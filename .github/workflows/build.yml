@@ -18,5 +18,14 @@ jobs:
           distribution: 'adopt'
           java-version: 8
           check-latest: true
-      - name: Build
-        run: ./gradlew build
+      - uses: burrunan/gradle-cache-action@v1
+        name: Build
+        with:
+          job-id: jdk8
+          arguments: build --no-build-cache
+          gradle-version: wrapper
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: liquidbounce
+          path: build/libs
