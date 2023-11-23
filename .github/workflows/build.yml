@@ -10,15 +10,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository and submodules
+      - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          submodules: recursive
-      - name: Setup java
+      - name: Java setup
         uses: actions/setup-java@v2
         with:
-          distribution: "adopt"
+          distribution: 'adopt'
           java-version: 8
-          cache: "gradle"
+          check-latest: true
       - name: Build
         run: ./gradlew build
