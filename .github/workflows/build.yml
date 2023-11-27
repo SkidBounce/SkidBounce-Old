@@ -10,21 +10,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository and submodules
+      - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          submodules: recursive
-      - name: Setup java
+      - name: Java setup
         uses: actions/setup-java@v2
         with:
-          distribution: "adopt"
+          distribution: 'adopt'
           java-version: 8
-          cache: "gradle"
-      - name: Build
-        run: ./gradlew build
-      - name: Upload artifact
+          check-latest: true
+      - uses: burrunan/gradle-cache-action@v1
+        name: Build
+        with:
+          job-id: jdk8
+          arguments: build --no-build-cache
+          gradle-version: wrapper
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
           name: skidbounce
-          path: build/libs.
-          if-no-files-found: warn
+          path: build/libs
