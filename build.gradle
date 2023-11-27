@@ -138,4 +138,9 @@ reobf {
 
 tasks.reobfJar.dependsOn(shadowJar)
 
-build.dependsOn compileKotlin
+task copyZipInclude(type: Copy) {
+    from 'zip_include/'
+    into 'build/libs/zip'
+}
+
+build.dependsOn copyZipInclude

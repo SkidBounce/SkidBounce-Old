@@ -1,7 +1,7 @@
 [
   {
-    "modid": "skidbounce",
-    "name": "SkidBounce",
+    "modid": "liquidbounce",
+    "name": "LiquidBounce",
     "description": "A free mixin-based injection hacked-client",
     "version": "${version}",
     "mcversion": "1.8.9",

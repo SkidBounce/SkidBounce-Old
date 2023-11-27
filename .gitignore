@@ -1,12 +1,7 @@
+
 /run/
 /out/
 /build/
 /.settings/
 /bin/
 /.gradle/
-/clients/
-/.vscode/
-/.idea/
-*.iml
-*.ipr
-*.iws

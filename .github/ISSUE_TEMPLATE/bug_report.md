@@ -21,5 +21,6 @@ Steps to reproduce the behavior:
 If applicable, add screenshots to help explain your problem.
 
 **Additional information:**
- - OS: [e.g. Windows 10]
+ - OS: [e.g. iOS]
  - LiquidBounce Build Version [e.g. b61]
+ - Minecraft Version [e.g. 1.8.9]

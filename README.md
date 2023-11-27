@@ -1,5 +1,11 @@
-# SkidBounce
+# LiquidBounce
 A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, supporting version 1.8.9
+
+Website: https://liquidbounce.net \
+Forum: https://forums.ccbluex.net \
+Guilded: https://www.guilded.gg/CCBlueX \
+YouTube: https://youtube.com/CCBlueX \
+Twitter: https://twitter.com/CCBlueX 
 
 ## Issues
 If you notice any bugs or missing features, you can let us know by opening an issue [here](https://github.com/CCBlueX/LiquidBounce/issues).
@@ -43,3 +49,6 @@ We appreciate contributions. So if you want to support us, feel free to make cha
 2. Re-work most of the render code.
 
 If you have experience in one or more of these fields, we would highly appreciate your support.
+
+## Stats
+![Alt](https://repobeats.axiom.co/api/embed/53a8b71ca387182c6f12a1c98a88edbe0a7bae99.svg "Repobeats analytics image")

@@ -13,7 +13,6 @@ enum class ModuleCategory(val displayName: String) {
     RENDER("Render"),
     WORLD("World"),
     MISC("Misc"),
-    GHOST("Ghost"),
     EXPLOIT("Exploit"),
     FUN("Fun");
 
