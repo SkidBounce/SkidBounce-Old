@@ -9,9 +9,9 @@ import jdk.internal.dynalink.beans.StaticClass
 import jdk.nashorn.api.scripting.JSObject
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory
 import jdk.nashorn.api.scripting.ScriptUtils
-import net.ccbluex.liquidbounce.SkidBounce.commandManager
-import net.ccbluex.liquidbounce.SkidBounce.moduleManager
-import net.ccbluex.liquidbounce.SkidBounce.scriptManager
+import net.ccbluex.liquidbounce.liquidbounce.commandManager
+import net.ccbluex.liquidbounce.liquidbounce.moduleManager
+import net.ccbluex.liquidbounce.liquidbounce.scriptManager
 import net.ccbluex.liquidbounce.features.command.Command
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory

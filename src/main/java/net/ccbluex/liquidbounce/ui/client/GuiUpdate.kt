@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.ui.client
 
-import net.ccbluex.liquidbounce.SkidBounce.IN_DEV
+import net.ccbluex.liquidbounce.liquidbounce.IN_DEV
 import net.ccbluex.liquidbounce.api.ClientUpdate
 import net.ccbluex.liquidbounce.ui.font.Fonts
 import net.ccbluex.liquidbounce.utils.misc.MiscUtils

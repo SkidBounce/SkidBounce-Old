@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.ui.client.clickgui
 
-import net.ccbluex.liquidbounce.SkidBounce.clickGui
+import net.ccbluex.liquidbounce.liquidbounce.clickGui
 import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.fadeSpeed
 import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.maxElements
 import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.panelsForcedInBoundaries

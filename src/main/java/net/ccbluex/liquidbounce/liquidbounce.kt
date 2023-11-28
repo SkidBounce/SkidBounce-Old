@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce
 
-import net.ccbluex.liquidbounce.api.ClientUpdate.gitInfo
 import net.ccbluex.liquidbounce.api.loadSettings
+import net.ccbluex.liquidbounce.api.ClientUpdate.gitInfo
 import net.ccbluex.liquidbounce.cape.CapeService
 import net.ccbluex.liquidbounce.event.ClientShutdownEvent
 import net.ccbluex.liquidbounce.event.EventManager
@@ -49,7 +49,7 @@ import net.ccbluex.liquidbounce.utils.render.MiniMapRegister
 import net.ccbluex.liquidbounce.utils.timing.TickedActions
 import kotlin.concurrent.thread
 
-object SkidBounce {
+object liquidbounce {
 
     // Client information
     const val CLIENT_NAME = "SkidBounce"

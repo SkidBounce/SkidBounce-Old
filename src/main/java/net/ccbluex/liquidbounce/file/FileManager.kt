@@ -7,10 +7,10 @@ package net.ccbluex.liquidbounce.file
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import net.ccbluex.liquidbounce.SkidBounce.CLIENT_NAME
-import net.ccbluex.liquidbounce.SkidBounce.MINECRAFT_VERSION
-import net.ccbluex.liquidbounce.SkidBounce.background
-import net.ccbluex.liquidbounce.SkidBounce.isStarting
+import net.ccbluex.liquidbounce.liquidbounce.CLIENT_NAME
+import net.ccbluex.liquidbounce.liquidbounce.MINECRAFT_VERSION
+import net.ccbluex.liquidbounce.liquidbounce.background
+import net.ccbluex.liquidbounce.liquidbounce.isStarting
 import net.ccbluex.liquidbounce.file.configs.*
 import net.ccbluex.liquidbounce.utils.Background.Companion.createBackground
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER

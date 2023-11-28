@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.client;
 
-import net.ccbluex.liquidbounce.SkidBounce;
+import net.ccbluex.liquidbounce.liquidbounce;
 import net.ccbluex.liquidbounce.api.ClientUpdate;
 import net.ccbluex.liquidbounce.event.*;
 import net.ccbluex.liquidbounce.features.module.modules.combat.AutoClicker;
@@ -111,7 +111,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;checkGLError(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.AFTER))
     private void startGame(CallbackInfo callbackInfo) {
-        SkidBounce.INSTANCE.startClient();
+        liquidbounce.INSTANCE.startClient();
     }
 
     @Inject(method = "startGame", at = @At(value = "NEW", target = "net/minecraft/client/renderer/texture/TextureManager"))
@@ -141,7 +141,7 @@ public abstract class MixinMinecraft {
     @Inject(method = "createDisplay", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V", shift = At.Shift.AFTER))
     private void createDisplay(CallbackInfo callbackInfo) {
         if (GuiClientConfiguration.Companion.getEnabledClientTitle()) {
-            Display.setTitle(SkidBounce.INSTANCE.getClientTitle());
+            Display.setTitle(liquidbounce.INSTANCE.getClientTitle());
         }
     }
 
@@ -206,7 +206,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "shutdown", at = @At("HEAD"))
     private void shutdown(CallbackInfo callbackInfo) {
-        SkidBounce.INSTANCE.stopClient();
+        liquidbounce.INSTANCE.stopClient();
     }
 
     @Inject(method = "clickMouse", at = @At("HEAD"))

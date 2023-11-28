@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.file.configs
 import com.google.gson.JsonNull
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import net.ccbluex.liquidbounce.SkidBounce.clickGui
+import net.ccbluex.liquidbounce.liquidbounce.clickGui
 import net.ccbluex.liquidbounce.file.FileConfig
 import net.ccbluex.liquidbounce.file.FileManager.PRETTY_GSON
 import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui

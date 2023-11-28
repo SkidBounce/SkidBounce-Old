@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.command.commands
 
-import net.ccbluex.liquidbounce.SkidBounce
+import net.ccbluex.liquidbounce.liquidbounce
 import net.ccbluex.liquidbounce.api.ClientApi
 import net.ccbluex.liquidbounce.api.Status
 import net.ccbluex.liquidbounce.api.autoSettingsList
@@ -113,7 +113,7 @@ class AutoSettingsCommand : Command("autosettings", "setting", "settings", "conf
 
                         val serverData = mc.currentServerData ?: error("You need to be on a server to upload settings.")
 
-                        val name = "${SkidBounce.clientCommit}-${serverData.serverIP.replace(".", "_")}"
+                        val name = "${liquidbounce.clientCommit}-${serverData.serverIP.replace(".", "_")}"
                         val response = ClientApi.uploadSettings(name, mc.session.username, settingsScript)
 
                         when (response.status) {

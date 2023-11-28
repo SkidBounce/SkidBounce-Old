@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.ui.client.clickgui.elements
 
-import net.ccbluex.liquidbounce.SkidBounce.clickGui
+import net.ccbluex.liquidbounce.liquidbounce.clickGui
 import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly

@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.command.commands
 
-import net.ccbluex.liquidbounce.SkidBounce.commandManager
+import net.ccbluex.liquidbounce.liquidbounce.commandManager
 import net.ccbluex.liquidbounce.features.command.Command
 
 class RemoteViewCommand : Command("remoteview", "rv") {

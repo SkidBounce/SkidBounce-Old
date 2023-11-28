@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.command
 
-import net.ccbluex.liquidbounce.SkidBounce.CLIENT_NAME
-import net.ccbluex.liquidbounce.SkidBounce.commandManager
+import net.ccbluex.liquidbounce.liquidbounce.CLIENT_NAME
+import net.ccbluex.liquidbounce.liquidbounce.commandManager
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 import net.minecraft.client.audio.PositionedSoundRecord

@@ -5,9 +5,9 @@
  */
 package net.ccbluex.liquidbounce.api
 
-import net.ccbluex.liquidbounce.SkidBounce
-import net.ccbluex.liquidbounce.SkidBounce.clientVersionNumber
-import net.ccbluex.liquidbounce.SkidBounce.IN_DEV
+import net.ccbluex.liquidbounce.liquidbounce
+import net.ccbluex.liquidbounce.liquidbounce.clientVersionNumber
+import net.ccbluex.liquidbounce.liquidbounce.IN_DEV
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.api.ClientApi.requestNewestBuildEndpoint
 object ClientUpdate {
 
     val gitInfo = Properties().also {
-        val inputStream = SkidBounce::class.java.classLoader.getResourceAsStream("git.properties")
+        val inputStream = liquidbounce::class.java.classLoader.getResourceAsStream("git.properties")
 
         if(inputStream != null) {
             it.load(inputStream)
@@ -28,7 +28,7 @@ object ClientUpdate {
     val newestVersion by lazy {
         // https://api.liquidbounce.net/api/v1/version/builds/legacy
         try {
-            requestNewestBuildEndpoint(branch = SkidBounce.clientBranch, release = !IN_DEV)
+            requestNewestBuildEndpoint(branch = liquidbounce.clientBranch, release = !IN_DEV)
         } catch (e: Exception) {
             LOGGER.error("Unable to receive update information", e)
             return@lazy null

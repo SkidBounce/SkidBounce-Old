@@ -6,7 +6,7 @@
 package net.ccbluex.liquidbounce.features.command.commands
 
 
-import net.ccbluex.liquidbounce.SkidBounce.moduleManager
+import net.ccbluex.liquidbounce.liquidbounce.moduleManager
 import net.ccbluex.liquidbounce.features.command.Command
 import net.ccbluex.liquidbounce.ui.client.hud.HUD.addNotification
 import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notification

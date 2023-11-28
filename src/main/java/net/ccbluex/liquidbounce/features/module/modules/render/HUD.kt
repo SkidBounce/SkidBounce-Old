@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.render
 
-import net.ccbluex.liquidbounce.SkidBounce.CLIENT_NAME
-import net.ccbluex.liquidbounce.SkidBounce.hud
+import net.ccbluex.liquidbounce.liquidbounce.CLIENT_NAME
+import net.ccbluex.liquidbounce.liquidbounce.hud
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory

@@ -12,7 +12,7 @@ import me.liuli.elixir.account.CrackedAccount
 import me.liuli.elixir.account.MicrosoftAccount
 import me.liuli.elixir.account.MinecraftAccount
 import me.liuli.elixir.account.MojangAccount
-import net.ccbluex.liquidbounce.SkidBounce.CLIENT_CLOUD
+import net.ccbluex.liquidbounce.liquidbounce.CLIENT_CLOUD
 import net.ccbluex.liquidbounce.event.EventManager.callEvent
 import net.ccbluex.liquidbounce.event.SessionEvent
 import net.ccbluex.liquidbounce.file.FileManager.accountsConfig
