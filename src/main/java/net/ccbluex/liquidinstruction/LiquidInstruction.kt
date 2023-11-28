@@ -13,7 +13,7 @@ import javax.swing.WindowConstants
 
 fun main() {
     // Setup instruction frame
-    val frame = JFrame("LiquidBounce | Installation")
+    val frame = JFrame("SkidBounce | Installation")
     frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
     frame.layout = BorderLayout()
     frame.isResizable = false

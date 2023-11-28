@@ -24,12 +24,12 @@ import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.*
 
 object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false) {
 
-    private val swordMode by ListValue("SwordMode", arrayOf("None", "NCP", "UpdatedNCP", "AAC5", "SwitchItem"), "None")
+    private val swordMode by ListValue("SwordMode", arrayOf("Vanilla", "NCP", "UpdatedNCP", "AAC5", "SwitchItem"), "Vanilla")
 
     private val blockForwardMultiplier by FloatValue("BlockForwardMultiplier", 1f, 0.2F..1f)
     private val blockStrafeMultiplier by FloatValue("BlockStrafeMultiplier", 1f, 0.2F..1f)
 
-    private val consumePacket by ListValue("ConsumeMode", arrayOf("None", "UpdatedNCP", "AAC5", "SwitchItem"), "None")
+    private val consumePacket by ListValue("ConsumeMode", arrayOf("Vanilla", "UpdatedNCP", "AAC5", "SwitchItem"), "Vanilla")
 
     private val consumeForwardMultiplier by FloatValue("ConsumeForwardMultiplier", 1f, 0.2F..1f)
     private val consumeStrafeMultiplier by FloatValue("ConsumeStrafeMultiplier", 1f, 0.2F..1f)
@@ -61,7 +61,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
                         EventState.PRE -> {
                             serverSlot = (serverSlot + 1) % 9
                             serverSlot = currentItem
-                        }                          
+                        }
 
 
                         else -> {}
@@ -88,7 +88,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
         if (heldItem.item is ItemSword && player.isBlocking) {
             when (swordMode.lowercase()) {
-                "none" -> {
+                "vanilla" -> {
                     return
                 }
 
