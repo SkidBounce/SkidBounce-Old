@@ -1,5 +1,5 @@
 /*
- * SkidBounce Hacked Client
+ * LiquidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
@@ -68,7 +68,7 @@ object RandomUtils {
      * ANIMAL (same as adjective)
      * xxx (random count, to fill target length)
      *
-     * 68 332 277 724 combinations (@see https://github.com/CCBlueX/SkidBounce/pull/923#issuecomment-145525193)
+     * 68 332 277 724 combinations (@see https://github.com/CCBlueX/LiquidBounce/pull/923#issuecomment-145525193)
      */
 
     fun randomUsername(

@@ -1,5 +1,5 @@
 /*
- * SkidBounce Hacked Client
+ * LiquidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
@@ -60,6 +60,7 @@ object ModuleManager : Listenable {
             AntiAFK,
             AntiBlind,
             AntiBot,
+            AntiCactus,
             AntiHunger,
             AntiFireball,
             AtAllProvider,

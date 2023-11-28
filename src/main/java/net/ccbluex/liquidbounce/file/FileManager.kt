@@ -1,5 +1,5 @@
 /*
- * SkidBounce Hacked Client
+ * LiquidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
@@ -7,10 +7,10 @@ package net.ccbluex.liquidbounce.file
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import net.ccbluex.liquidbounce.SkidBounce.CLIENT_NAME
-import net.ccbluex.liquidbounce.SkidBounce.MINECRAFT_VERSION
-import net.ccbluex.liquidbounce.SkidBounce.background
-import net.ccbluex.liquidbounce.SkidBounce.isStarting
+import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
+import net.ccbluex.liquidbounce.LiquidBounce.MINECRAFT_VERSION
+import net.ccbluex.liquidbounce.LiquidBounce.background
+import net.ccbluex.liquidbounce.LiquidBounce.isStarting
 import net.ccbluex.liquidbounce.file.configs.*
 import net.ccbluex.liquidbounce.utils.Background.Companion.createBackground
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER

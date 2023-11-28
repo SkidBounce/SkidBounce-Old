@@ -1,5 +1,5 @@
 /*
- * SkidBounce Hacked Client
+ * LiquidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
@@ -24,7 +24,7 @@ class GuiWelcome : GuiScreen() {
 
         Fonts.font35.run {
             drawCenteredString("Thank you for downloading and installing our client!", width / 2F, 70f, 0xffffff, true)
-            drawCenteredString("Here is some information you might find useful if you are using SkidBounce for the first time.", width / 2F, 70f + fontHeight, 0xffffff, true)
+            drawCenteredString("Here is some information you might find useful if you are using LiquidBounce for the first time.", width / 2F, 70f + fontHeight, 0xffffff, true)
 
             drawCenteredString("§lClickGUI:", width / 2F, 80f + fontHeight * 3, 0xffffff, true)
             drawCenteredString("Press ${Keyboard.getKeyName(ClickGUI.keyBind)} to open up the ClickGUI", width / 2F, 80f + fontHeight * 4, 0xffffff, true)

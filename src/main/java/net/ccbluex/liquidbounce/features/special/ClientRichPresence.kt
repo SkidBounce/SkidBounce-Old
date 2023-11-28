@@ -1,5 +1,5 @@
 /*
- * SkidBounce Hacked Client
+ * LiquidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
@@ -11,11 +11,11 @@ import com.jagrosh.discordipc.IPCClient
 import com.jagrosh.discordipc.IPCListener
 import com.jagrosh.discordipc.entities.RichPresence
 import com.jagrosh.discordipc.entities.pipe.PipeStatus
-import net.ccbluex.liquidbounce.SkidBounce.CLIENT_CLOUD
-import net.ccbluex.liquidbounce.SkidBounce.CLIENT_NAME
-import net.ccbluex.liquidbounce.SkidBounce.clientVersionText
-import net.ccbluex.liquidbounce.SkidBounce.MINECRAFT_VERSION
-import net.ccbluex.liquidbounce.SkidBounce.moduleManager
+import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_CLOUD
+import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
+import net.ccbluex.liquidbounce.LiquidBounce.clientVersionText
+import net.ccbluex.liquidbounce.LiquidBounce.MINECRAFT_VERSION
+import net.ccbluex.liquidbounce.LiquidBounce.moduleManager
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 import net.ccbluex.liquidbounce.utils.misc.HttpUtils.get

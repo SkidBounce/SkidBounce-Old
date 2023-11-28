@@ -1,11 +1,11 @@
 /*
- * SkidBounce Hacked Client
+ * LiquidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
 package net.ccbluex.liquidbounce.utils
 
-import net.ccbluex.liquidbounce.SkidBounce.moduleManager
+import net.ccbluex.liquidbounce.LiquidBounce.moduleManager
 import net.ccbluex.liquidbounce.api.ClientApi
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.file.FileManager
@@ -18,7 +18,7 @@ import org.lwjgl.input.Keyboard
 import kotlin.reflect.KMutableProperty0
 
 /**
- * Utility class for handling settings and scripts in SkidBounce.
+ * Utility class for handling settings and scripts in LiquidBounce.
  */
 object SettingsUtils {
 

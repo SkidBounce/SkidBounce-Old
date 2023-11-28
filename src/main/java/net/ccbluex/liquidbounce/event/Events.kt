@@ -1,5 +1,5 @@
 /*
- * SkidBounce Hacked Client
+ * LiquidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
@@ -185,6 +185,6 @@ class ClickWindowEvent(val windowId: Int, val slotId: Int, val mouseButtonClicke
     CancellableEvent()
 
 /**
- * Called when SkidBounce finishes starting up
+ * Called when LiquidBounce finishes starting up
  */
 class StartupEvent : Event()
