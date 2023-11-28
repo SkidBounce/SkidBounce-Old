@@ -1,11 +1,11 @@
 /*
- * LiquidBounce Hacked Client
+ * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
 package net.ccbluex.liquidbounce.features.module.modules.render
 
-import net.ccbluex.liquidbounce.LiquidBounce.clickGui
+import net.ccbluex.liquidbounce.SkidBounce.clickGui
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
@@ -26,7 +26,7 @@ import java.awt.Color
 
 object ClickGUI : Module("ClickGUI", ModuleCategory.RENDER, Keyboard.KEY_RSHIFT, canBeEnabled = false) {
     private val style by
-        object : ListValue("Style", arrayOf("LiquidBounce", "Null", "Slowly", "Black"), "LiquidBounce") {
+        object : ListValue("Style", arrayOf("SkidBounce", "Null", "Slowly", "Black"), "SkidBounce") {
             override fun onChanged(oldValue: String, newValue: String) = updateStyle()
         }
     var scale by FloatValue("Scale", 0.8f, 0.5f..1.5f)
@@ -52,7 +52,7 @@ object ClickGUI : Module("ClickGUI", ModuleCategory.RENDER, Keyboard.KEY_RSHIFT,
 
     private fun updateStyle() {
         clickGui.style = when (style) {
-            "LiquidBounce" -> LiquidBounceStyle
+            "SkidBounce" -> LiquidBounceStyle
             "Null" -> NullStyle
             "Slowly" -> SlowlyStyle
             "Black" -> BlackStyle

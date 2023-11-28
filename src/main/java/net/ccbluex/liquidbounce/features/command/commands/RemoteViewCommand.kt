@@ -1,11 +1,11 @@
 /*
- * LiquidBounce Hacked Client
+ * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
 package net.ccbluex.liquidbounce.features.command.commands
 
-import net.ccbluex.liquidbounce.LiquidBounce.commandManager
+import net.ccbluex.liquidbounce.SkidBounce.commandManager
 import net.ccbluex.liquidbounce.features.command.Command
 
 class RemoteViewCommand : Command("remoteview", "rv") {

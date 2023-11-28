@@ -1,11 +1,11 @@
 /*
- * LiquidBounce Hacked Client
+ * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
 package net.ccbluex.liquidbounce.ui.client.clickgui
 
-import net.ccbluex.liquidbounce.LiquidBounce.clickGui
+import net.ccbluex.liquidbounce.SkidBounce.clickGui
 import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.fadeSpeed
 import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.maxElements
 import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.panelsForcedInBoundaries

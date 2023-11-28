@@ -1,12 +1,12 @@
 /*
- * LiquidBounce Hacked Client
+ * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
 package net.ccbluex.liquidbounce.api
 
 import com.google.gson.annotations.SerializedName
-import net.ccbluex.liquidbounce.LiquidBounce
+import net.ccbluex.liquidbounce.SkidBounce
 import net.ccbluex.liquidbounce.file.FileManager.PRETTY_GSON
 import net.ccbluex.liquidbounce.utils.misc.HttpUtils.post
 
@@ -17,9 +17,9 @@ import org.apache.http.entity.ContentType
 import org.apache.http.entity.mime.MultipartEntityBuilder
 
 /**
- * LiquidBounce Client API
+ * SkidBounce Client API
  *
- * This represents all API endpoints of the LiquidBounce API for the usage on the client.
+ * This represents all API endpoints of the SkidBounce API for the usage on the client.
  */
 object ClientApi {
 
@@ -83,9 +83,9 @@ object ClientApi {
 
     /**
      * User agent
-     * LiquidBounce/<version> (<commit>, <branch>, <build-type>, <platform>)
+     * SkidBounce/<version> (<commit>, <branch>, <build-type>, <platform>)
      */
-    private val ENDPOINT_AGENT = "${LiquidBounce.CLIENT_NAME}/${LiquidBounce.clientVersionText} (${LiquidBounce.clientCommit}, ${LiquidBounce.clientBranch}, ${if (LiquidBounce.IN_DEV) "dev" else "release"}, ${System.getProperty("os.name")})"
+    private val ENDPOINT_AGENT = "${SkidBounce.CLIENT_NAME}/${SkidBounce.clientVersionText} (${SkidBounce.clientCommit}, ${SkidBounce.clientBranch}, ${if (SkidBounce.IN_DEV) "dev" else "release"}, ${System.getProperty("os.name")})"
 
     /**
      * Session token

@@ -1,11 +1,11 @@
 /*
- * LiquidBounce Hacked Client
+ * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.gui;
 
-import net.ccbluex.liquidbounce.LiquidBounce;
+import net.ccbluex.liquidbounce.SkidBounce;
 import net.ccbluex.liquidbounce.features.command.CommandManager;
 import net.ccbluex.liquidbounce.features.module.modules.misc.ComponentOnHover;
 import net.ccbluex.liquidbounce.features.module.modules.render.HUD;
@@ -90,7 +90,7 @@ public abstract class MixinGuiScreen {
         disableFog();
 
         if(GuiClientConfiguration.Companion.getEnabledCustomBackground()) {
-            final Background background = LiquidBounce.INSTANCE.getBackground();
+            final Background background = SkidBounce.INSTANCE.getBackground();
 
             if (background == null) {
                 // Use default background shader

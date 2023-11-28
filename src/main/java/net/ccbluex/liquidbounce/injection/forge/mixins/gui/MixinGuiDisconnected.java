@@ -1,5 +1,5 @@
 /*
- * LiquidBounce Hacked Client
+ * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
@@ -43,7 +43,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
-import static net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME;
+import static net.ccbluex.liquidbounce.SkidBounce.CLIENT_NAME;
 
 @Mixin(GuiDisconnected.class)
 public abstract class MixinGuiDisconnected extends MixinGuiScreen {

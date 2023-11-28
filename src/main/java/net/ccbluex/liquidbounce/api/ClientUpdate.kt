@@ -1,13 +1,13 @@
 /*
- * LiquidBounce Hacked Client
+ * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
 package net.ccbluex.liquidbounce.api
 
-import net.ccbluex.liquidbounce.LiquidBounce
-import net.ccbluex.liquidbounce.LiquidBounce.clientVersionNumber
-import net.ccbluex.liquidbounce.LiquidBounce.IN_DEV
+import net.ccbluex.liquidbounce.SkidBounce
+import net.ccbluex.liquidbounce.SkidBounce.clientVersionNumber
+import net.ccbluex.liquidbounce.SkidBounce.IN_DEV
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.api.ClientApi.requestNewestBuildEndpoint
 object ClientUpdate {
 
     val gitInfo = Properties().also {
-        val inputStream = LiquidBounce::class.java.classLoader.getResourceAsStream("git.properties")
+        val inputStream = SkidBounce::class.java.classLoader.getResourceAsStream("git.properties")
 
         if(inputStream != null) {
             it.load(inputStream)
@@ -28,7 +28,7 @@ object ClientUpdate {
     val newestVersion by lazy {
         // https://api.liquidbounce.net/api/v1/version/builds/legacy
         try {
-            requestNewestBuildEndpoint(branch = LiquidBounce.clientBranch, release = !IN_DEV)
+            requestNewestBuildEndpoint(branch = SkidBounce.clientBranch, release = !IN_DEV)
         } catch (e: Exception) {
             LOGGER.error("Unable to receive update information", e)
             return@lazy null

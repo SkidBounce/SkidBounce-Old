@@ -1,12 +1,12 @@
 /*
- * LiquidBounce Hacked Client
+ * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
 package net.ccbluex.liquidbounce.ui.client
 
-import net.ccbluex.liquidbounce.LiquidBounce.clientTitle
-import net.ccbluex.liquidbounce.LiquidBounce.background
+import net.ccbluex.liquidbounce.SkidBounce.clientTitle
+import net.ccbluex.liquidbounce.SkidBounce.background
 import net.ccbluex.liquidbounce.file.FileManager.backgroundImageFile
 import net.ccbluex.liquidbounce.file.FileManager.backgroundShaderFile
 import net.ccbluex.liquidbounce.file.FileManager.saveConfig
@@ -37,7 +37,7 @@ class GuiClientConfiguration(val prevGui: GuiScreen) : GuiScreen() {
 
         fun updateClientWindow() {
             if (enabledClientTitle) {
-                // Set LiquidBounce title
+                // Set SkidBounce title
                 Display.setTitle(clientTitle)
                 // Update favicon
                 IconUtils.getFavicon()?.let { icons ->

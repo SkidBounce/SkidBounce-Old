@@ -1,5 +1,5 @@
 /*
- * LiquidBounce Hacked Client
+ * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
@@ -17,7 +17,7 @@ import java.util.Map;
 public class MixinLoader implements IFMLLoadingPlugin {
 
     public MixinLoader() {
-        System.out.println("[LiquidBounce] Injecting with IFMLLoadingPlugin.");
+        System.out.println("[SkidBounce] Injecting with IFMLLoadingPlugin.");
 
         MixinBootstrap.init();
         Mixins.addConfiguration("liquidbounce.forge.mixins.json");

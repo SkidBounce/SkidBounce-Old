@@ -1,5 +1,5 @@
 /*
- * LiquidBounce Hacked Client
+ * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
@@ -7,6 +7,7 @@ package net.ccbluex.liquidbounce
 
 import net.ccbluex.liquidbounce.api.ClientUpdate.gitInfo
 import net.ccbluex.liquidbounce.api.loadSettings
+import net.ccbluex.liquidbounce.api.messageOfTheDay
 import net.ccbluex.liquidbounce.cape.CapeService
 import net.ccbluex.liquidbounce.event.ClientShutdownEvent
 import net.ccbluex.liquidbounce.event.EventManager
@@ -149,6 +150,9 @@ object SkidBounce {
 
         // Load alt generators
         loadActiveGenerators()
+
+        // Load message of the day
+        messageOfTheDay?.message?.let { LOGGER.info("Message of the day: $it") }
 
         // Setup Discord RPC
         if (showRichPresenceValue) {
