@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidinstruction
 
-import net.ccbluex.liquidbounce.liquidbounce
+import net.ccbluex.liquidbounce.SkidBounce
 import java.awt.BorderLayout
 import javax.swing.JFrame
 import javax.swing.JLabel
@@ -21,8 +21,8 @@ fun main() {
 
     // Add instruction as label
     @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-    val label = JLabel(liquidbounce::class.java.getResourceAsStream("/instructions.html").reader().readText()
-            .replace("{assets}", liquidbounce.javaClass.classLoader.getResource("assets").toString()))
+    val label = JLabel(SkidBounce::class.java.getResourceAsStream("/instructions.html").reader().readText()
+            .replace("{assets}", SkidBounce.javaClass.classLoader.getResource("assets").toString()))
     frame.add(label, BorderLayout.CENTER)
 
     // Pack frame

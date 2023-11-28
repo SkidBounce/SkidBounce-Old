@@ -5,10 +5,10 @@
  */
 package net.ccbluex.liquidbounce.ui.client.hud.element.elements
 
-import net.ccbluex.liquidbounce.liquidbounce.clientCommit
-import net.ccbluex.liquidbounce.liquidbounce.CLIENT_CREATOR
-import net.ccbluex.liquidbounce.liquidbounce.CLIENT_NAME
-import net.ccbluex.liquidbounce.liquidbounce.clientVersionText
+import net.ccbluex.liquidbounce.SkidBounce.clientCommit
+import net.ccbluex.liquidbounce.SkidBounce.CLIENT_CREATOR
+import net.ccbluex.liquidbounce.SkidBounce.CLIENT_NAME
+import net.ccbluex.liquidbounce.SkidBounce.clientVersionText
 import net.ccbluex.liquidbounce.ui.client.hud.designer.GuiHudDesigner
 import net.ccbluex.liquidbounce.ui.client.hud.element.Border
 import net.ccbluex.liquidbounce.ui.client.hud.element.Element

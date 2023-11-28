@@ -43,7 +43,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
-import static net.ccbluex.liquidbounce.liquidbounce.CLIENT_NAME;
+import static net.ccbluex.liquidbounce.SkidBounce.CLIENT_NAME;
 
 @Mixin(GuiDisconnected.class)
 public abstract class MixinGuiDisconnected extends MixinGuiScreen {

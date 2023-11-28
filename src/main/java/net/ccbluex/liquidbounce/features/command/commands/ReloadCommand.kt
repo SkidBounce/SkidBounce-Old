@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.command.commands
 
-import net.ccbluex.liquidbounce.liquidbounce.isStarting
-import net.ccbluex.liquidbounce.liquidbounce.moduleManager
+import net.ccbluex.liquidbounce.SkidBounce.isStarting
+import net.ccbluex.liquidbounce.SkidBounce.moduleManager
 import net.ccbluex.liquidbounce.features.command.Command
 import net.ccbluex.liquidbounce.features.command.CommandManager
 import net.ccbluex.liquidbounce.file.FileManager.accountsConfig

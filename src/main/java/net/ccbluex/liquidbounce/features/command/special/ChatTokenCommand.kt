@@ -1,6 +1,6 @@
 package net.ccbluex.liquidbounce.features.command.special
 
-import net.ccbluex.liquidbounce.liquidbounce.commandManager
+import net.ccbluex.liquidbounce.SkidBounce.commandManager
 import net.ccbluex.liquidbounce.chat.packet.packets.ServerRequestJWTPacket
 import net.ccbluex.liquidbounce.features.command.Command
 import net.ccbluex.liquidbounce.features.module.modules.misc.LiquidChat

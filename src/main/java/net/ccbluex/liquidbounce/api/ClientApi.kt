@@ -6,7 +6,7 @@
 package net.ccbluex.liquidbounce.api
 
 import com.google.gson.annotations.SerializedName
-import net.ccbluex.liquidbounce.liquidbounce
+import net.ccbluex.liquidbounce.SkidBounce
 import net.ccbluex.liquidbounce.file.FileManager.PRETTY_GSON
 import net.ccbluex.liquidbounce.utils.misc.HttpUtils.post
 
@@ -85,7 +85,7 @@ object ClientApi {
      * User agent
      * SkidBounce/<version> (<commit>, <branch>, <build-type>, <platform>)
      */
-    private val ENDPOINT_AGENT = "${liquidbounce.CLIENT_NAME}/${liquidbounce.clientVersionText} (${liquidbounce.clientCommit}, ${liquidbounce.clientBranch}, ${if (liquidbounce.IN_DEV) "dev" else "release"}, ${System.getProperty("os.name")})"
+    private val ENDPOINT_AGENT = "${SkidBounce.CLIENT_NAME}/${SkidBounce.clientVersionText} (${SkidBounce.clientCommit}, ${SkidBounce.clientBranch}, ${if (SkidBounce.IN_DEV) "dev" else "release"}, ${System.getProperty("os.name")})"
 
     /**
      * Session token
