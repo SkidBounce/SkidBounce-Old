@@ -7,7 +7,6 @@ package net.ccbluex.liquidbounce
 
 import net.ccbluex.liquidbounce.api.ClientUpdate.gitInfo
 import net.ccbluex.liquidbounce.api.loadSettings
-import net.ccbluex.liquidbounce.api.messageOfTheDay
 import net.ccbluex.liquidbounce.cape.CapeService
 import net.ccbluex.liquidbounce.event.ClientShutdownEvent
 import net.ccbluex.liquidbounce.event.EventManager
@@ -50,10 +49,10 @@ import net.ccbluex.liquidbounce.utils.render.MiniMapRegister
 import net.ccbluex.liquidbounce.utils.timing.TickedActions
 import kotlin.concurrent.thread
 
-object LiquidBounce {
+object SkidBounce {
 
     // Client information
-    const val CLIENT_NAME = "LiquidBounce"
+    const val CLIENT_NAME = "SkidBounce"
     val clientVersionText = gitInfo["git.build.version"]?.toString() ?: "unknown"
     val clientVersionNumber = clientVersionText.substring(1).toIntOrNull() ?: 0 // version format: "b<VERSION>" on legacy
     val clientCommit = gitInfo["git.commit.id.abbrev"]?.let { "git-$it" } ?: "unknown"
@@ -150,9 +149,6 @@ object LiquidBounce {
 
         // Load alt generators
         loadActiveGenerators()
-
-        // Load message of the day
-        messageOfTheDay?.message?.let { LOGGER.info("Message of the day: $it") }
 
         // Setup Discord RPC
         if (showRichPresenceValue) {
