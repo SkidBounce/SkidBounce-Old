@@ -60,7 +60,6 @@ object ModuleManager : Listenable {
             AntiAFK,
             AntiBlind,
             AntiBot,
-            AntiCactus,
             AntiHunger,
             AntiFireball,
             AtAllProvider,
