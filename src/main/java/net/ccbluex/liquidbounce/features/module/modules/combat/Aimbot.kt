@@ -36,7 +36,6 @@ object Aimbot : Module("Aimbot", ModuleCategory.COMBAT) {
 
     private val clickTimer = MSTimer()
 
-    @EventTarget
     fun onMotion(event: MotionEvent) {
         if (event.eventState != EventState.POST)
             return

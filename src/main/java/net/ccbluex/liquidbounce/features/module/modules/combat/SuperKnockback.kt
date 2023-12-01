@@ -21,7 +21,7 @@ import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C0BPacketEntityAction
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action.*
 
-object SuperKnockback : Module("SuperKnockback", ModuleCategory.COMBAT) {
+object SuperKnockback : Module("SuperKnockback", ModuleCategory.COMBAT, spacedName = "Super Knockback") {
 
     private val delay by IntegerValue("Delay", 0, 0, 500)
     private val hurtTime by IntegerValue("HurtTime", 10, 0, 10)

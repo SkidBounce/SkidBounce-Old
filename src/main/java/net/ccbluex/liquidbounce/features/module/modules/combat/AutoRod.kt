@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.IntegerValue
 import net.minecraft.init.Items
 
-object AutoRod : Module("AutoRod", ModuleCategory.COMBAT) {
+object AutoRod : Module("AutoRod", ModuleCategory.COMBAT, spacedName = "Auto Rod") {
 
     private val facingEnemy by BoolValue("FacingEnemy", true)
 

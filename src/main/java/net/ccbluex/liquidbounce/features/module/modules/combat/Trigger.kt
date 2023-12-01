@@ -14,7 +14,7 @@ import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
 import net.ccbluex.liquidbounce.value.IntegerValue
 import net.minecraft.client.settings.KeyBinding
 
-object Trigger : Module("Trigger", ModuleCategory.COMBAT) {
+object Trigger : Module("TriggerBot", ModuleCategory.COMBAT, spacedName = "Trigger Bot") {
 
     private val maxCPSValue: IntegerValue = object : IntegerValue("MaxCPS", 8, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minCPS)
