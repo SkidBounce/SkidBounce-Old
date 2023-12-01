@@ -104,7 +104,7 @@ class Script(val scriptFile: File) : MinecraftInstance() {
         val categoryString = moduleObject.getMember("category") as String
         val category = ModuleCategory.values().find {
             it.displayName.equals(categoryString, true)
-        } ?: ModuleCategory.FUN
+        } ?: ModuleCategory.SCRIPT
 
 
         val module = ScriptModule(name, category, description, moduleObject)
