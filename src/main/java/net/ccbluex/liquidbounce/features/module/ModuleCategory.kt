@@ -12,7 +12,6 @@ enum class ModuleCategory(val displayName: String) {
     MOVEMENT("Movement"),
     RENDER("Render"),
     CLIENT("Client"),
-    GHOST("Ghost"),
     WORLD("World"),
     MISC("Misc"),
     EXPLOIT("Exploit"),
