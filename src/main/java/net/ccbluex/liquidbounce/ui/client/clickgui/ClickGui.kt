@@ -104,6 +104,7 @@ object ClickGui : GuiScreen() {
                 ButtonElement("Dead", { if (targetDead) guiColor else Int.MAX_VALUE }) {
                     targetDead = !targetDead
                 },
+
             )
 
         }
