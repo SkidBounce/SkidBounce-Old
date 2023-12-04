@@ -83,10 +83,6 @@ object ClickGui : GuiScreen() {
 
         yPos += 20
         panels += setupTargetsPanel(100, yPos, width, height)
-
-        // Settings Panel
-        yPos += 20
-        panels += setupSettingsPanel(100, yPos, width, height)
     }
 
     private fun setupTargetsPanel(xPos: Int = 100, yPos: Int, width: Int, height: Int) =
@@ -109,49 +105,6 @@ object ClickGui : GuiScreen() {
                     targetDead = !targetDead
                 },
             )
-
-        }
-
-    private fun setupSettingsPanel(xPos: Int = 100, yPos: Int, width: Int, height: Int) =
-        object : Panel("Auto Settings", xPos, yPos, width, height, false) {
-
-            /**
-             * Auto settings list
-             */
-            override val elements = autoSettingsList?.map {
-                ButtonElement(it.name, { Integer.MAX_VALUE }) {
-                    thread {
-                        runCatching {
-                            displayChatMessage("Loading settings...")
-
-                            // Load settings and apply them
-                            val settings = ClientApi.requestSettingsScript(it.settingId)
-
-                            displayChatMessage("Applying settings...")
-                            SettingsUtils.applyScript(settings)
-                        }.onSuccess {
-                            displayChatMessage("§6Settings applied successfully")
-                            HUD.addNotification(Notification("Updated Settings"))
-                            mc.soundHandler.playSound(
-                                PositionedSoundRecord.create(
-                                    ResourceLocation("random.anvil_use"), 1F
-                                )
-                            )
-                        }.onFailure {
-                            ClientUtils.LOGGER.error("Failed to load settings", it)
-                            displayChatMessage("Failed to load settings: ${it.message}")
-                        }
-                    }
-                }.apply {
-                    this.hoverText = buildString {
-                        appendLine("§7Description: §e${it.description.ifBlank { "No description available" }}")
-                        appendLine("§7Type: §e${it.type.displayName}")
-                        appendLine("§7Contributors: §e${it.contributors}")
-                        appendLine("§7Last updated: §e${it.date}")
-                        append("§7Status: §e${it.statusType.displayName} §a(${it.statusDate})")
-                    }
-                }
-            } ?: emptyList()
 
         }
 
