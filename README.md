@@ -2,12 +2,42 @@
 A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, supporting version 1.8.9
 
 # Clients to skid
-[LiquidBounce](https://github.com/CCBlueX/LiquidBounce/tree/legacy)
-[FDPClient](https://github.com/SkidderMC/FDPClient)
-[NightX](https://github.com/Aspw-w/NightX-Client)
-[CrossSine](https://github.com/shxp3/CrossSine)
+[LiquidBounce](https://github.com/CCBlueX/LiquidBounce/tree/legacy)\
+[FDPClient](https://github.com/SkidderMC/FDPClient)\
+[NightX](https://github.com/Aspw-w/NightX-Client)\
+[CrossSine](https://github.com/shxp3/CrossSine)\
 [LiquidBouncePlus-Reborn](https://github.com/liquidbounceplusreborn/LiquidbouncePlus-Reborn)
 
+## Completed
+| Thing            | Completion      |
+|------------------|-----------------|
+| NoSlow           | :red_circle:    |
+| NoWeb            | :green_circle:  |
+| Speed            | :yellow_circle: |
+| LongJump         | :red_circle:    | 
+| Fly              | :red_circle:    | 
+| NoFall           | :red_circle:    | 
+| Hud              | :red_circle:    | 
+| Animations       | :red_circle:    | 
+| NoFall           | :red_circle:    |
+| Jesus            | :red_circle:    | 
+| Disabler         | :red_circle:    |
+| Phase            | :red_circle:    | 
+| Velocity         | :red_circle:    | 
+| ClickGUI         | :red_circle:    | 
+| AutoBlock        | :red_circle:    | 
+| Modules          | :red_circle:    | 
+| Scaffold         | :red_circle:    | 
+| Tower            | :red_circle:    | 
+| Step             | :red_circle:    | 
+| Criticals        | :red_circle:    | 
+| AntiVoid         | :red_circle:    | 
+| FastClimb        | :red_circle:    | 
+| NoFalls          | :red_circle:    | 
+| InventoryManager | :red_circle:    | 
+| Spider           | :red_circle:    | 
+| FastUse          | :red_circle:    | 
+| Everything Else  | :red_circle:    | 
 ## Issues
 If you notice any bugs or missing features, you can let us know by opening an issue [here](https://github.com/ManInMyVan/SkidBounce/issues).
 

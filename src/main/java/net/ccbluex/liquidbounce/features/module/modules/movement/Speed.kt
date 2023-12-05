@@ -73,10 +73,8 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         VerusLowHop,
         NewVerusLowHop,
 
-        // Hypixel
-        HypixelHop,
-
         // Server specific
+        HypixelHop,
         TeleportCubeCraft,
         HiveHop,
         Mineplex,

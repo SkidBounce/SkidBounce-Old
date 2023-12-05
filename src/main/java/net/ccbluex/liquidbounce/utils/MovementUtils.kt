@@ -38,7 +38,7 @@ object MovementUtils : MinecraftInstance(), Listenable {
         return baseSpeed
     }
     fun getBaseMoveSpeed(customSpeed: Double): Double {
-        var baseSpeed = if (MovementUtils.isOnIce()) 0.258977700006 else customSpeed
+        var baseSpeed = if (isOnIce()) 0.258977700006 else customSpeed
         if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
             val amplifier = mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier
             baseSpeed *= 1.0 + 0.2 * (amplifier + 1)
