@@ -3,7 +3,7 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.misc
+package net.ccbluex.liquidbounce.features.module.modules.targets
 
 import net.ccbluex.liquidbounce.event.AttackEvent
 import net.ccbluex.liquidbounce.event.EventTarget
@@ -24,7 +24,7 @@ import net.minecraft.network.play.server.S13PacketDestroyEntities
 import net.minecraft.network.play.server.S14PacketEntity
 import net.minecraft.network.play.server.S20PacketEntityProperties
 
-object AntiBot : Module("AntiBot", ModuleCategory.CLIENT) {
+object AntiBot : Module("AntiBot", ModuleCategory.TARGETS) {
 
     private val tab by BoolValue("Tab", true)
         private val tabMode by ListValue("TabMode", arrayOf("Equals", "Contains"), "Contains") { tab }
@@ -191,7 +191,8 @@ object AntiBot : Module("AntiBot", ModuleCategory.CLIENT) {
             val entity = mc.theWorld.getEntityByID(packet.entityID)
 
             if (entity != null && entity is EntityLivingBase && packet.animationType == 0
-                    && entity.entityId !in swingList)
+                    && entity.entityId !in swingList
+            )
                 swingList += entity.entityId
         }
 

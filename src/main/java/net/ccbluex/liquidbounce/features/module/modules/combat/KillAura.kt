@@ -9,9 +9,10 @@ import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.event.EventManager.callEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.ccbluex.liquidbounce.features.module.modules.misc.AntiBot.isBot
-import net.ccbluex.liquidbounce.features.module.modules.misc.Teams
+import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
+import net.ccbluex.liquidbounce.features.module.modules.targets.Teams
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
+import net.ccbluex.liquidbounce.features.module.modules.targets.Friends
 import net.ccbluex.liquidbounce.utils.CooldownHelper.getAttackCooldownProgress
 import net.ccbluex.liquidbounce.utils.CooldownHelper.resetLastAttackedTicks
 import net.ccbluex.liquidbounce.utils.EntityUtils.targetAnimals
@@ -597,7 +598,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT, Keyboard.KEY_R) {
             if (targetPlayer && entity is EntityPlayer) {
                 if (entity.isSpectator || isBot(entity)) return false
 
-                if (entity.isClientFriend() && !NoFriends.handleEvents()) return false
+                if (entity.isClientFriend() && !Friends.handleEvents()) return false
 
                 return !Teams.handleEvents() || !Teams.isInYourTeam(entity)
             }
@@ -761,7 +762,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT, Keyboard.KEY_R) {
                     ).isNotEmpty())
                 }
 
-            if (raycast && raycastedEntity != null && raycastedEntity is EntityLivingBase && (NoFriends.handleEvents() || !(raycastedEntity is EntityPlayer && raycastedEntity.isClientFriend()))) {
+            if (raycast && raycastedEntity != null && raycastedEntity is EntityLivingBase && (Friends.handleEvents() || !(raycastedEntity is EntityPlayer && raycastedEntity.isClientFriend()))) {
                 val prevHurtTime = currentTarget!!.hurtTime
                 currentTarget = raycastedEntity
                 currentTarget!!.hurtTime = prevHurtTime

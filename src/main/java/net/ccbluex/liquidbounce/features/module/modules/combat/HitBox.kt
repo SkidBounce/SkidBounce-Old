@@ -7,8 +7,9 @@ package net.ccbluex.liquidbounce.features.module.modules.combat
 
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.ccbluex.liquidbounce.features.module.modules.misc.AntiBot.isBot
-import net.ccbluex.liquidbounce.features.module.modules.misc.Teams
+import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
+import net.ccbluex.liquidbounce.features.module.modules.targets.Teams
+import net.ccbluex.liquidbounce.features.module.modules.targets.Friends
 import net.ccbluex.liquidbounce.utils.extensions.isAnimal
 import net.ccbluex.liquidbounce.utils.extensions.isClientFriend
 import net.ccbluex.liquidbounce.utils.extensions.isMob
@@ -40,7 +41,7 @@ object HitBox : Module("HitBox", ModuleCategory.COMBAT) {
 
                 if (isBot(entity)) {
                     return botSize
-                } else if (entity.isClientFriend() && !NoFriends.handleEvents()) {
+                } else if (entity.isClientFriend() && !Friends.handleEvents()) {
                     return friendSize
                 } else if (Teams.handleEvents() && Teams.isInYourTeam(entity)) {
                     return teamMateSize

@@ -5,9 +5,9 @@
  */
 package net.ccbluex.liquidbounce.utils
 
-import net.ccbluex.liquidbounce.features.module.modules.combat.NoFriends
-import net.ccbluex.liquidbounce.features.module.modules.misc.AntiBot.isBot
-import net.ccbluex.liquidbounce.features.module.modules.misc.Teams
+import net.ccbluex.liquidbounce.features.module.modules.targets.Friends
+import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
+import net.ccbluex.liquidbounce.features.module.modules.targets.Teams
 import net.ccbluex.liquidbounce.utils.extensions.isAnimal
 import net.ccbluex.liquidbounce.utils.extensions.isClientFriend
 import net.ccbluex.liquidbounce.utils.extensions.isMob
@@ -38,7 +38,7 @@ object EntityUtils : MinecraftInstance() {
                         if (isBot(entity))
                             return false
 
-                        if (entity.isClientFriend() && !NoFriends.handleEvents())
+                        if (entity.isClientFriend() && !Friends.handleEvents())
                             return false
 
                         if (entity.isSpectator) return false

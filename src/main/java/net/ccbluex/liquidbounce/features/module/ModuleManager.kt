@@ -13,12 +13,11 @@ import net.ccbluex.liquidbounce.event.Listenable
 import net.ccbluex.liquidbounce.features.command.CommandManager.registerCommand
 import net.ccbluex.liquidbounce.features.module.modules.combat.*
 import net.ccbluex.liquidbounce.features.module.modules.exploit.*
-import net.ccbluex.liquidbounce.features.module.modules.`fun`.Derp
-import net.ccbluex.liquidbounce.features.module.modules.`fun`.SkinDerp
 import net.ccbluex.liquidbounce.features.module.modules.misc.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.*
 import net.ccbluex.liquidbounce.features.module.modules.player.*
 import net.ccbluex.liquidbounce.features.module.modules.render.*
+import net.ccbluex.liquidbounce.features.module.modules.targets.*
 import net.ccbluex.liquidbounce.features.module.modules.world.*
 import net.ccbluex.liquidbounce.features.module.modules.world.Timer
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
@@ -56,6 +55,7 @@ object ModuleManager : Listenable {
             AirJump,
             AirLadder,
             Ambience,
+            Animals,
             Animations,
             AntiAFK,
             AntiBlind,
@@ -99,6 +99,7 @@ object ModuleManager : Listenable {
             ConsoleSpammer,
             Criticals,
             Damage,
+            Dead,
             Derp,
             ESP,
             Eagle,
@@ -125,6 +126,7 @@ object ModuleManager : Listenable {
             IceSpeed,
             InventoryCleaner,
             InventoryMove,
+            Invisible,
             ItemESP,
             KeepAlive,
             KeepContainer,
@@ -137,6 +139,7 @@ object ModuleManager : Listenable {
             Liquids,
             LongJump,
             MidClick,
+            Mobs,
             MoreCarry,
             MultiActions,
             NameProtect,
@@ -147,7 +150,7 @@ object ModuleManager : Listenable {
             NoFOV,
             NoFall,
             NoFluid,
-            NoFriends,
+            Friends,
             NoHurtCam,
             NoJumpDelay,
             NoPitchLimit,
@@ -162,6 +165,7 @@ object ModuleManager : Listenable {
             Parkour,
             PerfectHorseJump,
             PingSpoof,
+            Players,
             Plugins,
             PortalMenu,
             PotionSaver,

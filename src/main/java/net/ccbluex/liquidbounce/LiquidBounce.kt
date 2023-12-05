@@ -6,7 +6,6 @@
 package net.ccbluex.liquidbounce
 
 import net.ccbluex.liquidbounce.api.ClientUpdate.gitInfo
-import net.ccbluex.liquidbounce.api.loadSettings
 import net.ccbluex.liquidbounce.cape.CapeService
 import net.ccbluex.liquidbounce.event.ClientShutdownEvent
 import net.ccbluex.liquidbounce.event.EventManager
@@ -108,11 +107,6 @@ object LiquidBounce {
 
         // Load client fonts
         loadFonts()
-
-        // Load settings
-        loadSettings(false) {
-            LOGGER.info("Successfully loaded ${it.size} settings.")
-        }
 
         // Register commands
         registerCommands()

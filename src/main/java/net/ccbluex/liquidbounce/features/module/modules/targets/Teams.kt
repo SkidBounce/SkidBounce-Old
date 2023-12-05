@@ -3,14 +3,14 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.misc
+package net.ccbluex.liquidbounce.features.module.modules.targets
 
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.minecraft.entity.EntityLivingBase
 
-object Teams : Module("Teams", ModuleCategory.MISC, gameDetecting = false) {
+object Teams : Module("Teams", ModuleCategory.TARGETS, gameDetecting = false) {
 
     private val scoreboard by BoolValue("ScoreboardTeam", true)
     private val color by BoolValue("Color", true)

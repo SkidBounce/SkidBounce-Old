@@ -8,7 +8,6 @@ package net.ccbluex.liquidbounce.ui.client.clickgui
 import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
 import net.ccbluex.liquidbounce.LiquidBounce.moduleManager
 import net.ccbluex.liquidbounce.api.ClientApi
-import net.ccbluex.liquidbounce.api.autoSettingsList
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI
 import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.guiColor
@@ -28,11 +27,6 @@ import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notification
 import net.ccbluex.liquidbounce.ui.font.AWTFontRenderer.Companion.assumeNonVolatile
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetAnimals
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetDead
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetInvisible
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetMobs
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetPlayer
 import net.ccbluex.liquidbounce.utils.SettingsUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.deltaTime
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawImage
@@ -82,32 +76,7 @@ object ClickGui : GuiScreen() {
         }
 
         yPos += 20
-        panels += setupTargetsPanel(100, yPos, width, height)
     }
-
-    private fun setupTargetsPanel(xPos: Int = 100, yPos: Int, width: Int, height: Int) =
-        object : Panel("Targets", xPos, yPos, width, height, false) {
-
-            override val elements = listOf(
-                ButtonElement("Players", { if (targetPlayer) guiColor else Int.MAX_VALUE }) {
-                    targetPlayer = !targetPlayer
-                },
-                ButtonElement("Mobs", { if (targetMobs) guiColor else Int.MAX_VALUE }) {
-                    targetMobs = !targetMobs
-                },
-                ButtonElement("Animals", { if (targetAnimals) guiColor else Int.MAX_VALUE }) {
-                    targetAnimals = !targetAnimals
-                },
-                ButtonElement("Invisible", { if (targetInvisible) guiColor else Int.MAX_VALUE }) {
-                    targetInvisible = !targetInvisible
-                },
-                ButtonElement("Dead", { if (targetDead) guiColor else Int.MAX_VALUE }) {
-                    targetDead = !targetDead
-                },
-
-            )
-
-        }
 
     override fun drawScreen(x: Int, y: Int, partialTicks: Float) {
         // Enable DisplayList optimization

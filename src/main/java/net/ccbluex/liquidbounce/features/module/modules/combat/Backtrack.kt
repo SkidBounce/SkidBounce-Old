@@ -8,12 +8,12 @@ package net.ccbluex.liquidbounce.features.module.modules.combat
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.ccbluex.liquidbounce.features.module.modules.misc.AntiBot.isBot
-import net.ccbluex.liquidbounce.features.module.modules.misc.Teams
+import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
+import net.ccbluex.liquidbounce.features.module.modules.targets.Teams
 import net.ccbluex.liquidbounce.features.module.modules.player.Blink
+import net.ccbluex.liquidbounce.features.module.modules.targets.Friends
 import net.ccbluex.liquidbounce.injection.implementations.IMixinEntity
 import net.ccbluex.liquidbounce.utils.*
-import net.ccbluex.liquidbounce.utils.PacketUtils.handlePacket
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.StringUtils.contains
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
@@ -446,7 +446,7 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
             if (entity is EntityPlayer) {
                 if (entity.isSpectator || isBot(entity)) return false
 
-                if (entity.isClientFriend() && !NoFriends.handleEvents()) return false
+                if (entity.isClientFriend() && !Friends.handleEvents()) return false
 
                 return !Teams.handleEvents() || !Teams.isInYourTeam(entity)
             }
