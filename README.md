@@ -1,6 +1,13 @@
 # SkidBounce
 A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, supporting version 1.8.9
 
+# Clients to skid
+[LiquidBounce](https://github.com/CCBlueX/LiquidBounce/tree/legacy)
+[FDPClient](https://github.com/SkidderMC/FDPClient)
+[NightX](https://github.com/Aspw-w/NightX-Client)
+[CrossSine](https://github.com/shxp3/CrossSine)
+[LiquidBouncePlus-Reborn](https://github.com/liquidbounceplusreborn/LiquidbouncePlus-Reborn)
+
 ## Issues
 If you notice any bugs or missing features, you can let us know by opening an issue [here](https://github.com/ManInMyVan/SkidBounce/issues).
 
