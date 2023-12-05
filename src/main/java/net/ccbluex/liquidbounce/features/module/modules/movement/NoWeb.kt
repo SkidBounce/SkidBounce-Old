@@ -17,11 +17,11 @@ import net.ccbluex.liquidbounce.value.FloatValue
 object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
 
     private val noWebModes = arrayOf(
-        // Vanilla
         Vanilla,
 
         // AAC
         AAC,
+        AACv4,
         AAC4,
         AAC5,
         OldAAC,
