@@ -6,27 +6,22 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
-import net.ccbluex.liquidbounce.utils.MovementUtils
 
-object Spartan : NoWebMode("Spartan") {
+object Matrix : NoWebMode("Matrix") {
     private var usedTimer = false
     override fun onUpdate() {
-        if (usedTimer && !mc.thePlayer.isInWeb) {
+        if (usedTimer) {
             mc.timer.timerSpeed = 1F
             usedTimer = false
         }
         if (!mc.thePlayer.isInWeb) return
-        MovementUtils.strafe(0.27F)
-        mc.timer.timerSpeed = 3.7F
-        if (!mc.gameSettings.keyBindSneak.isKeyDown) {
-            mc.thePlayer.motionY = 0.0
-        }
-        if (mc.thePlayer.ticksExisted % 2 == 0) {
-            mc.timer.timerSpeed = 1.7F
-        }
+
+        mc.thePlayer.jumpMovementFactor = 0.12425f
+        mc.thePlayer.motionY = -0.0125
+        if (mc.gameSettings.keyBindSneak.isKeyDown) mc.thePlayer.motionY = -0.1625
         if (mc.thePlayer.ticksExisted % 40 == 0) {
-            mc.timer.timerSpeed = 3F
+            mc.timer.timerSpeed = 3.0F
+            usedTimer = true
         }
-        usedTimer = true
     }
 }

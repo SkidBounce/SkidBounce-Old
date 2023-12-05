@@ -23,12 +23,14 @@ object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
         // AAC
         AAC,
         AAC4,
+        AAC5,
         OldAAC,
         LAAC,
 
         // Other
         FastFall,
         Horizon,
+        Matrix,
         MineBlaze,
         Rewinside,
         Spartan
