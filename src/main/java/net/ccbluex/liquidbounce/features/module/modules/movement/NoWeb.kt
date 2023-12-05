@@ -10,9 +10,11 @@ import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.horizon.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.spartan.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other.*
 import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.FloatValue
 
 object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
 
@@ -29,6 +31,9 @@ object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
         // Spartan
         Spartan,
 
+        // Horizon
+        Horizon,
+
         // Other
         Rewinside,
         MineBlaze,
@@ -40,6 +45,8 @@ object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
     val mode by ListValue(
         "Mode", modes, "Vanilla"
     )
+
+    val horizonSpeed by FloatValue("HorizonSpeed", 0.1F, 0.01F..0.8F) { mode == "Horizon" }
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
