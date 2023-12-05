@@ -20,7 +20,9 @@ object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
         Vanilla,
 
         // AAC
-        AAC, LAAC,
+        AAC,
+        LAAC,
+        OldAAC,
         
         // Other
         Rewinside,
