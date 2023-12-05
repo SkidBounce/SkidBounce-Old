@@ -28,11 +28,13 @@ object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
         LAAC,
 
         // Other
+        Cardinal,
         FastFall,
         Horizon,
         IntaveTest,
         Matrix,
         MineBlaze,
+        Negativity,
         Rewinside,
         Spartan,
         Test
