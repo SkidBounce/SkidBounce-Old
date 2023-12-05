@@ -135,7 +135,7 @@ object ModuleManager : Listenable {
             KillAura,
             LadderJump,
             LiquidChat,
-            LiquidWalk,
+            Jesus,
             Liquids,
             LongJump,
             MidClick,

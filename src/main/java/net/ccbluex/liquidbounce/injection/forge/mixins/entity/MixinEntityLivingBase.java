@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.injection.forge.mixins.entity;
 import net.ccbluex.liquidbounce.event.EventManager;
 import net.ccbluex.liquidbounce.event.JumpEvent;
 import net.ccbluex.liquidbounce.features.module.modules.movement.AirJump;
-import net.ccbluex.liquidbounce.features.module.modules.movement.LiquidWalk;
+import net.ccbluex.liquidbounce.features.module.modules.movement.Jesus;
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoJumpDelay;
 import net.ccbluex.liquidbounce.features.module.modules.movement.Sprint;
 import net.ccbluex.liquidbounce.features.module.modules.render.AntiBlind;
@@ -118,7 +118,7 @@ public abstract class MixinEntityLivingBase extends MixinEntity {
             jumpTicks = 10;
         }
 
-        final LiquidWalk liquidWalk = LiquidWalk.INSTANCE;
+        final Jesus liquidWalk = Jesus.INSTANCE;
 
         if (liquidWalk.handleEvents() && !isJumping && !isSneaking() && isInWater() && liquidWalk.getMode().equals("Swim")) {
             updateAITick();

@@ -21,9 +21,9 @@ import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.BlockPos
 import org.lwjgl.input.Keyboard
 
-object LiquidWalk : Module("LiquidWalk", ModuleCategory.MOVEMENT, Keyboard.KEY_J) {
+object Jesus : Module("Jesus", ModuleCategory.MOVEMENT) {
 
-    val mode by ListValue("Mode", arrayOf("Vanilla", "NCP", "AAC", "AAC3.3.11", "AACFly", "Spartan", "Dolphin"), "NCP")
+    val mode by ListValue("Mode", arrayOf("Vanilla", "NCP", "AAC", "AAC3.3.11", "AACFly", "Spartan", "Dolphin"), "Vanilla")
         private val aacFly by FloatValue("AACFlyMotion", 0.5f, 0.1f..1f) { mode == "AACFly" }
 
     private val noJump by BoolValue("NoJump", false)
