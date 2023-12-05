@@ -11,13 +11,9 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spartan.SpartanYPort
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spectre.SpectreBHop
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spectre.SpectreLowHop
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spectre.SpectreOnGround
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.verus.NewVerusLowHop
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.verus.VerusHop
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.verus.VerusLowHop
+import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spartan.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spectre.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.verus.*
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -43,8 +39,10 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         AACBHop,
         AAC2BHop,
         AAC3BHop,
+        AACv4BHop,
         AAC4BHop,
         AAC4Hop,
+        AAC4SlowHop,
         AAC5BHop,
         AAC6BHop,
         AAC7BHop,
@@ -75,10 +73,12 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         VerusLowHop,
         NewVerusLowHop,
 
+        // Hypixel
+        HypixelHop,
+
         // Server specific
         TeleportCubeCraft,
         HiveHop,
-        HypixelHop,
         Mineplex,
         MineplexGround,
 
