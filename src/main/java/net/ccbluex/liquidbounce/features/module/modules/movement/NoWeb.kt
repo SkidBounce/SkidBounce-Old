@@ -10,8 +10,6 @@ import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.horizon.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.spartan.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other.*
 import net.ccbluex.liquidbounce.value.ListValue
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -25,19 +23,16 @@ object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
         // AAC
         AAC,
         AAC4,
-        LAAC,
         OldAAC,
-
-        // Spartan
-        Spartan,
-
-        // Horizon
-        Horizon,
+        LAAC,
 
         // Other
-        Rewinside,
+        FastFall,
+        Horizon,
         MineBlaze,
-        FastFall
+        Rewinside,
+        Spartan
+
     )
 
     private val modes = noWebModes.map { it.modeName }.toTypedArray()
