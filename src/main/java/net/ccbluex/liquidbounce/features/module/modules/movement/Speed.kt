@@ -48,6 +48,7 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         AAC5BHop,
         AAC6BHop,
         AAC7BHop,
+        AACHop3310,
         AACHop3313,
         AACHop350,
         AACHop438,

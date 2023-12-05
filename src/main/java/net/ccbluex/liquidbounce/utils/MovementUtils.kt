@@ -11,7 +11,11 @@ import net.ccbluex.liquidbounce.event.MoveEvent
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.extensions.toRadiansD
+import net.minecraft.block.BlockIce
+import net.minecraft.block.BlockPackedIce
 import net.minecraft.network.play.client.C03PacketPlayer
+import net.minecraft.potion.Potion
+import net.minecraft.util.BlockPos
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
@@ -21,7 +25,37 @@ object MovementUtils : MinecraftInstance(), Listenable {
     var speed
         get() = mc.thePlayer?.run { sqrt(motionX * motionX + motionZ * motionZ).toFloat() } ?: .0f
         set(value) { strafe(value) }
-
+    fun isOnIce(): Boolean {
+        val thePlayer = mc.thePlayer
+        val blockUnder = mc.theWorld.getBlockState(BlockPos(thePlayer.posX, thePlayer.posY - 1.0, thePlayer.posZ)).block
+        return blockUnder is BlockIce || blockUnder is BlockPackedIce
+    }
+    fun getBaseMoveSpeed(): Double {
+        var baseSpeed = 0.2873
+        if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
+            baseSpeed *= 1.0 + 0.2 * (mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier + 1).toDouble()
+        }
+        return baseSpeed
+    }
+    fun getBaseMoveSpeed(customSpeed: Double): Double {
+        var baseSpeed = if (MovementUtils.isOnIce()) 0.258977700006 else customSpeed
+        if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
+            val amplifier = mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier
+            baseSpeed *= 1.0 + 0.2 * (amplifier + 1)
+        }
+        return baseSpeed
+    }
+    fun getJumpBoostModifier(baseJumpHeight: Double): Double {
+        return getJumpBoostModifier(baseJumpHeight, true)
+    }
+    fun getJumpBoostModifier(baseJumpHeight: Double, potionJump: Boolean): Double {
+        var baseJumpHeight = baseJumpHeight
+        if (mc.thePlayer.isPotionActive(Potion.jump) && potionJump) {
+            val amplifier = mc.thePlayer.getActivePotionEffect(Potion.jump).amplifier
+            baseJumpHeight += ((amplifier + 1).toFloat() * 0.1f).toDouble()
+        }
+        return baseJumpHeight
+    }
     val isMoving
         get() = mc.thePlayer?.movementInput?.run { moveForward != 0f || moveStrafe != 0f } ?: false
 
