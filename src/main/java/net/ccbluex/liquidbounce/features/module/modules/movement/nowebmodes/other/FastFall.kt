@@ -7,8 +7,13 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.oth
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 
-object None : NoWebMode("None") {
+object FastFall : NoWebMode("FastFall") {
+    //  Bypass AAC(All), Vulcan, Verus, Matrix, NCP3.17, HAWK, Spartan
     override fun onUpdate() {
-        mc.thePlayer.isInWeb = false
+        if (!mc.thePlayer.isInWeb) return
+        if (mc.thePlayer.onGround) mc.thePlayer.jump()
+        if (mc.thePlayer.motionY > 0f) {
+            mc.thePlayer.motionY -= mc.thePlayer.motionY * 2
+        }
     }
 }

@@ -9,31 +9,29 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac.AAC
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac.LAAC
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other.None
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other.Rewi
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other.MineBlaze
+import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other.*
 import net.ccbluex.liquidbounce.value.ListValue
 
 object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
 
     private val noWebModes = arrayOf(
         // Vanilla
-        None,
+        Vanilla,
 
         // AAC
         AAC, LAAC,
         
         // Other
-        Rewi,
-        MineBlaze
+        Rewinside,
+        MineBlaze,
+        FastFall
     )
 
     private val modes = noWebModes.map { it.modeName }.toTypedArray()
 
     val mode by ListValue(
-        "Mode", modes, "None"
+        "Mode", modes, "Vanilla"
     )
 
     @EventTarget

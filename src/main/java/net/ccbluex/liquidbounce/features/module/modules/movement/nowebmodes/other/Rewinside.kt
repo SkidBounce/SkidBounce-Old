@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.oth
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 
-object Rewi : NoWebMode("Rewi") {
+object Rewinside : NoWebMode("Rewinside") {
     override fun onUpdate() {
         if (!mc.thePlayer.isInWeb) {
             return
