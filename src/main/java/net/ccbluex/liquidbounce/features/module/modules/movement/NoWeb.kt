@@ -30,10 +30,12 @@ object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
         // Other
         FastFall,
         Horizon,
+        IntaveTest,
         Matrix,
         MineBlaze,
         Rewinside,
-        Spartan
+        Spartan,
+        Test
 
     )
 
