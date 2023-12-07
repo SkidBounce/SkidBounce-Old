@@ -21,22 +21,23 @@ import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false) {
     private val swordModes = arrayOf(
         Vanilla,
+        SwitchItem,
         NCP,
         UNCP,
+        AAC,
         AAC5,
-        SwitchItem,
     )
     private val bowModes = arrayOf(
         Vanilla,
+        SwitchItem,
         UNCP,
         AAC5,
-        SwitchItem,
     )
     private val consumeModes = arrayOf(
         Vanilla,
+        SwitchItem,
         UNCP,
         AAC5,
-        SwitchItem,
     )
 
     private val blocking by BoolValue("Blocking", true)
