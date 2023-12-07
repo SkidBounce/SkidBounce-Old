@@ -6,15 +6,17 @@
 package net.ccbluex.liquidbounce.injection.forge.mixins.client;
 
 import net.ccbluex.liquidbounce.features.module.modules.combat.SuperKnockback;
+import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow;
 import net.minecraft.util.MovementInputFromOptions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MovementInputFromOptions.class)
 public class MixinMovementInputFromOptions extends MixinMovementInput {
-
     @Inject(method = "updatePlayerMoveState", at = @At(value = "FIELD", target = "Lnet/minecraft/util/MovementInputFromOptions;jump:Z"))
     private void hookSuperKnockbackInputBlock(CallbackInfo ci) {
         SuperKnockback module = SuperKnockback.INSTANCE;
@@ -28,5 +30,14 @@ public class MixinMovementInputFromOptions extends MixinMovementInput {
                 }
             }
         }
+    }
+
+    @ModifyConstant(method = "updatePlayerMoveState", constant = @Constant(doubleValue = 0.3D, ordinal = 0))
+    public double noSlowSneakStrafe(double constant) {
+        return (NoSlow.INSTANCE.getState() && NoSlow.INSTANCE.getSneaking()) ? NoSlow.INSTANCE.getSneakStrafeMultiplier() : 0.3D;
+    }
+    @ModifyConstant(method = "updatePlayerMoveState", constant = @Constant(doubleValue = 0.3D, ordinal = 1))
+    public double noSlowSneakForward(double constant) {
+        return (NoSlow.INSTANCE.getState() && NoSlow.INSTANCE.getSneaking()) ? NoSlow.INSTANCE.getSneakForwardMultiplier() : 0.3D;
     }
 }

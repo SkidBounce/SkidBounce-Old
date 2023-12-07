@@ -8,8 +8,6 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.event.JumpEvent
 
-
-
 object AAC4 : NoWebMode("AAC4") {
     private var usedTimer = false
     override fun onUpdate() {
@@ -27,7 +25,6 @@ object AAC4 : NoWebMode("AAC4") {
             mc.timer.timerSpeed = 1.35F
         }
         usedTimer = true
-
     }
     fun onJump(event: JumpEvent) {
         event.cancelEvent()
