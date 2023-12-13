@@ -8,6 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
@@ -16,9 +17,10 @@ import net.minecraft.init.Blocks
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.other.*
-import net.ccbluex.liquidbounce.utils.extensions.stopXZ
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 
 object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false) {
+
     private val swordModes = arrayOf(
         Vanilla,
         SwitchItem,
@@ -40,6 +42,12 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         AAC5,
     )
 
+    var shouldSwap = false
+
+    override fun onDisable() {
+        shouldSwap = false
+    }
+
     private val blocking by BoolValue("Blocking", true)
     private val consuming by BoolValue("Consuming", true)
     private val bows by BoolValue("Bows", true)
@@ -47,9 +55,15 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     val soulsand by BoolValue("SoulSand", true)
     val liquidPush by BoolValue("LiquidPush", true)
     val slime by BoolValue("Slime", true)
-    private val swordMode by ListValue("SwordMode", swordModes.map { it.modeName }.toTypedArray(), "Vanilla") { blocking }
+
+    private val blockingMode by ListValue("BlockingMode", swordModes.map { it.modeName }.toTypedArray(), "Vanilla") { blocking }
     private val consumeMode by ListValue("ConsumeMode", consumeModes.map { it.modeName }.toTypedArray(), "Vanilla") { consuming }
     private val bowMode by ListValue("BowMode", bowModes.map { it.modeName }.toTypedArray(), "Vanilla") { bows }
+
+    private val onlyMoveBlocking by BoolValue("OnlyMoveBlocking", true) { blocking }
+    private val onlyMoveConsume by BoolValue("OnlyMoveConsume", true) { consuming }
+    private val onlyMoveBow by BoolValue("OnlyMoveBow", true) { bows }
+
     private val blockForwardMultiplier by FloatValue("BlockForwardMultiplier", 1f, 0.2f..1f) { blocking }
     private val blockStrafeMultiplier by FloatValue("BlockStrafeMultiplier", 1f, 0.2f..1f) { blocking }
     private val consumeForwardMultiplier by FloatValue("ConsumeForwardMultiplier", 1f, 0.2f..1f) { consuming }
@@ -63,8 +77,8 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     val slimeMultiplier by FloatValue("SlimeMultiplier", 1f, 0.4f..1f) { slime }
     private val slimeFriction by FloatValue("SlimeFriction", 0.6f, 0.6f..0.8f) { slime }
 
-    private val modeModuleSword
-        get() = swordModes.find { it.modeName == swordMode }!!
+    private val modeModuleBlocking
+        get() = swordModes.find { it.modeName == blockingMode }!!
     private val modeModuleBow
         get() = bowModes.find { it.modeName == bowMode }!!
     private val modeModuleConsume
@@ -74,9 +88,15 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     fun onMotion(event: MotionEvent) {
         Blocks.slime_block.slipperiness = if (slime) slimeFriction else 0.8f
 
-        if (mc.thePlayer.isUsingItem) {
+        if ( !shouldSwap && ( mc.thePlayer.motionX == 0.0 && mc.thePlayer.motionZ == 0.0 ) && (
+                    ( onlyMoveConsume && isHoldingConsumable() ) ||
+                    ( onlyMoveBlocking && mc.thePlayer.heldItem?.item is ItemSword ) ||
+                    ( onlyMoveBow && mc.thePlayer.heldItem?.item is ItemBow ) )
+        ) return
+
+        if (getIsUsingItem() || shouldSwap) {
             when (mc.thePlayer.heldItem?.item) {
-                is ItemSword -> if (blocking) modeModuleSword.onMotion(event) else return
+                is ItemSword -> if (blocking) modeModuleBlocking.onMotion(event) else return
                 is ItemFood, is ItemPotion, is ItemBucketMilk -> if (consuming) modeModuleConsume.onMotion(event) else return
                 is ItemBow -> if (bows) modeModuleBow.onMotion(event) else return
             }
@@ -84,9 +104,15 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     }
     @EventTarget
     fun onUpdate() {
-        if (mc.thePlayer.isUsingItem) {
+        if ( ( mc.thePlayer.motionX == 0.0 && mc.thePlayer.motionZ == 0.0 ) && (
+            ( onlyMoveConsume && isHoldingConsumable() ) ||
+            ( onlyMoveBlocking && mc.thePlayer.heldItem?.item is ItemSword ) ||
+            ( onlyMoveBow && mc.thePlayer.heldItem?.item is ItemBow ) )
+        ) return
+
+        if (getIsUsingItem() || shouldSwap) {
             when (mc.thePlayer.heldItem?.item) {
-                is ItemSword -> if (blocking) modeModuleSword.onUpdate() else return
+                is ItemSword -> if (blocking) modeModuleBlocking.onUpdate() else return
                 is ItemFood, is ItemPotion, is ItemBucketMilk -> if (consuming) modeModuleConsume.onUpdate() else return
                 is ItemBow -> if (bows) modeModuleBow.onUpdate() else return
             }
@@ -94,27 +120,38 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     }
     @EventTarget
     fun onPacket(event: PacketEvent) {
-        if (mc.thePlayer.isUsingItem) {
+        if (
+            ( getIsUsingItem() || shouldSwap ) && ( mc.thePlayer.motionX != 0.0 || mc.thePlayer.motionZ != 0.0 ) && !(
+                ( onlyMoveConsume && isHoldingConsumable() ) ||
+                ( onlyMoveBlocking && mc.thePlayer.heldItem?.item is ItemSword ) ||
+                ( onlyMoveBow && mc.thePlayer.heldItem?.item is ItemBow )
+            )
+        ) {
             when (mc.thePlayer.heldItem?.item) {
-                is ItemSword -> if (blocking) modeModuleSword.onPacket(event) else return
+                is ItemSword -> if (blocking) modeModuleBlocking.onPacket(event) else return
                 is ItemFood, is ItemPotion, is ItemBucketMilk -> if (consuming) modeModuleConsume.onPacket(event) else return
                 is ItemBow -> if (bows) modeModuleBow.onPacket(event) else return
             }
         }
-    }
 
-    /**
-     * Not sure how it works, but it should allow you to
-     * block again after jumping by stopping the player xz.
-     */
-    @EventTarget
-    fun onJump(event: JumpEvent) {
-        if (modeModuleSword == UNCP && mc.thePlayer.heldItem.item is ItemSword && mc.thePlayer.isBlocking) {
-            mc.thePlayer.stopXZ()
+        val packet = event.packet
+        if (event.isCancelled || shouldSwap)
+            return
+        when (packet) {
+            is C08PacketPlayerBlockPlacement -> {
+                if (packet.stack?.item != null && mc.thePlayer.heldItem?.item != null && packet.stack.item == mc.thePlayer.heldItem?.item) {
+                    if ((modeModuleConsume == UNCP && (packet.stack.item is ItemFood || packet.stack.item is ItemPotion || packet.stack.item is ItemBucketMilk)) || (modeModuleBow == UNCP && packet.stack.item is ItemBow)) {
+                        shouldSwap = true
+                    }
+                }
+            }
         }
     }
     override val tag
-        get() = swordMode
+        get() = if (blocking) blockingMode
+                else if (consuming) consumeMode
+                else if (bows) bowMode
+                else ""
     @EventTarget
     fun onSlowDown(event: SlowDownEvent) {
         val heldItem = mc.thePlayer.heldItem?.item
@@ -130,4 +167,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
         else -> 0.2F
     }
+    fun isUNCPBlocking() = modeModuleBlocking == UNCP && mc.gameSettings.keyBindUseItem.isKeyDown && (mc.thePlayer.heldItem?.item is ItemSword)
+    fun getIsUsingItem() = mc.thePlayer?.heldItem != null && (mc.thePlayer.isUsingItem || (mc.thePlayer.heldItem?.item is ItemSword && KillAura.blockStatus) || isUNCPBlocking())
+    fun isHoldingConsumable() = mc.thePlayer.heldItem?.item is ItemFood || mc.thePlayer.heldItem?.item is ItemPotion || mc.thePlayer.heldItem?.item is ItemBucketMilk
 }

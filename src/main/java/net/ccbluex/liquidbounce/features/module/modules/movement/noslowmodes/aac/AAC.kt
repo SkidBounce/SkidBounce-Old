@@ -8,6 +8,7 @@ import net.minecraft.network.play.client.C07PacketPlayerDigging
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
+import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow.shouldSwap
 
 object AAC : NoSlowMode("AAC") {
     override fun onMotion(event: MotionEvent) {
@@ -19,6 +20,11 @@ object AAC : NoSlowMode("AAC") {
                     EnumFacing.DOWN
                 )
             )
-        } else if (event.eventState == EventState.POST) sendPacket(C08PacketPlayerBlockPlacement(mc.thePlayer.inventory.getCurrentItem()))
+            shouldSwap = true
+
+        } else if (event.eventState == EventState.POST) {
+            sendPacket(C08PacketPlayerBlockPlacement(mc.thePlayer.inventory.getCurrentItem()))
+            shouldSwap = false
+        }
     }
 }
