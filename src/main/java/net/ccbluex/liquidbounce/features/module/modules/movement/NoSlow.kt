@@ -24,6 +24,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     private val swordModes = arrayOf(
         Vanilla,
         SwitchItem,
+        OldIntave,
         NCP,
         NCP2,
         NewNCP,
@@ -34,12 +35,14 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     private val bowModes = arrayOf(
         Vanilla,
         SwitchItem,
+        OldIntave,
         UNCP,
         AAC5,
     )
     private val consumeModes = arrayOf(
         Vanilla,
         SwitchItem,
+        OldIntave,
         UNCP,
         AAC5,
     )
