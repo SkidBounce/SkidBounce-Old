@@ -12,16 +12,18 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getMaterial
+import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Blocks
 import net.minecraft.util.BlockPos
 
 object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
-    private val mode by ListValue("Mode", arrayOf("NCP", "AAC", "Spartan"), "NCP")
+    private val mode by ListValue("Mode", arrayOf("Friction", "AAC", "Spartan"), "Friction")
+    private val friction by FloatValue("Friction", 0.39f, 0.1f..0.98f)
     override fun onEnable() {
-        if (mode == "NCP") {
-            Blocks.ice.slipperiness = 0.39f
-            Blocks.packed_ice.slipperiness = 0.39f
+        if (mode == "Friction") {
+            Blocks.ice.slipperiness = friction
+            Blocks.packed_ice.slipperiness = friction
         }
         super.onEnable()
     }
@@ -29,9 +31,9 @@ object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         val mode = mode
-        if (mode == "NCP") {
-            Blocks.ice.slipperiness = 0.39f
-            Blocks.packed_ice.slipperiness = 0.39f
+        if (mode == "Friction") {
+            Blocks.ice.slipperiness = friction
+            Blocks.packed_ice.slipperiness = friction
         } else {
             Blocks.ice.slipperiness = 0.98f
             Blocks.packed_ice.slipperiness = 0.98f
