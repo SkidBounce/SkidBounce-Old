@@ -22,6 +22,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.sparta
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan.Spartan2
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanilla.SmoothVanilla
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanilla.Vanilla
+import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.extensions.stop
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
@@ -62,7 +63,7 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT, Keyboard.KEY_F) {
         Spartan, Spartan2, BugSpartan,
 
         // Other anti-cheats
-        MineSecure, HawkEye, HAC, WatchCat, Vulcan, VulcanOld,
+        MineSecure, HawkEye, HAC, WatchCat, VulcanGhost, Vulcan, VulcanOld,
 
         // Other
         Jetpack, KeepAlive, Collide, Jump, Flag
@@ -92,6 +93,8 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT, Keyboard.KEY_F) {
         { mode == "Hypixel" && hypixelBoost }
 
     // Other
+    val vulcanghostTimer = FloatValue("VulcanGhost-Timer", 2f, 1f..3f) { mode == "VulcanGhost" }
+    val vulcanghostNoClip = BoolValue("VulcanGhost-NoClip", true) { mode == "VulcanGhost" }
     val mineplexSpeed by FloatValue("MineplexSpeed", 1f, 0.5f..10f) { mode == "Mineplex" }
     val neruxVaceTicks by IntegerValue("NeruxVace-Ticks", 6, 2..20) { mode == "NeruxVace" }
     val redeskyHeight by FloatValue("Redesky-Height", 4f, 1f..7f) { mode == "Redesky" }
@@ -184,6 +187,13 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT, Keyboard.KEY_F) {
     @EventTarget
     fun onMove(event: MoveEvent) {
         modeModule.onMove(event)
+    }
+    @EventTarget
+    fun onWorld(event: WorldEvent) {
+        // breaks when you join a server with it on for some reason
+        if (mode == "VulcanGhost") {
+            state = false
+        }
     }
 
     fun handleVanillaKickBypass() {
