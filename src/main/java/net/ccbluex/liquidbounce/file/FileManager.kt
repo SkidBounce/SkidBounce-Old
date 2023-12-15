@@ -8,7 +8,6 @@ package net.ccbluex.liquidbounce.file
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
-import net.ccbluex.liquidbounce.LiquidBounce.MINECRAFT_VERSION
 import net.ccbluex.liquidbounce.LiquidBounce.background
 import net.ccbluex.liquidbounce.LiquidBounce.isStarting
 import net.ccbluex.liquidbounce.file.configs.*
@@ -22,7 +21,7 @@ import java.io.File
 @SideOnly(Side.CLIENT)
 object FileManager : MinecraftInstance() {
 
-    val dir = File(mc.mcDataDir, "$CLIENT_NAME-$MINECRAFT_VERSION")
+    val dir = File(mc.mcDataDir, CLIENT_NAME)
     val fontsDir = File(dir, "fonts")
     val settingsDir = File(dir, "settings")
     val modulesConfig = ModulesConfig(File(dir, "modules.json"))

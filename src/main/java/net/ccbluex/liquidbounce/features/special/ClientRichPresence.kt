@@ -14,7 +14,6 @@ import com.jagrosh.discordipc.entities.pipe.PipeStatus
 import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_CLOUD
 import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
 import net.ccbluex.liquidbounce.LiquidBounce.clientVersionText
-import net.ccbluex.liquidbounce.LiquidBounce.MINECRAFT_VERSION
 import net.ccbluex.liquidbounce.LiquidBounce.moduleManager
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
@@ -97,7 +96,7 @@ object ClientRichPresence : MinecraftInstance() {
 
         // Check assets contains logo and set logo
         if ("logo" in assets)
-            builder.setLargeImage(assets["logo"], "MC $MINECRAFT_VERSION - $CLIENT_NAME $clientVersionText")
+            builder.setLargeImage(assets["logo"], "$CLIENT_NAME $clientVersionText")
 
         // Check user is in-game
         if (mc.thePlayer != null) {

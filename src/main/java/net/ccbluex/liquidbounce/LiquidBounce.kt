@@ -58,10 +58,9 @@ object LiquidBounce {
     val clientBranch = gitInfo["git.branch"]?.toString() ?: "unknown"
     const val IN_DEV = true
     const val CLIENT_CREATOR = "CCBlueX"
-    const val MINECRAFT_VERSION = "1.8.9"
     const val CLIENT_CLOUD = "https://cloud.liquidbounce.net/LiquidBounce"
 
-    val clientTitle = CLIENT_NAME + " " + clientVersionText + " " + clientCommit + "  | " + MINECRAFT_VERSION + if (IN_DEV) " | DEVELOPMENT BUILD" else ""
+    val clientTitle = CLIENT_NAME + " " + clientVersionText + " " + clientCommit + "  | " + if (IN_DEV) " | DEVELOPMENT BUILD" else ""
 
     var isStarting = true
 
