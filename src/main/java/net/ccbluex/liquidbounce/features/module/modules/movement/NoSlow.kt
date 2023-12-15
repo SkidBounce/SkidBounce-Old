@@ -51,6 +51,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
     override fun onDisable() {
         shouldSwap = false
+        Blocks.slime_block.slipperiness = 0.8f
     }
 
     private val blocking by BoolValue("Blocking", true)
