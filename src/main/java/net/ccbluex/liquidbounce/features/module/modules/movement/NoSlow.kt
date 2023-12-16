@@ -17,7 +17,9 @@ import net.minecraft.init.Blocks
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.other.*
+import net.ccbluex.liquidbounce.utils.PacketUtils
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
+import net.minecraft.network.play.client.C0BPacketEntityAction
 
 object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false) {
 
@@ -65,10 +67,12 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     private val blockingMode by ListValue("BlockingMode", swordModes.map { it.modeName }.toTypedArray(), "Vanilla") { blocking }
     private val consumeMode by ListValue("ConsumeMode", consumeModes.map { it.modeName }.toTypedArray(), "Vanilla") { consuming }
     private val bowMode by ListValue("BowMode", bowModes.map { it.modeName }.toTypedArray(), "Vanilla") { bows }
+    private val sneakMode by ListValue("SneakMode", arrayOf("Vanilla", "Switch", "MineSecure"), "Vanilla") { sneaking }
 
     private val onlyMoveBlocking by BoolValue("OnlyMoveBlocking", true) { blocking }
     private val onlyMoveConsume by BoolValue("OnlyMoveConsume", true) { consuming }
     private val onlyMoveBow by BoolValue("OnlyMoveBow", true) { bows }
+    private val onlyMoveSneak by BoolValue("OnlyMoveSneak", true) { sneaking }
 
     private val blockForwardMultiplier by FloatValue("BlockForwardMultiplier", 1f, 0.2f..1f) { blocking }
     private val blockStrafeMultiplier by FloatValue("BlockStrafeMultiplier", 1f, 0.2f..1f) { blocking }
@@ -93,6 +97,38 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     @EventTarget
     fun onMotion(event: MotionEvent) {
         Blocks.slime_block.slipperiness = if (slime) slimeFriction else 0.8f
+
+        if (mc.gameSettings.keyBindSneak.isKeyDown && !(onlyMoveSneak && mc.thePlayer.motionX == 0.0 && mc.thePlayer.motionZ == 0.0)) {
+            when (sneakMode) {
+                "Vanilla" -> {}
+                "Switch" -> when (event.eventState) {
+                    EventState.PRE -> {
+                        PacketUtils.sendPackets(
+                            C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING),
+                            C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING)
+                        )
+                    }
+                    EventState.POST -> {
+                        PacketUtils.sendPackets(
+                            C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING),
+                            C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING)
+                        )
+                    }
+                    else -> {}
+                }
+                "MineSecure" -> {
+                    if (event.eventState == EventState.PRE)
+                        return
+
+                    PacketUtils.sendPacket(
+                        C0BPacketEntityAction(
+                            mc.thePlayer,
+                            C0BPacketEntityAction.Action.START_SNEAKING
+                        )
+                    )
+                }
+            }
+        }
 
         if ( !shouldSwap && ( mc.thePlayer.motionX == 0.0 && mc.thePlayer.motionZ == 0.0 ) && (
                     ( onlyMoveConsume && isHoldingConsumable() ) ||
