@@ -11,11 +11,11 @@ A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, 
 ## Completed
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
-|      NoSlow      |  :red_circle:   |
+|      NoSlow      | :yellow_circle: |
 |      NoWeb       | :green_circle:  |
 |      Speed       | :yellow_circle: |
 |     LongJump     |  :red_circle:   | 
-|       Fly        |  :red_circle:   | 
+|       Fly        | :yellow_circle: | 
 |      NoFall      |  :red_circle:   | 
 |       Hud        |  :red_circle:   | 
 |    Animations    |  :red_circle:   | 
