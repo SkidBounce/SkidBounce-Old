@@ -5,19 +5,15 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 
-import net.ccbluex.liquidbounce.event.EventState
-import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 
 object AACHop350 : SpeedMode("AACHop3.5.0") {
 
-    @EventTarget
-    fun onMotion(event: MotionEvent) {
+    override fun onMotion() {
         val thePlayer = mc.thePlayer ?: return
 
-        if (event.eventState == EventState.POST && isMoving && !thePlayer.isInWater && !thePlayer.isInLava && !mc.thePlayer.isSneaking) {
+        if (isMoving && !thePlayer.isInWater && !thePlayer.isInLava && !thePlayer.isSneaking) {
             thePlayer.jumpMovementFactor += 0.00208f
             if (thePlayer.fallDistance <= 1f) {
                 if (thePlayer.onGround) {
