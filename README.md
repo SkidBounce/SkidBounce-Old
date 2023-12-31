@@ -19,7 +19,6 @@ A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, 
 |      NoFall      |  :red_circle:   | 
 |       Hud        |  :red_circle:   | 
 |    Animations    |  :red_circle:   | 
-|      NoFall      |  :red_circle:   |
 |      Jesus       |  :red_circle:   | 
 |     Disabler     |  :red_circle:   |
 |      Phase       |  :red_circle:   | 
@@ -33,7 +32,6 @@ A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, 
 |    Criticals     |  :red_circle:   | 
 |     AntiVoid     |  :red_circle:   | 
 |    FastClimb     |  :red_circle:   | 
-|     NoFalls      |  :red_circle:   | 
 | InventoryManager |  :red_circle:   | 
 |      Spider      |  :red_circle:   | 
 |     FastUse      |  :red_circle:   | 
