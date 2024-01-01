@@ -1,12 +1,6 @@
-/*
- * LiquidBounce Hacked Client
- * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
- * https://github.com/CCBlueX/LiquidBounce/
- */
-package net.ccbluex.liquidbounce.features.module.modules.render
+package net.ccbluex.liquidbounce.features.module.modules.client
 
-import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
-import net.ccbluex.liquidbounce.LiquidBounce.hud
+import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
@@ -15,7 +9,7 @@ import net.ccbluex.liquidbounce.value.BoolValue
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.util.ResourceLocation
 
-object HUD : Module("HUD", ModuleCategory.RENDER, defaultInArray = false, gameDetecting = false) {
+object HUD : Module("HUD", ModuleCategory.CLIENT, defaultInArray = false, gameDetecting = false) {
     val blackHotbar by BoolValue("BlackHotbar", true)
     val inventoryParticle by BoolValue("InventoryParticle", false)
     private val blur by BoolValue("Blur", false)
@@ -26,21 +20,21 @@ object HUD : Module("HUD", ModuleCategory.RENDER, defaultInArray = false, gameDe
         if (mc.currentScreen is GuiHudDesigner)
             return
 
-        hud.render(false)
+        LiquidBounce.hud.render(false)
     }
 
     @EventTarget
-    fun onUpdate(event: UpdateEvent) = hud.update()
+    fun onUpdate(event: UpdateEvent) = LiquidBounce.hud.update()
 
     @EventTarget
-    fun onKey(event: KeyEvent) = hud.handleKey('a', event.key)
+    fun onKey(event: KeyEvent) = LiquidBounce.hud.handleKey('a', event.key)
 
     @EventTarget(ignoreCondition = true)
     fun onScreen(event: ScreenEvent) {
         if (mc.theWorld == null || mc.thePlayer == null) return
         if (state && blur && !mc.entityRenderer.isShaderActive && event.guiScreen != null &&
                 !(event.guiScreen is GuiChat || event.guiScreen is GuiHudDesigner)) mc.entityRenderer.loadShader(
-            ResourceLocation(CLIENT_NAME.lowercase() + "/blur.json")
+            ResourceLocation(LiquidBounce.CLIENT_NAME.lowercase() + "/blur.json")
         ) else if (mc.entityRenderer.shaderGroup != null &&
             "liquidbounce/blur.json" in mc.entityRenderer.shaderGroup.shaderGroupName) mc.entityRenderer.stopUseShader()
     }

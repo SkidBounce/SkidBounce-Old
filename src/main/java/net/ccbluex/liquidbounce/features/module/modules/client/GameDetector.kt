@@ -1,17 +1,17 @@
-package net.ccbluex.liquidbounce.features.module.modules.misc
+package net.ccbluex.liquidbounce.features.module.modules.client
 
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.event.WorldEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.utils.misc.StringUtils.contains
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.minecraft.entity.boss.IBossDisplayData
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.potion.Potion
-import net.ccbluex.liquidbounce.utils.misc.StringUtils.contains
 
-object GameDetector: Module("GameDetector", ModuleCategory.MISC, gameDetecting = false) {
+object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting = false) {
     // Check if player's gamemode is Survival or Adventure
     private val gameMode by BoolValue("GameModeCheck", true)
 

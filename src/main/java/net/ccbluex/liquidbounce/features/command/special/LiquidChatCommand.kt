@@ -1,7 +1,7 @@
 package net.ccbluex.liquidbounce.features.command.special
 
 import net.ccbluex.liquidbounce.features.command.Command
-import net.ccbluex.liquidbounce.features.module.modules.misc.LiquidChat
+import net.ccbluex.liquidbounce.features.module.modules.client.LiquidChat
 import net.ccbluex.liquidbounce.utils.misc.StringUtils
 
 object LiquidChatCommand : Command("chat", "lc", "irc") {
