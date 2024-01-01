@@ -7,15 +7,5 @@ package net.ccbluex.liquidbounce.features.module.modules.targets
 
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetInvisible
 
-object Invisible : Module("Invisible", ModuleCategory.TARGETS, subjective = true, gameDetecting = false) {
-    override fun onEnable() {
-        super.onEnable()
-        targetInvisible = true
-    }
-    override fun onDisable() {
-        super.onDisable()
-        targetInvisible = false
-    }
-}
+object Invisible : Module("Invisible", ModuleCategory.TARGETS, gameDetecting = false, defaultInArray = false)

@@ -6,10 +6,10 @@
 package net.ccbluex.liquidbounce.features.command.commands
 
 import net.ccbluex.liquidbounce.features.command.Command
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetAnimals
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetInvisible
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetMobs
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetPlayer
+import net.ccbluex.liquidbounce.features.module.modules.targets.Animals
+import net.ccbluex.liquidbounce.features.module.modules.targets.Invisible
+import net.ccbluex.liquidbounce.features.module.modules.targets.Mobs
+import net.ccbluex.liquidbounce.features.module.modules.targets.Players
 
 object TargetCommand : Command("target") {
     /**
@@ -19,29 +19,29 @@ object TargetCommand : Command("target") {
         if (args.size > 1) {
             when {
                 args[1].equals("players", ignoreCase = true) -> {
-                    targetPlayer = !targetPlayer
-                    chat("§7Target player toggled ${if (targetPlayer) "on" else "off"}.")
+                    Players.state = !Players.state
+                    chat("§7Target player toggled ${if (Players.state) "on" else "off"}.")
                     playEdit()
                     return
                 }
 
                 args[1].equals("mobs", ignoreCase = true) -> {
-                    targetMobs = !targetMobs
-                    chat("§7Target mobs toggled ${if (targetMobs) "on" else "off"}.")
+                    Mobs.state = !Mobs.state
+                    chat("§7Target mobs toggled ${if (Mobs.state) "on" else "off"}.")
                     playEdit()
                     return
                 }
 
                 args[1].equals("animals", ignoreCase = true) -> {
-                    targetAnimals = !targetAnimals
-                    chat("§7Target animals toggled ${if (targetAnimals) "on" else "off"}.")
+                    Animals.state = !Animals.state
+                    chat("§7Target animals toggled ${if (Animals.state) "on" else "off"}.")
                     playEdit()
                     return
                 }
 
                 args[1].equals("invisible", ignoreCase = true) -> {
-                    targetInvisible = !targetInvisible
-                    chat("§7Target Invisible toggled ${if (targetInvisible) "on" else "off"}.")
+                    Invisible.state = !Invisible.state
+                    chat("§7Target Invisible toggled ${if (Invisible.state) "on" else "off"}.")
                     playEdit()
                     return
                 }

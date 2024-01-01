@@ -6,10 +6,10 @@
 package net.ccbluex.liquidbounce.ui.client.clickgui
 
 import net.ccbluex.liquidbounce.LiquidBounce.clickGui
-import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.fadeSpeed
-import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.maxElements
-import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.panelsForcedInBoundaries
-import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI.scale
+import net.ccbluex.liquidbounce.features.module.modules.client.ClickGUI.fadeSpeed
+import net.ccbluex.liquidbounce.features.module.modules.client.ClickGUI.maxElements
+import net.ccbluex.liquidbounce.features.module.modules.client.ClickGUI.panelsForcedInBoundaries
+import net.ccbluex.liquidbounce.features.module.modules.client.ClickGUI.scale
 import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui.clamp
 import net.ccbluex.liquidbounce.ui.client.clickgui.elements.Element
 import net.ccbluex.liquidbounce.ui.client.clickgui.elements.ModuleElement

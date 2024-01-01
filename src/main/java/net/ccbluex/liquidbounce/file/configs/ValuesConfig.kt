@@ -31,11 +31,6 @@ import net.ccbluex.liquidbounce.ui.client.GuiClientConfiguration.Companion.parti
 import net.ccbluex.liquidbounce.ui.client.GuiClientConfiguration.Companion.stylisedAlts
 import net.ccbluex.liquidbounce.ui.client.GuiClientConfiguration.Companion.unformattedAlts
 import net.ccbluex.liquidbounce.ui.client.altmanager.menus.altgenerator.GuiTheAltening.Companion.apiKey
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetAnimals
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetDead
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetInvisible
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetMobs
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetPlayer
 import java.io.*
 
 class ValuesConfig(file: File) : FileConfig(file) {
@@ -57,14 +52,6 @@ class ValuesConfig(file: File) : FileConfig(file) {
                     commandManager.prefix = value.asCharacter
                 key.equals("showrichpresence", true) ->
                     clientRichPresence.showRichPresenceValue = value.asBoolean
-                key.equals("targets", true) -> {
-                    val jsonValue = value as JsonObject
-                    if (jsonValue.has("TargetPlayer")) targetPlayer = jsonValue["TargetPlayer"].asBoolean
-                    if (jsonValue.has("TargetMobs")) targetMobs = jsonValue["TargetMobs"].asBoolean
-                    if (jsonValue.has("TargetAnimals")) targetAnimals = jsonValue["TargetAnimals"].asBoolean
-                    if (jsonValue.has("TargetInvisible")) targetInvisible = jsonValue["TargetInvisible"].asBoolean
-                    if (jsonValue.has("TargetDead")) targetDead = jsonValue["TargetDead"].asBoolean
-                }
                 key.equals("features", true) -> {
                     val jsonValue = value as JsonObject
                     if (jsonValue.has("AntiForge")) fmlFixesEnabled = jsonValue["AntiForge"].asBoolean
@@ -131,16 +118,6 @@ class ValuesConfig(file: File) : FileConfig(file) {
             addProperty("ShowRichPresence", clientRichPresence.showRichPresenceValue)
         }
 
-        val jsonTargets = JsonObject()
-        jsonTargets.run {
-            addProperty("TargetPlayer", targetPlayer)
-            addProperty("TargetMobs", targetMobs)
-            addProperty("TargetAnimals", targetAnimals)
-            addProperty("TargetInvisible", targetInvisible)
-            addProperty("TargetDead", targetDead)
-        }
-
-        jsonObject.add("targets", jsonTargets)
         val jsonFeatures = JsonObject()
         jsonFeatures.run {
             addProperty("AntiForge", fmlFixesEnabled)

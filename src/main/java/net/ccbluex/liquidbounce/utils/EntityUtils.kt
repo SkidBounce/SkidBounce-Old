@@ -5,9 +5,8 @@
  */
 package net.ccbluex.liquidbounce.utils
 
-import net.ccbluex.liquidbounce.features.module.modules.targets.Friends
+import net.ccbluex.liquidbounce.features.module.modules.targets.*
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
-import net.ccbluex.liquidbounce.features.module.modules.targets.Teams
 import net.ccbluex.liquidbounce.utils.extensions.isAnimal
 import net.ccbluex.liquidbounce.utils.extensions.isClientFriend
 import net.ccbluex.liquidbounce.utils.extensions.isMob
@@ -18,22 +17,12 @@ import net.ccbluex.liquidbounce.utils.misc.StringUtils.contains
 
 object EntityUtils : MinecraftInstance() {
 
-    var targetInvisible = false
-
-    var targetPlayer = true
-
-    var targetMobs = true
-
-    var targetAnimals = false
-
-    var targetDead = false
-
     private val healthSubstrings = arrayOf("hp", "health", "❤", "lives")
 
     fun isSelected(entity: Entity?, canAttackCheck: Boolean): Boolean {
-        if (entity is EntityLivingBase && (targetDead || entity.isEntityAlive) && entity != mc.thePlayer) {
-            if (targetInvisible || !entity.isInvisible) {
-                if (targetPlayer && entity is EntityPlayer) {
+        if (entity is EntityLivingBase && (Dead.handleEvents() || entity.isEntityAlive) && entity != mc.thePlayer) {
+            if (Invisible.handleEvents() || !entity.isInvisible) {
+                if (Players.handleEvents() && entity is EntityPlayer) {
                     if (canAttackCheck) {
                         if (isBot(entity))
                             return false
@@ -48,7 +37,7 @@ object EntityUtils : MinecraftInstance() {
                     return true
                 }
 
-                return targetMobs && entity.isMob() || targetAnimals && entity.isAnimal()
+                return Mobs.handleEvents() && entity.isMob() || Animals.handleEvents() && entity.isAnimal()
             }
         }
         return false

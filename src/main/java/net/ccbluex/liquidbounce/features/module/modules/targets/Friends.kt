@@ -8,4 +8,4 @@ package net.ccbluex.liquidbounce.features.module.modules.targets
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 
-object Friends : Module("Friends", ModuleCategory.TARGETS, subjective = true, gameDetecting = false)
+object Friends : Module("Friends", ModuleCategory.TARGETS, gameDetecting = false, defaultInArray = false)

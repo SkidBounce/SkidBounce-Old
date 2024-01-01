@@ -244,5 +244,4 @@ object AntiBot : Module("AntiBot", ModuleCategory.TARGETS) {
         invisibleList.clear()
         notAlwaysInRadiusList.clear()
     }
-
 }

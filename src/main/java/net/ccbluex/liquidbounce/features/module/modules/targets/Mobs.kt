@@ -7,15 +7,5 @@ package net.ccbluex.liquidbounce.features.module.modules.targets
 
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.ccbluex.liquidbounce.utils.EntityUtils.targetMobs
 
-object Mobs : Module("Mobs", ModuleCategory.TARGETS, subjective = true, gameDetecting = false) {
-    override fun onEnable() {
-        super.onEnable()
-        targetMobs = true
-    }
-    override fun onDisable() {
-        super.onDisable()
-        targetMobs = false
-    }
-}
+object Mobs : Module("Mobs", ModuleCategory.TARGETS, gameDetecting = false, defaultInArray = false)
