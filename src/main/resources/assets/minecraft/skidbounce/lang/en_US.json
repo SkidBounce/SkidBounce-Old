@@ -104,7 +104,9 @@
         "module.avoidHazards.description": "Prevents you from walking into blocks that might be harmful to you.",
         
         "module.blink.description": "Suspends all movement packets.",
-        
+
+        "module.bedProtectionESP.description": "Allows you to see where the blocks should be placed to protect a bed",
+
         "module.blockESP.description": "Allows you to see a selected block through walls.",
         
         "module.blockOverlay.description": "Allows you to change the design of the block overlay.",
@@ -328,7 +330,9 @@
         "module.waterSpeed.description": "Allows you to swim faster.",
         
         "module.xRay.description": "Allows you to see ores through walls.",
-        
-        "module.zoot.description": "Removes all bad potion effects/fire."
+
+        "module.zoot.description": "Removes all bad potion effects/fire.",
+
+        "module.keepSprint.description": "Keeps you sprinting after attacking."
     }
 }

@@ -13,9 +13,12 @@ import net.ccbluex.liquidbounce.features.module.modules.targets.Teams
 import net.ccbluex.liquidbounce.features.module.modules.player.Blink
 import net.ccbluex.liquidbounce.features.module.modules.targets.Friends
 import net.ccbluex.liquidbounce.injection.implementations.IMixinEntity
-import net.ccbluex.liquidbounce.utils.*
+import net.ccbluex.liquidbounce.utils.PacketUtils
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.StringUtils.contains
+import net.ccbluex.liquidbounce.utils.realX
+import net.ccbluex.liquidbounce.utils.realY
+import net.ccbluex.liquidbounce.utils.realZ
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBacktrackBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
@@ -48,7 +51,18 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
         }
     }
 
-    val mode by ListValue("Mode", arrayOf("Legacy", "Modern"), "Modern")
+    val mode by object : ListValue("Mode", arrayOf("Legacy", "Modern"), "Modern") {
+        override fun onChanged(oldValue: String, newValue: String) {
+            clearPackets()
+            backtrackedPlayer.clear()
+        }
+    }
+
+    // Legacy
+    private val legacyPos by ListValue("Caching mode",
+        arrayOf("ClientPos", "ServerPos"),
+        "ClientPos"
+    ) { mode == "Legacy" }
 
     // Modern
     private val style by ListValue("Style", arrayOf("Pulse", "Smooth"), "Smooth") { mode == "Modern" }
@@ -66,10 +80,10 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
 
     // ESP
     private val esp by BoolValue("ESP", true, subjective = true) { mode == "Modern" }
-        private val rainbow by BoolValue("Rainbow", true, subjective = true) { mode == "Modern" && esp }
-        private val red by IntegerValue("R", 0, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
-        private val green by IntegerValue("G", 255, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
-        private val blue by IntegerValue("B", 0, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
+    private val rainbow by BoolValue("Rainbow", true, subjective = true) { mode == "Modern" && esp }
+    private val red by IntegerValue("R", 0, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
+    private val green by IntegerValue("G", 255, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
+    private val blue by IntegerValue("B", 0, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
 
     private val packetQueue = LinkedHashMap<Packet<*>, Long>()
     private val positions = mutableListOf<Pair<Vec3, Long>>()
@@ -79,6 +93,8 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
     private var globalTimer = MSTimer()
 
     private var shouldDraw = true
+
+    private var ignoreWholeTick = false
 
     // Legacy
     private val maximumCachedPositions by IntegerValue("MaxCachedPositions", 10, 1..20) { mode == "Legacy" }
@@ -111,15 +127,38 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
                             System.currentTimeMillis()
                         )
                     }
-                }
 
-                backtrackedPlayer.forEach { (key, backtrackData) ->
-                    // Remove old data
-                    backtrackData.removeAll { it.time + delay < System.currentTimeMillis() }
+                    is S14PacketEntity -> {
+                        if (legacyPos == "ServerPos") {
+                            val entity = mc.theWorld?.getEntityByID(packet.entityId)
+                            val entityMixin = entity as? IMixinEntity
+                            if (entityMixin != null) {
+                                addBacktrackData(
+                                    entity.uniqueID,
+                                    entityMixin.trueX,
+                                    entityMixin.trueY,
+                                    entityMixin.trueZ,
+                                    System.currentTimeMillis()
+                                )
+                            }
+                        }
+                    }
 
-                    // Remove player if there is no data left. This prevents memory leaks.
-                    if (backtrackData.isEmpty())
-                        removeBacktrackData(key)
+                    is S18PacketEntityTeleport -> {
+                        if (legacyPos == "ServerPos") {
+                            val entity = mc.theWorld?.getEntityByID(packet.entityId)
+                            val entityMixin = entity as? IMixinEntity
+                            if (entityMixin != null) {
+                                addBacktrackData(
+                                    entity.uniqueID,
+                                    entityMixin.trueX,
+                                    entityMixin.trueY,
+                                    entityMixin.trueZ,
+                                    System.currentTimeMillis()
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
@@ -210,10 +249,21 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
 
     @EventTarget
     fun onGameLoop(event: GameLoopEvent) {
+        if (mode == "Legacy") {
+            backtrackedPlayer.forEach { (key, backtrackData) ->
+                // Remove old data
+                backtrackData.removeAll { it.time + delay < System.currentTimeMillis() }
+
+                // Remove player if there is no data left. This prevents memory leaks.
+                if (backtrackData.isEmpty())
+                    removeBacktrackData(key)
+            }
+        }
+
         val target = target as? EntityLivingBase
         val targetMixin = target as? IMixinEntity
 
-        if (targetMixin != null && !Blink.blinkingReceive() && shouldBacktrack() && targetMixin.truePos) {
+        if (mode == "Modern" && targetMixin != null && !Blink.blinkingReceive() && shouldBacktrack() && targetMixin.truePos) {
             val trueDist = mc.thePlayer.getDistance(targetMixin.trueX, targetMixin.trueY, targetMixin.trueZ)
             val dist = mc.thePlayer.getDistance(target.posX, target.posY, target.posZ)
 
@@ -229,6 +279,8 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
                 globalTimer.reset()
             }
         }
+
+        ignoreWholeTick = false
     }
 
     @EventTarget
@@ -244,6 +296,7 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
 
         target = event.targetEntity
     }
+
     @EventTarget
     fun onRender3D(event: Render3DEvent) {
         when (mode.lowercase()) {
@@ -285,7 +338,7 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
             }
 
             "modern" -> {
-                if (!shouldBacktrack() || packetQueue.isEmpty() || !shouldDraw || !esp )
+                if (!shouldBacktrack() || packetQueue.isEmpty() || !shouldDraw || !esp)
                     return
 
                 val renderManager = mc.renderManager
@@ -322,7 +375,7 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
 
     @EventTarget
     fun onEntityMove(event: EntityMovementEvent) {
-        if (mode == "Legacy") {
+        if (mode == "Legacy" && legacyPos == "ClientPos") {
             val entity = event.movedEntity
 
             // Check if entity is a player
@@ -340,13 +393,12 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
             clearPackets(false)
     }
 
-    override fun onEnable() = reset()
+    override fun onEnable() =
+        reset()
 
     override fun onDisable() {
-        if (mode == "Modern") {
-            clearPackets()
-            reset()
-        }
+        clearPackets()
+        backtrackedPlayer.clear()
     }
 
     private fun handlePackets() {
@@ -410,6 +462,7 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
         }
         positions.clear()
         shouldDraw = false
+        ignoreWholeTick = true
     }
 
     private fun addBacktrackData(id: UUID, x: Double, y: Double, z: Double, time: Long) {
@@ -501,12 +554,65 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
         entity.setPosition(entityPosition.xCoord, entityPosition.yCoord, entityPosition.zCoord)
     }
 
+    fun runWithNearestTrackedDistance(entity: Entity, f: () -> Unit) {
+        if (entity !is EntityPlayer || !handleEvents()|| mode == "Modern") {
+            f()
+
+            return
+        }
+
+        var backtrackDataArray = getBacktrackData(entity.uniqueID)?.toMutableList()
+
+        if (backtrackDataArray == null) {
+            f()
+
+            return
+        }
+
+        backtrackDataArray = backtrackDataArray.sortedBy { (x, y, z, _) ->
+            runWithSimulatedPastPosition(entity, Vec3(x, y, z)) {
+                mc.thePlayer.getDistanceToBox(entity.hitBox)
+            }
+        }.toMutableList()
+
+        val (x, y, z, _) = backtrackDataArray.first()
+
+        runWithSimulatedPastPosition(entity, Vec3(x, y, z)) {
+            f()
+
+            null
+        }
+    }
+
+    private fun runWithSimulatedPastPosition(entity: Entity, vec3: Vec3, f: () -> Double?): Double? {
+        val entityPosition = entity.positionVector
+        val (prevX, prevY, prevZ) = Triple(entity.prevPosX, entity.prevPosY, entity.prevPosZ)
+
+        val (x, y, z) = Triple(vec3.xCoord, vec3.yCoord, vec3.zCoord)
+
+        entity.setPosition(x, y, z)
+        entity.prevPosX = x
+        entity.prevPosY = y
+        entity.prevPosZ = z
+
+        val result = f()
+
+        // Reset position
+        entity.prevPosX = prevX
+        entity.prevPosY = prevY
+        entity.prevPosZ = prevZ
+
+        entity.setPosition(entityPosition.xCoord, entityPosition.yCoord, entityPosition.zCoord)
+
+        return result
+    }
+
     val color
         get() = if (rainbow) rainbow() else Color(red, green, blue)
 
     private fun shouldBacktrack() =
         target?.let {
-            !it.isDead && isEnemy(it) && (mc.thePlayer?.ticksExisted ?: 0) > 20
+            !it.isDead && isEnemy(it) && (mc.thePlayer?.ticksExisted ?: 0) > 20 && !ignoreWholeTick
         } ?: false
 
     private fun reset() {

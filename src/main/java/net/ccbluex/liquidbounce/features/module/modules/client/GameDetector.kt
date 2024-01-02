@@ -9,6 +9,7 @@ import net.ccbluex.liquidbounce.utils.misc.StringUtils.contains
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.minecraft.entity.boss.IBossDisplayData
 import net.minecraft.entity.item.EntityArmorStand
+import net.minecraft.item.Item
 import net.minecraft.potion.Potion
 
 object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting = false) {
@@ -26,6 +27,9 @@ object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting
 
     // Check if player doesn't have infinite invisibility effect
     private val invisibility by BoolValue("InvisibilityCheck", true)
+
+    // Check if player has compass inside their inventory
+    private val compass by BoolValue("CompassCheck", false)
 
     // Check for any hub-like BossBar or ArmorStand entities
     private val entity by BoolValue("EntityCheck", false)
@@ -54,7 +58,7 @@ object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting
         if (gameMode && !mc.playerController.gameIsSurvivalOrAdventure())
             return
 
-        if (this.capabilities &&
+        if (GameDetector.capabilities &&
             (!capabilities.allowEdit || capabilities.allowFlying || capabilities.isFlying || capabilities.disableDamage))
             return
 
@@ -65,6 +69,9 @@ object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting
             return
 
         if (invisibility && thePlayer.getActivePotionEffect(Potion.invisibility)?.isPotionDurationMax == true)
+            return
+
+        if (compass && thePlayer.inventory.hasItem(Item.getItemById(345)))
             return
 
         if (scoreboard) {

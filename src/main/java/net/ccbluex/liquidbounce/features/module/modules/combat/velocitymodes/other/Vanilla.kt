@@ -48,7 +48,7 @@ object Vanilla : VelocityMode("Vanilla") {
     }
 
     override fun onUpdate() {
-        if (jump && mc.thePlayer.onGround && mc.thePlayer.hurtTime == 9 && RandomUtils.nextInt(1, 100) > jumpFailRate) {
+        if (!mc.thePlayer.isJumping && jump && mc.thePlayer.onGround && mc.thePlayer.hurtTime == 9 && RandomUtils.nextInt(1, 100) > jumpFailRate) {
             mc.thePlayer.jump()
             mc.thePlayer.motionY = jumpMotion.toDouble()
         }
