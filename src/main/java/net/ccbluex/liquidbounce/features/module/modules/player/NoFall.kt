@@ -32,7 +32,8 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         AAC3315,
         Spartan,
         CubeCraft,
-        Hypixel
+        Hypixel,
+        Vulcan,
     )
 
     private val modes = noFallModes.map { it.modeName }.toTypedArray()
