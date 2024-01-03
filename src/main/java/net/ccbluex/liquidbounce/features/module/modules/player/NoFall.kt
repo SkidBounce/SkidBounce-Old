@@ -23,6 +23,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         SpoofGround,
         NoGround,
         Packet,
+        Packet2,
         MLG,
         AAC,
         AACv4,
