@@ -4,7 +4,7 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFal
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C03PacketPlayer
 
-object Packet2 : NoFallMode("Packet2") {
+object LessPacket : NoFallMode("LessPacket") {
     override fun onUpdate() {
         if (mc.thePlayer.fallDistance - mc.thePlayer.motionY > 3f) {
             sendPacket(C03PacketPlayer(true))
