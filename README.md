@@ -16,7 +16,7 @@ A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, 
 |      Speed       | :yellow_circle: |
 |     LongJump     |  :red_circle:   | 
 |       Fly        | :yellow_circle: | 
-|      NoFall      |  :red_circle:   | 
+|      NoFall      | :yellow_circle: | 
 |       Hud        |  :red_circle:   | 
 |    Animations    |  :red_circle:   | 
 |      Jesus       |  :red_circle:   | 
