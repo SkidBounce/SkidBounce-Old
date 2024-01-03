@@ -8,10 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.player
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.AAC
-import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.AAC3311
-import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.AAC3315
-import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.LAAC
+import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.other.*
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlock
@@ -27,6 +24,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Packet,
         MLG,
         AAC,
+        AACv4,
         LAAC,
         AAC3311,
         AAC3315,
