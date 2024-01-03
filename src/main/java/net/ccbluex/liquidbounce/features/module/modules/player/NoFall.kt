@@ -36,6 +36,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Spartan,
         CubeCraft,
         Hypixel,
+        HypixelFlag,
         HypSpoof,
         Vulcan,
         Medusa,
