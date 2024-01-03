@@ -116,7 +116,7 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     fun onTick(event: TickEvent) { modeModule.onTick(event) }
     @EventTarget
     fun onAttack(event: AttackEvent) { modeModule.onAttack() }
-    @EventTarget
+    @EventTarget(priority = 1)
     fun onPacket(event: PacketEvent) {
         modeModule.onPacket(event)
         if (event.packet is S12PacketEntityVelocity && event.packet.entityID == mc.thePlayer.entityId) {
