@@ -28,17 +28,15 @@ class GuiMainMenu : GuiScreen() {
             add(GuiButton(1, width / 2 - 100, defaultHeight, 98, 20, I18n.format("menu.singleplayer")))
             add(GuiButton(2, width / 2 + 2, defaultHeight, 98, 20, I18n.format("menu.multiplayer")))
 
-
-            add(GuiButton(108, width / 2 - 100, defaultHeight + 24 * 3, translationMenu("contributors")))
-            add(GuiButton(0, width / 2 - 100, defaultHeight + 24 * 4, 98, 20, I18n.format("menu.options")))
-            add(GuiButton(4, width / 2 + 2, defaultHeight + 24 * 4, 98, 20, I18n.format("menu.quit")))
+            add(GuiButton(0, width / 2 - 100, defaultHeight + 24 * 3, 98, 20, I18n.format("menu.options")))
+            add(GuiButton(4, width / 2 + 2, defaultHeight + 24 * 3, 98, 20, I18n.format("menu.quit")))
         }
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         drawBackground(0)
 
-        drawRect(width / 2f - 115, height / 4f + 35, width / 2f + 115, height / 4f + 175, Integer.MIN_VALUE)
+        drawRect(width / 2f - 115, height / 4f + 35, width / 2f + 115, height / 4f + 151, Integer.MIN_VALUE)
 
         Fonts.fontBold180.drawCenteredString(CLIENT_NAME, width / 2F, height / 8F, 4673984, true)
         Fonts.font35.drawCenteredString(clientVersionText, width / 2F + 148, height / 8F + Fonts.font35.fontHeight, 0xffffff, true)
@@ -56,7 +54,6 @@ class GuiMainMenu : GuiScreen() {
             101 -> mc.displayGuiScreen(GuiServerStatus(this))
             102 -> mc.displayGuiScreen(GuiClientConfiguration(this))
             103 -> mc.displayGuiScreen(GuiModsMenu(this))
-            108 -> mc.displayGuiScreen(GuiContributors(this))
         }
     }
 }
