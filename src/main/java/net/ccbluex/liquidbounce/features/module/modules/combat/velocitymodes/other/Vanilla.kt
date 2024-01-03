@@ -73,5 +73,3 @@ object Vanilla : VelocityMode("Vanilla") {
         mc.thePlayer.motionZ *= attackReduceMultiplier.toDouble()
     }
 }
-
-

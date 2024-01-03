@@ -88,11 +88,3 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
     override val tag
         get() = mode
 }
-//                "tphop" -> {
-//                    sendPackets(
-//                        C04PacketPlayerPosition(x, y + 0.02, z, false),
-//                        C04PacketPlayerPosition(x, y + 0.01, z, false)
-//                    )
-//                    thePlayer.setPosition(x, y + 0.01, z)
-//                }
-//            }
