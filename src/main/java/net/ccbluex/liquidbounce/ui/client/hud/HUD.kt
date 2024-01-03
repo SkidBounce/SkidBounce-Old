@@ -44,14 +44,11 @@ object HUD : MinecraftInstance() {
   fun setDefault() {
     elements.clear()
 
-    addElement(Text.defaultClient())
-    addElement(TabGUI())
     addElement(Arraylist())
     addElement(ScoreboardElement())
     addElement(Armor())
     addElement(Effects())
     addElement(Notifications())
-    // addElement(SpeedGraph()) / not as default pls
   }
 
   /** Render all elements */

@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.injection.forge.mixins.network;
 import io.netty.buffer.Unpooled;
 import net.ccbluex.liquidbounce.event.EntityMovementEvent;
 import net.ccbluex.liquidbounce.event.EventManager;
-import net.ccbluex.liquidbounce.features.module.modules.misc.NoRotateSet;
+import net.ccbluex.liquidbounce.features.module.modules.misc.NoRotate;
 import net.ccbluex.liquidbounce.features.module.modules.player.Blink;
 import net.ccbluex.liquidbounce.features.special.ClientFixes;
 import net.ccbluex.liquidbounce.utils.ClientUtils;
@@ -127,7 +127,7 @@ public abstract class MixinNetHandlerPlayClient {
 
     @Inject(method = "handlePlayerPosLook", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;setPositionAndRotation(DDDFF)V", shift = At.Shift.BEFORE))
     private void injectNoRotateSetPositionOnly(S08PacketPlayerPosLook p_handlePlayerPosLook_1_, CallbackInfo ci) {
-        NoRotateSet module = NoRotateSet.INSTANCE;
+        NoRotate module = NoRotate.INSTANCE;
 
         // Save the server's requested rotation before it resets the rotations
         module.setSavedRotation(PlayerExtensionKt.getRotation(Minecraft.getMinecraft().thePlayer));
@@ -140,7 +140,7 @@ public abstract class MixinNetHandlerPlayClient {
         PacketUtils.sendPacket(p_sendPacket_1_, shouldTrigger);
 
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-        NoRotateSet module = NoRotateSet.INSTANCE;
+        NoRotate module = NoRotate.INSTANCE;
 
         if (player == null || !module.shouldModify(player)) {
             return;

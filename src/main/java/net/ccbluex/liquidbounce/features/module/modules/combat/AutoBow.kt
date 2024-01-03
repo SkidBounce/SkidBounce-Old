@@ -17,7 +17,7 @@ import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.RELEASE_U
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 
-object AutoBow : Module("AutoBow", ModuleCategory.COMBAT, subjective = true, spacedName = "Auto Bow") {
+object AutoBow : Module("AutoBow", ModuleCategory.COMBAT, subjective = true) {
 
     private val waitForBowAimbot by BoolValue("WaitForBowAimbot", true)
 
@@ -26,7 +26,7 @@ object AutoBow : Module("AutoBow", ModuleCategory.COMBAT, subjective = true, spa
         val thePlayer = mc.thePlayer
 
         if (thePlayer.isUsingItem && thePlayer.heldItem?.item is ItemBow &&
-                thePlayer.itemInUseDuration > 20 && (!waitForBowAimbot || !BowAimbot.handleEvents() || BowAimbot.hasTarget())) {
+                thePlayer.itemInUseDuration > 20 && (!waitForBowAimbot || !BowAimBot.handleEvents() || BowAimBot.hasTarget())) {
             thePlayer.stopUsingItem()
             sendPacket(C07PacketPlayerDigging(RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN))
         }

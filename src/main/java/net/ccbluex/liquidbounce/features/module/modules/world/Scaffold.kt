@@ -64,7 +64,7 @@ import javax.vecmath.Color3f
 import kotlin.math.*
 
 
-object Scaffold : Module("Scaffold", ModuleCategory.WORLD, Keyboard.KEY_I) {
+object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
 
     private val mode by ListValue("Mode", arrayOf("Normal", "Rewinside", "Expand", "Telly", "GodBridge"), "Normal")
 

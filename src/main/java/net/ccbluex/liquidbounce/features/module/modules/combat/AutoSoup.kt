@@ -28,7 +28,7 @@ import net.minecraft.network.play.client.C09PacketHeldItemChange
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 
-object AutoSoup : Module("AutoSoup", ModuleCategory.COMBAT, spacedName = "Auto Soup") {
+object AutoSoup : Module("AutoSoup", ModuleCategory.COMBAT) {
 
     private val health by FloatValue("Health", 15f, 0f..20f)
     private val delay by IntegerValue("Delay", 150, 0..500)

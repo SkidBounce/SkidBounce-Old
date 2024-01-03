@@ -8,7 +8,5 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 
-object AntiBounce : Module("AntiBounce", ModuleCategory.MOVEMENT, spacedName = "Anti Bounce")
-/*
-    src\main\java\net\ccbluex\liquidbounce\injection\forge\mixins\block\MixinBlockSlime.java
-*/
+object AntiBounce : Module("AntiBounce", ModuleCategory.MOVEMENT)
+// ~\src\main\java\net\ccbluex\liquidbounce\injection\forge\mixins\block\MixinBlockSlime.java

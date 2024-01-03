@@ -37,7 +37,7 @@ import net.minecraft.util.AxisAlignedBB
 import org.lwjgl.input.Keyboard
 import java.awt.Color
 
-object Fly : Module("Fly", ModuleCategory.MOVEMENT, Keyboard.KEY_F) {
+object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     private val flyModes = arrayOf(
         Vanilla, SmoothVanilla,
 

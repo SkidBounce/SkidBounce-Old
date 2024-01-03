@@ -35,7 +35,7 @@ import java.awt.Color
 class Arraylist(x: Double = 1.0, y: Double = 2.0, scale: Float = 1F,
     side: Side = Side(Horizontal.RIGHT, Vertical.UP)) : Element(x, y, scale, side) {
 
-    private val textColorMode by ListValue("Text-Color", arrayOf("Custom", "Random", "Rainbow"), "Custom")
+    private val textColorMode by ListValue("Text-Color", arrayOf("Custom", "Random", "Rainbow"), "Rainbow")
     private val textRed by IntegerValue("Text-R", 0, 0..255) { textColorMode == "Custom" }
     private val textGreen by IntegerValue("Text-G", 111, 0..255) { textColorMode == "Custom" }
     private val textBlue by IntegerValue("Text-B", 255, 0..255) { textColorMode == "Custom" }
@@ -52,7 +52,7 @@ class Arraylist(x: Double = 1.0, y: Double = 2.0, scale: Float = 1F,
     private val backgroundRed by IntegerValue("Background-R", 0, 0..255) { backgroundMode == "Custom" }
     private val backgroundGreen by IntegerValue("Background-G", 0, 0..255) { backgroundMode == "Custom" }
     private val backgroundBlue by IntegerValue("Background-B", 0, 0..255) { backgroundMode == "Custom" }
-    private val backgroundAlpha by IntegerValue("Background-Alpha", 0, 0..255) { backgroundMode == "Custom" }
+    private val backgroundAlpha by IntegerValue("Background-Alpha", 127, 0..255) { backgroundMode == "Custom" }
 
     private fun isColorModeUsed(value: String) = textColorMode == value || rectMode == value || backgroundMode == value
 
@@ -73,7 +73,7 @@ class Arraylist(x: Double = 1.0, y: Double = 2.0, scale: Float = 1F,
         override fun onUpdate(value: Boolean) = updateTagDetails()
     }
 
-    private val font by FontValue("Font", Fonts.font40)
+    private val font by FontValue("Font", Fonts.minecraftFont)
     private val textShadow by BoolValue("ShadowText", true)
     private val moduleCase by ListValue("ModuleCase", arrayOf("Normal", "Uppercase", "Lowercase"), "Normal")
     private val space by FloatValue("Space", 0F, 0F..5F)

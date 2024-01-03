@@ -50,7 +50,7 @@ import java.awt.Color
 import kotlin.math.truncate
 
 
-object Tower : Module("Tower", ModuleCategory.WORLD, Keyboard.KEY_O, gameDetecting = false) {
+object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
     /**
      * OPTIONS
      */

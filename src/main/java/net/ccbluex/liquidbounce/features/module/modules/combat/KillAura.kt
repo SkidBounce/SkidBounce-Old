@@ -62,11 +62,10 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.util.Vec3
 import net.minecraft.world.WorldSettings
-import org.lwjgl.input.Keyboard
 import java.awt.Color
 import kotlin.math.max
 
-object KillAura : Module("KillAura", ModuleCategory.COMBAT, Keyboard.KEY_R) {
+object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     /**
      * OPTIONS
      */

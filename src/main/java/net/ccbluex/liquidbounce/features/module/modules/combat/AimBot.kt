@@ -26,7 +26,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.Vec3
 import java.util.*
 
-object Aimbot : Module("Aimbot", ModuleCategory.COMBAT) {
+object AimBot : Module("AimBot", ModuleCategory.COMBAT) {
 
     private val range by FloatValue("Range", 4.4F, 1F..8F)
     private val turnSpeed by FloatValue("TurnSpeed", 10f, 1F..180F)

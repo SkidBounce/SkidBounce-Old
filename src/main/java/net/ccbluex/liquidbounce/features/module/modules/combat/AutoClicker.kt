@@ -21,7 +21,7 @@ import net.minecraft.item.EnumAction
 import net.minecraft.util.MovingObjectPosition
 import kotlin.random.Random.Default.nextBoolean
 
-object AutoClicker : Module("AutoClicker", ModuleCategory.COMBAT, spacedName = "Auto Clicker") {
+object AutoClicker : Module("AutoClicker", ModuleCategory.COMBAT) {
     private val maxCPSValue: IntegerValue = object : IntegerValue("MaxCPS", 8, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minCPS)
     }
