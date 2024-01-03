@@ -32,6 +32,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         CubeCraft,
         Hypixel,
         Vulcan,
+        Medusa,
     )
 
     private val modes = noFallModes.map { it.modeName }.toTypedArray()
