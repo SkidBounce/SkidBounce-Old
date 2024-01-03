@@ -4,7 +4,7 @@ import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.minecraft.network.play.client.C03PacketPlayer
 
-object Packet3 : NoFallMode("Packet2") {
+object Packet3 : NoFallMode("Packet3") {
     private var packet1Count = 0
     private var packetModify = false
     override fun onEnable() {

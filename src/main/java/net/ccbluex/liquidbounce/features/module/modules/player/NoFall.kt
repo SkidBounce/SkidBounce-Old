@@ -38,6 +38,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         HypSpoof,
         Vulcan,
         Medusa,
+        Verus,
     )
 
     private val modes = noFallModes.map { it.modeName }.toTypedArray()
