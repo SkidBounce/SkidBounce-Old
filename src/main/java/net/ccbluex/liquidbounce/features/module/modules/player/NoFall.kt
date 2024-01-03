@@ -24,6 +24,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         NoGround,
         Packet,
         Packet2,
+        Packet3,
         LessPacket,
         MLG,
         AAC,
