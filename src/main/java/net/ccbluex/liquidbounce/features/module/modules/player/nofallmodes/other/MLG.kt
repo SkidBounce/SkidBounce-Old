@@ -2,7 +2,7 @@ package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.othe
 
 import net.ccbluex.liquidbounce.event.EventState.PRE
 import net.ccbluex.liquidbounce.event.MotionEvent
-import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.minFallDistance
+import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.mlgMinFallDistance
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.ccbluex.liquidbounce.utils.RotationUtils.faceBlock
 import net.ccbluex.liquidbounce.utils.VecRotation
@@ -34,7 +34,7 @@ object MLG : NoFallMode("MLG") {
 
             if (!mlgTimer.hasTimePassed(10)) return
 
-            if (thePlayer.fallDistance > minFallDistance) {
+            if (thePlayer.fallDistance > mlgMinFallDistance) {
                 val fallingPlayer = FallingPlayer(thePlayer)
 
                 val maxDist = mc.playerController.blockReachDistance + 1.5
