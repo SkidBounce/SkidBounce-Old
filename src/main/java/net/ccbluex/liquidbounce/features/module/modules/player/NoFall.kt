@@ -31,6 +31,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         MLG,
         AAC,
         AACv4,
+        AAC44xFlag,
         LAAC,
         AAC3311,
         AAC3315,
