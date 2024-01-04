@@ -25,6 +25,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Packet,
         Packet2,
         Packet3,
+        Packet4,
         LessPacket,
         Damage,
         MLG,
