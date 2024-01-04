@@ -23,7 +23,7 @@ object FileManager : MinecraftInstance() {
 
     val dir = File(mc.mcDataDir, CLIENT_NAME)
     val fontsDir = File(dir, "fonts")
-    val settingsDir = File(dir, "settings")
+    val settingsDir = File(dir, "configs")
     val modulesConfig = ModulesConfig(File(dir, "modules.json"))
     val valuesConfig = ValuesConfig(File(dir, "values.json"))
     val clickGuiConfig = ClickGuiConfig(File(dir, "clickgui.json"))
