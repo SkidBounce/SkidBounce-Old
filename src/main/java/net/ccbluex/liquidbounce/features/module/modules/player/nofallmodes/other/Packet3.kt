@@ -5,27 +5,27 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFal
 import net.minecraft.network.play.client.C03PacketPlayer
 
 object Packet3 : NoFallMode("Packet3") {
-    private var packetCount = 0
-    private var packetModify = false
+    private var lastFallDistRounded = 0
+    private var modify = false
     override fun onEnable() {
-        packetCount = 0
-        packetModify = false
+        lastFallDistRounded = 0
+        modify = false
     }
 
     override fun onUpdate() {
-        if (mc.thePlayer.fallDistance.toInt() / 2 > packetCount) {
-            packetCount = mc.thePlayer.fallDistance.toInt() / 2
-            packetModify = true
+        if (mc.thePlayer.fallDistance.toInt() / 2 > lastFallDistRounded) {
+            lastFallDistRounded = mc.thePlayer.fallDistance.toInt() / 2
+            modify = true
         }
         if (mc.thePlayer.onGround) {
-            packetCount = 0
+            lastFallDistRounded = 0
         }
     }
 
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is C03PacketPlayer && packetModify) {
+        if (event.packet is C03PacketPlayer && modify) {
             event.packet.onGround = true
-            packetModify = false
+            modify = false
         }
     }
 }
