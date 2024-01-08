@@ -15,6 +15,7 @@ import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlock
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.BlockLiquid
 import net.minecraft.util.AxisAlignedBB.fromBounds
@@ -31,6 +32,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Motion,
         MLG,
         Damage,
+        Phase,
         AAC,
         AACv4,
         AAC44xFlag,
@@ -54,6 +56,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     val spoofgroundAlways by BoolValue("SpoofGround-Always", true) { mode == "SpoofGround" }
     val spoofgroundMinFallDistance by FloatValue("SpoofGround-MinFallDistance", 0f, 0f..3f) { mode == "SpoofGround" && !spoofgroundAlways }
     val motionMotion by FloatValue("Motion-Motion", -0.01f, -5f..5f) { mode == "Motion" }
+    val phaseOffset by IntegerValue("Phase-Offset", 1, 0..5) { mode == "Phase" }
 
     override fun onEnable() {
         modeModule.onEnable()
