@@ -1,0 +1,53 @@
+/*
+ * LiquidBounce Hacked Client
+ * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
+ * https://github.com/CCBlueX/LiquidBounce/
+ */
+package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other
+
+import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
+import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
+import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
+import net.minecraft.init.Blocks.web
+import net.minecraft.network.play.client.C07PacketPlayerDigging
+import net.minecraft.util.BlockPos
+import net.minecraft.util.EnumFacing
+
+object Grim : NoWebMode("Grim") {
+    override fun onUpdate() {
+        if (mc.thePlayer == null) return
+        val blocks: MutableSet<BlockPos> = mutableSetOf()
+
+        for (x in 3 downTo -3) {
+            for (y in 3 downTo -3) {
+                for (z in 3 downTo -3) {
+
+                    val pos = BlockPos(
+                        mc.thePlayer.posX.toInt() + x,
+                        mc.thePlayer.posY.toInt() + y,
+                        mc.thePlayer.posZ.toInt() + z
+                    )
+
+                    if (getBlock(pos) == web && // "collision" check
+                        pos.x > mc.thePlayer.entityBoundingBox.minX - 1.25 &&
+                        pos.x < mc.thePlayer.entityBoundingBox.maxX + 0.25 &&
+                        pos.y > mc.thePlayer.entityBoundingBox.minY - 1.25 &&
+                        pos.y < mc.thePlayer.entityBoundingBox.maxY + 0.25 &&
+                        pos.z > mc.thePlayer.entityBoundingBox.minZ - 1.25 &&
+                        pos.z < mc.thePlayer.entityBoundingBox.maxZ + 0.25
+                    ) blocks += pos
+                }
+            }
+        }
+        blocks.forEach {
+            sendPacket(
+                C07PacketPlayerDigging(
+                    C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK,
+                    it,
+                    EnumFacing.DOWN
+                )
+            )
+        }
+        mc.thePlayer.isInWeb = false
+    }
+}
