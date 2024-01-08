@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other
 
+import net.ccbluex.liquidbounce.features.module.modules.movement.NoWeb.grimExpand
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
@@ -29,12 +30,12 @@ object Grim : NoWebMode("Grim") {
                     )
 
                     if (getBlock(pos) == web && // "collision" check
-                        pos.x > mc.thePlayer.entityBoundingBox.minX - 1.25 &&
-                        pos.x < mc.thePlayer.entityBoundingBox.maxX + 0.25 &&
-                        pos.y > mc.thePlayer.entityBoundingBox.minY - 1.25 &&
-                        pos.y < mc.thePlayer.entityBoundingBox.maxY + 0.25 &&
-                        pos.z > mc.thePlayer.entityBoundingBox.minZ - 1.25 &&
-                        pos.z < mc.thePlayer.entityBoundingBox.maxZ + 0.25
+                        pos.x > mc.thePlayer.entityBoundingBox.minX - grimExpand - 1 &&
+                        pos.x < mc.thePlayer.entityBoundingBox.maxX + grimExpand &&
+                        pos.y > mc.thePlayer.entityBoundingBox.minY - grimExpand - 1 &&
+                        pos.y < mc.thePlayer.entityBoundingBox.maxY + grimExpand &&
+                        pos.z > mc.thePlayer.entityBoundingBox.minZ - grimExpand - 1 &&
+                        pos.z < mc.thePlayer.entityBoundingBox.maxZ + grimExpand
                     ) blocks += pos
                 }
             }

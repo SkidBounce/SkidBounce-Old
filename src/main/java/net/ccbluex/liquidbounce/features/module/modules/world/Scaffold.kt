@@ -57,7 +57,6 @@ import net.minecraft.network.play.client.C0BPacketEntityAction.Action.STOP_SNEAK
 import net.minecraft.util.*
 import net.minecraft.world.WorldSettings
 import net.minecraftforge.event.ForgeEventFactory
-import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import javax.vecmath.Color3f
