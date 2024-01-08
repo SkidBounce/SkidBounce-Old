@@ -54,7 +54,7 @@ object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
     val customUpSpeed by FloatValue("CustomUpSpeed", 1F, 0F..3F) { mode == "Custom" && customFloat }
     val customDownSpeed by FloatValue("CustomDownSpeed", 1F, 0F..3F) { mode == "Custom" && customFloat }
     val customSpeed by FloatValue("CustomSpeed", 1.1F, 0.1F..1.16F) { mode == "Custom" }
-    val grimExpand by FloatValue("GrimExpand", 0.25F, 0F..1F) { mode == "Custom" }
+    val grimExpand by FloatValue("GrimExpand", 0.25F, 0F..1F) { mode == "Grim" }
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
