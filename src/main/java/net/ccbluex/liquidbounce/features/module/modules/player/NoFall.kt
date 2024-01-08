@@ -28,6 +28,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Packet3,
         Packet4,
         Packet5,
+        Motion,
         MLG,
         Damage,
         AAC,
@@ -52,6 +53,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     val mlgMinFallDistance by FloatValue("MLG-MinHeight", 5f, 2f..50f, subjective = true) { mode == "MLG" }
     val spoofgroundAlways by BoolValue("SpoofGround-Always", true) { mode == "SpoofGround" }
     val spoofgroundMinFallDistance by FloatValue("SpoofGround-MinFallDistance", 0f, 0f..3f) { mode == "SpoofGround" && !spoofgroundAlways }
+    val motionMotion by FloatValue("Motion-Motion", -0.01f, -5f..5f) { mode == "Motion" }
 
     override fun onEnable() {
         modeModule.onEnable()
