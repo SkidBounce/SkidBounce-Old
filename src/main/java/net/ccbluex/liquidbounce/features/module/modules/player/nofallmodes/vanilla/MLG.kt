@@ -1,17 +1,17 @@
-package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.other
+package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vanilla
 
-import net.ccbluex.liquidbounce.event.EventState.PRE
+import net.ccbluex.liquidbounce.event.EventState
 import net.ccbluex.liquidbounce.event.MotionEvent
-import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.mlgMinFallDistance
+import net.ccbluex.liquidbounce.features.module.modules.player.NoFall
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
-import net.ccbluex.liquidbounce.utils.RotationUtils.faceBlock
+import net.ccbluex.liquidbounce.utils.RotationUtils
 import net.ccbluex.liquidbounce.utils.VecRotation
 import net.ccbluex.liquidbounce.utils.extensions.eyes
-import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
+import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.utils.misc.FallingPlayer
 import net.ccbluex.liquidbounce.utils.timing.TickTimer
-import net.minecraft.init.Blocks.web
-import net.minecraft.init.Items.water_bucket
+import net.minecraft.init.Blocks
+import net.minecraft.init.Items
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemBucket
 import net.minecraft.util.BlockPos
@@ -27,14 +27,14 @@ object MLG : NoFallMode("MLG") {
     override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer
 
-        if (event.eventState == PRE) {
+        if (event.eventState == EventState.PRE) {
             currentMlgRotation = null
 
             mlgTimer.update()
 
             if (!mlgTimer.hasTimePassed(10)) return
 
-            if (thePlayer.fallDistance > mlgMinFallDistance) {
+            if (thePlayer.fallDistance > NoFall.mlgMinFallDistance) {
                 val fallingPlayer = FallingPlayer(thePlayer)
 
                 val maxDist = mc.playerController.blockReachDistance + 1.5
@@ -52,7 +52,7 @@ object MLG : NoFallMode("MLG") {
                     for (i in 36..44) {
                         val itemStack = thePlayer.inventoryContainer.getSlot(i).stack ?: continue
 
-                        if (itemStack.item == water_bucket || itemStack.item is ItemBlock && (itemStack.item as ItemBlock).block == web) {
+                        if (itemStack.item == Items.water_bucket || itemStack.item is ItemBlock && (itemStack.item as ItemBlock).block == Blocks.web) {
                             index = i - 36
 
                             if (thePlayer.inventory.currentItem == index) break
@@ -63,21 +63,21 @@ object MLG : NoFallMode("MLG") {
 
                     currentMlgBlock = collision.pos
 
-                    serverSlot = index
+                    InventoryUtils.serverSlot = index
 
-                    currentMlgRotation = faceBlock(collision.pos)
+                    currentMlgRotation = RotationUtils.faceBlock(collision.pos)
                     currentMlgRotation?.rotation?.toPlayer(thePlayer)
                 }
             }
         } else if (currentMlgRotation != null) {
-            val stack = thePlayer.inventory.getStackInSlot(serverSlot)
+            val stack = thePlayer.inventory.getStackInSlot(InventoryUtils.serverSlot)
 
             // If used item was a water bucket, try to pick it back up later
             if (mc.playerController.sendUseItem(thePlayer, mc.theWorld, stack) && stack.item is ItemBucket) {
                 mlgTimer.reset()
             }
 
-            serverSlot = thePlayer.inventory.currentItem
+            InventoryUtils.serverSlot = thePlayer.inventory.currentItem
         }
     }
 }
