@@ -29,7 +29,6 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Packet2,
         Packet3,
         Packet4,
-        Packet5,
         Motion,
         MLG,
         Damage,
@@ -74,18 +73,18 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
-        val thePlayer = mc.thePlayer
+        mc.thePlayer ?: return
 
         if (FreeCam.handleEvents()) return
 
-        if (collideBlock(thePlayer.entityBoundingBox) { it is BlockLiquid } || collideBlock(
+        if (collideBlock(mc.thePlayer.entityBoundingBox) { it is BlockLiquid } || collideBlock(
                 fromBounds(
-                    thePlayer.entityBoundingBox.maxX,
-                    thePlayer.entityBoundingBox.maxY,
-                    thePlayer.entityBoundingBox.maxZ,
-                    thePlayer.entityBoundingBox.minX,
-                    thePlayer.entityBoundingBox.minY - 0.01,
-                    thePlayer.entityBoundingBox.minZ
+                    mc.thePlayer.entityBoundingBox.maxX,
+                    mc.thePlayer.entityBoundingBox.maxY,
+                    mc.thePlayer.entityBoundingBox.maxZ,
+                    mc.thePlayer.entityBoundingBox.minX,
+                    mc.thePlayer.entityBoundingBox.minY - 0.01,
+                    mc.thePlayer.entityBoundingBox.minZ
                 )
             ) { it is BlockLiquid }
         ) return
@@ -130,17 +129,17 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
 
     @EventTarget
     fun onMove(event: MoveEvent) {
-        val thePlayer = mc.thePlayer
+        mc.thePlayer ?: return
 
-        if (collideBlock(thePlayer.entityBoundingBox) { it is BlockLiquid }
+        if (collideBlock(mc.thePlayer.entityBoundingBox) { it is BlockLiquid }
             || collideBlock(
                 fromBounds(
-                    thePlayer.entityBoundingBox.maxX,
-                    thePlayer.entityBoundingBox.maxY,
-                    thePlayer.entityBoundingBox.maxZ,
-                    thePlayer.entityBoundingBox.minX,
-                    thePlayer.entityBoundingBox.minY - 0.01,
-                    thePlayer.entityBoundingBox.minZ
+                    mc.thePlayer.entityBoundingBox.maxX,
+                    mc.thePlayer.entityBoundingBox.maxY,
+                    mc.thePlayer.entityBoundingBox.maxZ,
+                    mc.thePlayer.entityBoundingBox.minX,
+                    mc.thePlayer.entityBoundingBox.minY - 0.01,
+                    mc.thePlayer.entityBoundingBox.minZ
                 )
             ) { it is BlockLiquid }
         ) return

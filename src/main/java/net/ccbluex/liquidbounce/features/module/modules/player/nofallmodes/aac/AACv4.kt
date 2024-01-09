@@ -18,7 +18,7 @@ object AACv4 : NoFallMode("AACv4") {
     }
 
     override fun onPacket(event: PacketEvent) {
-        if(event.packet is C03PacketPlayer && aac4Fakelag) {
+        if (event.packet is C03PacketPlayer && aac4Fakelag) {
             event.cancelEvent()
             if (packetModify) {
                 event.packet.onGround = true
@@ -29,7 +29,7 @@ object AACv4 : NoFallMode("AACv4") {
     }
 
     override fun onMotion(event: MotionEvent) {
-        if(event.eventState == EventState.PRE) {
+        if (event.eventState == EventState.PRE) {
             if (!inVoid()) {
                 if (aac4Fakelag) {
                     aac4Fakelag = false
@@ -65,9 +65,8 @@ object AACv4 : NoFallMode("AACv4") {
         }
     }
     private fun inVoid(): Boolean {
-        if (mc.thePlayer.posY < 0) {
+        if (mc.thePlayer.posY < 0)
             return false
-        }
         var off = 0
         while (off < mc.thePlayer.posY + 2) {
             val bb = AxisAlignedBB(

@@ -18,7 +18,7 @@ object Medusa : NoFallMode("Medusa") {
         }
     }
     override fun onPacket(event: PacketEvent) {
-        if(event.packet is C03PacketPlayer && needSpoof) {
+        if (event.packet is C03PacketPlayer && needSpoof) {
             event.packet.onGround = true
             needSpoof = false
         }

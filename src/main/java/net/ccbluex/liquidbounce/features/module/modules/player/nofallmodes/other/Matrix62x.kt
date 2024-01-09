@@ -8,23 +8,23 @@ import net.minecraft.network.play.client.C03PacketPlayer
 
 object Matrix62x : NoFallMode("Matrix6.2.X") {
     private var spoof = false
-//    private var falling = false
+    private var falling = false
     private var fallTicks = 0
     private var lastY = 0.0
 
     override fun onEnable() {
         spoof = false
-//        falling = false
+        falling = false
         lastY = 0.0
     }
 
     override fun onUpdate() {
-//        if (falling) {
-//            mc.thePlayer.stopXZ()
-//            mc.thePlayer.jumpMovementFactor = 0f
-//            if (mc.thePlayer.onGround)
-//                falling = false
-//        }
+        if (falling) {
+            mc.thePlayer.stopXZ()
+            mc.thePlayer.jumpMovementFactor = 0f
+        }
+        if (mc.thePlayer.onGround)
+            falling = false
 
         if (mc.thePlayer.fallDistance - mc.thePlayer.motionY > 3) {
             if (fallTicks == 0)
