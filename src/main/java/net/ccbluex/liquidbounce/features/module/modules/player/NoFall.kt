@@ -47,6 +47,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         HypSpoof,
         Vulcan,
         Medusa,
+        Medusa2,
         Verus,
     )
 
