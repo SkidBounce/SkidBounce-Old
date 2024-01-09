@@ -5,19 +5,15 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFal
 import net.minecraft.network.play.client.C03PacketPlayer
 
 object Verus : NoFallMode("Verus") {
-    private var needSpoof = false
-    private var packetModify = false
-    private var packetCount = 0
+    private var spoof = false
     override fun onEnable() {
-        needSpoof = false
-        packetModify = false
-        packetCount = 0
+        spoof = false
     }
 
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is C03PacketPlayer && needSpoof) {
+        if (event.packet is C03PacketPlayer && spoof) {
             event.packet.onGround = true
-            needSpoof = false
+            spoof = false
         }
     }
 
@@ -27,15 +23,7 @@ object Verus : NoFallMode("Verus") {
             mc.thePlayer.fallDistance = 0.0f
             mc.thePlayer.motionX *= 0.6
             mc.thePlayer.motionZ *= 0.6
-            needSpoof = true
-        }
-
-        if (mc.thePlayer.fallDistance.toInt() / 3 > packetCount) {
-            packetCount = mc.thePlayer.fallDistance.toInt() / 3
-            packetModify = true
-        }
-        if (mc.thePlayer.onGround) {
-            packetCount = 0
+            spoof = true
         }
     }
 }
