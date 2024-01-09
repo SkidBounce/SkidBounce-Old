@@ -34,12 +34,15 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         MLG,
         Damage,
         Phase,
+
         AAC,
         AACv4,
         AAC44xFlag,
         LAAC,
         AAC3311,
         AAC3315,
+
+        Matrix62x,
         Spartan,
         CubeCraft,
         Hypixel,
