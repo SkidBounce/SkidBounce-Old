@@ -24,6 +24,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     private val noFallModes = arrayOf(
         SpoofGround,
         NoGround,
+        NoPacket,
         Packet,
         Packet2,
         Packet3,
