@@ -20,6 +20,7 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity
 
 object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     private val velocityModes = arrayOf(
+        Custom,
         Vanilla,
         Phase,
         Vulcan,
@@ -38,7 +39,7 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
          Motion Limits
          Only Combat
          Direction Override
-         Delayed setting in Vanilla
+         Delayed setting in Custom
      */
 
     //  Settings
