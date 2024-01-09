@@ -1,6 +1,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.other
 
 import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.verusMulti
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.minecraft.network.play.client.C03PacketPlayer
 
@@ -21,8 +22,8 @@ object Verus : NoFallMode("Verus") {
         if (mc.thePlayer.fallDistance - mc.thePlayer.motionY > 3) {
             mc.thePlayer.motionY = 0.0
             mc.thePlayer.fallDistance = 0.0f
-            mc.thePlayer.motionX *= 0.6
-            mc.thePlayer.motionZ *= 0.6
+            mc.thePlayer.motionX *= verusMulti
+            mc.thePlayer.motionZ *= verusMulti
             spoof = true
         }
     }

@@ -58,6 +58,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     val spoofgroundMinFallDistance by FloatValue("SpoofGround-MinFallDistance", 0f, 0f..3f) { mode == "SpoofGround" && !spoofgroundAlways }
     val motionMotion by FloatValue("Motion-Motion", -0.01f, -5f..5f) { mode == "Motion" }
     val phaseOffset by IntegerValue("Phase-Offset", 1, 0..5) { mode == "Phase" }
+    val verusMulti by FloatValue("Verus-XZMulti", 0.6f, 0f..1f) { mode == "Verus" }
 
     override fun onEnable() {
         modeModule.onEnable()
