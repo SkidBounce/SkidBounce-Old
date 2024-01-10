@@ -22,16 +22,16 @@ import net.minecraft.world.WorldSettings
 import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 
-object KeyPearl : Module("KeyPearl", ModuleCategory.PLAYER, subjective = true, gameDetecting = false) {
+object KeyPearl : Module("KeyPearl", ModuleCategory.PLAYER, gameDetecting = false) {
 
     private val delayedSlotSwitch by BoolValue("DelayedSlotSwitch", true)
-    private val mouse by BoolValue("Mouse", false)
+    private val mouse by BoolValue("Mouse", false, subjective = true)
         private val mouseButtonValue = ListValue("MouseButton",
-            arrayOf("Left", "Right", "Middle", "MouseButton4", "MouseButton5"), "Middle") { mouse }
+            arrayOf("Left", "Right", "Middle", "MouseButton4", "MouseButton5"), "Middle", subjective = true) { mouse }
 
-        private val keyName by TextValue("KeyName", "X") { !mouse }
+        private val keyName by TextValue("KeyName", "X", subjective = true) { !mouse }
 
-    private val noEnderPearlsMessage by BoolValue("NoEnderPearlsMessage", true)
+    private val noEnderPearlsMessage by BoolValue("NoEnderPearlsMessage", true, subjective = true)
 
     private var wasMouseDown = false
     private var wasKeyDown = false

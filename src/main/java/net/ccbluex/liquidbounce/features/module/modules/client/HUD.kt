@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.value.BoolValue
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.util.ResourceLocation
 
-object HUD : Module("HUD", ModuleCategory.CLIENT, defaultInArray = false, gameDetecting = false) {
+object HUD : Module("HUD", ModuleCategory.CLIENT, defaultInArray = false, gameDetecting = false, subjective = true) {
     val blackHotbar by BoolValue("BlackHotbar", true)
     val inventoryParticle by BoolValue("InventoryParticle", false)
     private val blur by BoolValue("Blur", false)

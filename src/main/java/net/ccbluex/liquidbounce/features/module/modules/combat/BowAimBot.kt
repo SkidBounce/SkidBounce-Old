@@ -35,17 +35,17 @@ import java.awt.Color
 
 object BowAimBot : Module("BowAimBot", ModuleCategory.COMBAT) {
 
-    private val bow by BoolValue("Bow", true, subjective = true)
-    private val egg by BoolValue("Egg", true, subjective = true)
-    private val snowball by BoolValue("Snowball", true, subjective = true)
-    private val pearl by BoolValue("EnderPearl", false, subjective = true)
+    private val bow by BoolValue("Bow", true)
+    private val egg by BoolValue("Egg", true)
+    private val snowball by BoolValue("Snowball", true)
+    private val pearl by BoolValue("EnderPearl", false)
 
-    private val priority by ListValue("Priority", arrayOf("Health", "Distance", "Direction"), "Direction", subjective = true)
+    private val priority by ListValue("Priority", arrayOf("Health", "Distance", "Direction"), "Direction")
 
     private val predict by BoolValue("Predict", true)
         private val predictSize by FloatValue("PredictSize", 2F, 0.1F..5F) { predict }
 
-    private val throughWalls by BoolValue("ThroughWalls", false, subjective = true)
+    private val throughWalls by BoolValue("ThroughWalls", false)
     private val mark by BoolValue("Mark", true, subjective = true)
 
     private val silent by BoolValue("Silent", true)

@@ -73,9 +73,9 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
 
     val mode by ListValue("Mode", modes, "Vanilla")
 
-    val vanillaSpeed by FloatValue("VanillaSpeed", 2f, 0f..10f, subjective = true)
+    val vanillaSpeed by FloatValue("VanillaSpeed", 2f, 0f..10f)
         { mode in arrayOf("Vanilla", "KeepAlive", "MineSecure", "BugSpartan") }
-    private val vanillaKickBypass by BoolValue("VanillaKickBypass", false, subjective = true)
+    private val vanillaKickBypass by BoolValue("VanillaKickBypass", false)
         { mode in arrayOf("Vanilla", "SmoothVanilla") }
     val ncpMotion by FloatValue("NCPMotion", 0f, 0f..1f) { mode == "NCP" }
 

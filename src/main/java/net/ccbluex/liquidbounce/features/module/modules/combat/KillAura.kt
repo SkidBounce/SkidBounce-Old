@@ -262,13 +262,12 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     // Bypass
     private val failSwing by BoolValue("FailSwing", true) { swing }
     private val swingOnlyInAir by BoolValue("SwingOnlyInAir", true) { swing && failSwing }
-    private val noInventoryAttack by BoolValue("NoInvAttack", false, subjective = true)
-    private val noInventoryDelay by IntegerValue("NoInvDelay", 200, 0..500, subjective = true)
+    private val noInventoryAttack by BoolValue("NoInvAttack", false)
+    private val noInventoryDelay by IntegerValue("NoInvDelay", 200, 0..500)
     { noInventoryAttack }
     private val noConsumeAttack by ListValue("NoConsumeAttack",
         arrayOf("Off", "NoHits", "NoRotation"),
-        "Off",
-        subjective = true
+        "Off"
     )
 
     // Visuals

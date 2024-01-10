@@ -102,7 +102,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
 
     // Autoblock
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Pick", "Spoof", "Switch"), "Spoof")
-    private val sortByHighestAmount by BoolValue("SortByHighestAmount", false, subjective = true) { autoBlock != "Off" }
+    private val sortByHighestAmount by BoolValue("SortByHighestAmount", false) { autoBlock != "Off" }
 
     // Basic stuff
     val sprint by BoolValue("Sprint", false)

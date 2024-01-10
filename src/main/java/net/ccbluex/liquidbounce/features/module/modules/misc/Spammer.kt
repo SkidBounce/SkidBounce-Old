@@ -19,7 +19,7 @@ import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.TextValue
 
-object Spammer : Module("Spammer", ModuleCategory.MISC, subjective = true) {
+object Spammer : Module("Spammer", ModuleCategory.MISC) {
     private val maxDelayValue: IntegerValue = object : IntegerValue("MaxDelay", 1000, 0..5000) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
 
@@ -40,7 +40,7 @@ object Spammer : Module("Spammer", ModuleCategory.MISC, subjective = true) {
     }
 
     private val message by
-        TextValue("Message", "$CLIENT_NAME Client | liquidbounce(.net) | CCBlueX on yt")
+        TextValue("Message", "$CLIENT_NAME Client | liquidbounce(.net) | CCBlueX on yt", subjective = true)
 
     private val custom by BoolValue("Custom", false)
 
