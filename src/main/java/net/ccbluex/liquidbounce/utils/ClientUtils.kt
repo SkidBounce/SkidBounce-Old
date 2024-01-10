@@ -57,11 +57,6 @@ object ClientUtils : MinecraftInstance() {
     }
 
     fun displayChatMessage(message: String) {
-        if (mc.thePlayer == null) {
-            LOGGER.info("(MCChat) $message")
-            return
-        }
-
         val jsonObject = JsonObject()
         jsonObject.addProperty("text", message)
         mc.thePlayer.addChatMessage(IChatComponent.Serializer.jsonToComponent(jsonObject.toString()))

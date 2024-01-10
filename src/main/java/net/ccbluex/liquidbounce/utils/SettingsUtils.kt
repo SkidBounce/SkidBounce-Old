@@ -122,7 +122,7 @@ object SettingsUtils {
         val moduleValue = module[valueName]
 
         if (moduleValue == null) {
-            displayChatMessage("§7[§3§lAutoSettings§7] §cValue §a§l$valueName§c wasn't found in module §a§l${module.getName()}§c.")
+            displayChatMessage("§cValue §a§l$valueName§c wasn't found in module §a§l${module.getName()}§c.")
             return
         }
 
@@ -135,7 +135,7 @@ object SettingsUtils {
                 is ListValue -> moduleValue.changeValue(value)
             }
         } catch (e: Exception) {
-            displayChatMessage("§7[§3§lAutoSettings§7] §a§l${e.javaClass.name}§7(${e.message}) §cAn Exception occurred while setting §a§l$value§c to §a§l${moduleValue.name}§c in §a§l${module.getName()}§c.")
+            displayChatMessage("§a§l${e.javaClass.name}§7(${e.message}) §cAn Exception occurred while setting §a§l$value§c to §a§l${moduleValue.name}§c in §a§l${module.getName()}§c.")
         }
     }
 
@@ -145,9 +145,10 @@ object SettingsUtils {
      */
     fun generateScript(): String {
         return moduleManager.modules
+            .filter { !it.subjective }
             .joinToString("\n") { module ->
                 buildString {
-                    val vals = module.values
+                    val vals = module.values.filter { !it.subjective }
                     if (vals.isNotEmpty()) {
                         vals.joinTo(this, separator = "\n") { "${module.name} ${it.name} ${it.get()}" }
                         appendLine()
