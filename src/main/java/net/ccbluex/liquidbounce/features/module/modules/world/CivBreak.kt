@@ -54,6 +54,7 @@ object CivBreak : Module("CivBreak", ModuleCategory.WORLD) {
         }
 
         private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f) { rotations }
+    private val grim by BoolValue("Grim", false)
 
     private var blockPos: BlockPos? = null
     private var enumFacing: EnumFacing? = null
@@ -68,10 +69,8 @@ object CivBreak : Module("CivBreak", ModuleCategory.WORLD) {
         enumFacing = event.enumFacing ?: return
 
         // Break
-        sendPackets(
-            C07PacketPlayerDigging(START_DESTROY_BLOCK, blockPos, enumFacing),
-            C07PacketPlayerDigging(STOP_DESTROY_BLOCK, blockPos, enumFacing)
-        )
+        if (!grim) sendPacket(C07PacketPlayerDigging(START_DESTROY_BLOCK, blockPos, enumFacing))
+        sendPacket(C07PacketPlayerDigging(STOP_DESTROY_BLOCK, blockPos, enumFacing))
     }
 
     @EventTarget
@@ -121,10 +120,8 @@ object CivBreak : Module("CivBreak", ModuleCategory.WORLD) {
         }
 
         // Break
-        sendPackets(
-            C07PacketPlayerDigging(START_DESTROY_BLOCK, blockPos, enumFacing),
-            C07PacketPlayerDigging(STOP_DESTROY_BLOCK, blockPos, enumFacing)
-        )
+        if (!grim) sendPacket(C07PacketPlayerDigging(START_DESTROY_BLOCK, blockPos, enumFacing))
+        sendPacket(C07PacketPlayerDigging(STOP_DESTROY_BLOCK, blockPos, enumFacing))
 
         mc.playerController.clickBlock(blockPos, enumFacing)
     }
