@@ -18,6 +18,7 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.RaycastUtils.raycastEntity
+import net.ccbluex.liquidbounce.utils.RaycastUtils.runWithModifiedRaycastResult
 import net.ccbluex.liquidbounce.utils.Rotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.getCenter
@@ -189,13 +190,13 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
 
     // Turn Speed
-    private val maxTurnSpeedValue = object : FloatValue("MaxTurnSpeed", 180f, 0f..180f) {
+    private val maxTurnSpeedValue = object : FloatValue("MaxTurnSpeed", 180f, 1f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) =
             newValue.coerceAtLeast(minTurnSpeed)
     }
     private val maxTurnSpeed by maxTurnSpeedValue
 
-    private val minTurnSpeed: Float by object : FloatValue("MinTurnSpeed", 180f, 0f..180f) {
+    private val minTurnSpeed: Float by object : FloatValue("MinTurnSpeed", 180f, 1f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) =
             newValue.coerceAtMost(maxTurnSpeed)
 
@@ -204,14 +205,14 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     }
 
     // Raycast
-    private val raycastValue = BoolValue("RayCast", true) { !maxTurnSpeedValue.isMinimal() }
+    private val raycastValue = BoolValue("RayCast", true)
     private val raycast by raycastValue
     private val raycastIgnored by BoolValue("RayCastIgnored", false) { raycastValue.isActive() }
     private val livingRaycast by BoolValue("LivingRayCast", true) { raycastValue.isActive() }
 
     // Bypass
     // AAC value also modifies target selection a bit, not just rotations, but it is minor
-    private val aacValue = BoolValue("AAC", false) { !maxTurnSpeedValue.isMinimal() }
+    private val aacValue = BoolValue("AAC", false)
     private val aac by aacValue
 
     private val keepRotationTicks by object : IntegerValue("KeepRotationTicks", 5, 1..20) {
@@ -223,23 +224,23 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     }
     private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f)
 
-    private val micronizedValue = BoolValue("Micronized", true) { !maxTurnSpeedValue.isMinimal() }
+    private val micronizedValue = BoolValue("Micronized", true)
     private val micronized by micronizedValue
     private val micronizedStrength by FloatValue("MicronizedStrength", 0.8f, 0.2f..2f)
     { micronizedValue.isActive() }
 
     // Rotations
-    private val silentRotationValue = BoolValue("SilentRotation", true) { !maxTurnSpeedValue.isMinimal() }
+    private val silentRotationValue = BoolValue("SilentRotation", true)
     private val silentRotation by silentRotationValue
     private val rotationStrafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off")
     { silentRotationValue.isActive() }
 
-    private val randomCenter by BoolValue("RandomCenter", true) { !maxTurnSpeedValue.isMinimal() }
-    private val outborder by BoolValue("Outborder", false) { !maxTurnSpeedValue.isMinimal() }
+    private val randomCenter by BoolValue("RandomCenter", true)
+    private val outborder by BoolValue("Outborder", false)
     private val fov by FloatValue("FOV", 180f, 0f..180f)
 
     // Predict
-    private val predictValue = BoolValue("Predict", true) { !maxTurnSpeedValue.isMinimal() }
+    private val predictValue = BoolValue("Predict", true)
     private val predict by predictValue
     private val maxPredictSizeValue = object : FloatValue("MaxPredictSize", 1f, 0.1f..5f) {
         override fun onChange(oldValue: Float, newValue: Float) =
@@ -259,7 +260,8 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     }
 
     // Bypass
-    private val fakeSwing by BoolValue("FakeSwing", true) { swing }
+    private val failSwing by BoolValue("FailSwing", true) { swing }
+    private val swingOnlyInAir by BoolValue("SwingOnlyInAir", true) { swing && failSwing }
     private val noInventoryAttack by BoolValue("NoInvAttack", false, subjective = true)
     private val noInventoryDelay by IntegerValue("NoInvDelay", 200, 0..500, subjective = true)
     { noInventoryAttack }
@@ -280,7 +282,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     // Target
     var target: EntityLivingBase? = null
     private var currentTarget: EntityLivingBase? = null
-    private var hitable = false
+    private var hittable = false
     private val prevTargetEntities = mutableListOf<Int>()
 
     // Attack delay
@@ -302,7 +304,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     override fun onDisable() {
         target = null
         currentTarget = null
-        hitable = false
+        hittable = false
         prevTargetEntities.clear()
         attackTimer.reset()
         clicks = 0
@@ -350,7 +352,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         if (cancelRun) {
             target = null
             currentTarget = null
-            hitable = false
+            hittable = false
             stopBlocking()
             return
         }
@@ -358,7 +360,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         if (noInventoryAttack && (mc.currentScreen is GuiContainer || System.currentTimeMillis() - containerOpen < noInventoryDelay)) {
             target = null
             currentTarget = null
-            hitable = false
+            hittable = false
             if (mc.currentScreen is GuiContainer) containerOpen = System.currentTimeMillis()
             return
         }
@@ -400,14 +402,14 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         if (cancelRun) {
             target = null
             currentTarget = null
-            hitable = false
+            hittable = false
             return
         }
 
         if (noInventoryAttack && (mc.currentScreen is GuiContainer || System.currentTimeMillis() - containerOpen < noInventoryDelay)) {
             target = null
             currentTarget = null
-            hitable = false
+            hittable = false
             if (mc.currentScreen is GuiContainer) containerOpen = System.currentTimeMillis()
             return
         }
@@ -415,7 +417,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         target ?: return
 
         if (mark && targetMode != "Multi") drawPlatform(
-            target!!, if (hitable) Color(37, 126, 255, 70) else Color(255, 0, 0, 70)
+            target!!, if (hittable) Color(37, 126, 255, 70) else Color(255, 0, 0, 70)
         )
 
         if (currentTarget != null && attackTimer.hasTimePassed(attackDelay)) {
@@ -446,18 +448,24 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         // Close inventory when open
         if (manipulateInventory) serverOpenInventory = false
 
-        updateHitable()
+        updateHittable()
 
         val currentTarget = this.currentTarget ?: return
 
-        // Check if enemy is not hitable
-        if (!hitable || currentTarget.hurtTime > hurtTime) {
-            if (swing && fakeSwing) {
-                if (mc.objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.MISS) {
-                    return
-                }
+        // Check if enemy is not hittable
+        if (!hittable || currentTarget.hurtTime > hurtTime) {
+            if (swing && failSwing) {
+                val rotation = currentRotation ?: thePlayer.rotation
 
-                thePlayer.swingItem()
+                runWithModifiedRaycastResult(rotation, range.toDouble(), throughWallsRange.toDouble()) {
+                    if (swingOnlyInAir && it.typeOfHit != MovingObjectPosition.MovingObjectType.MISS) {
+                        return@runWithModifiedRaycastResult
+                    }
+
+                    // Imitate game click behavior
+                    mc.clickMouse()
+                    mc.sendClickBlockToController(mc.currentScreen == null && mc.inGameHasFocus)
+                }
             }
         } else {
             blockStopInDead = false
@@ -688,8 +696,6 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
      * Update killaura rotations to enemy
      */
     private fun updateRotations(entity: Entity): Boolean {
-        if (maxTurnSpeedValue.isMinimal()) return true
-
         val entityPrediction = Vec3(entity.posX - entity.prevPosX,
             entity.posY - entity.prevPosY,
             entity.posZ - entity.prevPosZ
@@ -755,45 +761,39 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     }
 
     /**
-     * Check if enemy is hitable with current rotations
+     * Check if enemy is hittable with current rotations
      */
-    private fun updateHitable() {
-        // Disable hitable check if turn speed is zero
-        if (maxTurnSpeedValue.isMinimal()) {
-            hitable = true
-            return
-        }
-
+    private fun updateHittable() {
         val currentRotation = currentRotation ?: mc.thePlayer.rotation
 
         val eyes = mc.thePlayer.eyes
 
-        var raycastedEntity: Entity? = null
+        var chosenEntity: Entity? = null
 
         if (raycast) {
-            raycastedEntity =
+            chosenEntity =
                 raycastEntity(range.toDouble(), currentRotation.yaw, currentRotation.pitch) { entity ->
                     (!livingRaycast || (entity is EntityLivingBase && entity !is EntityArmorStand)) && (isEnemy(entity) || raycastIgnored || aac && mc.theWorld.getEntitiesWithinAABBExcludingEntity(
                         entity, entity.entityBoundingBox
                     ).isNotEmpty())
                 }
 
-            if (raycast && raycastedEntity != null && raycastedEntity is EntityLivingBase && (Friends.handleEvents() || !(raycastedEntity is EntityPlayer && raycastedEntity.isClientFriend()))) {
+            if (raycast && chosenEntity != null && chosenEntity is EntityLivingBase && (Friends.handleEvents() || !(chosenEntity is EntityPlayer && chosenEntity.isClientFriend()))) {
                 val prevHurtTime = currentTarget!!.hurtTime
-                currentTarget = raycastedEntity
+                currentTarget = chosenEntity
                 currentTarget!!.hurtTime = prevHurtTime
             }
 
-            hitable = currentTarget == raycastedEntity
+            hittable = currentTarget == chosenEntity
         } else {
-            hitable = isRotationFaced(currentTarget!!, range.toDouble(), currentRotation)
+            hittable = isRotationFaced(currentTarget!!, range.toDouble(), currentRotation)
         }
 
-        if (!hitable) {
+        if (!hittable) {
             return
         }
 
-        val targetToCheck = raycastedEntity ?: currentTarget ?: return
+        val targetToCheck = chosenEntity ?: currentTarget ?: return
 
         // If player is inside entity, automatic yes because the intercept below cannot check for that
         // Minecraft does the same, see #EntityRenderer line 353
@@ -817,9 +817,9 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
                 if (intercept != null) {
                     // Is the entity box raycast vector visible? If not, check through-wall range
-                    hitable = isVisible(intercept.hitVec) || mc.thePlayer.getDistanceToEntityBox(targetToCheck) <= throughWallsRange
+                    hittable = isVisible(intercept.hitVec) || mc.thePlayer.getDistanceToEntityBox(targetToCheck) <= throughWallsRange
 
-                    if (hitable) {
+                    if (hittable) {
                         checkNormally = false
                         return@loopThroughBacktrackData true
                     }
@@ -839,7 +839,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         )
 
         // Is the entity box raycast vector visible? If not, check through-wall range
-        hitable = isVisible(intercept.hitVec) || mc.thePlayer.getDistanceToEntityBox(targetToCheck) <= throughWallsRange
+        hittable = isVisible(intercept.hitVec) || mc.thePlayer.getDistanceToEntityBox(targetToCheck) <= throughWallsRange
     }
 
     /**
