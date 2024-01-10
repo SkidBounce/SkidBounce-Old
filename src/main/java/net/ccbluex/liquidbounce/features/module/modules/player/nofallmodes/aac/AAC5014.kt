@@ -35,7 +35,7 @@ object AAC5014 : NoFallMode("AAC5.0.14") {
         }
 
         if (timer > 0)
-            timer -= 1
+            --timer
 
         if (mc.thePlayer.onGround) {
             mc.thePlayer.fallDistance = -2f
