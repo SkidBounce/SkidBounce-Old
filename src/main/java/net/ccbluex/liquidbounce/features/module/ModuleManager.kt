@@ -211,6 +211,7 @@ object ModuleManager : Listenable {
             WaterSpeed,
             XRay,
             Zoot,
+            Disabler,
         )
 
         InventoryManager.startCoroutine()
