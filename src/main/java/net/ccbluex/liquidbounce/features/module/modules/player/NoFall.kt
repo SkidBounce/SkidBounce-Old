@@ -52,6 +52,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         HypixelFlag,
         HypSpoof,
         Vulcan,
+        Vulcan2,
         Medusa,
         Medusa2,
         Verus,
@@ -67,6 +68,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     val phaseOffset by IntegerValue("Phase-Offset", 1, 0..5) { mode == "Phase" }
     val verusMulti by FloatValue("Verus-XZMulti", 0.6f, 0f..1f) { mode == "Verus" }
 
+    val vulcan2Motion by FloatValue("Vulcan2-Motion", 0.35f, 0f..10f) { mode == "Vulcan2" }
     override fun onEnable() {
         modeModule.onEnable()
     }
