@@ -81,6 +81,7 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         MineplexGround,
 
         // Other
+        Cardinal,
         Matrix,
         Boost,
         Frame,
@@ -143,7 +144,7 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         if (isMoving && !sprintManually)
             thePlayer.isSprinting = true
 
-        modeModule.onMotion()
+        modeModule.onMotion(event)
     }
 
     @EventTarget

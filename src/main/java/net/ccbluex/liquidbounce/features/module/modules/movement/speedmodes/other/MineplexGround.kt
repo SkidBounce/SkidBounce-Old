@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other
 
+import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.mineplexGroundSpeed
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
@@ -21,7 +22,7 @@ object MineplexGround : SpeedMode("MineplexGround") {
     private var spoofSlot = false
     private var speed = 0f
 
-    override fun onMotion() {
+    override fun onMotion(event: MotionEvent) {
         if (!isMoving || !mc.thePlayer.onGround || mc.thePlayer.heldItem == null || mc.thePlayer.isUsingItem) return
         spoofSlot = false
         for (i in 36..44) {

@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.ncp
 
+import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.event.MoveEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.hasMotion
@@ -30,7 +31,7 @@ object YPort : SpeedMode("YPort") {
     private var lastDist = 0.0
     private var timerDelay = 0
     private var safeJump = false
-    override fun onMotion() {
+    override fun onMotion(event: MotionEvent) {
         if (!safeJump && !mc.gameSettings.keyBindJump.isKeyDown && !mc.thePlayer.isOnLadder && !mc.thePlayer.isInsideOfMaterial(
                 Material.water) && !mc.thePlayer.isInsideOfMaterial(Material.lava) && !mc.thePlayer.isInWater && (getBlock(-1.1) != air && getBlock(-1.1) != air || getBlock(-0.1) != air && mc.thePlayer.motionX != 0.0 && mc.thePlayer.motionZ != 0.0 && !mc.thePlayer.onGround && mc.thePlayer.fallDistance < 3f && mc.thePlayer.fallDistance > 0.05) && level == 3) mc.thePlayer.motionY = -0.3994
         val xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX

@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 
+import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.toRadians
@@ -12,7 +13,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 object AACBHop : SpeedMode("AACBHop") {
-    override fun onMotion() {
+    override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer ?: return
 
         if (thePlayer.isInWater)

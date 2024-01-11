@@ -5,10 +5,11 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 
+import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 
 object AACv4BHop : SpeedMode("AACv4BHop") {
-    override fun onMotion() {
+    override fun onMotion(event: MotionEvent) {
         if (mc.thePlayer.isInWater) return
         if (mc.thePlayer.moveForward > 0) {
             if (mc.thePlayer.onGround) {

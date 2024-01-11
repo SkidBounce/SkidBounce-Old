@@ -5,12 +5,13 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 
+import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 
 object AACHop350 : SpeedMode("AACHop3.5.0") {
 
-    override fun onMotion() {
+    override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer ?: return
 
         if (isMoving && !thePlayer.isInWater && !thePlayer.isInLava && !thePlayer.isSneaking) {

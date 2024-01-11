@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 
+import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.direction
 import net.ccbluex.liquidbounce.utils.MovementUtils.forward
@@ -20,7 +21,7 @@ object AACLowHop3 : SpeedMode("AACLowHop3") {
         firstJump = true
     }
 
-    override fun onMotion() {
+    override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer ?: return
 
         if (isMoving) {

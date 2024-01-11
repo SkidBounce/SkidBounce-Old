@@ -5,13 +5,14 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.ncp
 
+import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 
 object MiJump : SpeedMode("MiJump") {
-    override fun onMotion() {
+    override fun onMotion(event: MotionEvent) {
         if (!isMoving) return
         if (mc.thePlayer.onGround && !mc.thePlayer.movementInput.jump) {
             mc.thePlayer.motionY += 0.1

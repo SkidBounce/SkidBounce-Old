@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.ncp
 
+import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
@@ -14,7 +15,7 @@ object Frame : SpeedMode("Frame") {
     private var motionTicks = 0
     private var move = false
     private val tickTimer = TickTimer()
-    override fun onMotion() {
+    override fun onMotion(event: MotionEvent) {
         if (isMoving) {
             val speed = 4.25
             if (mc.thePlayer.onGround) {
