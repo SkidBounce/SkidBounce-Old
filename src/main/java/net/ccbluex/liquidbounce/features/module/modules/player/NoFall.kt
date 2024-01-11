@@ -36,12 +36,14 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
 
         AAC,
         AACv4,
+        AACLoyisa442,
         AAC44xFlag,
         LAAC,
         AAC3311,
         AAC3315,
         AAC504,
         AAC5014,
+        AAC50142,
 
         Matrix62x,
         Spartan,
