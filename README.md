@@ -8,7 +8,8 @@ A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, 
 [CrossSine](https://github.com/shxp3/CrossSine)\
 [LiquidBouncePlus-Reborn](https://github.com/liquidbounceplusreborn/LiquidbouncePlus-Reborn)
 
-## Completed
+## Completion
+as of latest commit
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
 |      NoSlow      | :yellow_circle: |
@@ -20,7 +21,7 @@ A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, 
 |       Hud        |  :red_circle:   | 
 |    Animations    |  :red_circle:   | 
 |      Jesus       |  :red_circle:   | 
-|     Disabler     |  :red_circle:   |
+|     Disabler     | :yellow_circle: |
 |      Phase       |  :red_circle:   | 
 |     Velocity     |  :red_circle:   | 
 |     ClickGUI     |  :red_circle:   | 
