@@ -181,7 +181,6 @@ object LiquidBounce {
         }
 
         // ViaMCP
-        // TODO: Transaction fix for 1.17+
         // TODO: Sword fix for 1.9+
         // TODO: Jump height fix for 1.9+
         try {

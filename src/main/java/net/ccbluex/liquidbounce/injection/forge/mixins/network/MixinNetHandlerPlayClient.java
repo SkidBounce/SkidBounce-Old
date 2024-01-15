@@ -5,6 +5,8 @@
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.network;
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import io.netty.buffer.Unpooled;
 import net.ccbluex.liquidbounce.event.EntityMovementEvent;
 import net.ccbluex.liquidbounce.event.EventManager;
@@ -25,20 +27,19 @@ import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.PacketThreadUtil;
-import net.minecraft.network.play.client.C17PacketCustomPayload;
-import net.minecraft.network.play.client.C19PacketResourcePackStatus;
-import net.minecraft.network.play.server.S01PacketJoinGame;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.network.play.server.S14PacketEntity;
-import net.minecraft.network.play.server.S48PacketResourcePackSend;
+import net.minecraft.network.play.client.*;
+import net.minecraft.network.play.server.*;
 import net.minecraft.world.WorldSettings;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -67,6 +68,8 @@ public abstract class MixinNetHandlerPlayClient {
 
     @Shadow
     private boolean doneLoadingTerrain;
+
+    @Shadow public abstract void addToSendQueue(Packet p_addToSendQueue_1_);
 
     @Inject(method = "handleResourcePack", at = @At("HEAD"), cancellable = true)
     private void handleResourcePack(final S48PacketResourcePackSend p_handleResourcePack_1_, final CallbackInfo callbackInfo) {
@@ -160,5 +163,29 @@ public abstract class MixinNetHandlerPlayClient {
         player.rotationYaw = (rotation.getYaw() + 0.000001f * sign) % 360.0F;
         player.rotationPitch = (rotation.getPitch() + 0.000001f * sign) % 360.0F;
         RotationUtils.INSTANCE.syncRotations();
+    }
+
+    /**
+     * @author ManInMyVan / SkidBounce
+     * @reason ViaMCP
+     */
+    @Overwrite
+    public void handleConfirmTransaction(S32PacketConfirmTransaction p_handleConfirmTransaction_1_) {
+        PacketThreadUtil.checkThreadAndEnqueue(p_handleConfirmTransaction_1_, mc.getNetHandler(), this.gameController);
+        if (ViaLoadingBase.getInstance().getTargetVersion().isNewerThanOrEqualTo(ProtocolVersion.v1_17)) {
+            this.addToSendQueue(new C0FPacketConfirmTransaction(p_handleConfirmTransaction_1_.getWindowId(), (short) 0, false));
+            return;
+        }
+        Container container = null;
+        EntityPlayer entityplayer = this.gameController.thePlayer;
+        if (p_handleConfirmTransaction_1_.getWindowId() == 0) {
+            container = entityplayer.inventoryContainer;
+        } else if (p_handleConfirmTransaction_1_.getWindowId() == entityplayer.openContainer.windowId) {
+            container = entityplayer.openContainer;
+        }
+
+        if (container != null && !p_handleConfirmTransaction_1_.func_148888_e()) {
+            this.addToSendQueue(new C0FPacketConfirmTransaction(p_handleConfirmTransaction_1_.getWindowId(), p_handleConfirmTransaction_1_.getActionNumber(), true));
+        }
     }
 }
