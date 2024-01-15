@@ -33,7 +33,7 @@ object Cardinal : SpeedMode("Cardinal") {
 
             if (isOnGround(0.35))
                 strafe()
-
+        }
         else mc.thePlayer.stopXZ()
     }
 
