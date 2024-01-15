@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.client;
 
+import de.florianmichael.viamcp.fixes.AttackOrder;
 import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.api.ClientUpdate;
 import net.ccbluex.liquidbounce.event.*;
@@ -36,16 +37,16 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Util;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.nio.ByteBuffer;
@@ -55,6 +56,10 @@ import static net.ccbluex.liquidbounce.utils.MinecraftInstance.mc;
 @Mixin(Minecraft.class)
 @SideOnly(Side.CLIENT)
 public abstract class MixinMinecraft {
+
+    @Final
+    @Shadow
+    private static final Logger logger = LogManager.getLogger();
 
     @Shadow
     public GuiScreen currentScreen;
@@ -205,12 +210,43 @@ public abstract class MixinMinecraft {
         LiquidBounce.INSTANCE.stopClient();
     }
 
-    @Inject(method = "clickMouse", at = @At("HEAD"))
-    private void clickMouse(CallbackInfo callbackInfo) {
+    // TODO: convert to @Inject
+    /**
+     * @author ManInMyVan / SkidBounce
+     * @reason ViaMCP
+     */
+    @Overwrite
+    public void clickMouse() {
         CPSCounter.INSTANCE.registerClick(CPSCounter.MouseButton.LEFT);
 
         if (AutoClicker.INSTANCE.handleEvents()) {
             leftClickCounter = 0;
+        }
+        if (this.leftClickCounter <= 0) {
+            AttackOrder.sendConditionalSwing(this.objectMouseOver);
+            if (this.objectMouseOver == null) {
+                logger.error("Null returned as 'hitResult', this shouldn't happen!");
+                if (this.playerController.isNotCreative()) {
+                    this.leftClickCounter = 10;
+                }
+            } else {
+                switch (this.objectMouseOver.typeOfHit) {
+                    case ENTITY:
+                        AttackOrder.sendFixedAttack(this.thePlayer, this.objectMouseOver.entityHit);
+                        break;
+                    case BLOCK:
+                        BlockPos blockpos = this.objectMouseOver.getBlockPos();
+                        if (this.theWorld.getBlockState(blockpos).getBlock().getMaterial() != Material.air) {
+                            this.playerController.clickBlock(blockpos, this.objectMouseOver.sideHit);
+                            break;
+                        }
+                    case MISS:
+                    default:
+                        if (this.playerController.isNotCreative()) {
+                            this.leftClickCounter = 10;
+                        }
+                }
+            }
         }
     }
 

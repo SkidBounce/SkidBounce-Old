@@ -41,6 +41,7 @@
     "gui.MixinGuiSlot",
     "gui.MixinGuiSpectator",
     "gui.MixinServerSelectionList",
+    "item.MixinItemBlock",
     "item.MixinItemRenderer",
     "item.MixinMixinItemStack",
     "network.MixinNetHandlerPlayClient",

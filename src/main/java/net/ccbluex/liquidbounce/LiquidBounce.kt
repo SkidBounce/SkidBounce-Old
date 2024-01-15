@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce
 
+import de.florianmichael.viamcp.ViaMCP
 import net.ccbluex.liquidbounce.api.ClientUpdate.gitInfo
 import net.ccbluex.liquidbounce.cape.CapeService
 import net.ccbluex.liquidbounce.event.ClientShutdownEvent
@@ -177,6 +178,17 @@ object LiquidBounce {
             LOGGER.error("Failed to load background.", it)
         }.onSuccess {
             LOGGER.info("Successfully loaded background.")
+        }
+
+        // ViaMCP
+        try {
+            ViaMCP.create()
+
+            // In case you want a version slider like in the Minecraft options, you can use this code here, please choose one of those:
+
+            ViaMCP.INSTANCE.initAsyncSlider() // For top left aligned slider
+        } catch (throwable: Throwable) {
+            LOGGER.error("Failed to setup ViaMCP.", throwable)
         }
 
         // Set is starting status
