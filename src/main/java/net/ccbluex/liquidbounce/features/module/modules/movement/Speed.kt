@@ -120,6 +120,8 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
     val aacGroundTimer by FloatValue("AACGround-Timer", 3f, 1.1f..10f) { mode in arrayOf("AACGround", "AACGround2") }
     val cubecraftPortLength by FloatValue("CubeCraft-PortLength", 1f, 0.1f..2f) { mode == "TeleportCubeCraft" }
     val mineplexGroundSpeed by FloatValue("MineplexGround-Speed", 0.5f, 0.1f..1f) { mode == "MineplexGround" }
+    val cardinalWaterLowHop by BoolValue("Cardinal-WaterLowHop", true) { mode == "Cardinal" }
+    val cardinalJumpWhenIceSpeed by BoolValue("Cardinal-JumpWhenIceSpeed", true) { mode == "Cardinal" }
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {

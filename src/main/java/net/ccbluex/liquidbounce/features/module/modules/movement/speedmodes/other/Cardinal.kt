@@ -7,24 +7,33 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.oth
 
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.IceSpeed
+import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.cardinalJumpWhenIceSpeed
+import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.cardinalWaterLowHop
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.isOnGround
 import net.ccbluex.liquidbounce.utils.MovementUtils.isOnIce
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
+import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
+import net.minecraft.init.Blocks.water
+import net.minecraft.util.BlockPos
 
 object Cardinal : SpeedMode("Cardinal") {
-
     override fun onMotion(event: MotionEvent) {
-        if (mc.thePlayer.isInWater) return
         if (isMoving) {
             mc.thePlayer.jumpMovementFactor = 0.026f
-            if (mc.thePlayer.onGround && !(isOnIce() && IceSpeed.handleEvents()))
+
+            if (mc.thePlayer.onGround && !(isOnIce() && IceSpeed.state && cardinalJumpWhenIceSpeed)) {
                 mc.thePlayer.jump()
+                if (getBlock(BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ)) == water && cardinalWaterLowHop) {
+                    mc.thePlayer.motionY *= 0.875
+                }
+            }
+
             if (isOnGround(0.35))
                 strafe()
-        }
+
         else mc.thePlayer.stopXZ()
     }
 
