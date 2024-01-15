@@ -57,11 +57,11 @@ object LiquidBounce {
     val clientVersionNumber = clientVersionText.substring(1).toIntOrNull() ?: 0 // version format: "b<VERSION>" on legacy
     val clientCommit = gitInfo["git.commit.id.abbrev"]?.let { "git-$it" } ?: "unknown"
     val clientBranch = gitInfo["git.branch"]?.toString() ?: "unknown"
-    const val IN_DEV = false
+    const val IN_DEV = true
     const val CLIENT_CREATOR = "CCBlueX"
     const val CLIENT_CLOUD = "https://cloud.liquidbounce.net/LiquidBounce"
 
-    val clientTitle = CLIENT_NAME + " " + clientVersionText + " " + clientCommit + if (IN_DEV) " | DEVELOPMENT BUILD" else ""
+    val clientTitle = "$CLIENT_NAME $clientVersionText ${if (IN_DEV) clientCommit else ""}"
 
     var isStarting = true
 
