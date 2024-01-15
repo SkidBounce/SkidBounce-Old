@@ -181,12 +181,10 @@ object LiquidBounce {
         }
 
         // ViaMCP
+        // TODO: Transaction fix for 1.17+
+        // TODO: Sword fix for 1.9+
         try {
             ViaMCP.create()
-
-            // In case you want a version slider like in the Minecraft options, you can use this code here, please choose one of those:
-
-            ViaMCP.INSTANCE.initAsyncSlider() // For top left aligned slider
         } catch (throwable: Throwable) {
             LOGGER.error("Failed to setup ViaMCP.", throwable)
         }
