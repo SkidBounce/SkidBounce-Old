@@ -54,7 +54,7 @@ object LiquidBounce {
     // Client information
     const val CLIENT_NAME = "SkidBounce"
     val clientVersionText = gitInfo["git.build.version"]?.toString() ?: "unknown"
-    val clientVersionNumber = clientVersionText.substring(1).toIntOrNull() ?: 0 // version format: "b<VERSION>" on legacy
+    val clientVersionNumber = clientVersionText.substring(1).toIntOrNull() ?: 0
     val clientCommit = gitInfo["git.commit.id.abbrev"]?.let { "git-$it" } ?: "unknown"
     val clientBranch = gitInfo["git.branch"]?.toString() ?: "unknown"
     const val IN_DEV = true
@@ -183,6 +183,7 @@ object LiquidBounce {
         // ViaMCP
         // TODO: Transaction fix for 1.17+
         // TODO: Sword fix for 1.9+
+        // TODO: Jump height fix for 1.9+
         try {
             ViaMCP.create()
         } catch (throwable: Throwable) {
