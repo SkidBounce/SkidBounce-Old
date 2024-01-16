@@ -20,14 +20,14 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
-    private val mode by ListValue("Mode", arrayOf("Motion", "Checker", "Collide", "AAC3.3.12", "AACGlide"), "Motion")
+    private val mode by ListValue("Mode", arrayOf("Vanilla", "Checker", "Collide", "AAC3.3.12", "AACGlide"), "Vanilla")
     private val collideGlitch by BoolValue("Collide-Glitch", true) { mode == "Collide" }
     private val collideJumpMotion by FloatValue("Collide-JumpMotion", 0.42f, 0.1f..1f) { mode == "Collide" }
     private val collideFast by BoolValue("Collide-Fast", true) { mode == "Collide" }
     private val collideFastSpeed by FloatValue("Collide-FastSpeed", 0.3f, 0f..1f) { mode == "Collide" && collideFast }
     private val CheckerMotion by FloatValue("Checker-Motion", 0f, 0f..1f) { mode == "Checker" }
-    private val motionFastStop by BoolValue("Motion-FastStop", true) { mode == "Motion" }
-    private val motionMotion by FloatValue("Motion-Motion", 0.42f, 0.1f..1f) { mode == "Motion" }
+    private val vanillaFastStop by BoolValue("Vanilla-FastStop", true) { mode == "Vanilla" }
+    private val vanillaMotion by FloatValue("Vanilla-Motion", 0.42f, 0.1f..1f) { mode == "Vanilla" }
 
     private var glitch = false
     private var waited = 0
@@ -39,9 +39,9 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
         if (!mc.thePlayer.isCollidedHorizontally || mc.thePlayer.isOnLadder || mc.thePlayer.isInWater || mc.thePlayer.isInLava)
             return
 
-        if (mode == "Motion") {
-            event.y = motionMotion.toDouble()
-            mc.thePlayer.motionY = if (motionFastStop) 0.0 else motionMotion.toDouble()
+        if (mode == "Vanilla") {
+            event.y = vanillaMotion.toDouble()
+            mc.thePlayer.motionY = if (vanillaFastStop) 0.0 else vanillaMotion.toDouble()
         }
     }
 
@@ -49,7 +49,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
     fun onUpdate(event: MotionEvent) {
         mc.thePlayer ?: return
 
-        if (event.eventState != EventState.POST || mc.thePlayer == null)
+        if (event.eventState != EventState.POST)
             return
 
         when (mode) {
@@ -108,6 +108,12 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
         val mode = mode
 
         when (mode) {
+            /*
+            if (event.y > mc.thePlayer.posY &&
+                collideBlockIntersects(mc.thePlayer.entityBoundingBox) { block: Block? -> block !is BlockAir }
+                || mc.thePlayer.isCollidedHorizontally
+                ) event.boundingBox = AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+            */
             "Checker" -> if (event.y > mc.thePlayer.posY) event.boundingBox = null
             "Collide" ->
                 if (event.block == Blocks.air && event.y < mc.thePlayer.posY && mc.thePlayer.isCollidedHorizontally
