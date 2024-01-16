@@ -27,7 +27,7 @@ object AACHop3310 : SpeedMode("AACHop3.3.10") {
         }
     }
 
-    fun onPacket(event: PacketEvent) {
+    override fun onPacket(event: PacketEvent) {
         if (event.packet is S12PacketEntityVelocity) {
             if (mc.thePlayer.onGround && mc.thePlayer.isSneaking && MovementUtils.isMoving) return
             event.cancelEvent()

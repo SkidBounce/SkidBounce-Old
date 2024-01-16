@@ -166,6 +166,11 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
     }
 
     @EventTarget
+    fun onPacket(event: PacketEvent) {
+        modeModule.onPacket(event)
+    }
+
+    @EventTarget
     fun onStrafe(event: StrafeEvent) {
         if (mc.thePlayer.isSneaking)
             return
