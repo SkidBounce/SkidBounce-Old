@@ -207,7 +207,7 @@ object ModuleManager : Listenable {
             TrueSight,
             VehicleOneHit,
             Velocity,
-            WallClimb,
+            Spider,
             WaterSpeed,
             XRay,
             Zoot,
