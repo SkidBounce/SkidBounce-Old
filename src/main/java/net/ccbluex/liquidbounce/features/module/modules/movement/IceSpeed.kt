@@ -19,11 +19,12 @@ import net.minecraft.util.BlockPos
 
 object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
     private val mode by ListValue("Mode", arrayOf("Friction", "AAC", "Spartan"), "Friction")
-    private val friction by FloatValue("Friction", 0.39f, 0.1f..0.98f)
+    private val iceFriction by FloatValue("IceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
+    private val packediceFriction by FloatValue("PackedIceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
     override fun onEnable() {
         if (mode == "Friction") {
-            Blocks.ice.slipperiness = friction
-            Blocks.packed_ice.slipperiness = friction
+            Blocks.ice.slipperiness = iceFriction
+            Blocks.packed_ice.slipperiness = packediceFriction
         }
         super.onEnable()
     }
@@ -32,8 +33,8 @@ object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
     fun onUpdate(event: UpdateEvent) {
         val mode = mode
         if (mode == "Friction") {
-            Blocks.ice.slipperiness = friction
-            Blocks.packed_ice.slipperiness = friction
+            Blocks.ice.slipperiness = iceFriction
+            Blocks.packed_ice.slipperiness = packediceFriction
         } else {
             Blocks.ice.slipperiness = 0.98f
             Blocks.packed_ice.slipperiness = 0.98f
@@ -78,4 +79,7 @@ object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
         Blocks.packed_ice.slipperiness = 0.98f
         super.onDisable()
     }
+
+    override val tag
+        get() = mode
 }
