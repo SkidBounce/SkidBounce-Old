@@ -27,6 +27,7 @@ object AACPush : VelocityMode("AACPush") {
 
     override fun onJump(event: JumpEvent) {
         jump = true
-        if (!mc.thePlayer.isCollidedVertically) event.cancelEvent()
+        if (!mc.thePlayer.isCollidedVertically)
+            event.cancelEvent()
     }
 }

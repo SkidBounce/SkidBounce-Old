@@ -6,9 +6,13 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.Vel
 
 object AACZero : VelocityMode("AACZero") {
     var hasVelocity = false
+
+    override fun onEnable() {
+        hasVelocity = false
+    }
     override fun onVelocityPacket(event: PacketEvent) {
-        if (mc.thePlayer.isInWater || mc.thePlayer.isInLava || mc.thePlayer.isInWeb) return
-        hasVelocity = true
+        if (!mc.thePlayer.isInWater && !mc.thePlayer.isInLava && !mc.thePlayer.isInWeb)
+            hasVelocity = true
     }
     override fun onUpdate() {
         if (mc.thePlayer.isInWater || mc.thePlayer.isInLava || mc.thePlayer.isInWeb) return
@@ -19,5 +23,8 @@ object AACZero : VelocityMode("AACZero") {
             mc.thePlayer.onGround = true
         } else hasVelocity = false
     }
-    override fun onJump(event: JumpEvent) { if (mc.thePlayer.hurtTime > 0) event.cancelEvent() }
+    override fun onJump(event: JumpEvent) {
+        if (mc.thePlayer.hurtTime > 0)
+            event.cancelEvent()
+    }
 }

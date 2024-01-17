@@ -19,6 +19,12 @@ object NewGrim : VelocityMode("NewGrim") {
     var flagTimer = MSTimer()
     var timerTicks = 0
 
+    override fun onEnable() {
+        gotVelo = false
+        flagTimer.reset()
+        timerTicks = 0
+    }
+
     override fun onPacket(event: PacketEvent) {
         val packet = event.packet
         if (packet is S08PacketPlayerPosLook)
@@ -27,14 +33,11 @@ object NewGrim : VelocityMode("NewGrim") {
             gotVelo = false
             return
         }
+    }
 
-        if (packet is S12PacketEntityVelocity && packet.entityID == mc.thePlayer?.entityId) {
-            event.cancelEvent()
-            gotVelo = true
-        } else if (packet is S27PacketExplosion) {
-            event.cancelEvent()
-            gotVelo = true
-        }
+    override fun onVelocityPacket(event: PacketEvent) {
+        event.cancelEvent()
+        gotVelo = true
     }
 
     override fun onTick(event: TickEvent) {

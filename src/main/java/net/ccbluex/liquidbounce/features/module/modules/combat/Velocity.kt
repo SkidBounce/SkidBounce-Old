@@ -17,6 +17,8 @@ import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.network.play.server.S12PacketEntityVelocity
+import net.minecraft.network.play.server.S27PacketExplosion
+import kotlin.math.sign
 
 object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     private val velocityModes = arrayOf(
@@ -36,38 +38,39 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     override val tag get() = mode
 
     /* TODO:
-         Motion Limits
-         Only Combat
-         Direction Override
-         Delayed setting in Custom
+     *   Motion Limits
+     *   Only Combat
+     *   Direction Override
+     *   Delayed setting in Custom
      */
 
     //  Settings
 
     private val mode by ListValue("Mode", velocityModes.map { it.modeName }.toTypedArray(), "Vanilla")
-    private val noFire by BoolValue("NoFire", true)
-    private val onlyGround by BoolValue("OnlyGround", false)
+    private val noFire by BoolValue("NoFire", true) { mode !in arrayOf("AACv4", "AACPush") }
+    private val onlyGround by BoolValue("OnlyGround", false) { mode !in arrayOf("AACv4", "AACPush") }
+    private val explosions by BoolValue("Explosions", true) { mode !in arrayOf("AACv4", "AACPush") }
 
-    val cancelHorizontal by BoolValue("CancelHorizontal", true) { mode == "Vanilla" }
-    val cancelVertical by BoolValue("CancelVertical", true) { mode == "Vanilla" }
-    val horizontalMultiplier by FloatValue("HorizontalMultiplier", 0f, 0f..1f) { mode == "Vanilla" && !cancelHorizontal }
-    val verticalMultiplier by FloatValue("VerticalMultiplier", 0f, 0f..1f) { mode == "Vanilla" && !cancelVertical }
-    val chance by IntegerValue("Chance", 100, 0..100) { mode == "Vanilla" }
-    val attackReduce by BoolValue("AttackReduce", false) { mode == "Vanilla" }
-    val attackReduceMultiplier by FloatValue("AttackReduce-Multiplier", 0.8f, 0f..1f) { mode == "Vanilla" && attackReduce }
-    val jump by BoolValue("Jump", false) { mode == "Vanilla" }
-    val jumpMotion by FloatValue("Jump-Motion", 0.42f, 0f..0.42f) { mode == "Vanilla" && jump }
-    val jumpFailRate by IntegerValue("Jump-FailRate", 0, 0..100) { mode == "Vanilla" && jump }
-    val tickreduce by BoolValue("TickReduce", false) { mode == "Vanilla" }
-    val tickreduceTicks by IntegerValue("TickReduce-Ticks", 1, 1..10) { mode == "Vanilla" && tickreduce }
-    val tickreduceMultiplier by FloatValue("TickReduce-Multiplier", 0f, 0f..1f) { mode == "Vanilla" && tickreduce }
-    val tickreduceVertical by BoolValue("TickReduce-Vertical", false) { mode == "Vanilla" && tickreduce }
-    val tickreduceHorizontal by BoolValue("TickReduce-Horizontal", false) { mode == "Vanilla" && tickreduce }
-    val reverse by BoolValue("Reverse", false) { mode == "Vanilla" }
-    val reverseSmooth by BoolValue("Reverse-Smooth", false) { mode == "Vanilla" && reverse }
-    val reverseNoGround by BoolValue("Reverse-NoGround", true) { mode == "Vanilla" && reverse }
-    val reverseTicks by IntegerValue("Reverse-StrafeTicks", 1, 1..20) { mode == "Vanilla" && reverse }
-    val reverseStrength by FloatValue("Reverse-Strength", 1f, 0.02f..1f) { mode == "Vanilla" && reverse }
+    val cancelHorizontal by BoolValue("CancelHorizontal", true) { mode == "Custom" }
+    val cancelVertical by BoolValue("CancelVertical", true) { mode == "Custom" }
+    val horizontalMultiplier by FloatValue("HorizontalMultiplier", 0f, 0f..1f) { mode == "Custom" && !cancelHorizontal }
+    val verticalMultiplier by FloatValue("VerticalMultiplier", 0f, 0f..1f) { mode == "Custom" && !cancelVertical }
+    val chance by IntegerValue("Chance", 100, 0..100) { mode == "Custom" }
+    val attackReduce by BoolValue("AttackReduce", false) { mode == "Custom" }
+    val attackReduceMultiplier by FloatValue("AttackReduce-Multiplier", 0.8f, 0f..1f) { mode == "Custom" && attackReduce }
+    val jump by BoolValue("Jump", false) { mode == "Custom" }
+    val jumpMotion by FloatValue("Jump-Motion", 0.42f, 0f..0.42f) { mode == "Custom" && jump }
+    val jumpFailRate by IntegerValue("Jump-FailRate", 0, 0..100) { mode == "Custom" && jump }
+    val tickreduce by BoolValue("TickReduce", false) { mode == "Custom" }
+    val tickreduceTicks by IntegerValue("TickReduce-Ticks", 1, 1..10) { mode == "Custom" && tickreduce }
+    val tickreduceMultiplier by FloatValue("TickReduce-Multiplier", 0f, 0f..1f) { mode == "Custom" && tickreduce }
+    val tickreduceVertical by BoolValue("TickReduce-Vertical", false) { mode == "Custom" && tickreduce }
+    val tickreduceHorizontal by BoolValue("TickReduce-Horizontal", false) { mode == "Custom" && tickreduce }
+    val reverse by BoolValue("Reverse", false) { mode == "Custom" }
+    val reverseSmooth by BoolValue("Reverse-Smooth", false) { mode == "Custom" && reverse }
+    val reverseNoGround by BoolValue("Reverse-NoGround", true) { mode == "Custom" && reverse }
+    val reverseTicks by IntegerValue("Reverse-StrafeTicks", 1, 1..20) { mode == "Custom" && reverse }
+    val reverseStrength by FloatValue("Reverse-Strength", 1f, 0.02f..1f) { mode == "Custom" && reverse }
 
     val newgrimAlways by BoolValue("Always", false) { mode == "NewGrim" }
     val newgrimOnlyAir by BoolValue("OnlyBreakAir", true) { mode == "NewGrim" }
@@ -97,13 +100,7 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     override fun onEnable() {
         velocityTimer.reset()
         velocityTick = 0
-        Phase.hasVelocity = false
-        AAC.hasVelocity = false
-        AACZero.hasVelocity = false
-        OldGrim.grimTCancel = 0
-        NewGrim.gotVelo = false
-        NewGrim.flagTimer.reset()
-        NewGrim.timerTicks = 0
+        modeModule.onEnable()
     }
 
     @EventTarget
@@ -120,8 +117,13 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     @EventTarget(priority = 1)
     fun onPacket(event: PacketEvent) {
         modeModule.onPacket(event)
-        if (event.packet is S12PacketEntityVelocity && event.packet.entityID == mc.thePlayer.entityId) {
-            if ((noFire && mc.thePlayer.isBurning) || (onlyGround && !mc.thePlayer.onGround)) return
+        val packet = event.packet
+        if (
+            (packet is S27PacketExplosion && explosions)
+            || (packet is S12PacketEntityVelocity && packet.entityID == mc.thePlayer.entityId)
+            && !(noFire && mc.thePlayer.isBurning)
+            && !(onlyGround && !mc.thePlayer.onGround)
+            ) {
             velocityTimer.reset()
             velocityTick = 0
             modeModule.onVelocityPacket(event)

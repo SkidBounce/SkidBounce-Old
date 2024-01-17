@@ -12,4 +12,5 @@ open class VelocityMode(val modeName: String): MinecraftInstance() {
     open fun onJump(event: JumpEvent) {}
     open fun onPacket(event: PacketEvent) {}
     open fun onVelocityPacket(event: PacketEvent) {}
+    open fun onEnable() {}
 }
