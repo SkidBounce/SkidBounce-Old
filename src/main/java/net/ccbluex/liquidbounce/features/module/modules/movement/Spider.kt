@@ -9,6 +9,7 @@ import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.MovementUtils.direction
+import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlockIntersects
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -17,10 +18,11 @@ import net.minecraft.init.Blocks.air
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.util.AxisAlignedBB
 import kotlin.math.cos
+import kotlin.math.floor
 import kotlin.math.sin
 
 object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
-    private val mode by ListValue("Mode", arrayOf("Vanilla", "Checker", "Collide", "AAC3.3.12", "AACGlide"), "Vanilla")
+    private val mode by ListValue("Mode", arrayOf("Vanilla", "Checker", "Collide", "AAC3.3.12", "AACGlide", "AACv4"), "Vanilla")
     private val collideGlitch by BoolValue("Collide-Glitch", true) { mode == "Collide" }
     private val collideJumpMotion by FloatValue("Collide-JumpMotion", 0.42f, 0.1f..1f) { mode == "Collide" }
     private val collideFast by BoolValue("Collide-Fast", true) { mode == "Collide" }
@@ -32,6 +34,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
 
     private var glitch = false
     private var waited = 0
+    private var usedTimer = false
 
     @EventTarget
     fun onMove(event: MoveEvent) {
@@ -55,6 +58,11 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
 
         if (event.eventState != EventState.POST)
             return
+
+        if (usedTimer) {
+            usedTimer = false
+            mc.timer.timerSpeed = 1f
+        }
 
         when (mode) {
             "Collide" -> {
@@ -87,6 +95,16 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                 if (mc.thePlayer.isCollidedHorizontally && !mc.thePlayer.isOnLadder)
                     mc.thePlayer.motionY = -0.19
             }
+            "AACv4" -> {
+                if (!isMoving || (!mc.thePlayer.isCollidedHorizontally && !isInsideBlock)) return
+                if (mc.thePlayer.motionY < 0.0 || mc.thePlayer.onGround)
+                    glitch = true
+                if (mc.thePlayer.onGround) {
+                    mc.thePlayer.jump()
+                    usedTimer = true
+                    mc.timer.timerSpeed = 0.4f
+                }
+            }
         }
     }
 
@@ -117,14 +135,33 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                 "New" -> if (event.y > mc.thePlayer.posY && (isInsideBlock || mc.thePlayer.isCollidedHorizontally))
                     event.boundingBox = AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
             }
-            "Collide" ->
-                if (event.block == air && event.y < mc.thePlayer.posY && mc.thePlayer.isCollidedHorizontally
-                    && !mc.thePlayer.isOnLadder && !mc.thePlayer.isInWater && !mc.thePlayer.isInLava)
-                    event.boundingBox = AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
-                        .offset(mc.thePlayer.posX, mc.thePlayer.posY.toInt() - 1.0, mc.thePlayer.posZ)
+            "Collide" -> {
+                if (event.block == air &&
+                    event.y < mc.thePlayer.posY &&
+                    mc.thePlayer.isCollidedHorizontally &&
+                    !mc.thePlayer.isOnLadder && !mc.thePlayer.isInWater && !mc.thePlayer.isInLava
+                    ) event.boundingBox =
+                        AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 1.0, 1.0, 1.0).offset(mc.thePlayer.posX, mc.thePlayer.posY.toInt() - 1.0, mc.thePlayer.posZ)
+            }
+            "AACv4" -> {
+                if (isMoving && mc.thePlayer.isCollidedHorizontally && mc.thePlayer.motionY <= 0.0) {
+                    event.boundingBox = AxisAlignedBB.fromBounds(
+                        event.x.toDouble(),
+                        event.y.toDouble(),
+                        event.z.toDouble(),
+                        event.x + 1.0,
+                        floor(mc.thePlayer.posY),
+                        event.z + 1.0
+                    )
+                }
+            }
         }
     }
 
+    override fun onDisable() {
+        mc.timer.timerSpeed = 1f
+        usedTimer = false
+    }
     private val isInsideBlock
         get() = collideBlockIntersects(mc.thePlayer.entityBoundingBox) { it != air }
 
