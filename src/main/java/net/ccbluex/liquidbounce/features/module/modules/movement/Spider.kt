@@ -13,7 +13,7 @@ import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlockIntersects
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
-import net.minecraft.init.Blocks
+import net.minecraft.init.Blocks.air
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.util.AxisAlignedBB
 import kotlin.math.cos
@@ -25,7 +25,8 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
     private val collideJumpMotion by FloatValue("Collide-JumpMotion", 0.42f, 0.1f..1f) { mode == "Collide" }
     private val collideFast by BoolValue("Collide-Fast", true) { mode == "Collide" }
     private val collideFastSpeed by FloatValue("Collide-FastSpeed", 0.3f, 0f..1f) { mode == "Collide" && collideFast }
-    private val CheckerMotion by FloatValue("Checker-Motion", 0f, 0f..1f) { mode == "Checker" }
+    private val checkerMode by ListValue("Checker-Mode", arrayOf("New", "Old"), "New") { mode == "Checker" }
+    private var checkerMotion by FloatValue("Checker-Motion", 0f, 0f..1f) { mode == "Checker" }
     private val vanillaFastStop by BoolValue("Vanilla-FastStop", true) { mode == "Vanilla" }
     private val vanillaMotion by FloatValue("Vanilla-Motion", 0.42f, 0.1f..1f) { mode == "Vanilla" }
 
@@ -35,13 +36,16 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
     @EventTarget
     fun onMove(event: MoveEvent) {
         mc.thePlayer ?: return
-
-        if (!mc.thePlayer.isCollidedHorizontally || mc.thePlayer.isOnLadder || mc.thePlayer.isInWater || mc.thePlayer.isInLava)
-            return
-
-        if (mode == "Vanilla") {
-            event.y = vanillaMotion.toDouble()
-            mc.thePlayer.motionY = if (vanillaFastStop) 0.0 else vanillaMotion.toDouble()
+        when (mode) {
+            "Vanilla" -> if (mc.thePlayer.isCollidedHorizontally && !mc.thePlayer.isOnLadder && !mc.thePlayer.isInWater && !mc.thePlayer.isInLava) {
+                event.y = vanillaMotion.toDouble()
+                mc.thePlayer.motionY = if (vanillaFastStop) 0.0 else vanillaMotion.toDouble()
+            }
+            "Checker" -> if (checkerMode == "New" && mc.thePlayer.movementInput.moveForward > 0.0 && isInsideBlock) {
+                event.x = 0.0
+                event.z = 0.0
+                event.y = checkerMotion.toDouble()
+            }
         }
     }
 
@@ -64,13 +68,12 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                         mc.thePlayer.motionY = -collideFastSpeed.toDouble()
             }
             "Checker" -> {
-                val isInsideBlock = collideBlockIntersects(mc.thePlayer.entityBoundingBox) {
-                    it != Blocks.air
+                when (checkerMode) {
+                    "Old" -> if (isInsideBlock && checkerMotion != 0f)
+                            mc.thePlayer.motionY = checkerMotion.toDouble()
+                    "New" -> if (mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround)
+                        mc.thePlayer.jump()
                 }
-                val motion = CheckerMotion
-
-                if (isInsideBlock && motion != 0f)
-                    mc.thePlayer.motionY = motion.toDouble()
             }
             "AAC3.3.12" -> if (mc.thePlayer.isCollidedHorizontally && !mc.thePlayer.isOnLadder) {
                 waited++
@@ -108,20 +111,22 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
         val mode = mode
 
         when (mode) {
-            /*
-            if (event.y > mc.thePlayer.posY &&
-                collideBlockIntersects(mc.thePlayer.entityBoundingBox) { block: Block? -> block !is BlockAir }
-                || mc.thePlayer.isCollidedHorizontally
-                ) event.boundingBox = AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-            */
-            "Checker" -> if (event.y > mc.thePlayer.posY) event.boundingBox = null
+            "Checker" -> when (checkerMode) {
+                "Old" -> if (event.y > mc.thePlayer.posY)
+                        event.boundingBox = null
+                "New" -> if (event.y > mc.thePlayer.posY && (isInsideBlock || mc.thePlayer.isCollidedHorizontally))
+                    event.boundingBox = AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+            }
             "Collide" ->
-                if (event.block == Blocks.air && event.y < mc.thePlayer.posY && mc.thePlayer.isCollidedHorizontally
+                if (event.block == air && event.y < mc.thePlayer.posY && mc.thePlayer.isCollidedHorizontally
                     && !mc.thePlayer.isOnLadder && !mc.thePlayer.isInWater && !mc.thePlayer.isInLava)
                     event.boundingBox = AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
                         .offset(mc.thePlayer.posX, mc.thePlayer.posY.toInt() - 1.0, mc.thePlayer.posZ)
         }
     }
+
+    private val isInsideBlock
+        get() = collideBlockIntersects(mc.thePlayer.entityBoundingBox) { it != air }
 
     override val tag
         get() = mode
