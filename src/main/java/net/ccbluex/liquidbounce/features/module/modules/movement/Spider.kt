@@ -23,7 +23,7 @@ import kotlin.math.floor
 import kotlin.math.sin
 
 object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
-    private val mode by ListValue("Mode", arrayOf("Vanilla", "Checker", "Collide", "AAC3.3.12", "AACGlide", "AACv4", "Vulcan"), "Vanilla")
+    private val mode by ListValue("Mode", arrayOf("Vanilla", "Checker", "Collide", "AAC3.3.12", "AACGlide", "AACv4", "Vulcan", "Verus"), "Vanilla")
     private val collideGlitch by BoolValue("Collide-Glitch", true) { mode == "Collide" }
     private val collideJumpMotion by FloatValue("Collide-JumpMotion", 0.42f, 0.1f..1f) { mode == "Collide" }
     private val collideFast by BoolValue("Collide-Fast", true) { mode == "Collide" }
@@ -32,7 +32,9 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
     private var checkerMotion by FloatValue("Checker-Motion", 0f, 0f..1f) { mode == "Checker" }
     private val vanillaFastStop by BoolValue("Vanilla-FastStop", true) { mode == "Vanilla" }
     private val vanillaMotion by FloatValue("Vanilla-Motion", 0.42f, 0.1f..1f) { mode == "Vanilla" }
+    private val verusMotion by FloatValue("Verus-Motion", 0.42f, 0.1f..1f) { mode == "Verus" }
 
+    private var canClimb = false
     private var glitch = false
     private var waited = 0
     private var usedTimer = false
@@ -126,6 +128,15 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                     }
                 }
             }
+            "Verus" -> {
+                if (!mc.thePlayer.isCollidedHorizontally || mc.thePlayer.isInWater || mc.thePlayer.isInLava || mc.thePlayer.isOnLadder || mc.thePlayer.isInWeb || mc.thePlayer.isOnLadder) {
+                    canClimb = false
+                } else {
+                    canClimb = true
+                    mc.thePlayer.motionY = verusMotion.toDouble()
+                    mc.thePlayer.onGround = true
+                }
+            }
         }
     }
 
@@ -191,6 +202,12 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                 }
             }
         }
+    }
+
+    @EventTarget
+    fun onJump(event: JumpEvent) {
+        if (mode == "Verus" && canClimb)
+            event.cancelEvent()
     }
 
     override fun onDisable() {
