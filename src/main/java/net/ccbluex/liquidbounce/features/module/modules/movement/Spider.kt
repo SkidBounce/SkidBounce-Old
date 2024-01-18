@@ -11,6 +11,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.MovementUtils.direction
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlockIntersects
+import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
@@ -22,7 +23,7 @@ import kotlin.math.floor
 import kotlin.math.sin
 
 object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
-    private val mode by ListValue("Mode", arrayOf("Vanilla", "Checker", "Collide", "AAC3.3.12", "AACGlide", "AACv4"), "Vanilla")
+    private val mode by ListValue("Mode", arrayOf("Vanilla", "Checker", "Collide", "AAC3.3.12", "AACGlide", "AACv4", "Vulcan"), "Vanilla")
     private val collideGlitch by BoolValue("Collide-Glitch", true) { mode == "Collide" }
     private val collideJumpMotion by FloatValue("Collide-JumpMotion", 0.42f, 0.1f..1f) { mode == "Collide" }
     private val collideFast by BoolValue("Collide-Fast", true) { mode == "Collide" }
@@ -96,13 +97,33 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                     mc.thePlayer.motionY = -0.19
             }
             "AACv4" -> {
-                if (!isMoving || (!mc.thePlayer.isCollidedHorizontally && !isInsideBlock)) return
+                if (!isMoving || (!mc.thePlayer.isCollidedHorizontally && !isInsideBlock))
+                    return
                 if (mc.thePlayer.motionY < 0.0 || mc.thePlayer.onGround)
                     glitch = true
                 if (mc.thePlayer.onGround) {
                     mc.thePlayer.jump()
                     usedTimer = true
                     mc.timer.timerSpeed = 0.4f
+                }
+            }
+            "Vulcan" -> {
+                if (!isMoving || (!mc.thePlayer.isCollidedHorizontally && !isInsideBlock)) {
+                    waited = 0
+                    return
+                }
+                if (mc.thePlayer.onGround) {
+                    waited = 0
+                    mc.thePlayer.jump()
+                }
+                if (waited >= 3)
+                    waited = 0
+                waited++
+                when (waited) {
+                    2, 3 -> {
+                        mc.thePlayer.jump()
+                        mc.thePlayer.stopXZ()
+                    }
                 }
             }
         }
@@ -118,6 +139,20 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                 packet.x -= sin(yaw) * 0.00000001
                 packet.z += cos(yaw) * 0.00000001
                 glitch = false
+            }
+            if (mode == "Vulcan") {
+                when (waited) {
+                    3 -> {
+                        val randomModulo = Math.random() * 0.03 + 0.22
+                        packet.y -= 0.1
+                        packet.x += sin(direction) * randomModulo
+                        packet.z -= cos(direction) * randomModulo
+                    }
+
+                    2 -> {
+                        packet.onGround = true
+                    }
+                }
             }
         }
     }
