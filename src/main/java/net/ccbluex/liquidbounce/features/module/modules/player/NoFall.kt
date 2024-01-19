@@ -12,6 +12,7 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.other.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vanilla.*
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
+import net.ccbluex.liquidbounce.utils.MovementUtils.aboveVoid
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlock
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -58,17 +59,17 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Verus,
     )
 
-    private val modes = noFallModes.map { it.modeName }.toTypedArray()
+    val mode by ListValue("Mode", noFallModes.map { it.modeName }.toTypedArray(), "SpoofGround")
 
-    val mode by ListValue("Mode", modes, "SpoofGround")
+    private val noVoid by BoolValue("NoVoid", false)
     val mlgMinFallDistance by FloatValue("MLG-MinHeight", 5f, 2f..50f) { mode == "MLG" }
     val spoofgroundAlways by BoolValue("SpoofGround-Always", true) { mode == "SpoofGround" }
     val spoofgroundMinFallDistance by FloatValue("SpoofGround-MinFallDistance", 0f, 0f..3f) { mode == "SpoofGround" && !spoofgroundAlways }
     val motionMotion by FloatValue("Motion-Motion", -0.01f, -5f..5f) { mode == "Motion" }
     val phaseOffset by IntegerValue("Phase-Offset", 1, 0..5) { mode == "Phase" }
     val verusMulti by FloatValue("Verus-XZMulti", 0.6f, 0f..1f) { mode == "Verus" }
-
     val vulcan2Motion by FloatValue("Vulcan2-Motion", 0.35f, 0f..10f) { mode == "Vulcan2" }
+
     override fun onEnable() {
         modeModule.onEnable()
     }
@@ -81,7 +82,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     fun onUpdate(event: UpdateEvent) {
         mc.thePlayer ?: return
 
-        if (FreeCam.handleEvents()) return
+        if (void || FreeCam.handleEvents()) return
 
         if (collideBlock(mc.thePlayer.entityBoundingBox) { it is BlockLiquid } || collideBlock(
                 fromBounds(
@@ -99,22 +100,11 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     }
 
     @EventTarget
-    fun onRender3D(event: Render3DEvent) {
-        modeModule.onRender3D(event)
-    }
-
-    @EventTarget
     fun onPacket(event: PacketEvent) {
         mc.thePlayer ?: return
+        if (void) return
 
         modeModule.onPacket(event)
-    }
-
-    @EventTarget
-    fun onBB(event: BlockBBEvent) {
-        mc.thePlayer ?: return
-
-        modeModule.onBB(event)
     }
 
     // Ignore condition used in LAAC mode
@@ -124,17 +114,14 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     }
 
     @EventTarget
-    fun onStep(event: StepEvent) {
-        modeModule.onStep(event)
-    }
-
-    @EventTarget
     fun onMotion(event: MotionEvent) {
+        if (void) return
         modeModule.onMotion(event)
     }
 
     @EventTarget
     fun onMove(event: MoveEvent) {
+        if (void) return
         mc.thePlayer ?: return
 
         if (collideBlock(mc.thePlayer.entityBoundingBox) { it is BlockLiquid }
@@ -156,6 +143,9 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     override val tag
         get() = mode
 
+    private val void
+        get() = noVoid && aboveVoid
+
     private val modeModule
         get() = noFallModes.find { it.modeName == mode }!!
-}
+

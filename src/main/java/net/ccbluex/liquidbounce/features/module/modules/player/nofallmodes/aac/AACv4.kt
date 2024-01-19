@@ -4,6 +4,7 @@ import net.ccbluex.liquidbounce.event.EventState
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
+import net.ccbluex.liquidbounce.utils.MovementUtils.aboveVoid
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.util.AxisAlignedBB
 
@@ -30,7 +31,7 @@ object AACv4 : NoFallMode("AACv4") {
 
     override fun onMotion(event: MotionEvent) {
         if (event.eventState == EventState.PRE) {
-            if (!inVoid()) {
+            if (aboveVoid) {
                 if (aac4Fakelag) {
                     aac4Fakelag = false
                     if (aac4Packets.size > 0) {
@@ -64,26 +65,7 @@ object AACv4 : NoFallMode("AACv4") {
             }
         }
     }
-    private fun inVoid(): Boolean {
-        if (mc.thePlayer.posY < 0)
-            return false
-        var off = 0
-        while (off < mc.thePlayer.posY + 2) {
-            val bb = AxisAlignedBB(
-                mc.thePlayer.posX,
-                mc.thePlayer.posY,
-                mc.thePlayer.posZ,
-                mc.thePlayer.posX,
-                off.toDouble(),
-                mc.thePlayer.posZ
-            )
-            if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, bb).isNotEmpty()) {
-                return true
-            }
-            off += 2
-        }
-        return false
-    }
+
     private fun inAir(height: Double, plus: Double): Boolean {
         if (mc.thePlayer.posY < 0) return false
         var off = 0

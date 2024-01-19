@@ -22,6 +22,29 @@ import kotlin.math.sqrt
 
 object MovementUtils : MinecraftInstance(), Listenable {
 
+    val aboveVoid
+        get() = aboveVoid()
+
+    private fun aboveVoid(): Boolean {
+        mc.thePlayer ?: return false
+        mc.theWorld ?: return false
+        var void = true
+        var i = -(mc.thePlayer.posY - 1.4857625).toInt()
+
+        while (i <= 0) {
+            void = mc.theWorld.getCollisionBoxes(
+                mc.thePlayer.entityBoundingBox.offset(
+                    mc.thePlayer.motionX * 0.5,
+                    i.toDouble(),
+                    mc.thePlayer.motionZ * 0.5
+                )
+            ).isEmpty()
+            ++i
+            if (!void) break
+        }
+
+        return void
+    }
     var speed
         get() = mc.thePlayer?.run { sqrt(motionX * motionX + motionZ * motionZ).toFloat() } ?: .0f
         set(value) { strafe(value) }
