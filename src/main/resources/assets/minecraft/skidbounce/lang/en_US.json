@@ -15,7 +15,7 @@
         "notification.moduleEnabled": "Enabled %s",
         "notification.moduleDisabled": "Disabled %s",
 
-        "module.aimbot.description": "Automatically faces selected entities around you.",
+        "module.aimBot.description": "Automatically faces selected entities around you.",
 
         "module.autoArmor.description": "Automatically equips the best armor in your inventory.",
 
@@ -35,7 +35,7 @@
 
         "module.backtrack.description": "Allows you to hit players by attacking their previous cached positions.",
 
-        "module.bowAimbot.description": "Automatically aims at players when using a bow.",
+        "module.bowAimBot.description": "Automatically aims at players when using a bow.",
 
         "module.criticals.description": "Automatically deals critical hits.",
 
@@ -55,7 +55,7 @@
 
         "module.tNTBlock.description": "Automatically blocks with your sword when TNT around you explodes.",
 
-        "module.trigger.description": "Automatically attacks the entity you are looking at.",
+        "module.triggerBot.description": "Automatically attacks the entity you are looking at.",
 
         "module.velocity.description": "Allows you to modify the amount of knockback you take.",
 
@@ -80,8 +80,6 @@
         "module.antiBlind.description": "Cancels blindness effects.",
         
         "module.antiBot.description": "Prevents KillAura from attacking AntiCheat bots.",
-        
-        "module.antiCactus.description": "Prevents cacti from damaging you.",
         
         "module.antiFireball.description": "Automatically punches fireballs away from you.",
         
@@ -201,7 +199,7 @@
         
         "module.liquidChat.description": "Allows you to chat with other LiquidBounce users.",
         
-        "module.liquidWalk.description": "Allows you to walk on water.",
+        "module.jesus.description": "Allows you to walk on water.",
         
         "module.liquids.description": "Allows you to interact with liquids.",
         
@@ -325,7 +323,7 @@
         
         "module.vehicleOneHit.description": "Allows you to break vehicles with a single hit.",
         
-        "module.wallClimb.description": "Allows you to climb up walls like a spider.",
+        "module.spider.description": "Allows you to climb up walls like a spider.",
 
         "module.waterSpeed.description": "Allows you to swim faster.",
         

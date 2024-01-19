@@ -13,7 +13,7 @@
         "notification.moduleEnabled": "%s се активира",
         "notification.moduleDisabled": "%s се деактивира",
 
-        "module.aimbot.description": "Автоматично се обръща към избрани обекти около вас.",
+        "module.aimBot.description": "Автоматично се обръща към избрани обекти около вас.",
 
         "module.autoArmor.description": "Автоматично оборудва най-добрата броня в инвентара ви.",
 
@@ -33,7 +33,7 @@
 
         "module.backtrack.description": "Позволява ви да удряте играчи, като ги атакувате на техните предишни кеширани позиции.",
 
-        "module.bowAimbot.description": "Автоматично се прицелва в играчите, когато се използва лък.",
+        "module.bowAimBot.description": "Автоматично се прицелва в играчите, когато се използва лък.",
 
         "module.criticals.description": "Автоматично нанася критични удари.",
 
@@ -53,7 +53,7 @@
 
         "module.tNTBlock.description": "Автоматично блокира с меча ви, когато TNT експлодира около вас.",
 
-        "module.trigger.description": "Автоматично атакува обекта, който гледате.",
+        "module.triggerBot.description": "Автоматично атакува обекта, който гледате.",
 
         "module.velocity.description": "Позволява ви да промените количеството отхвърляне, което приемате.",
 
@@ -78,8 +78,6 @@
         "module.antiBlind.description": "Отменя ефекта на слепотата (blindness) .",
         
         "module.antiBot.description": "Предотвратява KillAura да атакува AntiCheat ботове.",
-        
-        "module.antiCactus.description": "Предотвратява кактусите да ви навредят.",
         
         "module.antiFireball.description": "Автоматично отблъсква огнени топки от вас.",
         
@@ -197,7 +195,7 @@
         
         "module.liquidChat.description": "Позволява ви да разговаряте с други потребители на Liquidbounce.",
         
-        "module.liquidWalk.description": "Позволява ви да ходите по вода.",
+        "module.jesus.description": "Позволява ви да ходите по вода.",
         
         "module.liquids.description": "Ви позволява да общувате с течности.",
         
@@ -321,7 +319,7 @@
         
         "module.vehicleOneHit.description": "Позволява ви да разбивате превозни средства с един удар.",
         
-        "module.wallClimb.description": "Позволява ви да се изкачвате по стени като паяк.",
+        "module.spider.description": "Позволява ви да се изкачвате по стени като паяк.",
 
         "module.waterSpeed.description": "Позволява ви да плувате по-бързо.",
         

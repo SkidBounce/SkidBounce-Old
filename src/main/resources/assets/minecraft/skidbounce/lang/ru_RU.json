@@ -13,7 +13,7 @@
         "notification.moduleEnabled": "Включен %s",
         "notification.moduleDisabled": "Выключен %s",
 
-        "module.aimbot.description": "Автоматически наводит прицел на врагов вокруг вас.",
+        "module.aimBot.description": "Автоматически наводит прицел на врагов вокруг вас.",
 
         "module.autoArmor.description": "Автоматически одевает лучшую броню из инвентаря.",
 
@@ -33,7 +33,7 @@
 
         "module.backtrack.description": "Позволяет бить игроков, атакуя их предыдущие кэшированные позиции.",
 
-        "module.bowAimbot.description": "Автоматически целится в игроков из лука.",
+        "module.bowAimBot.description": "Автоматически целится в игроков из лука.",
 
         "module.criticals.description": "Каждый удар наносит критический урон(криты).",
 
@@ -53,7 +53,7 @@
 
         "module.tNTBlock.description": "Автоматический блок мечом при взрыве TNT.",
 
-        "module.trigger.description": "Автоматически бьёт цель, на которую смотришь.",
+        "module.triggerBot.description": "Автоматически бьёт цель, на которую смотришь.",
 
         "module.velocity.description": "Позволяет изменить количество получаемого КБ(сила отталкивания).",
 
@@ -78,9 +78,7 @@
         "module.antiBlind.description": "Убирает эффект слепоты.",
         
         "module.antiBot.description": "KillAura не будет атаковать Античит ботов.",
-        
-        "module.antiCactus.description": "Отключает урон от кактусов.",
-        
+
         "module.antiFireball.description": "Автоматически отталкивает фаерболы.",
         
         "module.atAllProvider.description": "Автоматическое упоминание всех участников сервера при использовании '@a' в сообщении.",
@@ -197,7 +195,7 @@
         
         "module.liquidChat.description": "Чат для общения с другими пользователями LiquidBounce.",
         
-        "module.liquidWalk.description": "Позволяет ходить по воде.",
+        "module.jesus.description": "Позволяет ходить по воде.",
         
         "module.liquids.description": "Позволяет взаимодействовать с жидкостями (вода/лава...).",
         
@@ -321,7 +319,7 @@
         
         "module.vehicleOneHit.description": "Позволяет ломать транспортные средства одним ударом.",
         
-        "module.wallClimb.description": "Позволяет ползать по стенам как паук.",
+        "module.spider.description": "Позволяет ползать по стенам как паук.",
 
         "module.waterSpeed.description": "Позволяет плавать быстрее.",
         

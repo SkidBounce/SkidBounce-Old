@@ -13,7 +13,7 @@
         "notification.moduleEnabled": "已启用 %s",
         "notification.moduleDisabled": "已禁用 %s",
 
-        "module.aimbot.description": "自动瞄准范围内的目标。",
+        "module.aimBot.description": "自动瞄准范围内的目标。",
 
         "module.autoArmor.description": "自动穿上最好的盔甲。",
 
@@ -33,7 +33,7 @@
 
         "module.backtrack.description": "允许你通过攻击玩家曾经处于的位置对其进行攻击。",
 
-        "module.bowAimbot.description": "拉弓时自动瞄准玩家。",
+        "module.bowAimBot.description": "拉弓时自动瞄准玩家。",
 
         "module.criticals.description": "攻击生物时自动暴击。",
 
@@ -53,7 +53,7 @@
 
         "module.tNTBlock.description": "当周围的TNT爆炸时，自动用剑格挡。",
 
-        "module.trigger.description": "自动攻击瞄准的目标。",
+        "module.triggerBot.description": "自动攻击瞄准的目标。",
 
         "module.velocity.description": "修改你所受到的击退。",
 
@@ -78,9 +78,7 @@
         "module.antiBlind.description": "消除失明效果。(视觉上)",
         
         "module.antiBot.description": "防止杀戮光环攻击反作弊发的假人。",
-        
-        "module.antiCactus.description": "防止受到仙人掌伤害。",
-        
+
         "module.antiFireball.description": "自动打走火球。",
         
         "module.atAllProvider.description": "当你在消息中使用'@a'时，自动提及服务器上的所有人。",
@@ -197,7 +195,7 @@
         
         "module.liquidChat.description": "允许你与其他LiquidBounce用户聊天。",
         
-        "module.liquidWalk.description": "允许你在水上行走。",
+        "module.jesus.description": "允许你在水上行走。",
         
         "module.liquids.description": "允许你与液体交互。",
         
@@ -321,7 +319,7 @@
         
         "module.vehicleOneHit.description": "允许你一击就可破坏载具。",
         
-        "module.wallClimb.description": "允许你像蜘蛛一样爬上墙壁。",
+        "module.spider.description": "允许你像蜘蛛一样爬上墙壁。",
 
         "module.waterSpeed.description": "允许你游得更快。",
         

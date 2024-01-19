@@ -13,7 +13,7 @@
         "notification.moduleEnabled": "Ativado %s",
         "notification.moduleDisabled": "Desativado %s",
 
-        "module.aimbot.description": "Enfrenta automaticamente as entidades selecionadas ao seu redor.",
+        "module.aimBot.description": "Enfrenta automaticamente as entidades selecionadas ao seu redor.",
 
         "module.autoArmor.description": "Equipa automaticamente a melhor armadura em seu inventário.",
 
@@ -33,7 +33,7 @@
 
         "module.backtrack.description": "Permite que você atinja os jogadores atacando suas posições anteriores em cache.",
 
-        "module.bowAimbot.description": "Mira automaticamente os jogadores ao usar um arco.",
+        "module.bowAimBot.description": "Mira automaticamente os jogadores ao usar um arco.",
 
         "module.criticals.description": "Permite que você dê danos criticos.",
 
@@ -51,7 +51,7 @@
 
         "module.teleportHit.description": "Permite atingir entidades de longe.",
 
-        "module.trigger.description": "Ataca automaticamente a entidade que você está olhando.",
+        "module.triggerBot.description": "Ataca automaticamente a entidade que você está olhando.",
 
         "module.velocity.description": "Permite modificar a quantidade de recuo que você recebe.",
 
@@ -76,8 +76,6 @@
         "module.antiBlind.description": "Cancela efeitos de cegueira.",
 
         "module.antiBot.description": "Impede que o KillAura ataque bots de AntiCheat.",
-
-        "module.antiCactus.description": "Impede que cactos o danifiquem.",
 
         "module.antiFireball.description": "Automáticamente tira as bolas de fogo longe de você.",
 
@@ -193,7 +191,7 @@
 
         "module.liquidChat.description": "Permite que você intereja com outros usuários do LiquidBounce.",
 
-        "module.liquidWalk.description": "Permite que você ande sobre a água.",
+        "module.jesus.description": "Permite que você ande sobre a água.",
 
         "module.liquids.description": "Permite que você interaja com líquidos.",
 
@@ -317,7 +315,7 @@
 
         "module.vehicleOneHit.description": "Permite quebrar veículos com um único golpe.",
 
-        "module.wallClimb.description": "Permite escalar paredes como uma aranha.",
+        "module.spider.description": "Permite escalar paredes como uma aranha.",
 
         "module.waterSpeed.description": "Permite nadar mais rápido.",
 
