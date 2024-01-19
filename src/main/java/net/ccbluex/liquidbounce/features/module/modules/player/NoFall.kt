@@ -148,4 +148,5 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
 
     private val modeModule
         get() = noFallModes.find { it.modeName == mode }!!
+}
 
