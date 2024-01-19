@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.lang
 
+import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
 import net.ccbluex.liquidbounce.file.FileManager.PRETTY_GSON
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
@@ -39,12 +40,12 @@ object LanguageManager : MinecraftInstance() {
      * Load all languages which are pre-defined in [knownLanguages] and stored in assets.
      * If a language is not found, it will be logged as error.
      *
-     * Languages are stored in assets/minecraft/liquidbounce/lang and when loaded will be stored in [languageMap]
+     * Languages are stored in assets/minecraft/[CLIENT_NAME]/lang and when loaded will be stored in [languageMap]
      */
     fun loadLanguages() {
         for (language in knownLanguages) {
             runCatching {
-                val languageFile = javaClass.getResourceAsStream("/assets/minecraft/liquidbounce/lang/$language.json")
+                val languageFile = javaClass.getResourceAsStream("/assets/minecraft/${CLIENT_NAME.lowercase()}/lang/$language.json")
                 val languageJson = PRETTY_GSON.fromJson(languageFile.bufferedReader(), Language::class.java)
                 languageMap[language] = languageJson
             }.onSuccess {
