@@ -72,6 +72,9 @@ object InventoryMove : Module("InventoryMove", ModuleCategory.MOVEMENT, gameDete
                 serverOpenInventory = true
         }
 
+        if (Fly.handleEvents() && Fly.mode == "VulcanGhost")
+            return
+
         for (affectedBinding in affectedBindings)
             affectedBinding.pressed = GameSettings.isKeyDown(affectedBinding)
                 || (affectedBinding == mc.gameSettings.keyBindSprint && Sprint.handleEvents() && Sprint.mode == "Legit" && (!Sprint.onlyOnSprintPress || mc.thePlayer.isSprinting))
