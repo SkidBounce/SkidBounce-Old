@@ -490,7 +490,7 @@ object PacketDebugger : Module("PacketDebugger", ModuleCategory.MISC) {
 
     @EventTarget(priority = Int.MIN_VALUE)
     fun onPacket(event: PacketEvent) {
-        if (event.isCancelled) return
+        if (event.isCancelled || !state) return
         val packet = event.packet
         val clazz: Class<*> = if (packet.javaClass.isMemberClass) packet.javaClass.declaringClass else packet.javaClass
         when (packet) {
