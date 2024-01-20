@@ -488,7 +488,7 @@ object PacketDebugger : Module("PacketDebugger", ModuleCategory.MISC) {
     private val S48 by BoolValue("S48PacketResourcePackSend", false)
     private val S49 by BoolValue("S49PacketUpdateEntityNBT", false)
 
-    @EventTarget
+    @EventTarget(priority = Int.MIN_VALUE)
     fun onPacket(event: PacketEvent) {
         if (event.isCancelled) return
         val packet = event.packet

@@ -7,6 +7,7 @@ package net.ccbluex.liquidbounce.utils
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity
+import net.ccbluex.liquidbounce.features.module.modules.misc.PacketDebugger
 import net.ccbluex.liquidbounce.features.module.modules.player.FakeLag
 import net.ccbluex.liquidbounce.injection.implementations.IMixinEntity
 import net.minecraft.entity.EntityLivingBase
@@ -112,7 +113,7 @@ object PacketUtils : MinecraftInstance(), Listenable {
             mc.netHandler?.addToSendQueue(packet)
             return
         }
-
+        PacketDebugger.onPacket(PacketEvent(packet, EventState.SEND))
         val netManager = mc.netHandler?.networkManager ?: return
         if (netManager.isChannelOpen) {
             netManager.flushOutboundQueue()
