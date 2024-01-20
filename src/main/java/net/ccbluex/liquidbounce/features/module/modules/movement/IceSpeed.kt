@@ -16,11 +16,14 @@ import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Blocks
 import net.minecraft.util.BlockPos
+import org.apache.commons.lang3.BooleanUtils.xor
 
 object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
     private val mode by ListValue("Mode", arrayOf("Friction", "AAC", "Spartan"), "Friction")
     private val iceFriction by FloatValue("IceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
+    private val strafeIceFriction by FloatValue("StrafeIceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
     private val packediceFriction by FloatValue("PackedIceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
+    private val strafePackediceFriction by FloatValue("StrafePackedIceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
     override fun onEnable() {
         if (mode == "Friction") {
             Blocks.ice.slipperiness = iceFriction
@@ -31,13 +34,16 @@ object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
-        val mode = mode
+        Blocks.ice.slipperiness = 0.98f
+        Blocks.packed_ice.slipperiness = 0.98f
         if (mode == "Friction") {
-            Blocks.ice.slipperiness = iceFriction
-            Blocks.packed_ice.slipperiness = packediceFriction
-        } else {
-            Blocks.ice.slipperiness = 0.98f
-            Blocks.packed_ice.slipperiness = 0.98f
+            if (xor(mc.thePlayer.moveForward != 0f, mc.thePlayer.moveStrafing != 0f)) {
+                Blocks.ice.slipperiness = iceFriction
+                Blocks.packed_ice.slipperiness = packediceFriction
+            } else {
+                Blocks.ice.slipperiness = strafeIceFriction
+                Blocks.packed_ice.slipperiness = strafePackediceFriction
+            }
         }
 
         val thePlayer = mc.thePlayer ?: return
