@@ -9,6 +9,7 @@ import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.*
+import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.matrix.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.other.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vanilla.*
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
@@ -47,6 +48,8 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         AAC50142,
 
         Matrix62x,
+        OldMatrix,
+
         Spartan,
         CubeCraft,
         Hypixel,
@@ -57,7 +60,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Medusa,
         Medusa2,
         Verus,
-    )
+    ).sortedBy { it.modeName }
 
     val mode by ListValue("Mode", noFallModes.map { it.modeName }.toTypedArray(), "SpoofGround")
 
