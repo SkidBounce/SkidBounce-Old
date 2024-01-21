@@ -67,7 +67,7 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
 
         // Other
         Jetpack, KeepAlive, Collide, Jump, Flag
-    )
+    ).sortedBy { it.modeName }
 
     private val modes = flyModes.map { it.modeName }.toTypedArray()
 

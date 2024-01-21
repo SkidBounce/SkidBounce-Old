@@ -23,7 +23,7 @@ import org.lwjgl.input.Keyboard
 
 object Jesus : Module("Jesus", ModuleCategory.MOVEMENT) {
 
-    val mode by ListValue("Mode", arrayOf("Vanilla", "NCP", "AAC", "AAC3.3.11", "AACFly", "Spartan", "Dolphin"), "Vanilla")
+    val mode by ListValue("Mode", arrayOf("Vanilla", "NCP", "AAC", "AAC3.3.11", "AACFly", "Spartan", "Dolphin").sortedArray(), "Vanilla")
         private val aacFly by FloatValue("AACFlyMotion", 0.5f, 0.1f..1f) { mode == "AACFly" }
 
     private val noJump by BoolValue("NoJump", false)

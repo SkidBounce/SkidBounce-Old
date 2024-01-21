@@ -21,7 +21,7 @@ import net.minecraft.potion.Potion
 
 object Regen : Module("Regen", ModuleCategory.PLAYER) {
 
-    private val mode by ListValue("Mode", arrayOf("Vanilla", "Spartan"), "Vanilla")
+    private val mode by ListValue("Mode", arrayOf("Spartan", "Vanilla"), "Vanilla")
         private val speed by IntegerValue("Speed", 100, 1..100) { mode == "Vanilla" }
 
     private val delay by IntegerValue("Delay", 0, 0..10000)

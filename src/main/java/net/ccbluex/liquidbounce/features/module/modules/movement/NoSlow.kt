@@ -33,21 +33,21 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         UNCP,
         AAC,
         AAC5,
-    )
-    private val bowModes = arrayOf(
-        Vanilla,
-        SwitchItem,
-        OldIntave,
-        UNCP,
-        AAC5,
-    )
+    ).sortedBy { it.modeName }
     private val consumeModes = arrayOf(
         Vanilla,
         SwitchItem,
         OldIntave,
         UNCP,
         AAC5,
-    )
+    ).sortedBy { it.modeName }
+    private val bowModes = arrayOf(
+        Vanilla,
+        SwitchItem,
+        OldIntave,
+        UNCP,
+        AAC5,
+    ).sortedBy { it.modeName }
 
     var shouldSwap = false
 

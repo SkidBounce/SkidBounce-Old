@@ -41,7 +41,7 @@ object LongJump : Module("LongJump", ModuleCategory.MOVEMENT) {
 
         // Other
         Redesky, Hycraft, Buzz,
-    )
+    ).sortedBy { it.modeName }
 
     private val modes = longJumpModes.map { it.modeName }.toTypedArray()
 

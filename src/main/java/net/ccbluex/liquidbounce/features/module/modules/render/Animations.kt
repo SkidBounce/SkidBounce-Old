@@ -45,7 +45,7 @@ object Animations : Module("Animations", ModuleCategory.RENDER, gameDetecting = 
         OneSevenAnimation(),
         PushdownAnimation(),
         OldAnimation()
-    )
+    ).sortedBy { it.name }
 
     private val animationMode by ListValue("Mode", animations.map { it.name }.toTypedArray(), "Pushdown")
     val oddSwing by BoolValue("OddSwing", false)

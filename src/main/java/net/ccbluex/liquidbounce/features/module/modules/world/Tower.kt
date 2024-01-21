@@ -56,7 +56,7 @@ object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
      */
     private val mode by ListValue(
         "Mode",
-        arrayOf("Jump", "MotionJump", "Motion", "ConstantMotion", "MotionTP", "Packet", "Teleport", "AAC3.3.9", "AAC3.6.4"),
+        arrayOf("Jump", "MotionJump", "Motion", "ConstantMotion", "MotionTP", "Packet", "Teleport", "AAC3.3.9", "AAC3.6.4").sortedArray(),
         "Motion"
     )
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Pick", "Spoof", "Switch"), "Spoof")

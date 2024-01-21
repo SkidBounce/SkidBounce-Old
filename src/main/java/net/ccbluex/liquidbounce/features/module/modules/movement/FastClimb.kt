@@ -25,7 +25,7 @@ import net.minecraft.util.EnumFacing
 object FastClimb : Module("FastClimb", ModuleCategory.MOVEMENT) {
 
     val mode by ListValue("Mode",
-            arrayOf("Vanilla", "Delay", "Clip", "AAC3.0.0", "AAC3.0.5", "SAAC3.1.2", "AAC3.1.2"), "Vanilla")
+            arrayOf("Vanilla", "Delay", "Clip", "AAC3.0.0", "AAC3.0.5", "SAAC3.1.2", "AAC3.1.2").sortedArray(), "Vanilla")
         private val speed by FloatValue("Speed", 1F, 0.01F..5F) { mode == "Vanilla" }
 
         // Delay mode | Separated Vanilla & Delay speed value

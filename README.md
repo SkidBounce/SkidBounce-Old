@@ -34,7 +34,7 @@ as of latest commit
 |     AntiVoid     |  :red_circle:   | 
 |    FastClimb     |  :red_circle:   | 
 | InventoryManager |  :red_circle:   | 
-|      Spider      |  :red_circle:   | 
+|      Spider      | :green_circle:  | 
 |     FastUse      |  :red_circle:   | 
 | Everything Else  |  :red_circle:   | 
 ## Issues

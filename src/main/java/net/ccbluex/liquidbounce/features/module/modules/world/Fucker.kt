@@ -349,7 +349,7 @@ object Fucker : Module("Fucker", ModuleCategory.WORLD) {
                             // probably more, but these are just the ones I found
                             sticky_piston, piston, beacon, hopper, cauldron, sea_lantern, tnt, glowstone, redstone_block, leaves, leaves2, ice -> true
                             bedrock -> it != EnumFacing.DOWN
-                            end_portal, soul_sand -> false
+                            end_portal_frame, soul_sand -> false
                             else -> blockPos.offset(it).getBlock() != blockPos.getBlock() && !sbb
                         }
                     }

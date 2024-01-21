@@ -19,7 +19,7 @@ import net.minecraft.util.BlockPos
 import org.apache.commons.lang3.BooleanUtils.xor
 
 object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
-    private val mode by ListValue("Mode", arrayOf("Friction", "AAC", "Spartan"), "Friction")
+    private val mode by ListValue("Mode", arrayOf("Friction", "AAC", "Spartan").sortedArray(), "Friction")
     private val iceFriction by FloatValue("IceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
     private val strafeIceFriction by FloatValue("StrafeIceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
     private val packediceFriction by FloatValue("PackedIceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }

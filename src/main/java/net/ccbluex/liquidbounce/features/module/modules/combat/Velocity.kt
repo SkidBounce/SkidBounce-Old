@@ -32,7 +32,7 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
         AACPush,
         AACv4,
         AACZero,
-    )
+    ).sortedBy { it.modeName }
 
     private val modeModule get() = velocityModes.find { it.modeName == mode }!!
     override val tag get() = mode

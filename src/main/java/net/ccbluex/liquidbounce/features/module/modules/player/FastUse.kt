@@ -22,7 +22,7 @@ import net.minecraft.network.play.client.C03PacketPlayer
 
 object FastUse : Module("FastUse", ModuleCategory.PLAYER) {
 
-    private val mode by ListValue("Mode", arrayOf("Instant", "NCP", "AAC", "Custom"), "NCP")
+    private val mode by ListValue("Mode", arrayOf("Instant", "NCP", "AAC", "Custom").sortedArray(), "NCP")
 
         private val delay by IntegerValue("CustomDelay", 0, 0..300) { mode == "Custom" }
         private val customSpeed by IntegerValue("CustomSpeed", 2, 1..35) { mode == "Custom" }

@@ -41,7 +41,7 @@ object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
         Rewinside,
         Spartan,
         Test
-    )
+    ).sortedBy { it.modeName }
 
     private val modes = noWebModes.map { it.modeName }.toTypedArray()
 
