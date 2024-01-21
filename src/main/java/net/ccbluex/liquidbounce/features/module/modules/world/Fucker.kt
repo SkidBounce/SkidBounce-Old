@@ -10,6 +10,7 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura
 import net.ccbluex.liquidbounce.features.module.modules.player.AutoTool
+import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.faceBlock
@@ -17,9 +18,11 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.limitAngleChange
 import net.ccbluex.liquidbounce.utils.RotationUtils.performRaytrace
 import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.toRotation
+import net.ccbluex.liquidbounce.utils.block.BlockUtils
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlockName
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getCenterDistance
+import net.ccbluex.liquidbounce.utils.block.BlockUtils.getState
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.isFullBlock
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
@@ -27,10 +30,19 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.*
 import net.minecraft.block.Block
-import net.minecraft.init.Blocks.air
+import net.minecraft.block.BlockAir
+import net.minecraft.block.BlockCrops
+import net.minecraft.block.BlockPane
+import net.minecraft.block.BlockPistonBase
+import net.minecraft.block.BlockSlab
+import net.minecraft.block.BlockStairs
+import net.minecraft.block.BlockWall
+import net.minecraft.init.Blocks
+import net.minecraft.init.Blocks.*
 import net.minecraft.network.play.client.C07PacketPlayerDigging
 import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.*
 import net.minecraft.network.play.client.C0APacketAnimation
+import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 import java.awt.Color
@@ -44,7 +56,7 @@ object Fucker : Module("Fucker", ModuleCategory.WORLD) {
     private val hypixel by BoolValue("Hypixel", false)
 
     private val block by BlockValue("Block", 26)
-    private val throughWalls by ListValue("ThroughWalls", arrayOf("None", "Raycast", "Around"), "None") { !hypixel }
+    private val throughWalls by ListValue("ThroughWalls", arrayOf("None", "Raycast", "Around", "Vulcan"), "None") { !hypixel }
     private val range by FloatValue("Range", 5F, 1F..7F)
 
     private val action by ListValue("Action", arrayOf("Destroy", "Use"), "Destroy")
@@ -327,6 +339,21 @@ object Fucker : Module("Fucker", ModuleCategory.WORLD) {
 
             "around" -> EnumFacing.values().any { !isFullBlock(blockPos.offset(it)) }
 
+            "vulcan" ->
+                blockPos.y > mc.thePlayer.posY || (
+                    EnumFacing.values().any {
+                        val abb = blockPos.offset(it).getBlock()?.getCollisionBoundingBox(mc.theWorld, blockPos.offset(it), getState(blockPos.offset(it)))
+                        val fbb = AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0).offset(blockPos.offset(it).x.toDouble(), blockPos.offset(it).y.toDouble(), blockPos.offset(it).z.toDouble())!!
+                        val sbb = if (abb == null) false else (abb.maxX == fbb.maxX && abb.minX == fbb.minX && abb.maxY == fbb.maxY && abb.minY == fbb.minY && abb.maxZ == fbb.maxZ && abb.minZ == fbb.minZ)
+                        when (blockPos.offset(it).getBlock()) {
+                            // probably more, but these are just the ones I found
+                            sticky_piston, piston, beacon, hopper, cauldron, sea_lantern, tnt, glowstone, redstone_block, leaves, leaves2, ice -> true
+                            bedrock -> it != EnumFacing.DOWN
+                            end_portal, soul_sand -> false
+                            else -> blockPos.offset(it).getBlock() != blockPos.getBlock() && !sbb
+                        }
+                    }
+                )
             else -> true
         }
     }
