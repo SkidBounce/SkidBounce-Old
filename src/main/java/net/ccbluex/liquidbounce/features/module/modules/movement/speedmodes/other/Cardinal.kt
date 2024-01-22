@@ -12,7 +12,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.cardinalW
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.isOnGround
-import net.ccbluex.liquidbounce.utils.MovementUtils.isOnIce
+import net.ccbluex.liquidbounce.utils.MovementUtils.onIce
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
@@ -24,7 +24,7 @@ object Cardinal : SpeedMode("Cardinal") {
         if (isMoving) {
             mc.thePlayer.jumpMovementFactor = 0.026f
 
-            if (mc.thePlayer.onGround && !(isOnIce() && IceSpeed.state && cardinalJumpWhenIceSpeed)) {
+            if (mc.thePlayer.onGround && !(onIce && IceSpeed.state && cardinalJumpWhenIceSpeed)) {
                 mc.thePlayer.jump()
                 if (getBlock(BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ)) == water && cardinalWaterLowHop) {
                     mc.thePlayer.motionY *= 0.875

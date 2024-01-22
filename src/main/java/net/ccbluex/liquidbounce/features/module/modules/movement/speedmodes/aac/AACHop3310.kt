@@ -16,7 +16,7 @@ object AACHop3310 : SpeedMode("AACHop3.3.10") {
     override fun onMove(event: MoveEvent) {
         val player = mc.thePlayer
         mc.gameSettings.keyBindJump.pressed = false
-        MovementUtils.strafe((MovementUtils.getBaseMoveSpeed() * 1.0164f).toFloat())
+        MovementUtils.strafe((MovementUtils.baseMoveSpeed * 1.0164f).toFloat())
         if (mc.thePlayer.onGround && mc.thePlayer.isCollidedVertically && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak)) {
             player.motionY = MovementUtils.getJumpBoostModifier(0.41999998688697815)
             event.y = player.motionY

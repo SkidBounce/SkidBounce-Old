@@ -9,12 +9,7 @@ import net.ccbluex.liquidbounce.event.MoveEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.handleVanillaKickBypass
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vanillaSpeed
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
-import net.ccbluex.liquidbounce.utils.MovementUtils.direction
-import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.stopXZ
-import kotlin.math.cos
-import kotlin.math.sin
 
 object Vanilla : FlyMode("Vanilla") {
 	override fun onMove(event: MoveEvent) {

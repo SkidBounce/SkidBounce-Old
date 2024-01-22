@@ -11,8 +11,8 @@ import net.ccbluex.liquidbounce.event.MoveEvent
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.extensions.toRadiansD
-import net.minecraft.block.BlockIce
-import net.minecraft.block.BlockPackedIce
+import net.minecraft.init.Blocks.ice
+import net.minecraft.init.Blocks.packed_ice
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.potion.Potion
 import net.minecraft.util.BlockPos
@@ -24,6 +24,8 @@ object MovementUtils : MinecraftInstance(), Listenable {
 
     val aboveVoid
         get() = aboveVoid()
+    val onIce
+        get() = mc.theWorld.getBlockState(BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1.0, mc.thePlayer.posZ)).block in arrayOf(packed_ice, ice)
 
     private fun aboveVoid(): Boolean {
         mc.thePlayer ?: return false
@@ -48,20 +50,12 @@ object MovementUtils : MinecraftInstance(), Listenable {
     var speed
         get() = mc.thePlayer?.run { sqrt(motionX * motionX + motionZ * motionZ).toFloat() } ?: .0f
         set(value) { strafe(value) }
-    fun isOnIce(): Boolean {
-        val thePlayer = mc.thePlayer
-        val blockUnder = mc.theWorld.getBlockState(BlockPos(thePlayer.posX, thePlayer.posY - 1.0, thePlayer.posZ)).block
-        return blockUnder is BlockIce || blockUnder is BlockPackedIce
-    }
-    fun getBaseMoveSpeed(): Double {
-        var baseSpeed = 0.2873
-        if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
-            baseSpeed *= 1.0 + 0.2 * (mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier + 1).toDouble()
-        }
-        return baseSpeed
-    }
+
+    val baseMoveSpeed
+        get() = 0.2873 * 1.0 + if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) 0.2 * (mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier + 1).toDouble() else 0.0
+
     fun getBaseMoveSpeed(customSpeed: Double): Double {
-        var baseSpeed = if (isOnIce()) 0.258977700006 else customSpeed
+        var baseSpeed = if (onIce) 0.258977700006 else customSpeed
         if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
             val amplifier = mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier
             baseSpeed *= 1.0 + 0.2 * (amplifier + 1)
@@ -86,7 +80,7 @@ object MovementUtils : MinecraftInstance(), Listenable {
         get() = mc.thePlayer?.run { motionX != .0 || motionY != .0 || motionZ != .0 } ?: false
 
     @JvmOverloads
-    fun strafe(speed: Float = this.speed, stopWhenNoInput: Boolean = false, moveEvent: MoveEvent? = null) =
+    fun strafe(speed: Float = this.speed, stopWhenNoInput: Boolean = false, moveEvent: MoveEvent? = null, strength: Float = 1f) =
         mc.thePlayer?.run {
             if (!isMoving) {
                 if (stopWhenNoInput) {
@@ -97,9 +91,8 @@ object MovementUtils : MinecraftInstance(), Listenable {
                 return@run
             }
 
-            val yaw = direction
-            val x = -sin(yaw) * speed
-            val z = cos(yaw) * speed
+            val x = -sin(direction) * (speed * strength) + (mc.thePlayer.motionX * (1 - strength))
+            val z = cos(direction) * (speed * strength) + (mc.thePlayer.motionZ * (1 - strength))
 
             if (moveEvent != null) {
                 moveEvent.x = x

@@ -17,6 +17,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.veru
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.ListValue
 
 object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
@@ -30,6 +31,7 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         NCPHop,
         NCPYPort,
         UNCPHop,
+        UNCPYPort,
 
         // YPort
         YPort,
@@ -122,6 +124,7 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
     val mineplexGroundSpeed by FloatValue("MineplexGround-Speed", 0.5f, 0.1f..1f) { mode == "MineplexGround" }
     val cardinalWaterLowHop by BoolValue("Cardinal-WaterLowHop", true) { mode == "Cardinal" }
     val cardinalJumpWhenIceSpeed by BoolValue("Cardinal-JumpWhenIceSpeed", true) { mode == "Cardinal" }
+    val uncpyportDamageBoost by BoolValue("UNCPYPort-DamageBoost", true) { mode == "UNCPYPort" }
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
