@@ -11,6 +11,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.MovementUtils.direction
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlockIntersects
+import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -64,7 +65,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
 
         if (usedTimer) {
             usedTimer = false
-            mc.timer.timerSpeed = 1f
+            mc.timer.resetSpeed()
         }
 
         when (mode) {
@@ -211,7 +212,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
     }
 
     override fun onDisable() {
-        mc.timer.timerSpeed = 1f
+        mc.timer.resetSpeed()
         usedTimer = false
     }
     private val isInsideBlock

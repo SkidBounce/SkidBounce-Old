@@ -10,6 +10,7 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other.*
+import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -61,7 +62,7 @@ object NoWeb : Module("NoWeb", ModuleCategory.MOVEMENT) {
         modeModule.onUpdate()
     }
     override fun onDisable() {
-        mc.timer.timerSpeed = 1.0F
+        mc.timer.resetSpeed()
     }
     override val tag
         get() = mode

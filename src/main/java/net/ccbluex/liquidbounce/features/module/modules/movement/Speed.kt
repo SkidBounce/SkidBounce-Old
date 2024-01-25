@@ -15,6 +15,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spar
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spectre.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.verus.*
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
+import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.IntegerValue
@@ -32,6 +33,7 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         NCPYPort,
         UNCPHop,
         UNCPYPort,
+        UNCPHop2,
 
         // YPort
         YPort,
@@ -182,19 +184,17 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
     }
 
     override fun onEnable() {
-        if (mc.thePlayer == null)
-            return
+        mc.thePlayer ?: return
 
-        mc.timer.timerSpeed = 1f
+        mc.timer.resetSpeed()
 
         modeModule.onEnable()
     }
 
     override fun onDisable() {
-        if (mc.thePlayer == null)
-            return
+        mc.thePlayer ?: return
 
-        mc.timer.timerSpeed = 1f
+        mc.timer.resetSpeed()
 
         modeModule.onDisable()
     }

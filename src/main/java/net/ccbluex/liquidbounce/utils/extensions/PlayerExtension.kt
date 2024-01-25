@@ -198,3 +198,10 @@ fun EntityPlayerSP.sendUseItem(stack: ItemStack): Boolean {
         true
     } else false
 }
+
+fun EntityPlayer.jump(motion: Double = 0.42, ignoreGround: Boolean = false) {
+    if (ignoreGround || this.onGround) {
+        this.jump()
+        this.motionY = motion
+    }
+}
