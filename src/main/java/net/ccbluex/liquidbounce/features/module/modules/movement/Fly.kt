@@ -24,6 +24,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanill
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanilla.Vanilla
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
+import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stop
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
@@ -66,18 +67,18 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         MineSecure, HawkEye, HAC, WatchCat, VulcanGhost, Vulcan, VulcanOld,
 
         // Other
-        Jetpack, KeepAlive, Collide, Jump, Flag
+        Jetpack, KeepAlive, Collide, Jump, Flag, Clip
     ).sortedBy { it.modeName }
 
     private val modes = flyModes.map { it.modeName }.toTypedArray()
 
     val mode by ListValue("Mode", modes, "Vanilla")
 
-    val vanillaSpeed by FloatValue("VanillaSpeed", 2f, 0f..10f)
+    val vanillaSpeed by FloatValue("Vanilla-Speed", 2f, 0f..10f)
         { mode in arrayOf("Vanilla", "KeepAlive", "MineSecure", "BugSpartan") }
-    private val vanillaKickBypass by BoolValue("VanillaKickBypass", false)
+    private val vanillaKickBypass by BoolValue("Vanilla-KickBypass", false)
         { mode in arrayOf("Vanilla", "SmoothVanilla") }
-    val ncpMotion by FloatValue("NCPMotion", 0f, 0f..1f) { mode == "NCP" }
+    val ncpMotion by FloatValue("NCP-Motion", 0f, 0f..1f) { mode == "NCP" }
 
     // AAC
     val aacSpeed by FloatValue("AAC1.9.10-Speed", 0.3f, 0f..1f) { mode == "AAC1.9.10" }
@@ -95,11 +96,21 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     // Other
     val vulcanghostTimer = FloatValue("VulcanGhost-Timer", 2f, 1f..3f) { mode == "VulcanGhost" }
     val vulcanghostNoClip = BoolValue("VulcanGhost-NoClip", true) { mode == "VulcanGhost" }
-    val mineplexSpeed by FloatValue("MineplexSpeed", 1f, 0.5f..10f) { mode == "Mineplex" }
+    val mineplexSpeed by FloatValue("Mineplex-Speed", 1f, 0.5f..10f) { mode == "Mineplex" }
     val neruxVaceTicks by IntegerValue("NeruxVace-Ticks", 6, 2..20) { mode == "NeruxVace" }
     val redeskyHeight by FloatValue("Redesky-Height", 4f, 1f..7f) { mode == "Redesky" }
 
-    // Visuals
+    val clipX by FloatValue("Clip-X", 2f, -5f..5f) { mode == "Clip" }
+    val clipY by FloatValue("Clip-Y", 2f, -5f..5f) { mode == "Clip" }
+    val clipZ by FloatValue("Clip-Z", 2f, -5f..5f) { mode == "Clip" }
+    val clipDelay by IntegerValue("Clip-Delay", 500, 0..3000) { mode == "Clip" }
+    val clipTimer by FloatValue("Clip-Timer", 1f, 0.01f..3f) { mode == "Clip" }
+    val clipMotionX by FloatValue("Clip-MotionX", 0f, -1f..1f) { mode == "Clip" }
+    val clipMotionY by FloatValue("Clip-MotionY", 0f, -1f..1f) { mode == "Clip" }
+    val clipMotionZ by FloatValue("Clip-MotionZ", 0f, -1f..1f) { mode == "Clip" }
+    val clipGroundSpoof by BoolValue("Clip-GroundSpoof", false) { mode == "Clip" }
+    val clipGround by BoolValue("Clip-GroundWhenClip", false) { mode == "Clip" }
+
     private val mark by BoolValue("Mark", true, subjective = true)
 
     var jumpY = 0.0
@@ -129,7 +140,7 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         }
 
         thePlayer.capabilities.isFlying = wasFlying
-        mc.timer.timerSpeed = 1f
+        mc.timer.resetSpeed()
         thePlayer.speedInAir = 0.02f
 
         modeModule.onDisable()
