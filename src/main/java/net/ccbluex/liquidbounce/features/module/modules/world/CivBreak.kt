@@ -9,7 +9,6 @@ import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
-import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.faceBlock
 import net.ccbluex.liquidbounce.utils.RotationUtils.limitAngleChange
@@ -25,8 +24,7 @@ import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Blocks.air
 import net.minecraft.init.Blocks.bedrock
 import net.minecraft.network.play.client.C07PacketPlayerDigging
-import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.START_DESTROY_BLOCK
-import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK
+import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.*
 import net.minecraft.network.play.client.C0APacketAnimation
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
@@ -69,7 +67,8 @@ object CivBreak : Module("CivBreak", ModuleCategory.WORLD) {
         enumFacing = event.enumFacing ?: return
 
         // Break
-        if (!grim) sendPacket(C07PacketPlayerDigging(START_DESTROY_BLOCK, blockPos, enumFacing))
+        sendPacket(C07PacketPlayerDigging(START_DESTROY_BLOCK, blockPos, enumFacing))
+        if (grim) sendPacket(C07PacketPlayerDigging(ABORT_DESTROY_BLOCK, blockPos!!.down(Int.MIN_VALUE), enumFacing))
         sendPacket(C07PacketPlayerDigging(STOP_DESTROY_BLOCK, blockPos, enumFacing))
     }
 
