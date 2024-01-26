@@ -7,19 +7,19 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.oth
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
+import net.ccbluex.liquidbounce.utils.extensions.jump
 
 object Legit : SpeedMode("Legit") {
     override fun onStrafe() {
-        val player = mc.thePlayer ?: return
+        mc.thePlayer ?: return
 
-        if (mc.thePlayer.onGround && isMoving && !mc.gameSettings.keyBindJump.isKeyDown) {
-            player.jump()
-        }
+        if (isMoving)
+            mc.thePlayer.jump(0.42)
     }
 
     override fun onUpdate() {
-        val player = mc.thePlayer ?: return
+        mc.thePlayer ?: return
 
-        player.isSprinting = player.movementInput.moveForward > 0.8
+        mc.thePlayer.isSprinting = mc.thePlayer.movementInput.moveForward > 0.8
     }
 }
