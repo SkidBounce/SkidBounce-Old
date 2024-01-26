@@ -13,6 +13,7 @@ import net.ccbluex.liquidbounce.injection.forge.mixins.entity.MixinEntity
 import net.ccbluex.liquidbounce.injection.forge.mixins.entity.MixinEntityLivingBase
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
 import net.ccbluex.liquidbounce.utils.MovementUtils
+import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.minecraft.block.BlockLadder
 import net.minecraft.block.material.Material
 import net.minecraft.entity.EntityLivingBase
@@ -26,7 +27,7 @@ object Jump : FlyMode("Jump") {
         if (mc.thePlayer == null)
             return
         if (mc.thePlayer.onGround && !mc.thePlayer.isJumping)
-            mc.thePlayer.jump()
+            mc.thePlayer.jump(0.42)
         if ((mc.gameSettings.keyBindJump.isKeyDown && !mc.gameSettings.keyBindSneak.isKeyDown) || mc.thePlayer.onGround)
             jumpY = mc.thePlayer.posY
     }

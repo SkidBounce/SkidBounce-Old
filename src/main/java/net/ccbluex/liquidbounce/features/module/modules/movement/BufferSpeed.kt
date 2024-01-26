@@ -14,6 +14,7 @@ import net.ccbluex.liquidbounce.utils.MovementUtils
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
+import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
@@ -97,8 +98,8 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
             fastHop = false
 
             if (slime && (getBlock(blockPos.down()) is BlockSlime || getBlock(blockPos) is BlockSlime)) {
-                thePlayer.jump()
-
+                thePlayer.jump(0.42)
+                // TODO: motX & motZ will be different?
                 thePlayer.motionX = thePlayer.motionY * 1.132
                 thePlayer.motionY = 0.08
                 thePlayer.motionZ = thePlayer.motionY * 1.132
@@ -115,7 +116,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
                     "new" -> {
                         fastHop = true
                         if (legitHop) {
-                            thePlayer.jump()
+                            thePlayer.jump(0.42)
                             thePlayer.onGround = false
                             legitHop = false
                             return
@@ -124,8 +125,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
 
                         strafe(0.375f)
 
-                        thePlayer.jump()
-                        thePlayer.motionY = 0.41
+                        thePlayer.jump(0.41, ignoreJumpBoost = true)
                         return
                     }
                 }
@@ -140,7 +140,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
                         fastHop = true
 
                         if (legitHop) {
-                            thePlayer.jump()
+                            thePlayer.jump(0.42)
                             thePlayer.onGround = false
                             legitHop = false
                             return
@@ -148,8 +148,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
 
                         thePlayer.onGround = false
                         strafe(0.375f)
-                        thePlayer.jump()
-                        thePlayer.motionY = 0.41
+                        thePlayer.jump(0.41, ignoreJumpBoost = true)
                         return
                     }
                 }
@@ -170,7 +169,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
                 if (thePlayer.posY - thePlayer.posY.toInt() >= 0.12500) {
                     boost(snowBoost)
                 } else {
-                    thePlayer.jump()
+                    thePlayer.jump(0.42)
                     forceDown = true
                 }
                 return
@@ -184,8 +183,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
                     }
                     "new" ->
                         if (isNearBlock && !thePlayer.movementInput.jump) {
-                            thePlayer.jump()
-                            thePlayer.motionY = 0.08
+                            thePlayer.jump(0.08, ignoreJumpBoost = true)
                             thePlayer.motionX *= 0.99
                             thePlayer.motionZ *= 0.99
                             down = true

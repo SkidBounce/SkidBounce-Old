@@ -3,8 +3,4 @@ package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.o
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.minecraft.entity.Entity
 
-object NoGround : CriticalsMode("NoGround") {
-    override fun onAttack(entity: Entity) {
-        return
-    }
-}
+object NoGround : CriticalsMode("NoGround")

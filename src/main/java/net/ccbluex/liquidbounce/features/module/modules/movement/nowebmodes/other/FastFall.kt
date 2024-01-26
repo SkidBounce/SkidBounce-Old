@@ -6,14 +6,13 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
+import net.ccbluex.liquidbounce.utils.extensions.jump
 
 object FastFall : NoWebMode("FastFall") {
-    //  Bypass AAC(All), Vulcan, Verus, Matrix, NCP3.17, HAWK, Spartan
     override fun onUpdate() {
         if (!mc.thePlayer.isInWeb) return
-        if (mc.thePlayer.onGround) mc.thePlayer.jump()
-        if (mc.thePlayer.motionY > 0f) {
+        mc.thePlayer.jump(0.42)
+        if (mc.thePlayer.motionY > 0f)
             mc.thePlayer.motionY -= mc.thePlayer.motionY * 2
-        }
     }
 }

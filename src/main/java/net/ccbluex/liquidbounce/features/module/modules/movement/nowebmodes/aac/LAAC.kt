@@ -6,6 +6,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
+import net.ccbluex.liquidbounce.utils.extensions.jump
 
 object LAAC : NoWebMode("LAAC") {
     override fun onUpdate() {
@@ -18,7 +19,6 @@ object LAAC : NoWebMode("LAAC") {
         if (!mc.gameSettings.keyBindSneak.isKeyDown)
             mc.thePlayer.motionY = 0.0
 
-        if (mc.thePlayer.onGround)
-            mc.thePlayer.jump()    
+        mc.thePlayer.jump(0.42)
     }
 }

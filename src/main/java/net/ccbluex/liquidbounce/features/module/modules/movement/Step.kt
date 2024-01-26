@@ -14,6 +14,8 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.direction
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
+import net.ccbluex.liquidbounce.utils.extensions.fakeJump
+import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.IntegerValue
@@ -71,7 +73,7 @@ object Step : Module("Step", ModuleCategory.MOVEMENT, gameDetecting = false) {
         when (mode) {
             "Jump" ->
                 if (thePlayer.isCollidedHorizontally && thePlayer.onGround && !mc.gameSettings.keyBindJump.isKeyDown) {
-                    fakeJump()
+                    mc.thePlayer.fakeJump()
                     thePlayer.motionY = jumpHeight.toDouble()
                 }
             "LAAC" ->
@@ -79,7 +81,7 @@ object Step : Module("Step", ModuleCategory.MOVEMENT, gameDetecting = false) {
                     if (thePlayer.onGround && timer.hasTimePassed(delay)) {
                         isStep = true
 
-                        fakeJump()
+                        mc.thePlayer.fakeJump()
                         thePlayer.motionY += 0.620000001490116
 
                         val yaw = direction
@@ -95,7 +97,7 @@ object Step : Module("Step", ModuleCategory.MOVEMENT, gameDetecting = false) {
                     if (thePlayer.onGround && couldStep()) {
                         thePlayer.motionX *= 1.26
                         thePlayer.motionZ *= 1.26
-                        thePlayer.jump()
+                        thePlayer.jump(0.42)
                         isAACStep = true
                     }
 
@@ -119,7 +121,7 @@ object Step : Module("Step", ModuleCategory.MOVEMENT, gameDetecting = false) {
         // Motion steps
         when {
             thePlayer.onGround && couldStep() -> {
-                fakeJump()
+                mc.thePlayer.fakeJump()
                 thePlayer.motionY = 0.0
                 event.y = 0.41999998688698
                 ncpNextStep = 1
@@ -194,7 +196,7 @@ object Step : Module("Step", ModuleCategory.MOVEMENT, gameDetecting = false) {
 
             when (mode) {
                 "NCP", "AAC" -> {
-                    fakeJump()
+                    mc.thePlayer.fakeJump()
 
                     // Half legit step (1 packet missing) [COULD TRIGGER TOO MANY PACKETS]
                     sendPackets(
@@ -204,7 +206,7 @@ object Step : Module("Step", ModuleCategory.MOVEMENT, gameDetecting = false) {
                     timer.reset()
                 }
                 "Spartan" -> {
-                    fakeJump()
+                    mc.thePlayer.fakeJump()
 
                     if (spartanSwitch) {
                         // Vanilla step (3 packets) [COULD TRIGGER TOO MANY PACKETS]
@@ -223,7 +225,7 @@ object Step : Module("Step", ModuleCategory.MOVEMENT, gameDetecting = false) {
                     timer.reset()
                 }
                 "Rewinside" -> {
-                    fakeJump()
+                    mc.thePlayer.fakeJump()
 
                     // Vanilla step (3 packets) [COULD TRIGGER TOO MANY PACKETS]
                     sendPackets(
@@ -252,14 +254,6 @@ object Step : Module("Step", ModuleCategory.MOVEMENT, gameDetecting = false) {
             packet.y += 0.07
             isStep = false
         }
-    }
-
-    // There could be some anti cheats which tries to detect step by checking for achievements and stuff
-    private fun fakeJump() {
-        val thePlayer = mc.thePlayer ?: return
-
-        thePlayer.isAirBorne = true
-        thePlayer.triggerAchievement(StatList.jumpStat)
     }
 
     private fun couldStep(): Boolean {

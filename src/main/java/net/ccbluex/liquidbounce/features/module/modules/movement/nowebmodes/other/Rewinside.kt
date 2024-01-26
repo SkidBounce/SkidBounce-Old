@@ -6,6 +6,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
+import net.ccbluex.liquidbounce.utils.extensions.jump
 
 object Rewinside : NoWebMode("Rewinside") {
     override fun onUpdate() {
@@ -14,7 +15,6 @@ object Rewinside : NoWebMode("Rewinside") {
         }
         mc.thePlayer.jumpMovementFactor = 0.42f
 
-        if (mc.thePlayer.onGround)
-            mc.thePlayer.jump()
+        mc.thePlayer.jump(0.42)
     }
 }

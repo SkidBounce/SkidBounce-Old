@@ -11,6 +11,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.MovementUtils.direction
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlockIntersects
+import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.value.BoolValue
@@ -74,8 +75,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                     glitch = collideGlitch
                 if (mc.thePlayer.isCollidedHorizontally)
                     if (mc.thePlayer.onGround) {
-                        mc.thePlayer.jump()
-                        mc.thePlayer.motionY = collideJumpMotion.toDouble()
+                        mc.thePlayer.jump(collideJumpMotion)
                     } else if (collideFast && mc.thePlayer.motionY < 0)
                         mc.thePlayer.motionY = -collideFastSpeed.toDouble()
             }
@@ -84,7 +84,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                     "Old" -> if (isInsideBlock && checkerMotion != 0f)
                             mc.thePlayer.motionY = checkerMotion.toDouble()
                     "New" -> if (mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround)
-                        mc.thePlayer.jump()
+                        mc.thePlayer.jump(0.42)
                 }
             }
             "AAC3.3.12" -> if (mc.thePlayer.isCollidedHorizontally && !mc.thePlayer.isOnLadder) {
@@ -105,7 +105,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                 if (mc.thePlayer.motionY < 0.0 || mc.thePlayer.onGround)
                     glitch = true
                 if (mc.thePlayer.onGround) {
-                    mc.thePlayer.jump()
+                    mc.thePlayer.jump(0.42)
                     usedTimer = true
                     mc.timer.timerSpeed = 0.4f
                 }
@@ -117,14 +117,14 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                 }
                 if (mc.thePlayer.onGround) {
                     waited = 0
-                    mc.thePlayer.jump()
+                    mc.thePlayer.jump(0.42)
                 }
                 if (waited >= 3)
                     waited = 0
                 waited++
                 when (waited) {
                     2, 3 -> {
-                        mc.thePlayer.jump()
+                        mc.thePlayer.jump(0.42)
                         mc.thePlayer.stopXZ()
                     }
                 }

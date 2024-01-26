@@ -15,9 +15,9 @@ import net.minecraft.util.EnumFacing
 
 object NewGrim : VelocityMode("NewGrim") {
 
-    var gotVelo = false
-    var flagTimer = MSTimer()
-    var timerTicks = 0
+    private var gotVelo = false
+    private var flagTimer = MSTimer()
+    private var timerTicks = 0
 
     override fun onEnable() {
         gotVelo = false

@@ -7,6 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spa
 
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
+import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextDouble
 
 object SpartanYPort : SpeedMode("SpartanYPort") {
@@ -14,7 +15,7 @@ object SpartanYPort : SpeedMode("SpartanYPort") {
     override fun onMotion(event: MotionEvent) {
         if (mc.gameSettings.keyBindForward.isKeyDown && !mc.gameSettings.keyBindJump.isKeyDown) {
             if (mc.thePlayer.onGround) {
-                mc.thePlayer.jump()
+                mc.thePlayer.jump(0.42)
                 airMoves = 0
             } else {
                 mc.timer.timerSpeed = 1.08f

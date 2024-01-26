@@ -20,7 +20,7 @@ object AAC4 : NoWebMode("AAC4") {
         mc.thePlayer.jumpMovementFactor = 0.02958f
         mc.thePlayer.motionY -= 0.00775
         if (mc.thePlayer.onGround) {
-            // mc.thePlayer.jump()
+            // mc.thePlayer.jump(0.4050)
             mc.thePlayer.motionY = 0.4050
             mc.timer.timerSpeed = 1.35F
         }

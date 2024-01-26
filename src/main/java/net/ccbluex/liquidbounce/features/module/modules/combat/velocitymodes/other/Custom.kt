@@ -24,6 +24,7 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.velocity
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.verticalMultiplier
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
+import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
 
@@ -48,9 +49,8 @@ object Custom : VelocityMode("Custom") {
     }
 
     override fun onUpdate() {
-        if (!mc.thePlayer.isJumping && jump && mc.thePlayer.onGround && mc.thePlayer.hurtTime == 9 && RandomUtils.nextInt(1, 100) > jumpFailRate) {
-            mc.thePlayer.jump()
-            mc.thePlayer.motionY = jumpMotion.toDouble()
+        if (jump && mc.thePlayer.hurtTime == 9 && RandomUtils.nextInt(1, 100) > jumpFailRate) {
+            mc.thePlayer.jump(jumpMotion)
         }
         if (reverse && !(reverseNoGround && mc.thePlayer.onGround)) {
             if (reverseTicks > velocityTick) {
@@ -69,7 +69,7 @@ object Custom : VelocityMode("Custom") {
 
     override fun onAttack() {
         if (mc.thePlayer.hurtTime < 3 || !attackReduce) return
-        mc.thePlayer.motionX *= attackReduceMultiplier.toDouble()
-        mc.thePlayer.motionZ *= attackReduceMultiplier.toDouble()
+        mc.thePlayer.motionX *= attackReduceMultiplier
+        mc.thePlayer.motionZ *= attackReduceMultiplier
     }
 }

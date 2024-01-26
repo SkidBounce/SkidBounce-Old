@@ -8,7 +8,7 @@ import net.minecraft.network.play.server.S32PacketConfirmTransaction
 object OldGrim : VelocityMode("OldGrim") {
     private var cancelPacket = 6
     private var resetPersec = 8
-    var grimTCancel = 0
+    private var grimTCancel = 0
     private var updates = 0
 
     override fun onEnable() {
