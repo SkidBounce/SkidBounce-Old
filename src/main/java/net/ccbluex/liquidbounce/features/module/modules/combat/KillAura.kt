@@ -12,6 +12,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.features.module.modules.targets.*
+import net.ccbluex.liquidbounce.utils.CPSCounter
 import net.ccbluex.liquidbounce.utils.CooldownHelper.getAttackCooldownProgress
 import net.ccbluex.liquidbounce.utils.CooldownHelper.resetLastAttackedTicks
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
@@ -75,28 +76,25 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
     // CPS - Attack speed
     private val maxCPSValue = object : IntegerValue("MaxCPS", 8, 1..20) {
-        override fun onChange(oldValue: Int, newValue: Int) =
-            newValue.coerceAtLeast(minCPS)
+        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minCPS)
 
         override fun onChanged(oldValue: Int, newValue: Int) {
             attackDelay = randomClickDelay(minCPS, newValue)
         }
 
-        override fun isSupported() =
-            !simulateCooldown
+        override fun isSupported() = !simulateCooldown
     }
+
     private val maxCPS by maxCPSValue
 
     private val minCPS: Int by object : IntegerValue("MinCPS", 5, 1..20) {
-        override fun onChange(oldValue: Int, newValue: Int) =
-            newValue.coerceAtMost(maxCPS)
+        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxCPS)
 
         override fun onChanged(oldValue: Int, newValue: Int) {
             attackDelay = randomClickDelay(newValue, maxCPS)
         }
 
-        override fun isSupported() =
-            !maxCPSValue.isMinimal() && !simulateCooldown
+        override fun isSupported() = !maxCPSValue.isMinimal() && !simulateCooldown
     }
 
     private val hurtTime by IntegerValue("HurtTime", 10, 0..10) { !simulateCooldown }
@@ -169,11 +167,9 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
     // TODO: Make block range independent from attack range
     private var blockRange by object : FloatValue("BlockRange", range, 1f..8f) {
-        override fun isSupported() =
-            autoBlock != "Off" && smartAutoBlock
+        override fun isSupported() = autoBlock != "Off" && smartAutoBlock
 
-        override fun onChange(oldValue: Float, newValue: Float) =
-            newValue.coerceAtMost(this@KillAura.range)
+        override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(this@KillAura.range)
     }
 
     // Don't block when you can't get damaged
@@ -188,20 +184,15 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     private val maxSwingProgress by IntegerValue("MaxOpponentSwingProgress", 1, 0..5)
     { autoBlock != "Off" && smartAutoBlock }
 
-
     // Turn Speed
     private val maxTurnSpeedValue = object : FloatValue("MaxTurnSpeed", 180f, 1f..180f) {
-        override fun onChange(oldValue: Float, newValue: Float) =
-            newValue.coerceAtLeast(minTurnSpeed)
+        override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtLeast(minTurnSpeed)
     }
     private val maxTurnSpeed by maxTurnSpeedValue
 
     private val minTurnSpeed: Float by object : FloatValue("MinTurnSpeed", 180f, 1f..180f) {
-        override fun onChange(oldValue: Float, newValue: Float) =
-            newValue.coerceAtMost(maxTurnSpeed)
-
-        override fun isSupported() =
-            !maxTurnSpeedValue.isMinimal()
+        override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxTurnSpeed)
+        override fun isSupported() = !maxTurnSpeedValue.isMinimal()
     }
 
     // Raycast
@@ -214,13 +205,12 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     // AAC value also modifies target selection a bit, not just rotations, but it is minor
     private val aacValue = BoolValue("AAC", false)
     private val aac by aacValue
+    private val useHitDelay by BoolValue("UseHitDelay", false)
+    private val hitDelayTicks by IntegerValue("HitDelayTicks", 1, 1..5) { useHitDelay }
 
     private val keepRotationTicks by object : IntegerValue("KeepRotationTicks", 5, 1..20) {
-        override fun isSupported() =
-            !aacValue.isActive()
-
-        override fun onChange(oldValue: Int, newValue: Int) =
-            newValue.coerceAtLeast(minimum)
+        override fun isSupported() = !aacValue.isActive()
+        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minimum)
     }
     private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f)
 
@@ -232,8 +222,11 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     // Rotations
     private val silentRotationValue = BoolValue("SilentRotation", true)
     private val silentRotation by silentRotationValue
-    private val rotationStrafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off")
-    { silentRotationValue.isActive() }
+    private val rotationStrafe by ListValue("Strafe",
+        arrayOf("Off", "Strict", "Silent"),
+        "Off"
+    ) { silentRotationValue.isActive() }
+    private val smootherMode by ListValue("SmootherMode", arrayOf("Linear", "Relative"), "Relative")
 
     private val randomCenter by BoolValue("RandomCenter", true)
     private val outborder by BoolValue("Outborder", false)
@@ -243,31 +236,26 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     private val predictValue = BoolValue("Predict", true)
     private val predict by predictValue
     private val maxPredictSizeValue = object : FloatValue("MaxPredictSize", 1f, 0.1f..5f) {
-        override fun onChange(oldValue: Float, newValue: Float) =
-            newValue.coerceAtLeast(minPredictSize)
-
-        override fun isSupported() =
-            predictValue.isActive()
+        override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtLeast(minPredictSize)
+        override fun isSupported() = predictValue.isActive()
     }
 
     private val maxPredictSize by maxPredictSizeValue
     private val minPredictSize: Float by object : FloatValue("MinPredictSize", 1f, 0.1f..5f) {
-        override fun onChange(oldValue: Float, newValue: Float) =
-            newValue.coerceAtMost(maxPredictSize)
-
-        override fun isSupported() =
-            predictValue.isActive() && !maxPredictSizeValue.isMinimal()
+        override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxPredictSize)
+        override fun isSupported() = predictValue.isActive() && !maxPredictSizeValue.isMinimal()
     }
 
     // Bypass
     private val failSwing by BoolValue("FailSwing", true) { swing }
     private val swingOnlyInAir by BoolValue("SwingOnlyInAir", true) { swing && failSwing }
-    private val noInventoryAttack by BoolValue("NoInvAttack", false)
-    private val noInventoryDelay by IntegerValue("NoInvDelay", 200, 0..500)
+    private val noInventoryAttack by BoolValue("NoInvAttack", false, subjective = true)
+    private val noInventoryDelay by IntegerValue("NoInvDelay", 200, 0..500, subjective = true)
     { noInventoryAttack }
     private val noConsumeAttack by ListValue("NoConsumeAttack",
         arrayOf("Off", "NoHits", "NoRotation"),
-        "Off"
+        "Off",
+        subjective = true
     )
 
     // Visuals
@@ -288,6 +276,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     private val attackTimer = MSTimer()
     private var attackDelay = 0
     private var clicks = 0
+    private var attackTickTimes = mutableListOf<Pair<MovingObjectPosition, Int>>()
 
     // Container Delay
     private var containerOpen = -1L
@@ -300,11 +289,12 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     /**
      * Disable kill aura module
      */
-    override fun onDisable() {
+    override fun onToggle(state: Boolean) {
         target = null
         currentTarget = null
         hittable = false
         prevTargetEntities.clear()
+        attackTickTimes.clear()
         attackTimer.reset()
         clicks = 0
 
@@ -335,11 +325,21 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         currentTarget = target
     }
 
+    @EventTarget
+    fun onWorldChange(event: WorldEvent) {
+        attackTickTimes.clear()
+    }
+
     /**
-     * Update event
+     * Tick event
      */
     @EventTarget
-    fun onUpdate(event: UpdateEvent) {
+    fun onTick(event: TickEvent) {
+        // Just in case world event doesn't get called
+        if (mc.thePlayer.ticksExisted in 0..1 && attackTickTimes.isNotEmpty()) {
+            attackTickTimes.clear()
+        }
+
         if (clickOnly && !mc.gameSettings.keyBindAttack.isKeyDown) return
 
         if (blockStatus && autoBlock == "Packet" && releaseAutoBlock && !ignoreTickRule) {
@@ -383,7 +383,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
             while (clicks > 0) {
                 val wasBlocking = blockStatus
 
-                runAttack()
+                runAttack(clicks)
                 clicks--
 
                 if (wasBlocking && !blockStatus && (releaseAutoBlock && !ignoreTickRule || autoBlock == "Off")) {
@@ -430,7 +430,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     /**
      * Attack enemy
      */
-    private fun runAttack() {
+    private fun runAttack(clicks: Int) {
         val target = target ?: return
 
         val thePlayer = mc.thePlayer ?: return
@@ -451,8 +451,12 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
         val currentTarget = this.currentTarget ?: return
 
+        if (hittable && currentTarget.hurtTime > hurtTime) {
+            return
+        }
+
         // Check if enemy is not hittable
-        if (!hittable || currentTarget.hurtTime > hurtTime) {
+        if (!hittable) {
             if (swing && failSwing) {
                 val rotation = currentRotation ?: thePlayer.rotation
 
@@ -461,9 +465,26 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
                         return@runWithModifiedRaycastResult
                     }
 
-                    // Imitate game click behavior
-                    mc.clickMouse()
-                    mc.sendClickBlockToController(mc.currentScreen == null && mc.inGameHasFocus)
+                    if (!shouldDelayClick(it.typeOfHit)) {
+                        if (it.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
+                            val entity = it.entityHit
+
+                            // Use own function instead of clickMouse() to maintain keep sprint, auto block, etc
+                            if (entity is EntityLivingBase) {
+                                attackEntity(entity)
+                            }
+                        } else {
+                            // Imitate game click
+                            mc.clickMouse()
+                        }
+                        attackTickTimes += it to thePlayer.ticksExisted
+                    }
+
+                    if (clicks == 1) {
+                        // We return false because when you click literally once, the attack key's [pressed] status is false.
+                        // Since we simulate clicks, we are supposed to respect that behavior.
+                        mc.sendClickBlockToController(false)
+                    }
                 }
             }
         } else {
@@ -563,6 +584,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
                 result
             }
+
             "health" -> targets.sortBy { it.health } // Sort by health
             "livingtime" -> targets.sortBy { -it.ticksExisted } // Sort by existence
             "armor" -> targets.sortBy { it.totalArmorValue } // Sort by armor
@@ -638,6 +660,11 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
             }
         }
 
+        // The function is only called when we are facing an entity
+        if (shouldDelayClick(MovingObjectPosition.MovingObjectType.ENTITY)) {
+            return
+        }
+
         // Call attack event
         callEvent(AttackEvent(entity))
 
@@ -682,6 +709,8 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
                 thePlayer.onEnchantmentCritical(entity)
             }
         }
+
+        CPSCounter.registerClick(CPSCounter.MouseButton.LEFT)
 
         // Start blocking after attack
         if (autoBlock != "Off" && (thePlayer.isBlocking || canBlock)) {
@@ -730,16 +759,19 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         // Get our current rotation. Otherwise, player rotation.
         val currentRotation = currentRotation ?: mc.thePlayer.rotation
 
-        var limitedRotation = limitAngleChange(
-            currentRotation, rotation, nextFloat(minTurnSpeed, maxTurnSpeed)
+        var limitedRotation = limitAngleChange(currentRotation,
+            rotation,
+            nextFloat(minTurnSpeed, maxTurnSpeed),
+            smootherMode
         )
 
         if (micronized) {
             // Is player facing the entity with current rotation?
             if (isRotationFaced(entity, maxRange.toDouble(), currentRotation)) {
                 // Limit angle change but this time modify the turn speed.
-                limitedRotation =
-                    limitAngleChange(currentRotation, rotation, nextFloat(endInclusive = micronizedStrength))
+                limitedRotation = limitAngleChange(currentRotation, rotation,
+                    nextFloat(endInclusive = micronizedStrength)
+                )
             }
         }
 
@@ -750,7 +782,8 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
                 !(!silentRotation || rotationStrafe == "Off"),
                 rotationStrafe == "Strict",
                 minTurnSpeed to maxTurnSpeed,
-                angleThresholdUntilReset
+                angleThresholdUntilReset,
+                smootherMode
             )
         } else {
             limitedRotation.toPlayer(mc.thePlayer)
@@ -770,12 +803,15 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         var chosenEntity: Entity? = null
 
         if (raycast) {
-            chosenEntity =
-                raycastEntity(range.toDouble(), currentRotation.yaw, currentRotation.pitch) { entity ->
-                    (!livingRaycast || (entity is EntityLivingBase && entity !is EntityArmorStand)) && (isEnemy(entity) || raycastIgnored || aac && mc.theWorld.getEntitiesWithinAABBExcludingEntity(
-                        entity, entity.entityBoundingBox
-                    ).isNotEmpty())
-                }
+            chosenEntity = raycastEntity(range.toDouble(),
+                currentRotation.yaw,
+                currentRotation.pitch
+            ) { entity ->
+                (!livingRaycast || (entity is EntityLivingBase && entity !is EntityArmorStand)) && (isEnemy(entity) || raycastIgnored || aac && mc.theWorld.getEntitiesWithinAABBExcludingEntity(
+                    entity,
+                    entity.entityBoundingBox
+                ).isNotEmpty())
+            }
 
             if (raycast && chosenEntity != null && chosenEntity is EntityLivingBase && (Friends.handleEvents() || !(chosenEntity is EntityPlayer && chosenEntity.isClientFriend()))) {
                 val prevHurtTime = currentTarget!!.hurtTime
@@ -888,8 +924,9 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         }
 
         renderBlocking = true
-    }
 
+        CPSCounter.registerClick(CPSCounter.MouseButton.RIGHT)
+    }
 
     /**
      * Stop blocking
@@ -901,6 +938,24 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         }
 
         renderBlocking = false
+    }
+
+    /**
+     * Check if raycast landed on a different object
+     *
+     * The game requires at least 1 tick of cooldown on raycast object type change (miss, block, entity)
+     * We are doing the same thing here but allow more cool down.
+     */
+    private fun shouldDelayClick(type: MovingObjectPosition.MovingObjectType): Boolean {
+        val player = mc.thePlayer ?: return false
+
+        if (!useHitDelay) {
+            return false
+        }
+
+        val lastAttack = attackTickTimes.lastOrNull()
+
+        return lastAttack != null && lastAttack.first.typeOfHit != type && player.ticksExisted - lastAttack.second <= hitDelayTicks
     }
 
     /**
@@ -938,7 +993,6 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
                     if (currentTarget!!.getDistanceToEntityBox(mc.thePlayer) > blockRange) return false
                 }
-
 
                 return true
             }
