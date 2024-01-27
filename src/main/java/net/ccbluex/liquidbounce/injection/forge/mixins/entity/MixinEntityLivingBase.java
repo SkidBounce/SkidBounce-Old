@@ -94,7 +94,7 @@ public abstract class MixinEntityLivingBase extends MixinEntity {
             }
 
             final Sprint sprint = Sprint.INSTANCE;
-            if (sprint.handleEvents() && sprint.getAllDirections() && sprint.getJumpDirections() && sprint.getMode().equals("Vanilla")) {
+            if (sprint.handleEvents() && sprint.getJumpDirections()) {
                 fixedYaw += MathExtensionsKt.toDegreesF(MovementUtils.INSTANCE.getDirection()) - this.rotationYaw;
             }
 
