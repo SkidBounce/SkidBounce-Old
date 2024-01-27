@@ -1,0 +1,22 @@
+/*
+ * LiquidBounce Hacked Client
+ * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
+ * https://github.com/CCBlueX/LiquidBounce/
+ */
+package net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.other
+
+import net.ccbluex.liquidbounce.features.module.modules.movement.Glide.neruxVaceTicks
+import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.GlideMode
+
+object NeruxVace : GlideMode("NeruxVace") {
+	private var tick = 0
+	override fun onUpdate() {
+		if (!mc.thePlayer.onGround)
+			tick++
+
+		if (tick >= neruxVaceTicks && !mc.thePlayer.onGround) {
+			tick = 0
+			mc.thePlayer.motionY = .015
+		}
+	}
+}

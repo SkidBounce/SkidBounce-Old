@@ -122,6 +122,7 @@ object ModuleManager : Listenable {
             GameDetector,
             Ghost,
             GhostHand,
+            Glide,
             GodMode,
             HUD,
             HighJump,

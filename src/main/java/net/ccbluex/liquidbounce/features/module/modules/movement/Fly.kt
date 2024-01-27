@@ -9,20 +9,12 @@ import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.aac.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.hypixel.BoostHypixel
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.hypixel.FreeHypixel
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.hypixel.Hypixel
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.ncp.NCP
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.ncp.OldNCP
+import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.hypixel.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.rewinside.Rewinside
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.rewinside.TeleportRewinside
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan.BugSpartan
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan.Spartan
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan.Spartan2
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanilla.SmoothVanilla
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanilla.Vanilla
-import net.ccbluex.liquidbounce.utils.ClientUtils
+import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.rewinside.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanilla.*
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stop
@@ -35,7 +27,6 @@ import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import net.minecraft.util.AxisAlignedBB
-import org.lwjgl.input.Keyboard
 import java.awt.Color
 
 object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
@@ -43,10 +34,10 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         Vanilla, SmoothVanilla,
 
         // NCP
-        NCP, OldNCP,
+        OldNCP,
 
         // AAC
-        AAC1910, AAC305, AAC316, AAC3312, AAC3312Glide, AAC3313,
+        AAC1910, AAC305, AAC316, AAC3312, AAC3313,
 
         // CubeCraft
         CubeCraft,
@@ -58,13 +49,13 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         Rewinside, TeleportRewinside,
 
         // Other server specific flys
-        Mineplex, NeruxVace, Minesucht, Redesky,
 
+        Mineplex, Minesucht, Redesky,
         // Spartan
         Spartan, Spartan2, BugSpartan,
 
         // Other anti-cheats
-        MineSecure, HawkEye, HAC, WatchCat, VulcanGhost, Vulcan, VulcanOld,
+        MineSecure, HawkEye, HAC, WatchCat, Vulcan,
 
         // Other
         Jetpack, KeepAlive, Collide, Jump, Flag, Clip
