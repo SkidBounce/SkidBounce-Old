@@ -6,8 +6,8 @@
 package net.ccbluex.liquidbounce.utils.extensions
 
 import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
-import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
+import net.ccbluex.liquidbounce.utils.MovementUtils
 import net.ccbluex.liquidbounce.utils.MovementUtils.getJumpBoostModifier
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.Rotation
@@ -30,6 +30,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
+import net.minecraft.potion.Potion
 import net.minecraft.stats.StatList.jumpStat
 import net.minecraft.util.*
 import net.minecraftforge.common.ForgeHooks
@@ -200,40 +201,29 @@ fun EntityPlayerSP.sendUseItem(stack: ItemStack): Boolean {
     } else false
 }
 
-fun EntityPlayer.fakeJump(ignoreGround: Boolean = false) {
-    if (!ignoreGround && !this.onGround) return
+fun EntityPlayer.fakeJump() {
     this.isAirBorne = true
     this.triggerAchievement(jumpStat)
 }
 
 fun EntityPlayer.jump(
     motion: Number = 0.42,
-    packet: Boolean = true,
     boost: Boolean = true,
-    doMotion: Boolean = true,
     ignoreJumpBoost: Boolean = false,
-    ignoreSprinting: Boolean = false,
     ignoreGround: Boolean = false,
     whenJumping: Boolean = false
 ) {
-    if (!ignoreGround && !this.onGround)
-        return
-    if (!whenJumping && this.isJumping)
-        return
+    if (!ignoreGround && !onGround) return
+    if (!whenJumping && isJumping) return
+    val z = motionX
+    val x = motionZ
 
-    if (doMotion)
-        this.motionY = getJumpBoostModifier(motion.toDouble(), !ignoreJumpBoost)
+    jump()
+    if (motion.toDouble() != 0.42)
+        motionY = getJumpBoostModifier(motion.toDouble(), !ignoreJumpBoost)
 
-    if (boost && (this.isSprinting || ignoreSprinting)) {
-        this.motionX -= MathHelper.sin(this.rotationYaw * 0.017453292f) * 0.2
-        this.motionZ += MathHelper.cos(this.rotationYaw * 0.017453292f) * 0.2
+    if (!boost) {
+        motionX = x
+        motionZ = z
     }
-
-    this.isAirBorne = true
-    ForgeHooks.onLivingJump(this)
-
-    this.addExhaustion(if (this.isSprinting) 0.8f else 0.2f)
-
-    if (packet)
-        this.triggerAchievement(jumpStat)
 }
