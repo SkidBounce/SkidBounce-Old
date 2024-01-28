@@ -41,7 +41,7 @@ object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting
 
     // Check for compass inside inventory. If false, then it should only check for selected slot
     private val checkAllSlots by BoolValue("CheckAllSlots", true) { compass }
-    private val slot by IntegerValue("Slot", 1, 1..9) { !checkAllSlots }
+    private val slot by IntegerValue("Slot", 1, 1..9) { !checkAllSlots && compass }
 
     // Check for any hub-like BossBar or ArmorStand entities
     private val entity by BoolValue("EntityCheck", false)
