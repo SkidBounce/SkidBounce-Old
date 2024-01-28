@@ -27,7 +27,7 @@ object KeyPearl : Module("KeyPearl", ModuleCategory.PLAYER, gameDetecting = fals
     private val delayedSlotSwitch by BoolValue("DelayedSlotSwitch", true)
     private val mouse by BoolValue("Mouse", false, subjective = true)
         private val mouseButtonValue = ListValue("MouseButton",
-            arrayOf("Left", "Middle", "Right", "MouseButton4", "MouseButton5"), "Middle", subjective = true) { mouse }
+            arrayOf("Left", "Right", "Middle", "MouseButton4", "MouseButton5"), "Middle", subjective = true) { mouse }
 
         private val keyName by TextValue("KeyName", "X", subjective = true) { !mouse }
 
