@@ -224,7 +224,7 @@
         
         "module.noPitchLimit.description": "UNTRANSLATED: Allows you to rotate your head indefinitely in every direction..",
         
-        "module.noRotateSet.description": "UNTRANSLATED: Prevents the server from rotating your head.",
+        "module.noRotate.description": "UNTRANSLATED: Prevents the server from rotating your head.",
         
         "module.noScoreboard.description": "UNTRANSLATED: Disables the scoreboard.",
 

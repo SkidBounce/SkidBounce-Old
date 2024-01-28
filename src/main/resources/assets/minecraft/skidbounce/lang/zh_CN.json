@@ -229,7 +229,7 @@
         
         "module.noPitchLimit.description": "允许你向各个方向无限制地旋转你的头。",
         
-        "module.noRotateSet.description": "防止服务器旋转你的头。",
+        "module.noRotate.description": "防止服务器旋转你的头。",
         
         "module.noScoreboard.description": "隐藏记分板。",
 

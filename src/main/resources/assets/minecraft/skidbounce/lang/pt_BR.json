@@ -225,7 +225,7 @@
 
         "module.noPitchLimit.description": "Permite que você gire sua cabeça indefinidamente em todas as direções.",
 
-        "module.noRotateSet.description": "Impede que o servidor gire sua cabeça.",
+        "module.noRotate.description": "Impede que o servidor gire sua cabeça.",
 
         "module.noScoreboard.description": "Desativa o ScoreBoard.",
 

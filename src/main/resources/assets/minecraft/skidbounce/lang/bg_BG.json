@@ -229,7 +229,7 @@
         
         "module.noPitchLimit.description": "Позволява ви да завъртите главата си за неопределено време във всяка посока ..",
         
-        "module.noRotateSet.description": "Предотвратява сървъра да върти главата ви.",
+        "module.noRotate.description": "Предотвратява сървъра да върти главата ви.",
         
         "module.noScoreboard.description": "Деактивира таблото.",
 

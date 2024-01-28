@@ -229,7 +229,7 @@
         
         "module.noPitchLimit.description": "Позволяет вертеть головой во все стороны.",
         
-        "module.noRotateSet.description": "Не даёт серверу поворачивать вашу голову.",
+        "module.noRotate.description": "Не даёт серверу поворачивать вашу голову.",
         
         "module.noScoreboard.description": "Убирает табло с информацией.",
 
