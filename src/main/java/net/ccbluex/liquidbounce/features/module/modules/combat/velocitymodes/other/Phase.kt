@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 
 object Phase : VelocityMode("Phase") {
-    var hasVelocity = false
+    private var hasVelocity = false
     override fun onEnable() {
         hasVelocity = false
     }

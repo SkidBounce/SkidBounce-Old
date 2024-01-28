@@ -32,6 +32,7 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
         AACPush,
         AACv4,
         AACZero,
+        GhostBlock,
     ).sortedBy { it.modeName }
 
     private val modeModule get() = velocityModes.find { it.modeName == mode }!!
@@ -89,6 +90,16 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     val aacPushXZReducer by FloatValue("AACPushXZReducer", 2f, 1f..3f) { mode == "AACPush" }
     val aacPushYReducer by BoolValue("AACPushYReducer", true) { mode == "AACPush" }
 
+    val maxHurtTime: IntegerValue = object : IntegerValue("MaxHurtTime", 9, 1..10) {
+        override fun isSupported() = mode == "GhostBlock"
+        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minHurtTime.get())
+    }
+
+    val minHurtTime: IntegerValue = object : IntegerValue("MinHurtTime", 1, 1..10) {
+        override fun isSupported() = mode == "GhostBlock" && !maxHurtTime.isMinimal()
+        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceIn(0, maxHurtTime.get())
+    }
+
     var velocityTick = 0
     val velocityTimer = MSTimer()
 
@@ -128,5 +139,10 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
             velocityTick = 0
             modeModule.onVelocityPacket(event)
         }
+    }
+    @EventTarget
+    fun onBlockBB(event: BlockBBEvent) {
+        mc.thePlayer ?: return
+        modeModule.onBlockBB(event)
     }
 }
