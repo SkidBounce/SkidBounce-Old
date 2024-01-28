@@ -12,9 +12,12 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.misc.StringUtils.contains
 import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.IntegerValue
 import net.minecraft.entity.boss.IBossDisplayData
 import net.minecraft.entity.item.EntityArmorStand
+import net.minecraft.init.Items
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.potion.Potion
 
 object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting = false) {
@@ -35,6 +38,10 @@ object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting
 
     // Check if player has compass inside their inventory
     private val compass by BoolValue("CompassCheck", false)
+
+    // Check for compass inside inventory. If false, then it should only check for selected slot
+    private val checkAllSlots by BoolValue("CheckAllSlots", true) { compass }
+    private val slot by IntegerValue("Slot", 1, 1..9) { !checkAllSlots }
 
     // Check for any hub-like BossBar or ArmorStand entities
     private val entity by BoolValue("EntityCheck", false)
@@ -60,6 +67,9 @@ object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting
         val netHandler = mc.netHandler ?: return
         val capabilities = thePlayer.capabilities
 
+        val slots = slot - 1
+        val itemSlot = mc.thePlayer.inventory.getStackInSlot(slots)
+
         if (gameMode && !mc.playerController.gameIsSurvivalOrAdventure())
             return
 
@@ -75,6 +85,14 @@ object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting
 
         if (invisibility && thePlayer.getActivePotionEffect(Potion.invisibility)?.isPotionDurationMax == true)
             return
+
+        if (compass) {
+            if (checkAllSlots && mc.thePlayer.inventory.hasItemStack(ItemStack(Items.compass)))
+                return
+
+            if (!checkAllSlots && itemSlot?.item == Items.compass)
+                return
+        }
 
         if (compass && thePlayer.inventory.hasItem(Item.getItemById(345)))
             return
