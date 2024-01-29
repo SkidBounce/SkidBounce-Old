@@ -11,6 +11,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.AirJump;
 import net.ccbluex.liquidbounce.features.module.modules.movement.Jesus;
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoJumpDelay;
 import net.ccbluex.liquidbounce.features.module.modules.movement.Sprint;
+import net.ccbluex.liquidbounce.features.module.modules.render.Animations;
 import net.ccbluex.liquidbounce.features.module.modules.render.AntiBlind;
 import net.ccbluex.liquidbounce.features.module.modules.client.Rotations;
 import net.ccbluex.liquidbounce.utils.MovementUtils;
@@ -169,5 +170,15 @@ public abstract class MixinEntityLivingBase extends MixinEntity {
         Rotation rotation = Rotations.INSTANCE.getRotation();
 
         return instance instanceof EntityPlayerSP && Rotations.INSTANCE.shouldUseRealisticMode() && rotation != null ? rotation.getYaw() : instance.rotationYaw;
+    }
+
+    /**
+     * @author SuperSkidder
+     * @reason Animations swing speed
+     */
+    @Overwrite
+    public int getArmSwingAnimationEnd(){
+        int speed = Animations.INSTANCE.getState() ? (int) (2 + (20 - Animations.INSTANCE.getSwingSpeed())) : 6;
+        return this.isPotionActive(Potion.digSpeed) ? speed - (1 + this.getActivePotionEffect(Potion.digSpeed).getAmplifier()) : (this.isPotionActive(Potion.digSlowdown) ? speed + (1 + this.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : speed);
     }
 }
