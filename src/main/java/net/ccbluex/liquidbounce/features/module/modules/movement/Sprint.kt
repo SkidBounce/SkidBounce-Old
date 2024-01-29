@@ -11,6 +11,7 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.world.Scaffold
 import net.ccbluex.liquidbounce.features.module.modules.combat.SuperKnockback
+import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.strict
@@ -110,21 +111,21 @@ object Sprint : Module("Sprint", ModuleCategory.MOVEMENT, gameDetecting = false)
             return true
 
         if (legit)
-            return modifiedForward < 0.0
+            return modifiedForward <= 0.0
 
         if (allDirections && !checkServerSide)
             return false
 
         val playerForwardInput = mc.thePlayer.movementInput.moveForward
 
-        if (!checkServerSide) {
-            return if (currentRotation == null) playerForwardInput < 0.0
-            else abs(playerForwardInput) < 0.0 || playerForwardInput < 0 && modifiedForward < 0.0
-        }
-        if (checkServerSideGround && !mc.thePlayer.onGround)
-            return currentRotation == null && modifiedForward < 0.0
+        if (!checkServerSide)
+            return if (currentRotation == null) playerForwardInput <= 0.0
+                else abs(playerForwardInput) <= 0.0 || playerForwardInput <= 0 && modifiedForward <= 0.0
 
-        return modifiedForward < 0.0
+        if (checkServerSideGround && !mc.thePlayer.onGround)
+            return currentRotation == null && modifiedForward <= 0.0
+
+        return modifiedForward <= 0.0
     }
 
     @EventTarget
