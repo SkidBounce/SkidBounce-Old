@@ -455,7 +455,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
                 )
 
                 val ticks = if (keepRotation) {
-                    1
+                    if (mode == "Telly") 1 else keepTicks
                 } else {
                     keepLength
                 }
@@ -837,7 +837,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
         blockPosition: BlockPos,
         raycast: Boolean,
         area: Boolean,
-        horizontalOnly: Boolean = false
+        horizontalOnly: Boolean = false,
     ): Boolean {
         val player = mc.thePlayer ?: return false
 
@@ -989,7 +989,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
     }
 
     private fun findTargetPlace(
-        pos: BlockPos, offsetPos: BlockPos, vec3: Vec3, side: EnumFacing, eyes: Vec3, maxReach: Float, raycast: Boolean
+        pos: BlockPos, offsetPos: BlockPos, vec3: Vec3, side: EnumFacing, eyes: Vec3, maxReach: Float, raycast: Boolean,
     ): PlaceRotation? {
         val world = mc.theWorld ?: return null
 
@@ -1057,7 +1057,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
     }
 
     private fun compareDifferences(
-        new: PlaceRotation, old: PlaceRotation?, rotation: Rotation = currRotation
+        new: PlaceRotation, old: PlaceRotation?, rotation: Rotation = currRotation,
     ): PlaceRotation {
         if (old == null || getRotationDifference(new.rotation, rotation) < getRotationDifference(
                 old.rotation, rotation
@@ -1192,7 +1192,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
         clickPos: BlockPos,
         side: EnumFacing,
         hitVec: Vec3,
-        attempt: Boolean = false
+        attempt: Boolean = false,
     ): Boolean {
         val thePlayer = mc.thePlayer ?: return false
 

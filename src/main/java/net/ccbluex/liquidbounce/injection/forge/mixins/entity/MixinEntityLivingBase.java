@@ -12,7 +12,6 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.Jesus;
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoJumpDelay;
 import net.ccbluex.liquidbounce.features.module.modules.movement.Sprint;
 import net.ccbluex.liquidbounce.features.module.modules.render.Animations;
-import net.ccbluex.liquidbounce.features.module.modules.render.AntiBlind;
 import net.ccbluex.liquidbounce.features.module.modules.client.Rotations;
 import net.ccbluex.liquidbounce.utils.MovementUtils;
 import net.ccbluex.liquidbounce.utils.Rotation;
@@ -30,9 +29,7 @@ import net.minecraft.util.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -42,9 +39,9 @@ public abstract class MixinEntityLivingBase extends MixinEntity {
     @Shadow
     public float rotationYawHead;
     @Shadow
-    protected boolean isJumping;
+    public boolean isJumping;
     @Shadow
-    private int jumpTicks;
+    public int jumpTicks;
 
     @Shadow
     protected abstract float getJumpUpwardsMotion();
@@ -133,14 +130,6 @@ public abstract class MixinEntityLivingBase extends MixinEntity {
             callbackInfoReturnable.setReturnValue(getVectorForRotation(rotationPitch, rotationYaw));
     }
 
-    @Inject(method = "isPotionActive(Lnet/minecraft/potion/Potion;)Z", at = @At("HEAD"), cancellable = true)
-    private void isPotionActive(Potion p_isPotionActive_1_, final CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        final AntiBlind antiBlind = AntiBlind.INSTANCE;
-
-        if ((p_isPotionActive_1_ == Potion.confusion || p_isPotionActive_1_ == Potion.blindness) && antiBlind.handleEvents() && antiBlind.getConfusionEffect())
-            callbackInfoReturnable.setReturnValue(false);
-    }
-
     /**
      * Inject head yaw rotation modification
      */
@@ -176,9 +165,10 @@ public abstract class MixinEntityLivingBase extends MixinEntity {
      * @author SuperSkidder
      * @reason Animations swing speed
      */
-    @Overwrite
-    public int getArmSwingAnimationEnd(){
-        int speed = Animations.INSTANCE.getState() ? (int) (2 + (20 - Animations.INSTANCE.getSwingSpeed())) : 6;
-        return this.isPotionActive(Potion.digSpeed) ? speed - (1 + this.getActivePotionEffect(Potion.digSpeed).getAmplifier()) : (this.isPotionActive(Potion.digSlowdown) ? speed + (1 + this.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : speed);
+    @ModifyConstant(method = "getArmSwingAnimationEnd", constant = @Constant(intValue = 6))
+    private int injectAnimationsModule(int constant) {
+        Animations module = Animations.INSTANCE;
+
+        return module.handleEvents() ? (2 + (20 - module.getSwingSpeed())) : constant;
     }
 }
