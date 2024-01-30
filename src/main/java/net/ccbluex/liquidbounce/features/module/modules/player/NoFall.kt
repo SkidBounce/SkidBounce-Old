@@ -33,6 +33,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Packet4,
         Motion,
         MLG,
+        Cancel,
         Damage,
         Phase,
 
