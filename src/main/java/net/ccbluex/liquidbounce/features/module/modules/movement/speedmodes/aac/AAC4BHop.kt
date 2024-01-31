@@ -32,7 +32,7 @@ object AAC4BHop : SpeedMode("AAC4BHop") {
             if (thePlayer.onGround) {
                 thePlayer.onGround = false
                 strafe(0.375f)
-                thePlayer.jump(0.41)
+                thePlayer.jump(0.41, ignoreGround = true)
             } else thePlayer.speedInAir = 0.0211f
         } else {
             thePlayer.motionX = 0.0

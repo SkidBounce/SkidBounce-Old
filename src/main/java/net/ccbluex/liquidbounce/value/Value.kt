@@ -18,10 +18,10 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 abstract class Value<T>(
-    val name: String,
+    var name: String,
     protected open var value: T,
     val subjective: Boolean = false,
-    private val isSupported: (() -> Boolean)? = null
+    var isSupported: (() -> Boolean)? = null
 ) : ReadWriteProperty<Any?, T> {
 
     fun set(newValue: T): Boolean {
