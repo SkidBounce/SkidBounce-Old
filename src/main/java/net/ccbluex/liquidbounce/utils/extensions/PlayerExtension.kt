@@ -265,8 +265,8 @@ fun EntityPlayer.jump(
     val x = motionZ
 
     jump()
-    if (motion.toDouble() != 0.42)
-        motionY = getJumpBoostModifier(motion.toDouble(), !ignoreJumpBoost)
+    motionY = getJumpBoostModifier(motion.toDouble(), !ignoreJumpBoost)
+    motionY -= 0.000000013113021835042815 // why mojang
 
     if (!boost) {
         motionX = x
