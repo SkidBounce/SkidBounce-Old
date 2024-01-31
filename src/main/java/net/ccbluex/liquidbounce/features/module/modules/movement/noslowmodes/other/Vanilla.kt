@@ -5,7 +5,6 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.other
 
-import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoSlowMode
 
-object Vanilla : NoSlowMode("Vanilla") { override fun onMotion(event: MotionEvent) { return } }
+object Vanilla : NoSlowMode("Vanilla")

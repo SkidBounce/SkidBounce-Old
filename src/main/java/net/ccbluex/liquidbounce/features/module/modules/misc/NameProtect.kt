@@ -17,8 +17,8 @@ import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.TextValue
 import net.minecraft.network.play.server.S01PacketJoinGame
 import net.minecraft.network.play.server.S40PacketDisconnect
-import kotlin.random.Random
 import java.util.*
+import kotlin.random.Random
 
 object NameProtect : Module("NameProtect", ModuleCategory.MISC, subjective = true, gameDetecting = false) {
 

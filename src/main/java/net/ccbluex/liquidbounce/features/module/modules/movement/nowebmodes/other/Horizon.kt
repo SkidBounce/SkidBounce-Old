@@ -5,10 +5,9 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other
 
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoWeb.horizonSpeed
+import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
-
 
 
 object Horizon : NoWebMode("Horizon") {

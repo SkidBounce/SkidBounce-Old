@@ -23,7 +23,7 @@ import net.minecraft.block.Block.getIdFromBlock
 import net.minecraft.init.Blocks.*
 import net.minecraft.util.BlockPos
 import java.awt.Color
-import java.util.LinkedList
+import java.util.*
 
 object BedProtectionESP : Module("BedProtectionESP", ModuleCategory.RENDER, subjective = true) {
     private val targetBlock by ListValue("TargetBlock", arrayOf("Bed", "DragonEgg"), "Bed")

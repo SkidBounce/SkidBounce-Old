@@ -5,28 +5,17 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
-import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.JumpEvent
-import net.ccbluex.liquidbounce.event.MoveEvent
-import net.ccbluex.liquidbounce.event.UpdateEvent
+import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.aac.AACv1
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.aac.AACv2
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.aac.AACv3
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.mineplex.Mineplex
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.mineplex.Mineplex2
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.mineplex.Mineplex3
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.ncp.NCP
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.other.Hycraft
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.other.Redesky
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.other.Buzz
+import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.aac.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.mineplex.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.ncp.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.other.*
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.extensions.jump
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 
 object LongJump : Module("LongJump", ModuleCategory.MOVEMENT) {
 

@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce.ui.client
 
-import net.ccbluex.liquidbounce.LiquidBounce.clientTitle
 import net.ccbluex.liquidbounce.LiquidBounce.background
+import net.ccbluex.liquidbounce.LiquidBounce.clientTitle
 import net.ccbluex.liquidbounce.file.FileManager.backgroundImageFile
 import net.ccbluex.liquidbounce.file.FileManager.backgroundShaderFile
 import net.ccbluex.liquidbounce.file.FileManager.saveConfig

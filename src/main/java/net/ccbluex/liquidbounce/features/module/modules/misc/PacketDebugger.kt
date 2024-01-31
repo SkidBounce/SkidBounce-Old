@@ -17,9 +17,7 @@ import net.minecraft.network.login.server.*
 import net.minecraft.network.play.client.*
 import net.minecraft.network.play.client.C03PacketPlayer.*
 import net.minecraft.network.play.server.*
-import net.minecraft.network.play.server.S14PacketEntity.S15PacketEntityRelMove
-import net.minecraft.network.play.server.S14PacketEntity.S16PacketEntityLook
-import net.minecraft.network.play.server.S14PacketEntity.S17PacketEntityLookMove
+import net.minecraft.network.play.server.S14PacketEntity.*
 import net.minecraft.network.status.client.*
 import net.minecraft.network.status.server.*
 import net.minecraft.util.BlockPos

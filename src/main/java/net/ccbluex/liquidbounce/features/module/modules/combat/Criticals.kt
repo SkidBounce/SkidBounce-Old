@@ -79,10 +79,10 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
             msTimer.reset()
         }
     }
+
     @EventTarget
     fun onPacket(event: PacketEvent) {
-        if (event.packet is C03PacketPlayer && mode == "NoGround")
-            event.packet.onGround = false
+        modeModule.onPacket(event)
     }
 
     override val tag

@@ -30,14 +30,13 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.vertical
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.extensions.jump
-import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
+import net.minecraft.network.play.server.S12PacketEntityVelocity
 
 object Custom : VelocityMode("Custom") {
-    override fun onVelocityPacket(event: PacketEvent) {
+    override fun onVelocityPacket(event: PacketEvent) { // TODO: explosions
         val packet = event.packet
-        if (packet !is S12PacketEntityVelocity) return
-        if (RandomUtils.nextInt(1, 100) <= chance) {
+        if (RandomUtils.nextInt(1, 100) <= chance && packet is S12PacketEntityVelocity) {
 
             packet.motionX = (packet.getMotionX() * horizontalMultiplier).toInt()
             packet.motionY = (packet.getMotionY() * verticalMultiplier).toInt()
@@ -45,10 +44,11 @@ object Custom : VelocityMode("Custom") {
 
             event.cancelEvent()
 
-            if (!cancelVertical) mc.thePlayer.motionY = packet.getMotionY().toDouble() / 8000.0
+            if (!cancelVertical)
+                mc.thePlayer.motionY = packet.motionY / 8000.0
             if (!cancelHorizontal) {
-                mc.thePlayer.motionX = packet.getMotionX().toDouble() / 8000.0
-                mc.thePlayer.motionZ = packet.getMotionZ().toDouble() / 8000.0
+                mc.thePlayer.motionX = packet.motionX / 8000.0
+                mc.thePlayer.motionZ = packet.motionZ / 8000.0
             }
         }
     }

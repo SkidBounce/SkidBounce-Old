@@ -16,10 +16,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spec
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.verus.*
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 
 object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
 

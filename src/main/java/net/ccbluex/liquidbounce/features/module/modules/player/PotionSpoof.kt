@@ -11,8 +11,8 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.IntegerValue
-import net.minecraft.potion.PotionEffect
 import net.minecraft.potion.Potion.*
+import net.minecraft.potion.PotionEffect
 
 object PotionSpoof : Module("PotionSpoof", ModuleCategory.PLAYER) {
 

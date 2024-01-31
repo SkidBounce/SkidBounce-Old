@@ -9,11 +9,11 @@ import net.ccbluex.liquidbounce.event.EventState
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipDelay
+import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipGround
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipGroundSpoof
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipMotionX
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipMotionY
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipMotionZ
-import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipGround
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipTimer
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipX
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipY
@@ -21,7 +21,6 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clipZ
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.minecraft.network.play.client.C03PacketPlayer
-
 import kotlin.math.cos
 import kotlin.math.sin
 

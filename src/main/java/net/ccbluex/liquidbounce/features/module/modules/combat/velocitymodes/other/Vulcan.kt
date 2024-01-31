@@ -11,13 +11,8 @@ import net.minecraft.network.play.client.C0FPacketConfirmTransaction
 
 object Vulcan : VelocityMode("Vulcan") {
     override fun onPacket(event: PacketEvent) {
-        val packet = event.packet
-        if (packet is C0FPacketConfirmTransaction) {
-            val uid = (packet.uid).toInt()
-            if (uid >= -31767 && uid <= -30769) {
-                event.cancelEvent()
-            }
-        }
+        if (event.packet is C0FPacketConfirmTransaction && event.packet.uid <= -30769 && event.packet.uid >= -31767)
+            event.cancelEvent()
     }
 
     override fun onVelocityPacket(event: PacketEvent) {

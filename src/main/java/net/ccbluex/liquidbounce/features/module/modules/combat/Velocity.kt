@@ -18,7 +18,6 @@ import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.network.play.server.S27PacketExplosion
-import kotlin.math.sign
 
 object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     private val velocityModes = arrayOf(

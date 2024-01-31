@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac
 
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.event.JumpEvent
+import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 
 object AAC4 : NoWebMode("AAC4") {
     private var usedTimer = false

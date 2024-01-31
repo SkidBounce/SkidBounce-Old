@@ -9,7 +9,6 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura.blockSta
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow.isUNCPBlocking
 import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
 import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
-import net.ccbluex.liquidbounce.utils.MovementUtils
 import net.ccbluex.liquidbounce.utils.MovementUtils.getJumpBoostModifier
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.Rotation
@@ -34,10 +33,8 @@ import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemSword
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
-import net.minecraft.potion.Potion
 import net.minecraft.stats.StatList.jumpStat
 import net.minecraft.util.*
-import net.minecraftforge.common.ForgeHooks
 import net.minecraftforge.event.ForgeEventFactory
 
 /**

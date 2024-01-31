@@ -7,7 +7,6 @@ package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.gr
 
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
-import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.network.play.server.S32PacketConfirmTransaction
 
 object OldGrim : VelocityMode("OldGrim") {

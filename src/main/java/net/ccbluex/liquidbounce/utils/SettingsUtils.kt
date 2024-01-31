@@ -15,7 +15,6 @@ import net.ccbluex.liquidbounce.utils.misc.StringUtils
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.translateAlternateColorCodes
 import net.ccbluex.liquidbounce.value.*
 import org.lwjgl.input.Keyboard
-import kotlin.reflect.KMutableProperty0
 
 /**
  * Utility class for handling settings and scripts in LiquidBounce.

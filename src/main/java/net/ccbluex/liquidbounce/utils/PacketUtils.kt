@@ -14,12 +14,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.Packet
 import net.minecraft.network.play.INetHandlerPlayClient
-import net.minecraft.network.play.server.S0CPacketSpawnPlayer
-import net.minecraft.network.play.server.S0FPacketSpawnMob
-import net.minecraft.network.play.server.S0EPacketSpawnObject
-import net.minecraft.network.play.server.S12PacketEntityVelocity
-import net.minecraft.network.play.server.S14PacketEntity
-import net.minecraft.network.play.server.S18PacketEntityTeleport
+import net.minecraft.network.play.server.*
 import kotlin.math.roundToInt
 
 // TODO: Remove annotations once all modules are converted to kotlin.
