@@ -15,7 +15,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3.0.0
         with:
-          gradle-version: 6.9.4
+          gradle-version: wrapper # 6.9.4
       - name: Build with Gradle
         run: gradle build
       - name: Upload build artifacts
