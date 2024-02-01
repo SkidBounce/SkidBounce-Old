@@ -12,12 +12,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.1.1
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3.0.0
         with:
-          gradle-version: wrapper # 6.9.4
+          gradle-version: 6.9.4
+
       - name: Build with Gradle
         run: gradle build
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4.3.0
         with:
