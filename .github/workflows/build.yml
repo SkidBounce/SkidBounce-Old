@@ -17,7 +17,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3.0.0
         with:
           gradle-version: 6.9.4
-          add-job-summary: false
+          add-job-summary: never
 
       - name: Build with Gradle
         run: gradle build
