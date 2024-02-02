@@ -92,7 +92,8 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         Legit,
         CustomSpeed,
         MineBlazeHop,
-        MineBlazeTimer
+        MineBlazeTimer,
+        WaveLowHop,
     ).sortedBy { it.modeName }
 
     private val modes = speedModes.map { it.modeName }.toTypedArray()
@@ -124,6 +125,7 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
     val cardinalWaterLowHop by BoolValue("Cardinal-WaterLowHop", true) { mode == "Cardinal" }
     val cardinalJumpWhenIceSpeed by BoolValue("Cardinal-JumpWhenIceSpeed", true) { mode == "Cardinal" }
     val uncpyportDamageBoost by BoolValue("UNCPYPort-DamageBoost", true) { mode == "UNCPYPort" }
+    val wavelowhopTimer by FloatValue("WaveLowHop-Timer", 1.25f, 1f..2f) { mode == "WaveLowHop" }
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {

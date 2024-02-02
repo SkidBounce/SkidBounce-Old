@@ -65,7 +65,6 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         { mode in arrayOf("Vanilla", "KeepAlive", "MineSecure", "BugSpartan") }
     private val vanillaKickBypass by BoolValue("Vanilla-KickBypass", false)
         { mode in arrayOf("Vanilla", "SmoothVanilla") }
-    val ncpMotion by FloatValue("NCP-Motion", 0f, 0f..1f) { mode == "NCP" }
 
     // AAC
     val aacSpeed by FloatValue("AAC1.9.10-Speed", 0.3f, 0f..1f) { mode == "AAC1.9.10" }
@@ -81,10 +80,9 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         { mode == "Hypixel" && hypixelBoost }
 
     // Other
-    val vulcanghostTimer = FloatValue("VulcanGhost-Timer", 2f, 1f..3f) { mode == "VulcanGhost" }
-    val vulcanghostNoClip = BoolValue("VulcanGhost-NoClip", true) { mode == "VulcanGhost" }
+    val vulcanghostTimer = FloatValue("Vulcan-Timer", 2f, 1f..3f) { mode == "Vulcan" }
+    val vulcanghostNoClip = BoolValue("Vulcan-NoClip", true) { mode == "Vulcan" }
     val mineplexSpeed by FloatValue("Mineplex-Speed", 1f, 0.5f..10f) { mode == "Mineplex" }
-    val neruxVaceTicks by IntegerValue("NeruxVace-Ticks", 6, 2..20) { mode == "NeruxVace" }
     val redeskyHeight by FloatValue("Redesky-Height", 4f, 1f..7f) { mode == "Redesky" }
 
     val clipX by FloatValue("Clip-X", 2f, -5f..5f) { mode == "Clip" }
@@ -189,9 +187,8 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     @EventTarget
     fun onWorld(event: WorldEvent) {
         // breaks when you join a server with it on for some reason
-        if (mode == "VulcanGhost") {
+        if (mode == "Vulcan")
             state = false
-        }
     }
 
     fun handleVanillaKickBypass() {
