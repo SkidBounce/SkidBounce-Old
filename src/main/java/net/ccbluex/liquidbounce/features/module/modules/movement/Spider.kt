@@ -124,7 +124,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                 waited++
                 when (waited) {
                     2, 3 -> {
-                        mc.thePlayer.jump(0.42)
+                        mc.thePlayer.jump(0.42, ignoreGround = true)
                         mc.thePlayer.stopXZ()
                     }
                 }

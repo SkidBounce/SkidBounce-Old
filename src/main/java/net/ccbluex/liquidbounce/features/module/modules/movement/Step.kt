@@ -32,7 +32,7 @@ object Step : Module("Step", ModuleCategory.MOVEMENT, gameDetecting = false) {
      */
 
     private val mode by ListValue("Mode",
-        arrayOf("Vanilla", "Jump", "NCP", "MotionNCP", "OldNCP", "AAC", "LAAC", "AAC3.3.4", "Spartan", "Rewinside", "Vulcan").sortedArray(), "Vanilla")
+        arrayOf("Vanilla", "Jump", "NCP", "MotionNCP", "OldNCP", "AAC", "LAAC", "AAC3.3.4", "Spartan", "Rewinside").sortedArray(), "Vanilla")
 
         private val height by FloatValue("Height", 1F, 0.6F..10F)
             { mode !in arrayOf("Jump", "MotionNCP", "LAAC", "AAC3.3.4") }
