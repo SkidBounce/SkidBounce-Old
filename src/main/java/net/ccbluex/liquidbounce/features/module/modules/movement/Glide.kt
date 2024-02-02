@@ -20,6 +20,7 @@ object Glide : Module("Glide", ModuleCategory.MOVEMENT) {
     private val glideModes = arrayOf(
         NCP,
         AAC3312,
+        AAC4X,
         NeruxVace,
         Vulcan,
         VulcanOld,
