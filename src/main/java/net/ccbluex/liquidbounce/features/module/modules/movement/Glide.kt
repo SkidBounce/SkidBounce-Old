@@ -23,7 +23,8 @@ object Glide : Module("Glide", ModuleCategory.MOVEMENT) {
         AAC4X,
         NeruxVace,
         Vulcan,
-        VulcanOld,
+        OldVulcan,
+        VulcanTest,
     ).sortedBy { it.modeName }
 
     private val modes = glideModes.map { it.modeName }.toTypedArray()
