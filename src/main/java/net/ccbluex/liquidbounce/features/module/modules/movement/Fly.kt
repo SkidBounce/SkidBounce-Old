@@ -51,7 +51,7 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         Spartan, Spartan2, BugSpartan,
 
         // Other anti-cheats
-        MineSecure, HawkEye, HAC, WatchCat, Vulcan,
+        MineSecure, HawkEye, HAC, WatchCat, Vulcan, Wave,
 
         // Other
         Jetpack, KeepAlive, Collide, Jump, Flag, Clip
@@ -84,7 +84,9 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     val vulcanghostNoClip = BoolValue("Vulcan-NoClip", true) { mode == "Vulcan" }
     val mineplexSpeed by FloatValue("Mineplex-Speed", 1f, 0.5f..10f) { mode == "Mineplex" }
     val redeskyHeight by FloatValue("Redesky-Height", 4f, 1f..7f) { mode == "Redesky" }
-
+    val waveUpSpeed by FloatValue("Wave-UpSpeed", 0.6f, 0f..1f)  { mode == "Wave" }
+    val waveDownSpeed by FloatValue("Wave-DownSpeed", 0.6f, 0f..1f)  { mode == "Wave" }
+    val waveTimer by FloatValue("Wave-Timer", 1.25f, 1f..2f) { mode == "Wave" }
     val clipX by FloatValue("Clip-X", 2f, -5f..5f) { mode == "Clip" }
     val clipY by FloatValue("Clip-Y", 2f, -5f..5f) { mode == "Clip" }
     val clipZ by FloatValue("Clip-Z", 2f, -5f..5f) { mode == "Clip" }
