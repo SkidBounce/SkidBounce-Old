@@ -12,6 +12,7 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.other.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.watchdog.*
 import net.ccbluex.liquidbounce.utils.PacketUtils
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverUsing
 import net.ccbluex.liquidbounce.value.*
@@ -33,6 +34,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         AAC,
         AAC2,
         AAC5,
+        WatchDog2,
     ).sortedBy { it.modeName }
     private val consumeModes = arrayOf(
         Vanilla,
