@@ -29,6 +29,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         NCP2,
         NewNCP,
         UNCP,
+        UNCP2,
         AAC,
         AAC5,
     ).sortedBy { it.modeName }
@@ -37,6 +38,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         SwitchItem,
         OldIntave,
         UNCP,
+        UNCP2,
         AAC5,
     ).sortedBy { it.modeName }
     private val bowModes = arrayOf(
@@ -44,6 +46,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         SwitchItem,
         OldIntave,
         UNCP,
+        UNCP2,
         AAC5,
     ).sortedBy { it.modeName }
 
@@ -215,7 +218,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
         else -> 0.2f
     }
-    fun isUNCPBlocking() = modeModuleBlocking == UNCP && mc.gameSettings.keyBindUseItem.isKeyDown && (mc.thePlayer.heldItem?.item is ItemSword)
+    fun isUNCPBlocking() = modeModuleBlocking == UNCP2 && mc.gameSettings.keyBindUseItem.isKeyDown && (mc.thePlayer.heldItem?.item is ItemSword)
     private val isUsingItem get() = mc.thePlayer?.heldItem != null && (mc.thePlayer.isUsingItem || (mc.thePlayer.heldItem?.item is ItemSword && KillAura.blockStatus) || isUNCPBlocking())
     private val isHoldingConsumable get() = mc.thePlayer.heldItem?.item is ItemFood || mc.thePlayer.heldItem?.item is ItemPotion || mc.thePlayer.heldItem?.item is ItemBucketMilk
 }
