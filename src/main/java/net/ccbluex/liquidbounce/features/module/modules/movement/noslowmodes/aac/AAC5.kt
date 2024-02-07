@@ -14,12 +14,7 @@ import net.minecraft.util.BlockPos
 
 object AAC5 : NoSlowMode("AAC5") {
     override fun onMotion(event: MotionEvent) {
-        if (event.eventState == EventState.POST) {
-            sendPacket(
-                C08PacketPlayerBlockPlacement(
-                    BlockPos(-1, -1, -1), 255, mc.thePlayer.heldItem, 0f, 0f, 0f
-                )
-            )
-        }
+        if (event.eventState == EventState.POST)
+            sendPacket(C08PacketPlayerBlockPlacement(BlockPos(-1, -1, -1), 255, mc.thePlayer.heldItem, 0f, 0f, 0f))
     }
 }

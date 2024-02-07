@@ -18,9 +18,10 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemBlock
 import net.minecraft.network.play.client.*
 import net.minecraft.network.play.client.C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT
-import net.minecraft.network.play.server.S09PacketHeldItemChange
-import net.minecraft.network.play.server.S2DPacketOpenWindow
-import net.minecraft.network.play.server.S2EPacketCloseWindow
+import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.RELEASE_USE_ITEM
+import net.minecraft.network.play.server.*
+import net.minecraft.util.BlockPos.ORIGIN
+import net.minecraft.util.EnumFacing.DOWN
 
 object InventoryUtils : MinecraftInstance(), Listenable {
 
@@ -34,6 +35,21 @@ object InventoryUtils : MinecraftInstance(), Listenable {
 
                 _serverSlot = value
             }
+        }
+
+    // Are we using an item on server-side?
+    var serverUsing
+        get() = _serverUsing
+        set(value) {
+            if (value == _serverUsing)
+                return
+
+            when (value) {
+                true -> sendPacket(C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem))
+                false -> sendPacket(C07PacketPlayerDigging(RELEASE_USE_ITEM, ORIGIN, DOWN))
+            }
+
+            _serverUsing = value
         }
 
     // Is inventory open on server-side?
@@ -55,6 +71,7 @@ object InventoryUtils : MinecraftInstance(), Listenable {
 
     // Backing fields
     private var _serverSlot = 0
+    private var _serverUsing = false
     private var _serverOpenInventory = false
 
     var isFirstInventoryClick = true
@@ -140,11 +157,18 @@ object InventoryUtils : MinecraftInstance(), Listenable {
         if (event.isCancelled) return
 
         when (val packet = event.packet) {
-            is C08PacketPlayerBlockPlacement, is C0EPacketClickWindow -> {
+            is C07PacketPlayerDigging ->
+                if (packet.status == C07PacketPlayerDigging.Action.RELEASE_USE_ITEM)
+                    _serverUsing = false
+            is C08PacketPlayerBlockPlacement -> {
                 CLICK_TIMER.reset()
+                if (packet.placedBlockDirection == 255)
+                    _serverUsing = true
+            }
 
-                if (packet is C0EPacketClickWindow)
-                    isFirstInventoryClick = false
+            is C0EPacketClickWindow -> {
+                CLICK_TIMER.reset()
+                isFirstInventoryClick = false
             }
 
             is C16PacketClientStatus ->
