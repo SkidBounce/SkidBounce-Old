@@ -31,6 +31,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         UNCP,
         UNCP2,
         AAC,
+        AAC2,
         AAC5,
     ).sortedBy { it.modeName }
     private val consumeModes = arrayOf(
