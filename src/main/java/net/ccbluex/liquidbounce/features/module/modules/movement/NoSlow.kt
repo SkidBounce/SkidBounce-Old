@@ -35,6 +35,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         AAC2,
         AAC5,
         Place,
+        EmptyPlace,
         WatchDog2,
     ).sortedBy { it.modeName }
     private val consumeModes = arrayOf(
@@ -45,6 +46,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         UNCP2,
         AAC5,
         Place,
+        EmptyPlace,
     ).sortedBy { it.modeName }
     private val bowModes = arrayOf(
         Vanilla,
@@ -54,6 +56,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         UNCP2,
         AAC5,
         Place,
+        EmptyPlace,
     ).sortedBy { it.modeName }
 
     var shouldSwap = false
