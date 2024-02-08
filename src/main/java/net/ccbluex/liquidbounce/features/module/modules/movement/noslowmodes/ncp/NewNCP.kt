@@ -7,7 +7,6 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.nc
 
 import net.ccbluex.liquidbounce.event.EventState.*
 import net.ccbluex.liquidbounce.event.MotionEvent
-import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow.shouldSwap
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoSlowMode
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C07PacketPlayerDigging
