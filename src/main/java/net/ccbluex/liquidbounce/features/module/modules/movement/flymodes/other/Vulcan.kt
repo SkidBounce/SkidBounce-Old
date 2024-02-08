@@ -6,7 +6,9 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
 
 import net.ccbluex.liquidbounce.event.PacketEvent
-import net.ccbluex.liquidbounce.features.module.modules.movement.Fly
+import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.state
+import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vulcanTimer
+import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vulcanNoClip
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.MovementUtils
@@ -52,12 +54,12 @@ object Vulcan : FlyMode("Vulcan") {
         when (stage) {
             FlyStage.FLYING, FlyStage.WAITING -> {
                 if (stage == FlyStage.FLYING) {
-                    mc.timer.timerSpeed = Fly.vulcanghostTimer.get()
+                    mc.timer.timerSpeed = vulcanTimer
                 } else {
                     mc.timer.timerSpeed = 1.0f
                 }
-                if (Fly.vulcanghostNoClip.get()) mc.thePlayer.noClip = true
-                if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && modifyTicks>=6 && (mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, 0.5, 0.0)).isEmpty() || Fly.vulcanghostNoClip.get())) {
+                if (vulcanNoClip) mc.thePlayer.noClip = true
+                if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && modifyTicks>=6 && (mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, 0.5, 0.0)).isEmpty() || vulcanNoClip)) {
                     mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY+0.5, mc.thePlayer.posZ)
                     modifyTicks = 0
                 }
@@ -68,7 +70,7 @@ object Vulcan : FlyMode("Vulcan") {
                         , mc.thePlayer.posZ + 0.05 * cos(playerYaw)
                     )
                 }
-                if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && modifyTicks>=6 && (mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, -0.5, 0.0)).isEmpty() || Fly.vulcanghostNoClip.get())) {
+                if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && modifyTicks>=6 && (mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, -0.5, 0.0)).isEmpty() || vulcanNoClip)) {
                     mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY-0.5, mc.thePlayer.posZ)
                     modifyTicks = 0
                 } else if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && !(GameSettings.isKeyDown(mc.gameSettings.keyBindForward) || GameSettings.isKeyDown(mc.gameSettings.keyBindBack) || GameSettings.isKeyDown(mc.gameSettings.keyBindLeft) || GameSettings.isKeyDown(mc.gameSettings.keyBindRight)) && mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, -0.5, 0.0))
@@ -139,7 +141,7 @@ object Vulcan : FlyMode("Vulcan") {
                 if (stage == FlyStage.WAIT_APPLY) {
                     if(sqrt((packet.x - groundX) * (packet.x - groundX)
                                 + (packet.z - groundZ) * (packet.z - groundZ)) < 1.4 && packet.y >= (groundY - 0.5)) {
-                        Fly.state = false
+                        state = false
                         return
                     }
                 }

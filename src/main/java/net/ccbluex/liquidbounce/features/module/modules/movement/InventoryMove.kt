@@ -68,7 +68,7 @@ object InventoryMove : Module("InventoryMove", ModuleCategory.MOVEMENT, gameDete
                 serverOpenInventory = true
         }
 
-        if (Fly.handleEvents() && Fly.mode == "VulcanGhost")
+        if (Fly.handleEvents() && Fly.mode == "Vulcan")
             return
 
         for (affectedBinding in affectedBindings)
