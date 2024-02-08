@@ -6,9 +6,11 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.EventState.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoSlowMode
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.other.*
@@ -75,11 +77,11 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     val slime by BoolValue("Slime", true)
 
     private val blockingMode by ListValue("BlockingMode", swordModes.map { it.modeName }.toTypedArray(), "Vanilla") { blocking }
-    val blockingPacketTiming by ListValue("BlockingPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { blocking && blockingMode in arrayOf("Slot", "Place", "EmptyPlace") }
+    private val blockingPacketTiming by ListValue("BlockingPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { blocking && blockingMode in arrayOf("Slot", "Place", "EmptyPlace") }
     private val consumeMode by ListValue("ConsumeMode", consumeModes.map { it.modeName }.toTypedArray(), "Vanilla") { consuming }
-    val consumePacketTiming by ListValue("ConsumePacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { consuming && consumeMode in arrayOf("Slot", "Place", "EmptyPlace") }
+    private val consumePacketTiming by ListValue("ConsumePacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { consuming && consumeMode in arrayOf("Slot", "Place", "EmptyPlace") }
     private val bowMode by ListValue("BowMode", bowModes.map { it.modeName }.toTypedArray(), "Vanilla") { bows }
-    val bowPacketTiming by ListValue("BowPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { bows && bowMode in arrayOf("Slot", "Place", "EmptyPlace") }
+    private val bowPacketTiming by ListValue("BowPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { bows && bowMode in arrayOf("Slot", "Place", "EmptyPlace") }
     private val sneakMode by ListValue("SneakMode", arrayOf("Vanilla", "Switch", "MineSecure"), "Vanilla") { sneaking }
 
     private val onlyMoveBlocking by BoolValue("OnlyMoveBlocking", true) { blocking }
@@ -116,15 +118,14 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
         if (mc.thePlayer.isSneaking && !(onlyMoveSneak && mc.thePlayer.motionX == 0.0 && mc.thePlayer.motionZ == 0.0)) {
             when (sneakMode) {
-                "Vanilla" -> {}
                 "Switch" -> when (event.eventState) {
-                    EventState.PRE -> {
+                    PRE -> {
                         PacketUtils.sendPackets(
                             C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING),
                             C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING)
                         )
                     }
-                    EventState.POST -> {
+                    POST -> {
                         PacketUtils.sendPackets(
                             C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING),
                             C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING)
@@ -133,7 +134,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
                     else -> {}
                 }
                 "MineSecure" -> {
-                    if (event.eventState == EventState.PRE)
+                    if (event.eventState == PRE)
                         return
 
                     PacketUtils.sendPacket(
@@ -148,13 +149,8 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
         if (!shouldSwap && noMoveCheck) return
 
-        if (isUsingItem || shouldSwap) {
-            when (mc.thePlayer.heldItem?.item) {
-                is ItemSword -> if (blocking) modeModuleBlocking.onMotion(event) else return
-                is ItemFood, is ItemPotion, is ItemBucketMilk -> if (consuming) modeModuleConsume.onMotion(event) else return
-                is ItemBow -> if (bows) modeModuleBow.onMotion(event) else return
-            }
-        }
+        if (isUsingItem || shouldSwap)
+            usedMode?.onMotion(event)
     }
 
     @EventTarget
@@ -164,23 +160,13 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
         if (noMoveCheck) return
 
-        if (isUsingItem || shouldSwap) {
-            when (mc.thePlayer.heldItem?.item) {
-                is ItemSword -> if (blocking) modeModuleBlocking.onUpdate() else return
-                is ItemFood, is ItemPotion, is ItemBucketMilk -> if (consuming) modeModuleConsume.onUpdate() else return
-                is ItemBow -> if (bows) modeModuleBow.onUpdate() else return
-            }
-        }
+        if (isUsingItem || shouldSwap)
+            usedMode?.onUpdate()
     }
     @EventTarget
     fun onPacket(event: PacketEvent) {
-        if ((isUsingItem || shouldSwap) && !noMoveCheck) {
-            when (mc.thePlayer.heldItem?.item) {
-                is ItemSword -> if (blocking) modeModuleBlocking.onPacket(event) else return
-                is ItemFood, is ItemPotion, is ItemBucketMilk -> if (consuming) modeModuleConsume.onPacket(event) else return
-                is ItemBow -> if (bows) modeModuleBow.onPacket(event) else return
-            }
-        }
+        if ((isUsingItem || shouldSwap) && !noMoveCheck)
+            usedMode?.onPacket(event)
 
         val packet = event.packet
         if (event.isCancelled || shouldSwap)
@@ -216,13 +202,33 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
         else -> 0.2f
     }
-    val noMoveCheck
+    private val noMoveCheck
         get() = ( mc.thePlayer.motionX == 0.0 && mc.thePlayer.motionZ == 0.0 ) &&
                 (
                     ( onlyMoveConsume && isHoldingConsumable ) ||
                     ( onlyMoveBlocking && mc.thePlayer.heldItem?.item is ItemSword ) ||
                     ( onlyMoveBow && mc.thePlayer.heldItem?.item is ItemBow )
                 )
+    fun packetTiming(eventState: EventState, item: Item? = mc.thePlayer.heldItem?.item): Boolean {
+            return when (item) {
+                is ItemSword -> eventState.stateName == blockingPacketTiming.uppercase() || blockingPacketTiming == "Any"
+                is ItemBow -> eventState.stateName == bowPacketTiming.uppercase() || bowPacketTiming == "Any"
+                is ItemFood, is ItemBucketMilk, is ItemPotion -> eventState.stateName == consumePacketTiming.uppercase() || consumePacketTiming == "Any"
+                else -> false
+            }
+    }
+
+    private val usedMode: NoSlowMode?
+        get() = mc.thePlayer.heldItem?.item.run {
+            if (this is ItemSword && blocking)
+                return@run modeModuleBlocking
+            if (this is ItemBow && bows)
+                return@run modeModuleBow
+            if (isHoldingConsumable && consuming)
+                return@run modeModuleConsume
+            return@run null
+        }
+
     fun isUNCPBlocking() = modeModuleBlocking == UNCP2 && mc.gameSettings.keyBindUseItem.isKeyDown && (mc.thePlayer.heldItem?.item is ItemSword)
     private val isUsingItem get() = mc.thePlayer?.heldItem != null && (mc.thePlayer.isUsingItem || (mc.thePlayer.heldItem?.item is ItemSword && KillAura.blockStatus) || isUNCPBlocking())
     private val isHoldingConsumable get() = mc.thePlayer.heldItem?.item is ItemFood || mc.thePlayer.heldItem?.item is ItemPotion || mc.thePlayer.heldItem?.item is ItemBucketMilk
