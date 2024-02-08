@@ -80,8 +80,8 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         { mode == "Hypixel" && hypixelBoost }
 
     // Other
-    val vulcanghostTimer = FloatValue("Vulcan-Timer", 2f, 1f..3f) { mode == "Vulcan" }
-    val vulcanghostNoClip = BoolValue("Vulcan-NoClip", true) { mode == "Vulcan" }
+    val vulcanTimer by FloatValue("Vulcan-Timer", 2f, 1f..3f) { mode == "Vulcan" }
+    val vulcanNoClip by BoolValue("Vulcan-NoClip", true) { mode == "Vulcan" }
     val mineplexSpeed by FloatValue("Mineplex-Speed", 1f, 0.5f..10f) { mode == "Mineplex" }
     val redeskyHeight by FloatValue("Redesky-Height", 4f, 1f..7f) { mode == "Redesky" }
     val waveUpSpeed by FloatValue("Wave-UpSpeed", 0.6f, 0f..1f)  { mode == "Wave" }
