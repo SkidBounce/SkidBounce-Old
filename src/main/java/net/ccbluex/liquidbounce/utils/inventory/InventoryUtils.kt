@@ -14,8 +14,8 @@ import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.utils.timing.TickedActions
 import net.minecraft.block.BlockBush
 import net.minecraft.init.Blocks
-import net.minecraft.item.Item
-import net.minecraft.item.ItemBlock
+import net.minecraft.init.Items.*
+import net.minecraft.item.*
 import net.minecraft.network.play.client.*
 import net.minecraft.network.play.client.C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT
 import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.RELEASE_USE_ITEM
@@ -162,8 +162,12 @@ object InventoryUtils : MinecraftInstance(), Listenable {
                     _serverUsing = false
             is C08PacketPlayerBlockPlacement -> {
                 CLICK_TIMER.reset()
+
+                // check if the item was used
                 if (packet.placedBlockDirection == 255)
-                    _serverUsing = true
+                    // check if the item is usable
+                    if (packet.stack.item.run { this is ItemSword || this is ItemFood || this is ItemBow || this is ItemPotion || this is ItemBucketMilk })
+                        _serverUsing = true
             }
 
             is C0EPacketClickWindow -> {
