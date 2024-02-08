@@ -69,38 +69,41 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     }
 
     private val blocking by BoolValue("Blocking", true)
-    private val consuming by BoolValue("Consuming", true)
-    private val bows by BoolValue("Bows", true)
-    val sneaking by BoolValue("Sneaking", true)
-    val soulsand by BoolValue("SoulSand", true)
-    val liquidPush by BoolValue("LiquidPush", true)
-    val slime by BoolValue("Slime", true)
-
     private val blockingMode by ListValue("BlockingMode", swordModes.map { it.modeName }.toTypedArray(), "Vanilla") { blocking }
+    private val onlyMoveBlocking by BoolValue("OnlyMoveBlocking", true) { blocking && blockingMode != "Vanilla" }
     private val blockingPacketTiming by ListValue("BlockingPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { blocking && blockingMode in arrayOf("Slot", "Place", "EmptyPlace") }
-    private val consumeMode by ListValue("ConsumeMode", consumeModes.map { it.modeName }.toTypedArray(), "Vanilla") { consuming }
-    private val consumePacketTiming by ListValue("ConsumePacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { consuming && consumeMode in arrayOf("Slot", "Place", "EmptyPlace") }
-    private val bowMode by ListValue("BowMode", bowModes.map { it.modeName }.toTypedArray(), "Vanilla") { bows }
-    private val bowPacketTiming by ListValue("BowPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { bows && bowMode in arrayOf("Slot", "Place", "EmptyPlace") }
-    private val sneakMode by ListValue("SneakMode", arrayOf("Vanilla", "Switch", "MineSecure"), "Vanilla") { sneaking }
-
-    private val onlyMoveBlocking by BoolValue("OnlyMoveBlocking", true) { blocking }
-    private val onlyMoveConsume by BoolValue("OnlyMoveConsume", true) { consuming }
-    private val onlyMoveBow by BoolValue("OnlyMoveBow", true) { bows }
-    private val onlyMoveSneak by BoolValue("OnlyMoveSneak", true) { sneaking }
-
     private val blockForwardMultiplier by FloatValue("BlockForwardMultiplier", 1f, 0.2f..1f) { blocking }
     private val blockStrafeMultiplier by FloatValue("BlockStrafeMultiplier", 1f, 0.2f..1f) { blocking }
+
+    private val consuming by BoolValue("Consuming", true)
+    private val consumeMode by ListValue("ConsumeMode", consumeModes.map { it.modeName }.toTypedArray(), "Vanilla") { consuming }
+    private val onlyMoveConsume by BoolValue("OnlyMoveConsume", true) { consuming && consumeMode != "Vanilla" }
+    private val consumePacketTiming by ListValue("ConsumePacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { consuming && consumeMode in arrayOf("Slot", "Place", "EmptyPlace") }
     private val consumeForwardMultiplier by FloatValue("ConsumeForwardMultiplier", 1f, 0.2f..1f) { consuming }
     private val consumeStrafeMultiplier by FloatValue("ConsumeStrafeMultiplier", 1f, 0.2f..1f) { consuming }
+
+    private val bows by BoolValue("Bows", true)
+    private val bowMode by ListValue("BowMode", bowModes.map { it.modeName }.toTypedArray(), "Vanilla") { bows }
+    private val onlyMoveBow by BoolValue("OnlyMoveBow", true) { bows && bowMode != "Vanilla" }
+    private val bowPacketTiming by ListValue("BowPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { bows && bowMode in arrayOf("Slot", "Place", "EmptyPlace") }
     private val bowForwardMultiplier by FloatValue("BowForwardMultiplier", 1f, 0.2f..1f) { bows }
     private val bowStrafeMultiplier by FloatValue("BowStrafeMultiplier", 1f, 0.2f..1f) { bows }
+
+    val sneaking by BoolValue("Sneaking", true)
+    private val sneakMode by ListValue("SneakMode", arrayOf("Vanilla", "Switch", "MineSecure"), "Vanilla") { sneaking }
+    private val onlyMoveSneak by BoolValue("OnlyMoveSneak", true) { sneaking && sneakMode != "Vanilla" }
     val sneakForwardMultiplier by FloatValue("SneakForwardMultiplier", 0.3f, 0.3f..1.0F) { sneaking }
     val sneakStrafeMultiplier by FloatValue("SneakStrafeMultiplier", 0.3f, 0.3f..1f) { sneaking }
+
+    val soulsand by BoolValue("SoulSand", true)
     val soulsandMultiplier by FloatValue("SoulSandMultiplier", 1f, 0.4f..1f) { soulsand }
+
+    val slime by BoolValue("Slime", true)
     val slimeYMultiplier by FloatValue("SlimeYMultiplier", 1f, 0.2f..1f) { slime }
     val slimeMultiplier by FloatValue("SlimeMultiplier", 1f, 0.4f..1f) { slime }
     private val slimeFriction by FloatValue("SlimeFriction", 0.6f, 0.6f..0.8f) { slime }
+
+    val liquidPush by BoolValue("LiquidPush", true)
 
     private val modeModuleBlocking
         get() = swordModes.find { it.modeName == blockingMode }!!
