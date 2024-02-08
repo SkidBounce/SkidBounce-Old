@@ -38,6 +38,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         Place,
         EmptyPlace,
         Slot,
+        WatchDog,
         WatchDog2,
     ).sortedBy { it.modeName }
     private val consumeModes = arrayOf(
