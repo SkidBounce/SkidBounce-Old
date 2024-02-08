@@ -33,7 +33,6 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         UNCP2,
         AAC,
         AAC2,
-        AAC5,
         Place,
         EmptyPlace,
         WatchDog2,
@@ -44,7 +43,6 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         OldIntave,
         UNCP,
         UNCP2,
-        AAC5,
         Place,
         EmptyPlace,
     ).sortedBy { it.modeName }
@@ -54,7 +52,6 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         OldIntave,
         UNCP,
         UNCP2,
-        AAC5,
         Place,
         EmptyPlace,
     ).sortedBy { it.modeName }
