@@ -43,6 +43,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         WatchDog,
         WatchDog2,
         Horizon,
+        Medusa,
     ).sortedBy { it.modeName }
     private val consumeModes = arrayOf(
         Vanilla,
@@ -54,6 +55,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         EmptyPlace,
         Slot,
         Horizon,
+        Medusa,
     ).sortedBy { it.modeName }
     private val bowModes = arrayOf(
         Vanilla,
@@ -65,6 +67,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         EmptyPlace,
         Slot,
         Horizon,
+        Medusa,
     ).sortedBy { it.modeName }
 
     private val noNoMoveCheck = arrayOf(
