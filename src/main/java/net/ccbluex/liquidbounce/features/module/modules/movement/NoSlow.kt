@@ -224,20 +224,20 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     }
 
     private val noMoveCheck
-        get() = mc.thePlayer.heldItem.item.run {
+        get() = if (isHoldingNoSlowItem)
+            mc.thePlayer.heldItem.item.run {
+                if (usedMode.modeName in noNoMoveCheck || hasMotion)
+                    return@run false
 
-            if (usedMode.modeName in noNoMoveCheck || hasMotion)
+                if (onlyMoveConsume && isHoldingConsumable)
+                    return@run true
+                if (onlyMoveBlocking && this is ItemSword)
+                    return@run true
+                if (onlyMoveBow && this is ItemBow)
+                    return@run true
+
                 return@run false
-
-            if (onlyMoveConsume && isHoldingConsumable)
-                return@run true
-            if (onlyMoveBlocking && this is ItemSword)
-                return@run true
-            if (onlyMoveBow && this is ItemBow)
-                return@run true
-
-            return@run false
-        }
+        } else false
 
     fun packetTiming(eventState: EventState, item: Item? = mc.thePlayer.heldItem.item): Boolean {
         return when (item) {
@@ -249,7 +249,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     }
 
     private val usedMode: NoSlowMode
-        get() = mc.thePlayer.heldItem.item.run {
+        get() = if (isHoldingNoSlowItem) mc.thePlayer.heldItem.item.run {
             if (this is ItemSword && blocking)
                 return@run modeModuleBlocking
             if (this is ItemBow && bows)
@@ -257,8 +257,12 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
             if (isHoldingConsumable && consuming)
                 return@run modeModuleConsume
             return@run Vanilla
-        }
-
+        } else Vanilla
+    private val isHoldingNoSlowItem
+        get() = mc.thePlayer?.heldItem?.item?.run {
+            (this is ItemSword && blocking) || (this is ItemBow && bows) ||
+                    ((this is ItemPotion || this is ItemFood || this is ItemBucketMilk) && consuming)
+        } ?: false
     fun isUNCPBlocking() = modeModuleBlocking == UNCP2 && mc.gameSettings.keyBindUseItem.isKeyDown && (mc.thePlayer.heldItem?.item is ItemSword)
     private val isUsingItem get() = mc.thePlayer?.heldItem != null && (mc.thePlayer.isUsingItem || (mc.thePlayer.heldItem?.item is ItemSword && KillAura.blockStatus) || isUNCPBlocking())
     private val isHoldingConsumable get() = mc.thePlayer.heldItem?.item is ItemFood || mc.thePlayer.heldItem?.item is ItemPotion || mc.thePlayer.heldItem?.item is ItemBucketMilk
