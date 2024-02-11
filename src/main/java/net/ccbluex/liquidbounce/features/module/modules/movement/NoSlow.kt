@@ -175,9 +175,7 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         if (serverUsing && !isUsingItem)
             serverUsing = false
 
-        if (noMoveCheck) return
-
-        if (isUsingItem)
+        if (!noMoveCheck && isUsingItem)
             usedMode.onUpdate()
     }
 
@@ -208,62 +206,60 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
     @EventTarget
     fun onSlowDown(event: SlowDownEvent) {
-        val heldItem = mc.thePlayer.heldItem.item
-        event.forward = getMultiplier(heldItem, true)
-        event.strafe = getMultiplier(heldItem, false)
-    }
-
-    private fun getMultiplier(item: Item?, isForward: Boolean) = when (item) {
-        is ItemFood, is ItemPotion, is ItemBucketMilk -> if (consuming) { if (isForward) consumeForwardMultiplier else consumeStrafeMultiplier } else 0.2f
-
-        is ItemSword -> if (blocking) { if (isForward) blockForwardMultiplier else blockStrafeMultiplier } else 0.2f
-
-        is ItemBow -> if (bows) { if (isForward) bowForwardMultiplier else bowStrafeMultiplier } else 0.2f
-
-        else -> 0.2f
-    }
-
-    private val noMoveCheck
-        get() = if (isHoldingNoSlowItem)
-            mc.thePlayer.heldItem.item.run {
-                if (usedMode.modeName in noNoMoveCheck || hasMotion)
-                    return@run false
-
-                if (onlyMoveConsume && isHoldingConsumable)
-                    return@run true
-                if (onlyMoveBlocking && this is ItemSword)
-                    return@run true
-                if (onlyMoveBow && this is ItemBow)
-                    return@run true
-
-                return@run false
-        } else false
-
-    fun packetTiming(eventState: EventState, item: Item? = mc.thePlayer.heldItem.item): Boolean {
-        return when (item) {
-            is ItemSword -> eventState.stateName == blockingPacketTiming.uppercase() || blockingPacketTiming == "Any"
-            is ItemBow -> eventState.stateName == bowPacketTiming.uppercase() || bowPacketTiming == "Any"
-            is ItemFood, is ItemBucketMilk, is ItemPotion -> eventState.stateName == consumePacketTiming.uppercase() || consumePacketTiming == "Any"
-            else -> false
+        event.forward = when (noSlowItem) {
+            NoSlowItem.CONSUMABLE -> consumeForwardMultiplier
+            NoSlowItem.SWORD -> blockForwardMultiplier
+            NoSlowItem.BOW -> bowForwardMultiplier
+            NoSlowItem.OTHER -> 0.2f
+        }
+        event.strafe = when (noSlowItem) {
+            NoSlowItem.CONSUMABLE -> consumeStrafeMultiplier
+            NoSlowItem.SWORD -> blockStrafeMultiplier
+            NoSlowItem.BOW -> bowStrafeMultiplier
+            NoSlowItem.OTHER -> 0.2f
         }
     }
 
+    private val noMoveCheck
+        get() = noSlowItem.run {
+            if (usedMode.modeName in noNoMoveCheck || hasMotion)
+                return@run false
+
+            return@run when (this) {
+                NoSlowItem.SWORD -> onlyMoveBlocking
+                NoSlowItem.BOW -> onlyMoveBow
+                NoSlowItem.CONSUMABLE -> onlyMoveConsume
+                NoSlowItem.OTHER -> false
+            }
+        }
+
+    fun packetTiming(eventState: EventState) =
+        when (noSlowItem) {
+            NoSlowItem.SWORD -> eventState.stateName == blockingPacketTiming.uppercase() || blockingPacketTiming == "Any"
+            NoSlowItem.BOW -> eventState.stateName == bowPacketTiming.uppercase() || bowPacketTiming == "Any"
+            NoSlowItem.CONSUMABLE -> eventState.stateName == consumePacketTiming.uppercase() || consumePacketTiming == "Any"
+            NoSlowItem.OTHER -> false
+        }
+
     private val usedMode: NoSlowMode
-        get() = if (isHoldingNoSlowItem) mc.thePlayer.heldItem.item.run {
-            if (this is ItemSword && blocking)
-                return@run modeModuleBlocking
-            if (this is ItemBow && bows)
-                return@run modeModuleBow
-            if (isHoldingConsumable && consuming)
-                return@run modeModuleConsume
-            return@run Vanilla
-        } else Vanilla
-    private val isHoldingNoSlowItem
-        get() = mc.thePlayer?.heldItem?.item?.run {
-            (this is ItemSword && blocking) || (this is ItemBow && bows) ||
-                    ((this is ItemPotion || this is ItemFood || this is ItemBucketMilk) && consuming)
-        } ?: false
+        get() = when (noSlowItem) {
+            NoSlowItem.SWORD -> modeModuleBlocking
+            NoSlowItem.BOW -> modeModuleBow
+            NoSlowItem.CONSUMABLE -> modeModuleConsume
+            NoSlowItem.OTHER -> Vanilla
+        }
+
     fun isUNCPBlocking() = modeModuleBlocking == UNCP2 && mc.gameSettings.keyBindUseItem.isKeyDown && (mc.thePlayer.heldItem?.item is ItemSword)
     private val isUsingItem get() = mc.thePlayer?.heldItem != null && (mc.thePlayer.isUsingItem || (mc.thePlayer.heldItem?.item is ItemSword && KillAura.blockStatus) || isUNCPBlocking())
-    private val isHoldingConsumable get() = mc.thePlayer.heldItem?.item is ItemFood || mc.thePlayer.heldItem?.item is ItemPotion || mc.thePlayer.heldItem?.item is ItemBucketMilk
+
+    private val noSlowItem: NoSlowItem
+        get() = mc.thePlayer?.heldItem?.item?.run {
+            return@run when {
+                this is ItemSword && blocking -> NoSlowItem.SWORD
+                this is ItemBow && bows -> NoSlowItem.BOW
+                (this is ItemPotion || this is ItemFood || this is ItemBucketMilk) && consuming-> NoSlowItem.CONSUMABLE
+                else -> NoSlowItem.OTHER
+            }
+        } ?: NoSlowItem.OTHER
+    enum class NoSlowItem { CONSUMABLE, SWORD, BOW, OTHER }
 }
