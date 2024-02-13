@@ -122,7 +122,10 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
     val aacGroundTimer by FloatValue("AACGround-Timer", 3f, 1.1f..10f) { mode in arrayOf("AACGround", "AACGround2") }
     val cubecraftPortLength by FloatValue("CubeCraft-PortLength", 1f, 0.1f..2f) { mode == "TeleportCubeCraft" }
     val mineplexGroundSpeed by FloatValue("MineplexGround-Speed", 0.5f, 0.1f..1f) { mode == "MineplexGround" }
-    val cardinalWaterLowHop by BoolValue("Cardinal-WaterLowHop", true) { mode == "Cardinal" }
+    val cardinalStrafeHeight by FloatValue("Cardinal-StrafeHeight", 0.3f, 0.1f..1f) { mode == "Cardinal" }
+    val cardinalStrafeStrength by FloatValue("Cardinal-StrafeStrength", 0.1f, 0f..0.5f) { mode == "Cardinal" }
+    val cardinalAboveWaterMultiplier by FloatValue("Cardinal-AboveWaterMultiplier", 0.87f, 0.4f..1f) { mode == "Cardinal" }
+    val cardinalSlimeMultiplier by FloatValue("Cardinal-SlimeMultiplier", 0.7f, 0.4f..1f) { mode == "Cardinal" }
     val cardinalJumpWhenIceSpeed by BoolValue("Cardinal-JumpWhenIceSpeed", true) { mode == "Cardinal" }
     val uncpyportDamageBoost by BoolValue("UNCPYPort-DamageBoost", true) { mode == "UNCPYPort" }
     val wavelowhopTimer by FloatValue("WaveLowHop-Timer", 1.25f, 1f..2f) { mode == "WaveLowHop" }
