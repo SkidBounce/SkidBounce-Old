@@ -29,14 +29,21 @@ object LongJump : Module("LongJump", ModuleCategory.MOVEMENT) {
         // Mineplex
         Mineplex, Mineplex2, Mineplex3,
 
+        // Redesky
+        Redesky,
+
         // Other
-        Redesky, Hycraft, Buzz,
+        Hycraft, Buzz,
     ).sortedBy { it.modeName }
 
     private val modes = longJumpModes.map { it.modeName }.toTypedArray()
 
     val mode by ListValue("Mode", modes, "NCP")
-        val ncpBoost by FloatValue("NCPBoost", 4.25f, 1f..10f) { mode == "NCP" }
+    val ncpBoost by FloatValue("NCPBoost", 4.25f, 1f..10f) { mode == "NCP" }
+    val redeskyJumpMovement by FloatValue("RedeskyJumpMovement", 0.15f, 0.05f..0.25f) { mode == "Redesky" }
+    val redeskyMotionY by FloatValue("RedeskyMotionY",0.05f,0.05f..1f) { mode == "Redesky" }
+    val redeskyUseTimer by BoolValue("RedeskyUseTimer", false) { mode == "Redesky" }
+    val redeskyTimer by FloatValue("RedeskyTimer", 0.7f, 0.1f..1f) { mode == "Redesky" }
 
     private val autoJump by BoolValue("AutoJump", false)
 
@@ -85,6 +92,10 @@ object LongJump : Module("LongJump", ModuleCategory.MOVEMENT) {
         if (handleEvents()) {
             modeModule.onJump(event)
         }
+    }
+
+    override fun onDisable() {
+        modeModule.onDisable()
     }
 
     override val tag
