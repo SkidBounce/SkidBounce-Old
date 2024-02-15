@@ -241,7 +241,7 @@ object CapeService : Listenable, MinecraftInstance() {
             val statusCode = response.statusLine.statusCode
 
             LOGGER.info(
-                if(statusCode == HttpStatus.SC_NO_CONTENT) {
+                if (statusCode == HttpStatus.SC_NO_CONTENT) {
                     capeUser.uuid = uuid
                     "[Donator Cape] Successfully transferred cape to $uuid ($username)"
                 } else {

@@ -42,10 +42,9 @@ public abstract class MixinEffectRenderer {
 
                 entityParticleEmitter.onUpdate();
 
-                if(entityParticleEmitter.isDead)
+                if (entityParticleEmitter.isDead)
                     it.remove();
             }
-        }catch(final ConcurrentModificationException ignored) {
-        }
+        } catch(final ConcurrentModificationException ignored) {}
     }
 }

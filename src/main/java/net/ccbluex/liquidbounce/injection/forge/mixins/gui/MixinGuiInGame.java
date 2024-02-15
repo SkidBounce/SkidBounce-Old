@@ -88,7 +88,7 @@ public abstract class MixinGuiInGame {
     private void renderPumpkinOverlay(final CallbackInfo callbackInfo) {
         final AntiBlind antiBlind = AntiBlind.INSTANCE;
 
-        if(antiBlind.handleEvents() && antiBlind.getPumpkinEffect())
+        if (antiBlind.handleEvents() && antiBlind.getPumpkinEffect())
             callbackInfo.cancel();
     }
 

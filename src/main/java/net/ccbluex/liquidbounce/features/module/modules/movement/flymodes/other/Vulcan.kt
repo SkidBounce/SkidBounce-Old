@@ -139,7 +139,7 @@ object Vulcan : FlyMode("Vulcan") {
                     }
                 }
                 if (stage == FlyStage.WAIT_APPLY) {
-                    if(sqrt((packet.x - groundX) * (packet.x - groundX)
+                    if (sqrt((packet.x - groundX) * (packet.x - groundX)
                                 + (packet.z - groundZ) * (packet.z - groundZ)) < 1.4 && packet.y >= (groundY - 0.5)) {
                         state = false
                         return

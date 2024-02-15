@@ -51,7 +51,7 @@ public class MixinNetworkManager {
         final PacketEvent event = new PacketEvent(packet, EventState.RECEIVE);
         EventManager.INSTANCE.callEvent(event);
 
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             callback.cancel();
         }
     }
@@ -61,7 +61,7 @@ public class MixinNetworkManager {
         final PacketEvent event = new PacketEvent(packet, EventState.SEND);
         EventManager.INSTANCE.callEvent(event);
 
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             callback.cancel();
         }
     }
