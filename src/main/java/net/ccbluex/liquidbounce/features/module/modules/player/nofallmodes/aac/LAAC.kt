@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.event.JumpEvent
 import net.ccbluex.liquidbounce.event.MoveEvent
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object LAAC : NoFallMode("LAAC") {
     private var jumped = false
 

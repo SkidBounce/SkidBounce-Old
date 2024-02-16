@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.timing.TickTimer
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Spartan : NoFallMode("Spartan") {
     private val spartanTimer = TickTimer()
 

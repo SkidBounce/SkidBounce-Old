@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.utils.extensions.stop
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Matrix62x : NoFallMode("Matrix6.2.X") {
     private var spoof = false
     private var falling = false

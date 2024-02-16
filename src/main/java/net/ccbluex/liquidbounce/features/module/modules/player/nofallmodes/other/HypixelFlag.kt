@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFal
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object HypixelFlag : NoFallMode("HypixelFlag") {
     private var isDmgFalling = false
     override fun onUpdate() {

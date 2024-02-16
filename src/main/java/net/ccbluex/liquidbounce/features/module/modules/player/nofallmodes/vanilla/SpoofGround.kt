@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.spoofgroun
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object SpoofGround : NoFallMode("SpoofGround") {
     override fun onPacket(event: PacketEvent) {
         if (event.packet is C03PacketPlayer && (spoofgroundAlways || mc.thePlayer.fallDistance > spoofgroundMinFallDistance))

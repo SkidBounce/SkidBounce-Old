@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AAC3311 : NoFallMode("AAC3.3.11") {
     override fun onUpdate() {
         if (mc.thePlayer.fallDistance > 2) {

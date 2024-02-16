@@ -10,6 +10,10 @@ import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.verusMulti
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author SkidderMC/FDPClient
+ * @author Aspw-w/NightX-Client
+ */
 object Verus : NoFallMode("Verus") {
     private var spoof = false
     override fun onEnable() {

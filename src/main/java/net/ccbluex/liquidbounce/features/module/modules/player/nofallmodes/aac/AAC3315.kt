@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFal
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AAC3315 : NoFallMode("AAC3.3.15") {
     override fun onUpdate() {
         mc.thePlayer ?: return

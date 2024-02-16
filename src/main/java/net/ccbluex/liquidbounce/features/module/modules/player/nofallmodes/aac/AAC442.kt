@@ -14,7 +14,10 @@ import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import net.minecraft.network.play.server.S08PacketPlayerPosLook
 
-object AACLoyisa442 : NoFallMode("AACLoyisa4.4.2") {
+/**
+ * @author Aspw-w/NightX-Client
+ */
+object AAC442 : NoFallMode("AAC4.4.2") {
     private var isDmgFalling = false
     private var flags = 0
     private val flagCooldown = MSTimer()

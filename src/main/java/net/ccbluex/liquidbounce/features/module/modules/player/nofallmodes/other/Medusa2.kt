@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFal
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author Aspw-w/NightX-Client
+ */
 object Medusa2 : NoFallMode("Medusa2") {
     override fun onPacket(event: PacketEvent) {
         if (event.packet is C03PacketPlayer && mc.thePlayer.fallDistance > 2.3) {

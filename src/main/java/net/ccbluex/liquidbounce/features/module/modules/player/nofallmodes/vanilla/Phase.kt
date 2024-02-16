@@ -13,6 +13,9 @@ import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import java.util.*
 import kotlin.concurrent.schedule
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Phase : NoFallMode("Phase") {
     override fun onUpdate() {
         if (mc.thePlayer.fallDistance > 3 + phaseOffset) {

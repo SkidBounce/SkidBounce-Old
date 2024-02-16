@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
+/**
+ * @author Aspw-w/NightX-Client
+ */
 object Matrix663 : NoFallMode("Matrix6.6.3") {
     private var packet = false
     private var timer = false

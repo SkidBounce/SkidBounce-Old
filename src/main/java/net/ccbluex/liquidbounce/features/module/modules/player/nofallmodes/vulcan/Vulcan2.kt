@@ -1,72 +1,81 @@
 /*
  * SkidBounce Hacked Client
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge, Forked from LiquidBounce.
- * https://github.com/ManInMyVan/SkidBounce/
+ *  https://github.com/ManInMyVan/SkidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac
+package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vulcan
 
-import net.ccbluex.liquidbounce.event.EventState
-import net.ccbluex.liquidbounce.event.MotionEvent
-import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.features.module.modules.player.NoFall
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
-import net.ccbluex.liquidbounce.utils.MovementUtils.aboveVoid
+import net.ccbluex.liquidbounce.utils.MovementUtils
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.util.AxisAlignedBB
 
-object AACv4 : NoFallMode("AACv4") {
-    private var aac4Fakelag = false
-    private var packetModify = false
-    private val aac4Packets = mutableListOf<C03PacketPlayer>()
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ */
+
+object Vulcan2 : NoFallMode("Vulcan2") {
+    private var lag = false
+    private var modify = false
+    private val packets = mutableListOf<C03PacketPlayer>()
     override fun onEnable() {
-        aac4Packets.clear()
-        packetModify = false
-        aac4Fakelag = false
+        packets.clear()
+        modify = false
+        lag = false
+    }
+
+    override fun onUpdate() {
+        if (mc.thePlayer.motionY <= 0.0 && mc.thePlayer.fallDistance <= 1f && lag)
+            mc.thePlayer.motionY = -NoFall.vulcan2Motion.toDouble()
     }
 
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is C03PacketPlayer && aac4Fakelag) {
+        if (event.packet is C03PacketPlayer && lag) {
             event.cancelEvent()
-            if (packetModify) {
+            if (modify) {
                 event.packet.onGround = true
-                packetModify = false
+                modify = false
             }
-            aac4Packets.add(event.packet)
+            packets.add(event.packet)
         }
     }
 
     override fun onMotion(event: MotionEvent) {
         if (event.eventState == EventState.PRE) {
-            if (aboveVoid) {
-                if (aac4Fakelag) {
-                    aac4Fakelag = false
-                    if (aac4Packets.size > 0) {
-                        for (packet in aac4Packets) {
+            if (MovementUtils.aboveVoid) {
+                if (lag) {
+                    lag = false
+                    if (packets.size > 0) {
+                        for (packet in packets) {
                             mc.thePlayer.sendQueue.addToSendQueue(packet)
                         }
-                        aac4Packets.clear()
+                        packets.clear()
                     }
                 }
                 return
             }
-            if (mc.thePlayer.onGround && aac4Fakelag) {
-                aac4Fakelag = false
-                if (aac4Packets.size > 0) {
-                    for (packet in aac4Packets) {
+            if (mc.thePlayer.onGround && lag) {
+                lag = false
+                if (packets.size > 0) {
+                    for (packet in packets) {
                         mc.thePlayer.sendQueue.addToSendQueue(packet)
                     }
-                    aac4Packets.clear()
+                    packets.clear()
                 }
                 return
             }
-            if (mc.thePlayer.fallDistance > 2.5 && aac4Fakelag) {
-                packetModify = true
+            if (mc.thePlayer.fallDistance > 2.5 && lag) {
+                modify = true
                 mc.thePlayer.fallDistance = 0f
             }
             if (inAir(4.0, 1.0)) {
                 return
             }
-            if (!aac4Fakelag) {
-                aac4Fakelag = true
+            if (!lag) {
+                lag = true
             }
         }
     }

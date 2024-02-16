@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFal
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object AAC44xFlag : NoFallMode("AAC4.4.X-Flag") {
     override fun onPacket(event: PacketEvent) {
         if (event.packet is S12PacketEntityVelocity && mc.thePlayer.fallDistance > 1.8)

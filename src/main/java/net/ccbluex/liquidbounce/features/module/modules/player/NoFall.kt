@@ -12,6 +12,7 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.matrix.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.other.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vanilla.*
+import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vulcan.*
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.utils.MovementUtils.aboveVoid
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlock
@@ -37,28 +38,28 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Damage,
         Phase,
 
-        AAC,
-        AACv4,
-        AACLoyisa442,
+        OldAAC,
+        AAC4,
+        AAC442,
         AAC44xFlag,
         LAAC,
         AAC3311,
         AAC3315,
         AAC504,
         AAC5014,
-        AAC50142,
 
         Matrix62x,
         Matrix663,
         OldMatrix,
+
+        Vulcan,
+        Vulcan2,
 
         Spartan,
         CubeCraft,
         Hypixel,
         HypixelFlag,
         HypSpoof,
-        Vulcan,
-        Vulcan2,
         Medusa,
         Medusa2,
         Verus,
@@ -74,6 +75,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     val phaseOffset by IntegerValue("Phase-Offset", 1, 0..5) { mode == "Phase" }
     val verusMulti by FloatValue("Verus-XZMulti", 0.6f, 0f..1f) { mode == "Verus" }
     val vulcan2Motion by FloatValue("Vulcan2-Motion", 0.35f, 0f..10f) { mode == "Vulcan2" }
+    val aac5014NightX by BoolValue("AAC5.0.14-NightX", false) { mode == "AAC5.0.14" }
 
     override fun onEnable() {
         modeModule.onEnable()

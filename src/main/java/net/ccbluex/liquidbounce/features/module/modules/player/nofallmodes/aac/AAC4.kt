@@ -3,76 +3,73 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge, Forked from LiquidBounce.
  * https://github.com/ManInMyVan/SkidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.other
+package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac
 
 import net.ccbluex.liquidbounce.event.EventState
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.event.PacketEvent
-import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.vulcan2Motion
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.aboveVoid
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.util.AxisAlignedBB
 
-object Vulcan2 : NoFallMode("Vulcan2") {
-    private var lag = false
-    private var modify = false
-    private val packets = mutableListOf<C03PacketPlayer>()
+/**
+ * @author SkidderMC/FDPClient
+ */
+object AAC4 : NoFallMode("AAC4") {
+    private var aac4Fakelag = false
+    private var packetModify = false
+    private val aac4Packets = mutableListOf<C03PacketPlayer>()
     override fun onEnable() {
-        packets.clear()
-        modify = false
-        lag = false
-    }
-
-    override fun onUpdate() {
-        if (mc.thePlayer.motionY <= 0.0 && mc.thePlayer.fallDistance <= 1f && lag)
-            mc.thePlayer.motionY = -vulcan2Motion.toDouble()
+        aac4Packets.clear()
+        packetModify = false
+        aac4Fakelag = false
     }
 
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is C03PacketPlayer && lag) {
+        if (event.packet is C03PacketPlayer && aac4Fakelag) {
             event.cancelEvent()
-            if (modify) {
+            if (packetModify) {
                 event.packet.onGround = true
-                modify = false
+                packetModify = false
             }
-            packets.add(event.packet)
+            aac4Packets.add(event.packet)
         }
     }
 
     override fun onMotion(event: MotionEvent) {
         if (event.eventState == EventState.PRE) {
             if (aboveVoid) {
-                if (lag) {
-                    lag = false
-                    if (packets.size > 0) {
-                        for (packet in packets) {
+                if (aac4Fakelag) {
+                    aac4Fakelag = false
+                    if (aac4Packets.size > 0) {
+                        for (packet in aac4Packets) {
                             mc.thePlayer.sendQueue.addToSendQueue(packet)
                         }
-                        packets.clear()
+                        aac4Packets.clear()
                     }
                 }
                 return
             }
-            if (mc.thePlayer.onGround && lag) {
-                lag = false
-                if (packets.size > 0) {
-                    for (packet in packets) {
+            if (mc.thePlayer.onGround && aac4Fakelag) {
+                aac4Fakelag = false
+                if (aac4Packets.size > 0) {
+                    for (packet in aac4Packets) {
                         mc.thePlayer.sendQueue.addToSendQueue(packet)
                     }
-                    packets.clear()
+                    aac4Packets.clear()
                 }
                 return
             }
-            if (mc.thePlayer.fallDistance > 2.5 && lag) {
-                modify = true
+            if (mc.thePlayer.fallDistance > 2.5 && aac4Fakelag) {
+                packetModify = true
                 mc.thePlayer.fallDistance = 0f
             }
             if (inAir(4.0, 1.0)) {
                 return
             }
-            if (!lag) {
-                lag = true
+            if (!aac4Fakelag) {
+                aac4Fakelag = true
             }
         }
     }

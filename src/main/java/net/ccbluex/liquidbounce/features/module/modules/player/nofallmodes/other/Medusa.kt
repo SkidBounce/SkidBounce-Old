@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Medusa : NoFallMode("Medusa") {
     private var needSpoof = false
     override fun onEnable() {

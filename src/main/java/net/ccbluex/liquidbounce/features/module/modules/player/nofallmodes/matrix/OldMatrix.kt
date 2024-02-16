@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.server.S08PacketPlayerPosLook
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object OldMatrix : NoFallMode("OldMatrix") {
     private var falling = false
     private var flagWait = 0

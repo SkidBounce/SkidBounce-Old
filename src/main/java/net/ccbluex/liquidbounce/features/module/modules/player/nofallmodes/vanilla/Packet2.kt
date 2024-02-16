@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Packet2 : NoFallMode("Packet2") {
     private var lastFallDistRounded = 0
     private var modify = false

@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vani
 import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.motionMotion
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Motion : NoFallMode("Motion") {
     override fun onUpdate() {
         if (mc.thePlayer.fallDistance > 3)

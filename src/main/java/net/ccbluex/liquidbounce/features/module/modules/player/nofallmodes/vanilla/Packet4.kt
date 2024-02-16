@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFal
 import net.ccbluex.liquidbounce.utils.PacketUtils
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Packet4 : NoFallMode("Packet4") {
     override fun onUpdate() {
         if (mc.thePlayer.fallDistance - mc.thePlayer.motionY > 3f) {

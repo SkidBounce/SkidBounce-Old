@@ -23,6 +23,9 @@ import net.minecraft.util.BlockPos
 import net.minecraft.util.Vec3
 import kotlin.math.ceil
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object MLG : NoFallMode("MLG") {
 
     private val mlgTimer = TickTimer()

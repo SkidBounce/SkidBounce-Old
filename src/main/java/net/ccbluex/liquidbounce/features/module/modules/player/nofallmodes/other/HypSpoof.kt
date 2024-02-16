@@ -10,7 +10,9 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFal
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C03PacketPlayer
 
-
+/**
+ * @author SkidderMC/FDPClient
+ */
 object HypSpoof : NoFallMode("HypSpoof") {
     override fun onPacket(event: PacketEvent) {
         if (event.packet is C03PacketPlayer)

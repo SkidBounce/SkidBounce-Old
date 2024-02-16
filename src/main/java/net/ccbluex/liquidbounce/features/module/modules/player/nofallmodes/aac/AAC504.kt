@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object AAC504 : NoFallMode("AAC5.0.4") {
     private var isDmgFalling = false
     override fun onUpdate() {

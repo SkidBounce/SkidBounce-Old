@@ -9,7 +9,10 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFal
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C03PacketPlayer
 
-object AAC : NoFallMode("AAC") {
+/**
+ * @author CCBlueX/LiquidBounce
+ */
+object OldAAC : NoFallMode("OldAAC") {
 
     private var currentState = 0
 
