@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac
 import net.ccbluex.liquidbounce.event.JumpEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object AAC4 : NoWebMode("AAC4") {
     private var usedTimer = false
     override fun onUpdate() {

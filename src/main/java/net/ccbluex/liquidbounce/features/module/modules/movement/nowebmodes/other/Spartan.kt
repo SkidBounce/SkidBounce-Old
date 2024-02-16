@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.oth
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Spartan : NoWebMode("Spartan") {
     private var usedTimer = false
     override fun onUpdate() {

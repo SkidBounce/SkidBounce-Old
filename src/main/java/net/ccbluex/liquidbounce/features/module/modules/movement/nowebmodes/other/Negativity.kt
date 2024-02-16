@@ -7,8 +7,10 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.oth
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 
+/**
+ * @author liquidbounceplusreborn/LiquidbouncePlus-Reborn
+ */
 object Negativity : NoWebMode("Negativity") {
-
     override fun onUpdate() {
         if (!mc.thePlayer.isInWeb) return
         mc.thePlayer.jumpMovementFactor = 0.4f

@@ -14,6 +14,10 @@ import net.minecraft.network.play.client.C07PacketPlayerDigging
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ */
 object Grim : NoWebMode("Grim") {
     override fun onUpdate() {
         if (mc.thePlayer == null) return

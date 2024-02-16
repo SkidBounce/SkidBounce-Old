@@ -7,6 +7,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object OldAAC : NoWebMode("OldAAC") {
     override fun onUpdate() {
         if (!mc.thePlayer.isInWeb) return

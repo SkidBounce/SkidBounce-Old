@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.oth
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
 
+/**
+ * @author liquidbounceplusreborn/LiquidbouncePlus-Reborn
+ */
 object Cardinal : NoWebMode("Cardinal") {
     override fun onUpdate() {
         if (!mc.thePlayer.isInWeb) return

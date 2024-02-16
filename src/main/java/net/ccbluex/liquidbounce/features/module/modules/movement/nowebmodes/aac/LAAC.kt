@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.utils.extensions.jump
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object LAAC : NoWebMode("LAAC") {
     override fun onUpdate() {
         if (!mc.thePlayer.isInWeb) {

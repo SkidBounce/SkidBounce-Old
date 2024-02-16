@@ -7,8 +7,10 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.oth
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Test : NoWebMode("Test") {
-
     override fun onUpdate() {
         if (!mc.thePlayer.isInWeb) return
         if (mc.thePlayer.ticksExisted % 7 == 0) {

@@ -7,6 +7,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.oth
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object MineBlaze : NoWebMode("MineBlaze") {
     override fun onUpdate() {
         val thePlayer = mc.thePlayer ?: return

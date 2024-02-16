@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
 
+/**
+ * @author liquidbounceplusreborn/LiquidbouncePlus-Reborn
+ */
 object AACv4 : NoWebMode("AACv4") {
     override fun onUpdate() {
         if (!mc.thePlayer.isInWeb) return

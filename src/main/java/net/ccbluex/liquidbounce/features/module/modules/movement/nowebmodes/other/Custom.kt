@@ -9,6 +9,10 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.NoWeb
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
 
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ */
 object Custom : NoWebMode("Custom") {
     override fun onUpdate() {
         if (!mc.thePlayer.isInWeb) return

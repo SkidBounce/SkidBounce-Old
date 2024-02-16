@@ -9,7 +9,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.NoWeb.horizonSp
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
 
-
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Horizon : NoWebMode("Horizon") {
     override fun onUpdate() {
         if (!mc.thePlayer.isInWeb || !mc.thePlayer.onGround) return
