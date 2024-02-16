@@ -49,6 +49,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         AAC50142,
 
         Matrix62x,
+        Matrix663,
         OldMatrix,
 
         Spartan,
