@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils
 import net.minecraft.client.settings.GameSettings
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 
+/**
+ * @author liquidbounceplusreborn/LiquidbouncePlus-Reborn
+ */
 object AACHop3310 : SpeedMode("AACHop3.3.10") {
     override fun onMove(event: MoveEvent) {
         val player = mc.thePlayer

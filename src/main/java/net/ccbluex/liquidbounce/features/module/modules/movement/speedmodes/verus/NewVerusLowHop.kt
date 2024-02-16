@@ -11,8 +11,10 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.minecraft.potion.Potion
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object NewVerusLowHop : SpeedMode("NewVerusLowHop") {
-
     private var speed = 0.0f
     private var airTicks = 0
 

@@ -12,8 +12,10 @@ import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Mineplex : SpeedMode("Mineplex") {
-
     private var speed1 = 0f
     private var speed2 = 0f
     private var wfg = false

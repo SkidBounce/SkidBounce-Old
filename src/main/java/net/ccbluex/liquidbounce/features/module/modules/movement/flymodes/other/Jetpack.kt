@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.minecraft.util.EnumParticleTypes
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Jetpack : FlyMode("Jetpack") {
 	override fun onUpdate() {
 		if (!mc.gameSettings.keyBindJump.isKeyDown)

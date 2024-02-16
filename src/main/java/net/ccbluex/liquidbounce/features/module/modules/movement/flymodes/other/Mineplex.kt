@@ -23,6 +23,9 @@ import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.Vec3
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Mineplex : FlyMode("Mineplex") {
 	private val timer = MSTimer()
 

@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Spartan2 : FlyMode("Spartan2") {
 	override fun onUpdate() {
 		strafe(0.264f)

@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.LongJumpMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACv2 : LongJumpMode("AACv2") {
     override fun onUpdate() {
         mc.thePlayer.jumpMovementFactor = 0.09f

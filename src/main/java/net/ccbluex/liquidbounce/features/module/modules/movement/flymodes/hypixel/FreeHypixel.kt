@@ -13,6 +13,9 @@ import net.ccbluex.liquidbounce.utils.timing.TickTimer
 import java.math.BigDecimal
 import java.math.RoundingMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object FreeHypixel : FlyMode("FreeHypixel") {
 	private val timer = TickTimer()
 	private var startYaw = 0f

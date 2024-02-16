@@ -17,6 +17,9 @@ import net.minecraft.util.BlockPos
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACPort : SpeedMode("AACPort") {
     override fun onUpdate() {
         val thePlayer = mc.thePlayer ?: return

@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jump
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AAC5BHop : SpeedMode("AAC5BHop") {
     private var legitJump = false
     override fun onTick() {

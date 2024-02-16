@@ -7,6 +7,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.vul
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.GlideMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object OldVulcan : GlideMode("OldVulcan") {
     override fun onUpdate() {
         if (!mc.thePlayer.onGround && mc.thePlayer.fallDistance > 0) {

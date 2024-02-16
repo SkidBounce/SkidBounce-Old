@@ -16,6 +16,9 @@ import net.minecraft.block.BlockCarpet
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACHop3313 : SpeedMode("AACHop3.3.13") {
     override fun onUpdate() {
         val thePlayer = mc.thePlayer ?: return

@@ -18,6 +18,9 @@ import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object MineSecure : FlyMode("MineSecure") {
 	private val timer = MSTimer()
 

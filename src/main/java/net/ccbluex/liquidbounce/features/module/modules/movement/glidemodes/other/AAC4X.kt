@@ -7,6 +7,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.oth
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.GlideMode
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object AAC4X : GlideMode("AAC4.X") {
     private var delay = 0
 

@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.jump
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACYPort2 : SpeedMode("AACYPort2") {
     override fun onMotion(event: MotionEvent) {
         if (isMoving) {

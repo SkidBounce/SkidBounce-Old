@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.timing.TickTimer
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object CubeCraft : FlyMode("CubeCraft") {
 	private val tickTimer = TickTimer()
 

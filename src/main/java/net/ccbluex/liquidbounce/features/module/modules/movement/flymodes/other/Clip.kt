@@ -24,6 +24,9 @@ import net.minecraft.network.play.client.C03PacketPlayer
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Clip : FlyMode("Clip") {
     private val timer = MSTimer()
     private var lastJump = false

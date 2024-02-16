@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.jump
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACHop350 : SpeedMode("AACHop3.5.0") {
 
     override fun onMotion(event: MotionEvent) {

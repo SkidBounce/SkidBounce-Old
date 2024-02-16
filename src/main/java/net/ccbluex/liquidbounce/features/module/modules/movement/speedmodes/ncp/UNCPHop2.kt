@@ -12,6 +12,10 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ */
 object UNCPHop2 : SpeedMode("UNCPHop2") {
     override fun onMotion(event: MotionEvent) {
         if (!isMoving) {

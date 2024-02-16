@@ -14,6 +14,10 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.minecraft.potion.Potion.moveSpeed
 
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ */
 object Wave : FlyMode("Wave") {
 	override fun onUpdate() {
 		mc.timer.timerSpeed = if (isMoving) waveTimer else 1f

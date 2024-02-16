@@ -15,6 +15,9 @@ import net.ccbluex.liquidbounce.utils.extensions.jump
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACLowHop3 : SpeedMode("AACLowHop3") {
     private var firstJump = false
     private var waitForGround = false

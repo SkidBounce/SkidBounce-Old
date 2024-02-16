@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C00PacketKeepAlive
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object KeepAlive : FlyMode("KeepAlive") {
 	override fun onUpdate() {
 		sendPacket(C00PacketKeepAlive())

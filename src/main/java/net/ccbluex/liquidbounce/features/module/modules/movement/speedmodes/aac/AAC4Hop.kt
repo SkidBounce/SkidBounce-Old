@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 
+/**
+ * @author liquidbounceplusreborn/LiquidbouncePlus-Reborn
+ */
 object AAC4Hop : SpeedMode("AAC4Hop") {
     override fun onDisable() {
         mc.timer.timerSpeed = 1f

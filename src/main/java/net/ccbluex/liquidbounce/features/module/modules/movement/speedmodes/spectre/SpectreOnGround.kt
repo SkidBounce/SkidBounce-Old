@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.extensions.toRadians
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object SpectreOnGround : SpeedMode("SpectreOnGround") {
     private var speedUp = 0
     override fun onMove(event: MoveEvent) {

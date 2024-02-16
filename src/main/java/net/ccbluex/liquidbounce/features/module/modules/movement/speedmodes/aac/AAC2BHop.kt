@@ -10,8 +10,10 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.jump
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AAC2BHop : SpeedMode("AAC2BHop") {
-
     override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer
 

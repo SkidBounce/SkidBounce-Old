@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jump
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object HypixelHop : SpeedMode("HypixelHop") {
     override fun onStrafe() {
         if (mc.thePlayer.isInWater || mc.thePlayer.isInLava)

@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils
 import org.lwjgl.input.Keyboard
 import java.awt.Color
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AAC3312 : FlyMode("AAC3.3.12") {
 	override fun onUpdate() {
 		if (mc.thePlayer.posY < -70)

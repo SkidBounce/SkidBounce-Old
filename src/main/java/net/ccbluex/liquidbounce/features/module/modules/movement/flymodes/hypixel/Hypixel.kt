@@ -19,6 +19,9 @@ import net.minecraft.init.Blocks.air
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.util.AxisAlignedBB
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Hypixel : FlyMode("Hypixel") {
 	private val tickTimer = TickTimer()
 	private val msTimer = MSTimer()

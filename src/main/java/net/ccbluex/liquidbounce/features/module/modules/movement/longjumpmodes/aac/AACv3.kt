@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.LongJumpMode
 import net.minecraft.util.EnumFacing
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACv3 : LongJumpMode("AACv3") {
     override fun onUpdate() {
         if (mc.thePlayer.fallDistance > 0.5f && !LongJump.teleported) {

@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.LongJumpMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Mineplex2 : LongJumpMode("Mineplex2") {
     override fun onUpdate() {
         run {

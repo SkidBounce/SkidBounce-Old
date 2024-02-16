@@ -18,6 +18,9 @@ import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.Vec3
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object MineplexGround : SpeedMode("MineplexGround") {
     private var spoofSlot = false
     private var speed = 0f

@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextDouble
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object SpartanYPort : SpeedMode("SpartanYPort") {
     private var airMoves = 0
     override fun onMotion(event: MotionEvent) {

@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.jump
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object MineBlazeHop : SpeedMode("MineBlazeHop") {
     override fun onUpdate() {
         if (mc.thePlayer == null) {

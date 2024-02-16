@@ -15,6 +15,9 @@ import net.ccbluex.liquidbounce.utils.extensions.component2
 import net.ccbluex.liquidbounce.utils.extensions.component3
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object NCP : GlideMode("NCP") {
 	override fun onEnable() {
 		if (!mc.thePlayer.onGround) return

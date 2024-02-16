@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.aacMotion2
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import org.lwjgl.input.Keyboard
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AAC3313 : FlyMode("AAC3.3.13") {
 	private var wasDead = false
 

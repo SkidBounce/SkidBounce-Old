@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.timing.TickTimer
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Frame : SpeedMode("Frame") {
     private var motionTicks = 0
     private var move = false

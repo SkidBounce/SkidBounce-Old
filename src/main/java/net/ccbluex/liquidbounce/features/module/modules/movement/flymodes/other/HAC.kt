@@ -7,6 +7,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object HAC : FlyMode("HAC") {
 	override fun onUpdate() {
 		mc.thePlayer.motionX *= 0.8

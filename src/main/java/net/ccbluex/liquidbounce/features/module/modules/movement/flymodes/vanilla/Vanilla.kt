@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vanillaSpee
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Vanilla : FlyMode("Vanilla") {
 	override fun onMove(event: MoveEvent) {
         val thePlayer = mc.thePlayer ?: return

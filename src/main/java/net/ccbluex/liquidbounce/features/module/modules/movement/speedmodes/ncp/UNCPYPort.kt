@@ -15,6 +15,10 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ */
 object UNCPYPort : SpeedMode("UNCPYPort") {
     override fun onMotion(event: MotionEvent) {
         mc.thePlayer.jumpMovementFactor = 0.0254f

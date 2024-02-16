@@ -15,6 +15,9 @@ import net.ccbluex.liquidbounce.utils.extensions.component3
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object OldNCP : FlyMode("OldNCP") {
 	override fun onEnable() {
 		if (!mc.thePlayer.onGround) return

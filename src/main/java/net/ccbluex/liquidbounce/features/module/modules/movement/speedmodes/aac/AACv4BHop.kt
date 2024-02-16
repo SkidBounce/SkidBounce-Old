@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.extensions.jump
 
+/**
+ * @author liquidbounceplusreborn/LiquidbouncePlus-Reborn
+ */
 object AACv4BHop : SpeedMode("AACv4BHop") {
     override fun onMotion(event: MotionEvent) {
         if (mc.thePlayer.isInWater) return

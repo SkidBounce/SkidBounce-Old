@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object CustomSpeed : SpeedMode("Custom") {
     override fun onMotion(event: MotionEvent) {
         if (isMoving) {

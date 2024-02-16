@@ -17,6 +17,9 @@ import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Redesky : FlyMode("Redesky") {
 	override fun onEnable() {
 		if (mc.thePlayer.onGround)

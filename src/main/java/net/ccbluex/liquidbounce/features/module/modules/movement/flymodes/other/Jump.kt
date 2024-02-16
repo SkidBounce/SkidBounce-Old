@@ -13,8 +13,10 @@ import net.minecraft.block.BlockLadder
 import net.minecraft.block.material.Material
 import net.minecraft.util.AxisAlignedBB
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Jump : FlyMode("Jump") {
-
     override fun onUpdate() {
         if (mc.thePlayer == null)
             return

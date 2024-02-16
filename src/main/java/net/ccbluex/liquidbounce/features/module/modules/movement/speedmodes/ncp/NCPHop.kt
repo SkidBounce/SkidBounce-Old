@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jump
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object NCPHop : SpeedMode("NCPHop") {
     override fun onEnable() {
         mc.timer.timerSpeed = 1.0865f

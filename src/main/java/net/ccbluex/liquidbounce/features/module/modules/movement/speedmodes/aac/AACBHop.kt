@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.extensions.toRadians
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACBHop : SpeedMode("AACBHop") {
     override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer ?: return

@@ -13,6 +13,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.L
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object NCP : LongJumpMode("NCP") {
     override fun onUpdate() {
         speed *= if (canBoost) ncpBoost else 1f

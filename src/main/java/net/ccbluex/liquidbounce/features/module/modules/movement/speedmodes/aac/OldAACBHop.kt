@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object OldAACBHop : SpeedMode("OldAACBHop") {
     override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer ?: return

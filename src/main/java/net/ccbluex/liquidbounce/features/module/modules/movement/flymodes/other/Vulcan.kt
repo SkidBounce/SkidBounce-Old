@@ -22,6 +22,9 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Vulcan : FlyMode("Vulcan") {
 
     private var ticks = 0

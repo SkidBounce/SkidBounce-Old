@@ -15,6 +15,9 @@ import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object TeleportRewinside : FlyMode("TeleportRewinside") {
 	override fun onUpdate() {
 		val (startX, startY, startZ) = mc.thePlayer

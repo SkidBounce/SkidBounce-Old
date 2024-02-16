@@ -18,6 +18,9 @@ import kotlin.math.max
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object NCPBHop : SpeedMode("NCPBHop") {
     private var level = 1
     private var moveSpeed = 0.2873

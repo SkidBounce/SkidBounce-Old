@@ -28,6 +28,9 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object BoostHypixel : FlyMode("BoostHypixel") {
 	private var state = 1
 	private var moveSpeed = 0.0

@@ -25,6 +25,9 @@ import kotlin.math.floor
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object YPort : SpeedMode("YPort") {
     private var moveSpeed = 0.2873
     private var level = 1

@@ -13,6 +13,9 @@ import net.ccbluex.liquidbounce.utils.extensions.toRadians
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object NCPYPort : SpeedMode("NCPYPort") {
     private var jumps = 0
     override fun onMotion(event: MotionEvent) {

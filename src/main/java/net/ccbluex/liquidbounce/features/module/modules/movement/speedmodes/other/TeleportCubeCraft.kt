@@ -14,6 +14,9 @@ import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object TeleportCubeCraft : SpeedMode("TeleportCubeCraft") {
     private val timer = MSTimer()
     override fun onMove(event: MoveEvent) {

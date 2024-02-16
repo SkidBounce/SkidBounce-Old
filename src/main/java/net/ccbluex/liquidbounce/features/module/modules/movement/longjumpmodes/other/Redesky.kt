@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesk
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.LongJumpMode
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Redesky : LongJumpMode("Redesky") {
     override fun onDisable() {
         mc.timer.resetSpeed()

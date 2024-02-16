@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object OnGround : SpeedMode("OnGround") {
     override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer

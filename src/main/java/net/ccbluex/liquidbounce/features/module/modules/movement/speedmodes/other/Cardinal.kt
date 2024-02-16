@@ -23,6 +23,10 @@ import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.minecraft.init.Blocks.slime_block
 import net.minecraft.init.Blocks.water
 
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ */
 object Cardinal : SpeedMode("Cardinal") {
     override fun onMotion(event: MotionEvent) {
         if (!isMoving) {

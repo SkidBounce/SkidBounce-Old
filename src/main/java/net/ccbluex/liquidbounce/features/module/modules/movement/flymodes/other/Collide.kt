@@ -11,7 +11,9 @@ import net.minecraft.block.BlockLadder
 import net.minecraft.block.material.Material
 import net.minecraft.util.AxisAlignedBB
 
-
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Collide : FlyMode("Collide") {
     override fun onBB(event: BlockBBEvent) {
         if (!mc.gameSettings.keyBindJump.isKeyDown && mc.gameSettings.keyBindSneak.isKeyDown) return

@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.extensions.jump
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object SlowHop : SpeedMode("SlowHop") {
     override fun onMotion(event: MotionEvent) {
         if (mc.thePlayer.isInWater) return

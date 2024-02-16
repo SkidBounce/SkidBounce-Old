@@ -7,6 +7,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.oth
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.GlideMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AAC3312 : GlideMode("AAC3.3.12") {
 	private var tick = 0
 

@@ -14,8 +14,11 @@ import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.minecraft.potion.Potion.moveSpeed
 
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ */
 object WaveLowHop : SpeedMode("WaveLowHop") {
-
     private var speed = 0.0f
     private var wasGround = false
 

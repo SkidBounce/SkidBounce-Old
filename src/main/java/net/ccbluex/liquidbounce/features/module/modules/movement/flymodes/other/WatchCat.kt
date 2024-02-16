@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextDouble
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object WatchCat : FlyMode("WatchCat") {
 	override fun onUpdate() {
 		strafe(0.15f)

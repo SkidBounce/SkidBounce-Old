@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACGround2 : SpeedMode("AACGround2") {
     override fun onUpdate() {
         if (!isMoving)

@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.event.JumpEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.LongJumpMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Mineplex : LongJumpMode("Mineplex") {
     override fun onUpdate() {
         mc.thePlayer.motionY += 0.01320999999999999

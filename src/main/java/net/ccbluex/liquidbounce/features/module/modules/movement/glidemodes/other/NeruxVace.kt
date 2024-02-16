@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.oth
 import net.ccbluex.liquidbounce.features.module.modules.movement.Glide.neruxVaceTicks
 import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.GlideMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object NeruxVace : GlideMode("NeruxVace") {
 	private var tick = 0
 	override fun onUpdate() {

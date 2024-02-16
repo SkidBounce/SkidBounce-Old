@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.vul
 import net.ccbluex.liquidbounce.event.MoveEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.GlideMode
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object VulcanTest : GlideMode("VulcanTest") {
     override fun onMove(event: MoveEvent) {
         if (mc.thePlayer.fallDistance > 2) {

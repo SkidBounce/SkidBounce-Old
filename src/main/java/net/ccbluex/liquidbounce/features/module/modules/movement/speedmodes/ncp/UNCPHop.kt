@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object UNCPHop : SpeedMode("UNCPHop") {
 
     private var keyDown = false
