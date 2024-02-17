@@ -55,6 +55,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Vulcan,
         Vulcan2,
 
+        Cardinal,
         Spartan,
         CubeCraft,
         Hypixel,
