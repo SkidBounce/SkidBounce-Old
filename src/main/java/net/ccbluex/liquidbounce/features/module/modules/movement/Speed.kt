@@ -72,6 +72,7 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         // Verus
         VerusHop,
         VerusLowHop,
+        VerusLowHop2,
         NewVerusLowHop,
 
         // Server specific
