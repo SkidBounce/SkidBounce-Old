@@ -6,11 +6,12 @@
 package net.ccbluex.liquidbounce.utils
 
 import com.google.gson.JsonObject
+import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
 import net.minecraft.client.settings.GameSettings
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.login.client.C01PacketEncryptionResponse
 import net.minecraft.network.login.server.S01PacketEncryptionRequest
-import net.minecraft.util.IChatComponent
+import net.minecraft.util.*
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 import org.apache.logging.log4j.LogManager
@@ -60,5 +61,9 @@ object ClientUtils : MinecraftInstance() {
         val jsonObject = JsonObject()
         jsonObject.addProperty("text", message)
         mc.thePlayer.addChatMessage(IChatComponent.Serializer.jsonToComponent(jsonObject.toString()))
+    }
+
+    fun resource(directory: String): ResourceLocation {
+        return ResourceLocation("${CLIENT_NAME.lowercase()}/$directory")
     }
 }
