@@ -12,7 +12,7 @@ A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, 
 as of latest commit
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
-|      NoSlow      | :lime_circle: |
+|      NoSlow      | :yellow_circle: |
 |      NoWeb       | :green_circle:  |
 |      Speed       | :orange_circle: |
 |     LongJump     |  :red_circle:   |
