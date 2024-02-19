@@ -12,11 +12,12 @@ skidding:
 
 As Of Latest Commit:\
 :green_circle: 100%\
-:yellow_circle: 66% - 99%\
-:orange_circle: 33% - 65%\
-:red_circle: 0% - 32%
+:yellow_circle: 50% - 99%\
+:orange_circle: 1% - 49%\
+:red_circle: 0%
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
+|      Total       | :orange_circle: |
 |      NoSlow      | :yellow_circle: |
 |      NoWeb       | :green_circle:  |
 |      Speed       | :orange_circle: |
