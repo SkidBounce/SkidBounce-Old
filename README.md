@@ -12,20 +12,19 @@ skidding:
 
 As Of Latest Commit:\
 :green_circle: 100%\
-:yellow_circle: 75%\
-:orange_circle: 50%\
-:red_circle: 25%
-:black_circle: 0%
+:yellow_circle: 66%
+:orange_circle: 33%\
+:red_circle: 0%
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
 |      NoSlow      | :yellow_circle: |
 |      NoWeb       | :green_circle:  |
 |      Speed       | :orange_circle: |
-|     LongJump     |  :black_circle:   |
+|     LongJump     |  :red_circle:   |
 |       Fly        | :orange_circle: |
 |      NoFall      | :yellow_circle: |
-|       Hud        |  :black_circle:   |
-|    Animations    |  :black_circle:   |
+|       Hud        |  :red_circle:   |
+|    Animations    |  :red_circle:   |
 |      Jesus       |  :red_circle:   |
 |     Disabler     | :orange_circle: |
 |      Phase       |  :red_circle:   |
