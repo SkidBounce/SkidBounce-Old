@@ -21,6 +21,7 @@ object Matrix663 : NoFallMode("Matrix6.6.3") {
 
     override fun onEnable() {
         packet = false
+        timer = false
     }
 
     override fun onUpdate() {

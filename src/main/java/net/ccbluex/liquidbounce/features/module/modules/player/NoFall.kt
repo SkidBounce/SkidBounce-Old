@@ -9,6 +9,7 @@ import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.*
+import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.hypixel.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.matrix.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.other.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vanilla.*
@@ -55,11 +56,14 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Vulcan,
         Vulcan2,
 
+        Hypixel,
+        Hypixel2,
+        Hypixel3,
+        HypixelFlag,
+
         Cardinal,
         Spartan,
         CubeCraft,
-        Hypixel,
-        HypixelFlag,
         HypSpoof,
         Medusa,
         Medusa2,

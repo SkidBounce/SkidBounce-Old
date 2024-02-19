@@ -23,6 +23,7 @@ object Matrix62x : NoFallMode("Matrix6.2.X") {
     override fun onEnable() {
         spoof = false
         falling = false
+        fallTicks = 0
         lastY = 0.0
     }
 

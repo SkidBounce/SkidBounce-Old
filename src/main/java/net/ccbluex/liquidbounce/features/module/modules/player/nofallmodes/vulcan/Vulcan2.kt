@@ -6,7 +6,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vulcan
 
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.modules.player.NoFall
+import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.vulcan2Motion
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
 import net.minecraft.network.play.client.C03PacketPlayer
@@ -29,7 +29,7 @@ object Vulcan2 : NoFallMode("Vulcan2") {
 
     override fun onUpdate() {
         if (mc.thePlayer.motionY <= 0.0 && mc.thePlayer.fallDistance <= 1f && lag)
-            mc.thePlayer.motionY = -NoFall.vulcan2Motion.toDouble()
+            mc.thePlayer.motionY = -vulcan2Motion.toDouble()
     }
 
     override fun onPacket(event: PacketEvent) {
