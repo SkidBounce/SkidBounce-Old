@@ -1,14 +1,15 @@
 # SkidBounce
 A free hacked-client for Minecraft 1.8.9 Forge.
 
-# Clients to skid
-[LiquidBounce](https://github.com/CCBlueX/LiquidBounce/tree/legacy)\
-[FDPClient](https://github.com/SkidderMC/FDPClient)\
-[NightX](https://github.com/Aspw-w/NightX-Client)\
-[CrossSine](https://github.com/shxp3/CrossSine)\
-[LiquidBouncePlus-Reborn](https://github.com/liquidbounceplusreborn/LiquidbouncePlus-Reborn)
-
 ## Completion
+
+skidding:
+* [LiquidBounce](https://github.com/CCBlueX/LiquidBounce/tree/legacy)\
+* [FDPClient](https://github.com/SkidderMC/FDPClient)\
+* [NightX](https://github.com/Aspw-w/NightX-Client)\
+* [CrossSine](https://github.com/shxp3/CrossSine)\
+* [LiquidBouncePlus-Reborn](https://github.com/liquidbounceplusreborn/LiquidbouncePlus-Reborn)
+
 as of latest commit
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
