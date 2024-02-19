@@ -14,29 +14,29 @@ as of latest commit
 |:----------------:|:---------------:|
 |      NoSlow      | :yellow_circle: |
 |      NoWeb       | :green_circle:  |
-|      Speed       | :yellow_circle: |
-|     LongJump     |  :red_circle:   | 
-|       Fly        | :yellow_circle: | 
-|      NoFall      | :yellow_circle: | 
-|       Hud        |  :red_circle:   | 
-|    Animations    |  :red_circle:   | 
-|      Jesus       |  :red_circle:   | 
-|     Disabler     | :yellow_circle: |
-|      Phase       |  :red_circle:   | 
-|     Velocity     |  :red_circle:   | 
-|     ClickGUI     |  :red_circle:   | 
-|    AutoBlock     |  :red_circle:   | 
-|     Modules      |  :red_circle:   | 
-|     Scaffold     |  :red_circle:   | 
-|      Tower       |  :red_circle:   | 
-|       Step       |  :red_circle:   | 
-|    Criticals     |  :red_circle:   | 
-|     AntiVoid     |  :red_circle:   | 
-|    FastClimb     |  :red_circle:   | 
-| InventoryManager |  :red_circle:   | 
-|      Spider      | :green_circle:  | 
-|     FastUse      |  :red_circle:   | 
-| Everything Else  |  :red_circle:   | 
+|      Speed       | :orange_circle: |
+|     LongJump     |  :red_circle:   |
+|       Fly        | :orange_circle: |
+|      NoFall      | :yellow_circle: |
+|       Hud        |  :red_circle:   |
+|    Animations    |  :red_circle:   |
+|      Jesus       |  :red_circle:   |
+|     Disabler     | :orange_circle: |
+|      Phase       |  :red_circle:   |
+|     Velocity     |  :red_circle:   |
+|     ClickGUI     |  :red_circle:   |
+|    AutoBlock     |  :red_circle:   |
+|     Modules      |  :red_circle:   |
+|     Scaffold     |  :red_circle:   |
+|      Tower       |  :red_circle:   |
+|       Step       |  :red_circle:   |
+|    Criticals     |  :red_circle:   |
+|     AntiVoid     |  :red_circle:   |
+|    FastClimb     |  :red_circle:   |
+| InventoryManager |  :red_circle:   |
+|      Spider      | :green_circle:  |
+|     FastUse      |  :red_circle:   |
+| Everything Else  |  :red_circle:   |
 ## Issues
 If you notice any bugs or missing features, you can let us know by opening an issue [here](https://github.com/ManInMyVan/SkidBounce/issues).
 
