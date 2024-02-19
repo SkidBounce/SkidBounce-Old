@@ -11,6 +11,10 @@ skidding:
 * [LiquidBouncePlus-Reborn](https://github.com/liquidbounceplusreborn/LiquidbouncePlus-Reborn)
 
 As Of Latest Commit:
+:green_circle: = 100%
+:yellow_circle: = 60%
+:orange_circle: = 30%
+:red_circle: = 0%
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
 |      NoSlow      | :yellow_circle: |
@@ -45,7 +49,7 @@ If you notice any bugs or missing features, you can let us know by opening an is
 ## License
 This project is subject to the [GNU General Public License v3.0](LICENSE). This does only apply for source code located directly in this clean repository. During the development and compilation process, additional source code may be used to which we have obtained no rights. Such code is not covered by the GPL license.
 
-For those who are unfamiliar with the license, here is a summary of its main points. This is by no means legal advice nor legally binding.
+For those who are unfamiliar with the license, here is a summary of its main points. **This is by no means legal advice nor legally binding**.
 
 You are allowed to
 - use
@@ -64,8 +68,8 @@ LiquidBounce is using Gradle, so make sure that it is installed properly. Instru
 1. Clone the repository using `git clone https://github.com/ManInMyVan/SkidBounce/`. 
 2. CD into the local repository folder.
 3. Depending on which IDE you are using execute either of the following commands:
-    - For IntelliJ: `gradlew --debug setupDevWorkspace idea genIntellijRuns build`
-    - For Eclipse: `gradlew --debug setupDevWorkspace eclipse build`
+    - For IntelliJ: `gradlew setupDevWorkspace idea genIntellijRuns build`
+    - For Eclipse: `gradlew setupDevWorkspace eclipse build`
 4. Open the folder as a Gradle project in your IDE.
 5. Select either the Forge or Vanilla run configuration.
 
