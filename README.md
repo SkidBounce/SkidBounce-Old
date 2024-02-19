@@ -29,7 +29,7 @@ As Of Latest Commit:\
 |      Jesus       |  :red_circle:   |
 |     Disabler     | :orange_circle: |
 |      Phase       |  :red_circle:   |
-|     Velocity     |  :red_circle:   |
+|     Velocity     | :orange_circle: |
 |     ClickGUI     |  :red_circle:   |
 |    AutoBlock     |  :red_circle:   |
 |     Modules      |  :red_circle:   |
