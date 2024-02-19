@@ -250,3 +250,11 @@ open class ListValue(
 
     override fun fromJsonF(element: JsonElement) = if (element.isJsonPrimitive) element.asString else null
 }
+
+/**
+ * Swing value represents an arm swing mode
+ */
+open class SwingValue(
+    name: String = "Swing",
+    isSupported: (() -> Boolean)? = null
+) : ListValue(name, arrayOf("Normal", "Packet", "Visual", "Off"), "Normal", false, isSupported)

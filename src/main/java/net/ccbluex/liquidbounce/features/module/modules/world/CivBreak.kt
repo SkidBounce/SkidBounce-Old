@@ -15,12 +15,10 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.limitAngleChange
 import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getCenterDistance
-import net.ccbluex.liquidbounce.utils.extensions.rotation
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.init.Blocks.air
 import net.minecraft.init.Blocks.bedrock
 import net.minecraft.network.play.client.C07PacketPlayerDigging
@@ -33,7 +31,7 @@ import java.awt.Color
 object CivBreak : Module("CivBreak", ModuleCategory.WORLD) {
 
     private val range by FloatValue("Range", 5F, 1F..6F)
-    private val visualSwing by BoolValue("VisualSwing", true, subjective = true)
+    private val swing by SwingValue()
 
     private val rotations by BoolValue("Rotations", true)
     private val strafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off") { rotations }
@@ -115,11 +113,7 @@ object CivBreak : Module("CivBreak", ModuleCategory.WORLD) {
         blockPos ?: return
         enumFacing ?: return
 
-        if (visualSwing) {
-            mc.thePlayer.swingItem()
-        } else {
-            sendPacket(C0APacketAnimation())
-        }
+        mc.thePlayer.swing(swing)
 
         // Break
         if (!grim) sendPacket(C07PacketPlayerDigging(START_DESTROY_BLOCK, blockPos, enumFacing))

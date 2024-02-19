@@ -29,10 +29,7 @@ import net.ccbluex.liquidbounce.utils.realX
 import net.ccbluex.liquidbounce.utils.realY
 import net.ccbluex.liquidbounce.utils.realZ
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.block.BlockChest
 import net.minecraft.block.BlockEnderChest
 import net.minecraft.entity.player.EntityPlayer
@@ -82,7 +79,7 @@ object ChestAura : Module("ChestAura", ModuleCategory.WORLD) {
         }
     }
 
-    private val visualSwing by BoolValue("VisualSwing", true, subjective = true)
+    private val swing by SwingValue()
 
     private val ignoreLooted by BoolValue("IgnoreLootedChests", true)
     private val detectRefill by BoolValue("DetectChestRefill", true)
@@ -221,8 +218,7 @@ object ChestAura : Module("ChestAura", ModuleCategory.WORLD) {
         performRayTrace(entity.pos, vec)?.run {
             TickScheduler += {
                 if (thePlayer.onPlayerRightClick(blockPos, sideHit, hitVec)) {
-                    if (visualSwing) thePlayer.swingItem()
-                    else sendPacket(C0APacketAnimation())
+                    mc.thePlayer.swing(swing)
 
                     timer.reset()
                 }

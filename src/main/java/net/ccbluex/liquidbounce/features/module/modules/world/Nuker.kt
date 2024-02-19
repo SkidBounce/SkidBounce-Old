@@ -17,13 +17,10 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getCenterDistance
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.searchBlocks
-import net.ccbluex.liquidbounce.utils.extensions.eyes
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
 import net.ccbluex.liquidbounce.utils.timing.TickTimer
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.block.Block
 import net.minecraft.block.BlockLiquid
 import net.minecraft.init.Blocks.air
@@ -47,6 +44,8 @@ object Nuker : Module("Nuker", ModuleCategory.WORLD, gameDetecting = false) {
     private val radius by FloatValue("Radius", 5.2F, 1F..6F)
     private val throughWalls by BoolValue("ThroughWalls", false)
     private val priority by ListValue("Priority", arrayOf("Distance", "Hardness"), "Distance")
+
+    private val swing by SwingValue()
 
     private val rotations by BoolValue("Rotations", true)
         private val strafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off") { rotations }
@@ -163,7 +162,7 @@ object Nuker : Module("Nuker", ModuleCategory.WORLD, gameDetecting = false) {
                     // End block break if able to break instant
                     if (block.getPlayerRelativeBlockHardness(thePlayer, mc.theWorld, blockPos) >= 1F) {
                         currentDamage = 0F
-                        thePlayer.swingItem()
+                        mc.thePlayer.swing(swing)
                         mc.playerController.onPlayerDestroyBlock(blockPos, EnumFacing.DOWN)
                         blockHitDelay = hitDelay
                         validBlocks -= blockPos
@@ -173,7 +172,7 @@ object Nuker : Module("Nuker", ModuleCategory.WORLD, gameDetecting = false) {
                 }
 
                 // Break block
-                thePlayer.swingItem()
+                mc.thePlayer.swing(swing)
                 currentDamage += block.getPlayerRelativeBlockHardness(thePlayer, mc.theWorld, blockPos)
                 mc.theWorld.sendBlockBreakProgress(thePlayer.entityId, blockPos, (currentDamage * 10F).toInt() - 1)
 
@@ -218,7 +217,7 @@ object Nuker : Module("Nuker", ModuleCategory.WORLD, gameDetecting = false) {
                 .forEach { (pos, _) ->
                     // Instant break block
                     sendPacket(C07PacketPlayerDigging(START_DESTROY_BLOCK, pos, EnumFacing.DOWN))
-                    thePlayer.swingItem()
+                    mc.thePlayer.swing(swing)
                     sendPacket(C07PacketPlayerDigging(STOP_DESTROY_BLOCK, pos, EnumFacing.DOWN))
                     attackedBlocks += pos
                 }

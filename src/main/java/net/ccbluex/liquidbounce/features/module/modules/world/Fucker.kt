@@ -54,7 +54,7 @@ object Fucker : Module("Fucker", ModuleCategory.WORLD) {
     private val instant by BoolValue("Instant", false) { (action == "Destroy" || surroundings) && !hypixel }
 
     private val switch by IntegerValue("SwitchDelay", 250, 0..1000)
-    private val swing by BoolValue("Swing", true)
+    private val swing by SwingValue()
     private val noHit by BoolValue("NoHit", false)
 
     private val rotations by BoolValue("Rotations", true)
@@ -210,9 +210,7 @@ object Fucker : Module("Fucker", ModuleCategory.WORLD) {
                     // CivBreak style block breaking
                     sendPacket(C07PacketPlayerDigging(START_DESTROY_BLOCK, currentPos, raytrace.sideHit))
 
-                    if (swing) {
-                        player.swingItem()
-                    }
+                    mc.thePlayer.swing(swing)
 
                     sendPacket(C07PacketPlayerDigging(STOP_DESTROY_BLOCK, currentPos, raytrace.sideHit))
                     currentDamage = 0F
@@ -231,9 +229,7 @@ object Fucker : Module("Fucker", ModuleCategory.WORLD) {
                             currentPos
                         ) >= 1f
                     ) {
-                        if (swing) {
-                            player.swingItem()
-                        }
+                        mc.thePlayer.swing(swing)
 
                         controller.onPlayerDestroyBlock(currentPos, raytrace.sideHit)
 
@@ -244,9 +240,7 @@ object Fucker : Module("Fucker", ModuleCategory.WORLD) {
                     }
                 }
 
-                if (swing) {
-                    player.swingItem()
-                }
+                mc.thePlayer.swing(swing)
 
                 currentDamage += block.getPlayerRelativeBlockHardness(player, world, currentPos)
                 world.sendBlockBreakProgress(player.entityId, currentPos, (currentDamage * 10F).toInt() - 1)
@@ -264,8 +258,7 @@ object Fucker : Module("Fucker", ModuleCategory.WORLD) {
             // Use block
             action == "Use" -> {
                 if (player.onPlayerRightClick(currentPos, raytrace.sideHit, raytrace.hitVec, player.heldItem)) {
-                    if (swing) player.swingItem()
-                    else sendPacket(C0APacketAnimation())
+                    mc.thePlayer.swing(swing)
 
                     blockHitDelay = 4
                     currentDamage = 0F

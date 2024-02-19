@@ -7,6 +7,7 @@ package net.ccbluex.liquidbounce.utils.extensions
 
 import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura.blockStatus
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow.isUNCPBlocking
+import net.ccbluex.liquidbounce.features.module.modules.render.Animations
 import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
 import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
 import net.ccbluex.liquidbounce.utils.MovementUtils.getJumpBoostModifier
@@ -24,7 +25,9 @@ import net.minecraft.entity.monster.*
 import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.*
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
+import net.minecraft.network.play.client.*
+import net.minecraft.potion.Potion
+import net.minecraft.potion.Potion.*
 import net.minecraft.stats.StatList.jumpStat
 import net.minecraft.util.*
 import net.minecraftforge.event.ForgeEventFactory
@@ -249,7 +252,7 @@ fun EntityPlayer.jump(
     boost: Boolean = true,
     ignoreJumpBoost: Boolean = false,
     ignoreGround: Boolean = false,
-    whenJumping: Boolean = false
+    whenJumping: Boolean = false,
 ) {
     if (!ignoreGround && !onGround) return
     if (!whenJumping && isJumping) return
@@ -263,5 +266,24 @@ fun EntityPlayer.jump(
     if (!boost) {
         motionX = x
         motionZ = z
+    }
+}
+
+fun EntityPlayer.swing(type: String) {
+    when (type) {
+        "Normal" -> swingItem()
+        "Packet" -> sendPacket(C0APacketAnimation())
+        "Visual" -> {
+            // TODO: npe when using access transformer?
+            val baseSwingSpeed = if (Animations.handleEvents()) 2 + (20 - Animations.swingSpeed) else 6
+            val swingSpeed = when {
+                isPotionActive(digSpeed) -> baseSwingSpeed - (1 + getActivePotionEffect(digSpeed).amplifier)
+                isPotionActive(digSlowdown) -> baseSwingSpeed + (1 + getActivePotionEffect(digSlowdown).amplifier) * 2
+                else -> baseSwingSpeed
+            }
+            if (swingProgressInt < 0 || !isSwingInProgress || swingProgressInt >= swingSpeed * 0.5)
+                swingProgressInt = -1
+                isSwingInProgress = true
+        }
     }
 }

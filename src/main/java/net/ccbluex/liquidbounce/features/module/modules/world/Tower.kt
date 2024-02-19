@@ -28,10 +28,7 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBorderedRect
 import net.ccbluex.liquidbounce.utils.timing.TickTimer
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.block.BlockBush
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager.resetColor
@@ -58,7 +55,7 @@ object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
         "Motion"
     )
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Pick", "Spoof", "Switch"), "Spoof")
-    private val swing by BoolValue("Swing", true, subjective = true)
+    private val swing by SwingValue()
     private val stopWhenBlockAbove by BoolValue("StopWhenBlockAbove", false)
 
     private val rotations by BoolValue("Rotations", true)
@@ -264,8 +261,7 @@ object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
 
         // Place block
         if (thePlayer.onPlayerRightClick(placeInfo!!.blockPos, placeInfo!!.enumFacing, placeInfo!!.vec3, itemStack)) {
-            if (swing) thePlayer.swingItem()
-            else sendPacket(C0APacketAnimation())
+            mc.thePlayer.swing(swing)
         }
 
         if (autoBlock == "Switch")

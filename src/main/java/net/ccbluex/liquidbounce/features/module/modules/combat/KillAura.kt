@@ -12,6 +12,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.features.module.modules.targets.*
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
+import net.ccbluex.liquidbounce.features.module.modules.world.ChestAura
 import net.ccbluex.liquidbounce.utils.CPSCounter
 import net.ccbluex.liquidbounce.utils.CooldownHelper.getAttackCooldownProgress
 import net.ccbluex.liquidbounce.utils.CooldownHelper.resetLastAttackedTicks
@@ -40,10 +41,7 @@ import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextInt
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.Entity
@@ -58,6 +56,7 @@ import net.minecraft.network.play.client.C02PacketUseEntity.Action.INTERACT
 import net.minecraft.network.play.client.C07PacketPlayerDigging
 import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.RELEASE_USE_ITEM
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
+import net.minecraft.network.play.client.C0APacketAnimation
 import net.minecraft.potion.Potion
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
@@ -133,7 +132,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     private val switchDelay by IntegerValue("SwitchDelay", 15, 1..1000) { targetMode == "Switch" }
 
     // Bypass
-    private val swing by BoolValue("Swing", true)
+    private val swing by SwingValue()
     private val keepSprint by BoolValue("KeepSprint", true)
 
     // AutoBlock
@@ -247,15 +246,14 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     }
 
     // Bypass
-    private val failSwing by BoolValue("FailSwing", true) { swing }
-    private val swingOnlyInAir by BoolValue("SwingOnlyInAir", true) { swing && failSwing }
+    private val failSwing by BoolValue("FailSwing", true) { swing != "Off" }
+    private val swingOnlyInAir by BoolValue("SwingOnlyInAir", true) { swing != "Off" && failSwing }
     private val noInventoryAttack by BoolValue("NoInvAttack", false, subjective = true)
     private val noInventoryDelay by IntegerValue("NoInvDelay", 200, 0..500, subjective = true)
     { noInventoryAttack }
     private val noConsumeAttack by ListValue("NoConsumeAttack",
         arrayOf("Off", "NoHits", "NoRotation"),
         "Off",
-        subjective = true
     )
 
     // Visuals
@@ -285,6 +283,9 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     var renderBlocking = false
     var blockStatus = false
     private var blockStopInDead = false
+
+    // Swing
+    private var cancelNextSwing = false
 
     /**
      * Disable kill aura module
@@ -428,6 +429,17 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     }
 
     /**
+     * Packet event
+     */
+    @EventTarget
+    fun onPacket(event: PacketEvent) {
+        if (event.packet is C0APacketAnimation && cancelNextSwing) {
+            cancelNextSwing = false
+            event.cancelEvent()
+        }
+    }
+
+    /**
      * Attack enemy
      */
     private fun runAttack(clicks: Int) {
@@ -457,7 +469,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
         // Check if enemy is not hittable
         if (!hittable) {
-            if (swing && failSwing) {
+            if (swing != "Off" && failSwing) {
                 val rotation = currentRotation ?: thePlayer.rotation
 
                 runWithModifiedRaycastResult(rotation, range.toDouble(), throughWallsRange.toDouble()) {
@@ -474,8 +486,12 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
                                 attackEntity(entity)
                             }
                         } else {
+                            if (swing == "Visual")
+                                cancelNextSwing = true
                             // Imitate game click
                             mc.clickMouse()
+                            if (swing == "Packet")
+                                mc.thePlayer.isSwingInProgress = false
                         }
                         attackTickTimes += it to thePlayer.ticksExisted
                     }
@@ -669,7 +685,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         callEvent(AttackEvent(entity))
 
         // Attack target
-        if (swing) thePlayer.swingItem()
+        mc.thePlayer.swing(swing)
 
         sendPacket(C02PacketUseEntity(entity, ATTACK))
 

@@ -40,10 +40,7 @@ import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.utils.timing.TickDelayTimer
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.block.BlockBush
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager.resetColor
@@ -109,7 +106,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
 
     // Basic stuff
     val sprint by BoolValue("Sprint", false)
-    private val swing by BoolValue("Swing", true, subjective = true)
+    private val swing by SwingValue()
     private val down by BoolValue("Down", true) { mode !in arrayOf("GodBridge", "Telly") }
 
     private val ticksUntilRotation: IntegerValue = object : IntegerValue("TicksUntilRotation", 3, 1..5) {
@@ -1210,8 +1207,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
                 }
             }
 
-            if (swing) thePlayer.swingItem()
-            else sendPacket(C0APacketAnimation())
+            mc.thePlayer.swing(swing)
 
             if (isManualJumpOptionActive)
                 blocksPlacedUntilJump++
