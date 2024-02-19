@@ -11,9 +11,9 @@ skidding:
 * [LiquidBouncePlus-Reborn](https://github.com/liquidbounceplusreborn/LiquidbouncePlus-Reborn)
 
 As Of Latest Commit:\
-:green_circle: 100%\
-:yellow_circle: 66%
-:orange_circle: 33%\
+:green_circle: 100%
+:yellow_circle: 66%\
+:orange_circle: 33%
 :red_circle: 0%
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
