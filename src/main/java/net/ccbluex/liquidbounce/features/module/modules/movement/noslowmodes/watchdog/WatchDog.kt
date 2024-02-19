@@ -16,6 +16,9 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing.DOWN
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object WatchDog : NoSlowMode("WatchDog") {
     val timer = MSTimer()
     override fun onMotion(event: MotionEvent) {

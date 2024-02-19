@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.Cr
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.minecraft.entity.Entity
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Motion : CriticalsMode("Motion") {
     override fun onAttack(entity: Entity) {
         mc.thePlayer.jump(motionY, boost = motionJump, ignoreGround = true)

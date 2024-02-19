@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object OldIntave : NoSlowMode("OldIntave") {
     override fun onMotion(event: MotionEvent) {
         when (event.eventState) {

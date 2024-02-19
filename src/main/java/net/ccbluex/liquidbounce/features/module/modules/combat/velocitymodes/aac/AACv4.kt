@@ -8,6 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.aa
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.aacv4MotionReducer
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACv4 : VelocityMode("AACv4") {
     override fun onUpdate() {
         if (mc.thePlayer.hurtTime > 0 && !mc.thePlayer.onGround && !mc.thePlayer.isInWater && !mc.thePlayer.isInLava && !mc.thePlayer.isInWeb) {

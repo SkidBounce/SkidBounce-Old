@@ -12,6 +12,9 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.util.BlockPos.ORIGIN
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object UNCP2 : NoSlowMode("UNCP2") {
     override fun onMotion(event: MotionEvent) {
         if (event.eventState == POST)

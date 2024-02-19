@@ -14,6 +14,9 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.util.BlockPos.ORIGIN
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object UNCP : NoSlowMode("UNCP") {
     override fun onMotion(event: MotionEvent) {
         if (event.eventState == PRE && shouldSwap) {

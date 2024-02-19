@@ -10,6 +10,9 @@ import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoSlowMode
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object SwitchItem : NoSlowMode("SwitchItem") {
     override fun onMotion(event: MotionEvent) {
         if (event.eventState == PRE) {

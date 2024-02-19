@@ -13,6 +13,9 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.Vel
 import net.minecraft.block.BlockAir
 import net.minecraft.util.AxisAlignedBB
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object GhostBlock : VelocityMode("GhostBlock") {
     private var hasVelocity = false
     override fun onEnable() {

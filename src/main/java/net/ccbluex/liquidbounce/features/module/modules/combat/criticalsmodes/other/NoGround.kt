@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object NoGround : CriticalsMode("NoGround") {
     override fun onPacket(event: PacketEvent) {
         if (event.packet is C03PacketPlayer)

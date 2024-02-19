@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.minecraft.network.play.client.C0FPacketConfirmTransaction
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Vulcan : VelocityMode("Vulcan") {
     override fun onPacket(event: PacketEvent) {
         if (event.packet is C0FPacketConfirmTransaction && event.packet.uid <= -30769 && event.packet.uid >= -31767)

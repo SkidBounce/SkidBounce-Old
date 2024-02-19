@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.aacVerti
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.velocityTimer
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AAC : VelocityMode("AAC") {
     private var hasVelocity = false
     override fun onEnable() {

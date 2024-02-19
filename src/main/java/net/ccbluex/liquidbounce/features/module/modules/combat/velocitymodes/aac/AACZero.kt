@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.event.JumpEvent
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACZero : VelocityMode("AACZero") {
     private var hasVelocity = false
 

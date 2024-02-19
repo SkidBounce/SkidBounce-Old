@@ -16,6 +16,9 @@ import net.minecraft.util.BlockPos
 import net.minecraft.util.BlockPos.ORIGIN
 import net.minecraft.util.EnumFacing.DOWN
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object NCP : NoSlowMode("NCP") {
     override fun onMotion(event: MotionEvent) {
         when (event.eventState) {

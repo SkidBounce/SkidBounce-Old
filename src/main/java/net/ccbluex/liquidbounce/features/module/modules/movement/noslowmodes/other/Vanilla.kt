@@ -7,4 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ot
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoSlowMode
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object Vanilla : NoSlowMode("Vanilla")

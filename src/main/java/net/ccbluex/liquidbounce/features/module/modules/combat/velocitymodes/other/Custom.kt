@@ -33,6 +33,12 @@ import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 
+/**
+ * @author CCBlueX/LiquidBounce
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ * @author SkidderMC/FDPClient
+ */
 object Custom : VelocityMode("Custom") {
     override fun onVelocityPacket(event: PacketEvent) { // TODO: explosions
         val packet = event.packet

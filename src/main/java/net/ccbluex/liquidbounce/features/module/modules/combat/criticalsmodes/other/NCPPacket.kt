@@ -13,6 +13,9 @@ import net.ccbluex.liquidbounce.utils.extensions.component3
 import net.minecraft.entity.Entity
 import net.minecraft.network.play.client.C03PacketPlayer
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object NCPPacket : CriticalsMode("NCPPacket") {
     override fun onAttack(entity: Entity) {
         val (x, y, z) = mc.thePlayer

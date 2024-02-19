@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.aacPushY
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.ccbluex.liquidbounce.features.module.modules.movement.Speed
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object AACPush : VelocityMode("AACPush") {
     private var jump = false
     override fun onUpdate() {

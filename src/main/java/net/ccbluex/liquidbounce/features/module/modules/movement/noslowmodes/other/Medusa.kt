@@ -11,6 +11,9 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C0BPacketEntityAction
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action.STOP_SPRINTING
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object Medusa : NoSlowMode("Medusa") {
     var sendPacket = true
     override fun onPacket(event: PacketEvent) {

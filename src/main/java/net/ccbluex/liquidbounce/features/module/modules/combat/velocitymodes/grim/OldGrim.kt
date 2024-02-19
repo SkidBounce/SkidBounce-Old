@@ -9,6 +9,9 @@ import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.minecraft.network.play.server.S32PacketConfirmTransaction
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object OldGrim : VelocityMode("OldGrim") {
     private var cancelPacket = 6
     private var resetPersec = 8

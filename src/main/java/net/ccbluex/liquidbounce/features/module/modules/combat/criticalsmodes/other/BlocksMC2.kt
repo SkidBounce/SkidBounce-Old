@@ -13,6 +13,9 @@ import net.ccbluex.liquidbounce.utils.extensions.component3
 import net.minecraft.entity.Entity
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
+/**
+ * @author CCBlueX/LiquidBounce
+ */
 object BlocksMC2 : CriticalsMode("BlocksMC2") {
     override fun onAttack(entity: Entity) {
         val (x, y, z) = mc.thePlayer

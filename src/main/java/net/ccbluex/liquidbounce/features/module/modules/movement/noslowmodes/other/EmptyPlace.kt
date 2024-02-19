@@ -11,6 +11,11 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoS
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ * @author SkidderMC/FDPClient
+ */
 object EmptyPlace : NoSlowMode("EmptyPlace") {
     override fun onMotion(event: MotionEvent) {
         if (packetTiming(event.eventState))

@@ -15,6 +15,9 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing.DOWN
 
+/**
+ * @author Aspw-w/NightX-Client
+ */
 object NewNCP : NoSlowMode("NewNCP") {
     override fun onMotion(event: MotionEvent) {
         if (!mc.thePlayer.onGround) return

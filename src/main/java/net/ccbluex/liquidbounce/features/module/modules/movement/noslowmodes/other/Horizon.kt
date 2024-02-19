@@ -12,6 +12,10 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.util.BlockPos
 import net.minecraft.util.BlockPos.ORIGIN
 
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ */
 object Horizon : NoSlowMode("Horizon") {
     override fun onPacket(event: PacketEvent) {
         if (event.packet is C08PacketPlayerBlockPlacement) {

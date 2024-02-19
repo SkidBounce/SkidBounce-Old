@@ -16,8 +16,12 @@ import net.minecraft.network.play.server.S08PacketPlayerPosLook
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 
+/**
+ * @author SkidderMC/FDPClient
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ */
 object NewGrim : VelocityMode("NewGrim") {
-
     private var gotVelo = false
     private var flagTimer = MSTimer()
     private var timerTicks = 0

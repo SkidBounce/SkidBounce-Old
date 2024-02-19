@@ -12,6 +12,11 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.minecraft.network.play.client.C09PacketHeldItemChange
 
+/**
+ * @author ManInMyVan/SkidBounce
+ * @author ManInMyVan
+ * @author SkidderMC/FDPClient
+ */
 object Slot : NoSlowMode("Slot") {
     override fun onMotion(event: MotionEvent) {
         if (packetTiming(event.eventState)) // has to be NoEvent for some reason

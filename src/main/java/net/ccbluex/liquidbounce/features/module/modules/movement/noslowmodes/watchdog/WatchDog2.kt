@@ -16,6 +16,9 @@ import net.minecraft.util.BlockPos
 import net.minecraft.util.BlockPos.ORIGIN
 import net.minecraft.util.EnumFacing.DOWN
 
+/**
+ * @author SkidderMC/FDPClient
+ */
 object WatchDog2 : NoSlowMode("WatchDog2") {
     override fun onMotion(event: MotionEvent) {
         when (event.eventState) {
