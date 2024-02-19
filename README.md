@@ -1,5 +1,5 @@
 # SkidBounce
-A free mixin-based injection hacked-client for Minecraft using Minecraft Forge, supporting version 1.8.9
+A free hacked-client for Minecraft 1.8.9 Forge.
 
 # Clients to skid
 [LiquidBounce](https://github.com/CCBlueX/LiquidBounce/tree/legacy)\
@@ -37,6 +37,7 @@ as of latest commit
 |      Spider      | :green_circle:  |
 |     FastUse      |  :red_circle:   |
 | Everything Else  |  :red_circle:   |
+
 ## Issues
 If you notice any bugs or missing features, you can let us know by opening an issue [here](https://github.com/ManInMyVan/SkidBounce/issues).
 
