@@ -13,7 +13,7 @@ skidding:
 As Of Latest Commit:\
 :green_circle: 100%
 :yellow_circle: 66%\
-:orange_circle: 33%
+:orange_circle: 33% 
 :red_circle: 0%
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
