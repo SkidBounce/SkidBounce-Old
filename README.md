@@ -14,7 +14,7 @@ As Of Latest Commit:\
 :green_circle: 100%\
 :yellow_circle: 66% - 99%\
 :orange_circle: 33% - 65%\
-:red_circle: 0% - :third:%
+:red_circle: 0% - 32%
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
 |      NoSlow      | :yellow_circle: |
