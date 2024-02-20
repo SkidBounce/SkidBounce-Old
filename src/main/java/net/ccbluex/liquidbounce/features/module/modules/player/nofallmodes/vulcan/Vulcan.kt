@@ -7,7 +7,8 @@ package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vulc
 
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
-import net.ccbluex.liquidbounce.utils.MovementUtils
+import net.ccbluex.liquidbounce.utils.*
+import net.ccbluex.liquidbounce.utils.extensions.round
 import net.minecraft.network.play.client.C03PacketPlayer
 
 /**
@@ -47,7 +48,7 @@ object Vulcan : NoFallMode("Vulcan") {
         if (event.packet is C03PacketPlayer && doSpoof) {
             event.packet.onGround = true
             doSpoof = false
-            event.packet.y = Math.round(mc.thePlayer.posY*2).toDouble() / 2
+            event.packet.y = mc.thePlayer.posY.round(1, 2)
             mc.thePlayer.setPosition(mc.thePlayer.posX, event.packet.y, mc.thePlayer.posZ)
         }
     }

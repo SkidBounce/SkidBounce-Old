@@ -39,6 +39,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Cancel,
         Damage,
         Phase,
+        Less,
 
         OldAAC,
         AAC4,
@@ -60,16 +61,18 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
 
         Vulcan,
         Vulcan2,
+        OldVulcan,
 
         Hypixel,
         Hypixel2,
         Hypixel3,
         HypixelFlag,
+        HypixelBlink,
+        HypSpoof,
 
         Cardinal,
         Spartan,
         CubeCraft,
-        HypSpoof,
         Medusa,
         Medusa2,
         Verus,

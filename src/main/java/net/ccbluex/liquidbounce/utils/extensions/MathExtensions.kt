@@ -9,6 +9,7 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.entity.Entity
 import net.minecraft.util.Vec3
 import net.minecraft.util.Vec3i
+import kotlin.math.pow
 
 /**
  * Provides:
@@ -97,3 +98,11 @@ fun ClosedFloatingPointRange<Float>.random(): Double {
  * @param shuffle determines if the returned `Iterable` is shuffled
  */
 fun <T> Iterable<T>.shuffled(shuffle: Boolean) = toMutableList().apply { if (shuffle) shuffle() }
+
+/**
+ * @see kotlin.math.round
+ */
+fun Number.round(digits: Number = 0, base: Number = 10): Double {
+	val multi = base.toDouble().pow(digits.toDouble())
+	return kotlin.math.round(this.toDouble() * multi) / multi
+}

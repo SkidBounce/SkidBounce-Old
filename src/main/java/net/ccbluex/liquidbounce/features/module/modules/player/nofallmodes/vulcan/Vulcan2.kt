@@ -16,7 +16,6 @@ import net.minecraft.util.AxisAlignedBB
  * @author ManInMyVan/SkidBounce
  * @author ManInMyVan
  */
-
 object Vulcan2 : NoFallMode("Vulcan2") {
     private var lag = false
     private var modify = false
