@@ -53,6 +53,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Matrix62x,
         Matrix62xPacket,
         Matrix663,
+        Matrix6632,
         OldMatrix,
 
         Vulcan,
@@ -83,6 +84,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     val verusMulti by FloatValue("Verus-XZMulti", 0.6f, 0f..1f) { mode == "Verus" }
     val vulcan2Motion by FloatValue("Vulcan2-Motion", 0.35f, 0f..10f) { mode == "Vulcan2" }
     val aac5014NightX by BoolValue("AAC5.0.14-NightX", false) { mode == "AAC5.0.14" }
+    val matrix6632Safe by BoolValue("Matrix6.6.3-2-Safe", false) { mode == "Matrix6.6.3-2" }
 
     override fun onEnable() {
         mc.timer.resetSpeed()
