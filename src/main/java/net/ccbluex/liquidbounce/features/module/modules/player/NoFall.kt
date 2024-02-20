@@ -54,6 +54,8 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         Matrix62xPacket,
         Matrix663,
         Matrix6632,
+        MatrixCollide,
+        MatrixNew,
         OldMatrix,
 
         Vulcan,
