@@ -17,67 +17,61 @@ import net.minecraft.util.AxisAlignedBB
  * @author SkidderMC/FDPClient
  */
 object AAC4 : NoFallMode("AAC4") {
-    private var aac4Fakelag = false
-    private var packetModify = false
-    private val aac4Packets = mutableListOf<C03PacketPlayer>()
+    private var blink = false
+    private var modify = false
+    private val packets = mutableListOf<C03PacketPlayer>()
     override fun onEnable() {
-        aac4Packets.clear()
-        packetModify = false
-        aac4Fakelag = false
+        packets.clear()
+        modify = false
+        blink = false
     }
 
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is C03PacketPlayer && aac4Fakelag) {
+        if (event.packet is C03PacketPlayer && blink) {
             event.cancelEvent()
-            if (packetModify) {
+            if (modify) {
                 event.packet.onGround = true
-                packetModify = false
+                modify = false
             }
-            aac4Packets.add(event.packet)
+            packets.add(event.packet)
         }
     }
 
     override fun onMotion(event: MotionEvent) {
         if (event.eventState == EventState.PRE) {
-            if (aboveVoid) {
-                if (aac4Fakelag) {
-                    aac4Fakelag = false
-                    if (aac4Packets.size > 0) {
-                        for (packet in aac4Packets) {
-                            mc.thePlayer.sendQueue.addToSendQueue(packet)
-                        }
-                        aac4Packets.clear()
-                    }
-                }
-                return
-            }
-            if (mc.thePlayer.onGround && aac4Fakelag) {
-                aac4Fakelag = false
-                if (aac4Packets.size > 0) {
-                    for (packet in aac4Packets) {
+            if (aboveVoid && blink) {
+                blink = false
+                if (packets.size > 0) {
+                    for (packet in packets) {
                         mc.thePlayer.sendQueue.addToSendQueue(packet)
                     }
-                    aac4Packets.clear()
+                    packets.clear()
                 }
                 return
             }
-            if (mc.thePlayer.fallDistance > 2.5 && aac4Fakelag) {
-                packetModify = true
-                mc.thePlayer.fallDistance = 0f
-            }
-            if (inAir(4.0, 1.0)) {
+            if (mc.thePlayer.onGround && blink) {
+                blink = false
+                if (packets.size > 0) {
+                    for (packet in packets) {
+                        mc.thePlayer.sendQueue.addToSendQueue(packet)
+                    }
+                    packets.clear()
+                }
                 return
             }
-            if (!aac4Fakelag) {
-                aac4Fakelag = true
+            if (mc.thePlayer.fallDistance > 2.5 && blink) {
+                modify = true
+                mc.thePlayer.fallDistance = 0f
             }
+            if (!inAir())
+                blink = true
         }
     }
 
-    private fun inAir(height: Double, plus: Double): Boolean {
+    private fun inAir(): Boolean {
         if (mc.thePlayer.posY < 0) return false
         var off = 0
-        while (off < height) {
+        while (off < 4) {
             val bb = AxisAlignedBB(
                 mc.thePlayer.posX,
                 mc.thePlayer.posY,
@@ -89,7 +83,7 @@ object AAC4 : NoFallMode("AAC4") {
             if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, bb).isNotEmpty()) {
                 return true
             }
-            off += plus.toInt()
+            off += 1
         }
         return false
     }

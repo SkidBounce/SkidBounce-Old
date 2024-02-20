@@ -17,6 +17,7 @@ import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vulca
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.utils.MovementUtils.aboveVoid
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlock
+import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.IntegerValue
@@ -50,6 +51,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         AAC5014,
 
         Matrix62x,
+        Matrix62xPacket,
         Matrix663,
         OldMatrix,
 
@@ -83,10 +85,12 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     val aac5014NightX by BoolValue("AAC5.0.14-NightX", false) { mode == "AAC5.0.14" }
 
     override fun onEnable() {
+        mc.timer.resetSpeed()
         modeModule.onEnable()
     }
 
     override fun onDisable() {
+        mc.timer.resetSpeed()
         modeModule.onDisable()
     }
 
@@ -161,4 +165,3 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
     private val modeModule
         get() = noFallModes.find { it.modeName == mode }!!
 }
-
