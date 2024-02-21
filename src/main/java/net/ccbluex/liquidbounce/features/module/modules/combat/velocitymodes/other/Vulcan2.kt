@@ -7,15 +7,14 @@ package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.ot
 
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
-import net.minecraft.network.play.server.S32PacketConfirmTransaction
+import net.minecraft.network.play.client.C0FPacketConfirmTransaction
 
 /**
- * @author EclipsesDev
- * @author CCBlueX/LiquidBounce
+ * @author SkidderMC/FDPClient
  */
-object Vulcan : VelocityMode("Vulcan") {
+object Vulcan2 : VelocityMode("Vulcan2") {
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is S32PacketConfirmTransaction)
+        if (event.packet is C0FPacketConfirmTransaction && event.packet.uid <= -30769 && event.packet.uid >= -31767)
             event.cancelEvent()
     }
 

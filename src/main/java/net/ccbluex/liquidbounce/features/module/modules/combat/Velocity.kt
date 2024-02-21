@@ -6,31 +6,23 @@
 package net.ccbluex.liquidbounce.features.module.modules.combat
 
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.grim.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.other.*
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
-import net.minecraft.network.play.server.S12PacketEntityVelocity
-import net.minecraft.network.play.server.S27PacketExplosion
+import net.ccbluex.liquidbounce.value.*
+import net.minecraft.network.play.server.*
 
 object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     private val velocityModes = arrayOf(
         Custom,
         Vanilla,
         Phase,
-        Vulcan,
-        NewGrim,
-        OldGrim,
-        AAC,
-        AACPush,
-        AACv4,
-        AACZero,
+        Vulcan, Vulcan2,
+        Matrix,
+        NewGrim, OldGrim,
+        AAC, AACPush, AACv4, AACZero,
         GhostBlock,
     ).sortedBy { it.modeName }
 
@@ -49,7 +41,7 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     private val mode by ListValue("Mode", velocityModes.map { it.modeName }.toTypedArray(), "Vanilla")
     private val noFire by BoolValue("NoFire", true) { mode !in arrayOf("AACv4", "AACPush") }
     private val onlyGround by BoolValue("OnlyGround", false) { mode !in arrayOf("AACv4", "AACPush") }
-    private val explosions by BoolValue("Explosions", true) { mode !in arrayOf("AACv4", "AACPush") }
+    private val explosions by BoolValue("Explosions", true) { mode !in arrayOf("AACv4", "AACPush", "Matrix") }
 
     val cancelHorizontal by BoolValue("CancelHorizontal", true) { mode == "Custom" }
     val cancelVertical by BoolValue("CancelVertical", true) { mode == "Custom" }
