@@ -12,8 +12,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.features.module.modules.targets.*
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
-import net.ccbluex.liquidbounce.features.module.modules.world.ChestAura
-import net.ccbluex.liquidbounce.utils.CPSCounter
+import net.ccbluex.liquidbounce.utils.*
 import net.ccbluex.liquidbounce.utils.CooldownHelper.getAttackCooldownProgress
 import net.ccbluex.liquidbounce.utils.CooldownHelper.resetLastAttackedTicks
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
@@ -21,9 +20,7 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.RaycastUtils.raycastEntity
 import net.ccbluex.liquidbounce.utils.RaycastUtils.runWithModifiedRaycastResult
-import net.ccbluex.liquidbounce.utils.Rotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
-import net.ccbluex.liquidbounce.utils.RotationUtils.getCenter
 import net.ccbluex.liquidbounce.utils.RotationUtils.getRotationDifference
 import net.ccbluex.liquidbounce.utils.RotationUtils.getVectorForRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.isRotationFaced
@@ -61,7 +58,6 @@ import net.minecraft.potion.Potion
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.MovingObjectPosition
-import net.minecraft.util.Vec3
 import net.minecraft.world.WorldSettings
 import java.awt.Color
 import kotlin.math.max
@@ -228,22 +224,13 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     private val smootherMode by ListValue("SmootherMode", arrayOf("Linear", "Relative"), "Relative")
 
     private val randomCenter by BoolValue("RandomCenter", true)
+    private val gaussianOffset by BoolValue("GaussianOffset", false) { randomCenter }
     private val outborder by BoolValue("Outborder", false)
     private val fov by FloatValue("FOV", 180f, 0f..180f)
 
     // Predict
-    private val predictValue = BoolValue("Predict", true)
-    private val predict by predictValue
-    private val maxPredictSizeValue = object : FloatValue("MaxPredictSize", 1f, 0.1f..5f) {
-        override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtLeast(minPredictSize)
-        override fun isSupported() = predictValue.isActive()
-    }
-
-    private val maxPredictSize by maxPredictSizeValue
-    private val minPredictSize: Float by object : FloatValue("MinPredictSize", 1f, 0.1f..5f) {
-        override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxPredictSize)
-        override fun isSupported() = predictValue.isActive() && !maxPredictSizeValue.isMinimal()
-    }
+    private val predictClientMovement by IntegerValue("PredictClientMovement", 2, 0..5)
+    private val predictEnemyPosition by FloatValue("PredictEnemyPosition", 1.5f, -1f..2f)
 
     // Bypass
     private val failSwing by BoolValue("FailSwing", true) { swing != "Off" }
@@ -740,40 +727,41 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
      * Update killaura rotations to enemy
      */
     private fun updateRotations(entity: Entity): Boolean {
-        val entityPrediction = Vec3(entity.posX - entity.prevPosX,
-            entity.posY - entity.prevPosY,
-            entity.posZ - entity.prevPosZ
-        ).times(1.5)
+        val player = mc.thePlayer ?: return false
 
-        var boundingBox = entity.hitBox.offset(
-            entityPrediction.xCoord,
-            entityPrediction.yCoord,
-            entityPrediction.zCoord
-        )
+        val (predictX, predictY, predictZ) = entity.currPos.subtract(entity.prevPos)
+            .times(2 + predictEnemyPosition.toDouble())
 
-        if (predict) {
-            boundingBox = boundingBox.offset(
-                (entity.posX - entity.prevPosX - (mc.thePlayer.posX - mc.thePlayer.prevPosX))
-                    * nextFloat(minPredictSize, maxPredictSize),
-                (entity.posY - entity.prevPosY - (mc.thePlayer.posY - mc.thePlayer.prevPosY))
-                    * nextFloat(minPredictSize, maxPredictSize),
-                (entity.posZ - entity.prevPosZ - (mc.thePlayer.posZ - mc.thePlayer.prevPosZ))
-                    * nextFloat(minPredictSize, maxPredictSize)
-            )
+        val boundingBox = entity.hitBox.offset(predictX, predictY, predictZ)
+        val (currPos, oldPos) = player.currPos to player.prevPos
+
+        val simPlayer = SimulatedPlayer.fromClientPlayer(player.movementInput)
+
+        repeat(predictClientMovement + 1) {
+            simPlayer.tick()
         }
+
+        player.setPosAndPrevPos(simPlayer.pos)
 
         val rotation = searchCenter(
             boundingBox,
             outborder && !attackTimer.hasTimePassed(attackDelay / 2),
             randomCenter,
-            predict,
+            gaussianOffset = this.gaussianOffset,
+            predict = false,
             lookRange = range + scanRange,
             attackRange = range,
             throughWallsRange = throughWallsRange
-        ) ?: return false
+        )
+
+        if (rotation == null) {
+            player.setPosAndPrevPos(currPos, oldPos)
+
+            return false
+        }
 
         // Get our current rotation. Otherwise, player rotation.
-        val currentRotation = currentRotation ?: mc.thePlayer.rotation
+        val currentRotation = currentRotation ?: player.rotation
 
         var limitedRotation = limitAngleChange(currentRotation,
             rotation,
@@ -802,8 +790,10 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
                 smootherMode
             )
         } else {
-            limitedRotation.toPlayer(mc.thePlayer)
+            limitedRotation.toPlayer(player)
         }
+
+        player.setPosAndPrevPos(currPos, oldPos)
 
         return true
     }
@@ -1000,7 +990,7 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
                     if (mc.thePlayer.hurtTime > maxOwnHurtTime) return false
 
-                    val rotationToPlayer = toRotation(getCenter(mc.thePlayer.hitBox), true, currentTarget!!)
+                    val rotationToPlayer = toRotation(mc.thePlayer.hitBox.center, true, currentTarget!!)
 
                     if (getRotationDifference(rotationToPlayer, currentTarget!!.rotation) > maxDirectionDiff)
                         return false

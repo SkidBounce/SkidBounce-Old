@@ -22,11 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinMovementInputFromOptions extends MixinMovementInput {
     @Inject(method = "updatePlayerMoveState", at = @At(value = "FIELD", target = "Lnet/minecraft/util/MovementInputFromOptions;jump:Z"))
     private void hookSuperKnockbackInputBlock(CallbackInfo ci) {
-        // Ignore other inputs that update on the same function (SimulatedPlayer for example)
-        if ((Object) this != Minecraft.getMinecraft().thePlayer.movementInput) {
-            return;
-        }
-
         SuperKnockback module = SuperKnockback.INSTANCE;
 
         if (module.shouldBlockInput()) {

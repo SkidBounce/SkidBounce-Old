@@ -5,10 +5,10 @@
  */
 package net.ccbluex.liquidbounce.utils.extensions
 
+import net.minecraft.block.Block
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.entity.Entity
-import net.minecraft.util.Vec3
-import net.minecraft.util.Vec3i
+import net.minecraft.util.*
 import kotlin.math.pow
 
 /**
@@ -98,6 +98,21 @@ fun ClosedFloatingPointRange<Float>.random(): Double {
  * @param shuffle determines if the returned `Iterable` is shuffled
  */
 fun <T> Iterable<T>.shuffled(shuffle: Boolean) = toMutableList().apply { if (shuffle) shuffle() }
+
+fun AxisAlignedBB.lerpWith(x: Double, y: Double, z: Double) =
+	Vec3(minX + (maxX - minX) * x, minY + (maxY - minY) * y, minZ + (maxZ - minZ) * z)
+
+fun AxisAlignedBB.lerpWith(point: Vec3) = lerpWith(point.xCoord, point.yCoord, point.zCoord)
+fun AxisAlignedBB.lerpWith(value: Double) = lerpWith(value, value, value)
+
+val AxisAlignedBB.center
+	get() = lerpWith(0.5)
+
+fun Block.lerpWith(x: Double, y: Double, z: Double) = Vec3(
+	blockBoundsMinX + (blockBoundsMaxX - blockBoundsMinX) * x,
+	blockBoundsMinY + (blockBoundsMaxY - blockBoundsMinY) * y,
+	blockBoundsMinZ + (blockBoundsMaxZ - blockBoundsMinZ) * z
+)
 
 /**
  * @see kotlin.math.round
