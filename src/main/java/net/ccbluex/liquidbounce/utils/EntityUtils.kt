@@ -7,17 +7,12 @@ package net.ccbluex.liquidbounce.utils
 
 import net.ccbluex.liquidbounce.features.module.modules.targets.*
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
-import net.ccbluex.liquidbounce.utils.extensions.isAnimal
-import net.ccbluex.liquidbounce.utils.extensions.isClientFriend
-import net.ccbluex.liquidbounce.utils.extensions.isMob
-import net.ccbluex.liquidbounce.utils.extensions.toRadians
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.StringUtils.contains
-import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.*
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.Vec3
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.*
 
 object EntityUtils : MinecraftInstance() {
 
@@ -55,9 +50,9 @@ object EntityUtils : MinecraftInstance() {
         val maxAngleDifferenceRadians = Math.toRadians(maxAngleDifference)
 
         val lookVec = Vec3(
-            -sin(playerRotation.toRadians().toDouble()),
-            -sin(playerPitch.toRadians().toDouble()),
-            cos(playerRotation.toRadians().toDouble())
+            -sin(playerRotation.toRadiansD()),
+            -sin(playerPitch.toRadiansD()),
+            cos(playerRotation.toRadiansD())
         ).normalize()
 
         val playerPos = player.positionVector.addVector(0.0, player.eyeHeight.toDouble(), 0.0)

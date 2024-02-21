@@ -7,8 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.combat
 
 import net.ccbluex.liquidbounce.LiquidBounce.hud
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.script.api.global.Chat
 import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notification
 import net.ccbluex.liquidbounce.utils.EntityUtils
@@ -17,14 +16,9 @@ import net.ccbluex.liquidbounce.utils.extensions.getDistanceToEntityBox
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawEntityBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
-import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.network.play.server.S08PacketPlayerPosLook
-import net.minecraft.network.play.server.S12PacketEntityVelocity
+import net.ccbluex.liquidbounce.value.*
+import net.minecraft.entity.*
+import net.minecraft.network.play.server.*
 import java.awt.Color
 import kotlin.random.Random
 
@@ -34,18 +28,16 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
     private var smartTick = 0
     private var cooldownTick = 0
 
+    private var velocityDetected = false
+    private var lagbackDetected = false
+
     // Condition to confirm
     private var confirmTick = false
     private var confirmMove = false
+    private var confirmStop = false
 
     // Condition to prevent getting timer speed stuck
     private var confirmAttack = false
-
-    // Condition to makesure timer isn't reset on lagback, when not attacking
-    private var confirmLagBack = false
-
-    // Condition to makesure timer isn't reset on knockback, when timer isn't changed
-    private var confirmKnockback = false
 
     private val timerBoostMode by ListValue("TimerMode", arrayOf("Normal", "Smart", "SmartMove"), "Normal")
 
@@ -57,10 +49,11 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
     private val rangeValue by FloatValue("Range", 3.5f, 1f..5f) { timerBoostMode == "Normal" }
     private val cooldownTickValue by IntegerValue("CooldownTick", 10, 1..50) { timerBoostMode == "Normal" }
 
-    // Smart & SmartMove Mode Settings
+    // Smart & SmartMove Mode Range
     private val minRange by FloatValue("MinRange", 1f, 1f..5f) { timerBoostMode != "Normal" }
     private val maxRange by FloatValue("MaxRange", 5f, 1f..5f) { timerBoostMode != "Normal" }
 
+    // Min & Max Tick Delay
     private val minTickDelay: IntegerValue = object : IntegerValue("MinTickDelay", 50, 1..500) {
         override fun isSupported() = timerBoostMode != "Normal"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxTickDelay.get())
@@ -70,6 +63,11 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
         override fun isSupported() = timerBoostMode != "Normal"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minTickDelay.get())
     }
+
+    // Min & Max Stop Settings
+    private val stopRange by BoolValue("StopRange", false)
+    private val minStopRange by FloatValue("MinStopRange", 1f, 1f..5f) { stopRange }
+    private val maxStopRange by FloatValue("MaxStopRange", 3f, 1f..5f) { stopRange }
 
     private val maxAngleDifference by FloatValue("MaxAngleDifference", 5.0f, 5.0f..90f) { timerBoostMode == "SmartMove" }
 
@@ -93,9 +91,13 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
 
     override fun onDisable() {
         timerReset()
+
         smartTick = 0
         cooldownTick = 0
         playerTicks = 0
+
+        velocityDetected = false
+        lagbackDetected = false
     }
 
     /**
@@ -103,7 +105,7 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
      */
     @EventTarget
     fun onAttack(event: AttackEvent) {
-        if (event.targetEntity !is EntityLivingBase || shouldResetTimer()) {
+        if (event.targetEntity !is EntityLivingBase && playerTicks >= 1 || shouldResetTimer()) {
             timerReset()
             return
         } else {
@@ -111,7 +113,7 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
         }
 
         val targetEntity = event.targetEntity
-        val entityDistance = mc.thePlayer.getDistanceToEntityBox(targetEntity)
+        val entityDistance = targetEntity?.let { mc.thePlayer.getDistanceToEntityBox(it) }
         val randomTickDelay = RandomUtils.nextInt(minTickDelay.get(), maxTickDelay.get() + 1)
         val randomRange = RandomUtils.nextDouble(minRange.toDouble(), maxRange.toDouble())
 
@@ -119,21 +121,14 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
         cooldownTick++
 
         val shouldSlowed = when (timerBoostMode) {
-            "Normal" -> cooldownTick >= cooldownTickValue && entityDistance <= rangeValue
-            "Smart" -> smartTick >= randomTickDelay && entityDistance <= randomRange
+            "Normal" -> cooldownTick >= cooldownTickValue && entityDistance!! <= rangeValue
+            "Smart" -> smartTick >= randomTickDelay && entityDistance!! <= randomRange
             else -> false
         }
 
         if (shouldSlowed && confirmAttack) {
             confirmAttack = false
             playerTicks = ticksValue
-
-            if (resetOnKnockback) {
-                confirmKnockback = true
-            }
-            if (resetOnlagBack) {
-                confirmLagBack = true
-            }
             cooldownTick = 0
             smartTick = 0
         } else {
@@ -150,6 +145,8 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
             return
         }
 
+        val nearbyEntity = getNearestEntityInRange() ?: return
+
         val randomTickDelay = RandomUtils.nextInt(minTickDelay.get(), maxTickDelay.get())
         val randomRange = RandomUtils.nextDouble(minRange.toDouble(), maxRange.toDouble())
 
@@ -165,9 +162,7 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
             confirmMove = false
         }
 
-        val nearbyEntity = getNearestEntityInRange()
-
-        if (nearbyEntity != null && isPlayerMoving()) {
+        if (isPlayerMoving()) {
             if (isLookingOnEntities(nearbyEntity, maxAngleDifference.toDouble())) {
                 val entityDistance = mc.thePlayer.getDistanceToEntityBox(nearbyEntity)
 
@@ -175,16 +170,24 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
                     playerTicks = ticksValue
                     confirmTick = false
                     confirmMove = true
-
-                    if (resetOnKnockback) {
-                        confirmKnockback = true
-                    }
-                    if (resetOnlagBack) {
-                        confirmLagBack = true
-                    }
                 }
+            } else {
+                timerReset()
             }
         }
+    }
+
+    /**
+     * Motion event
+     * (Resets player speed when too close to the target)
+     */
+    @EventTarget
+    fun onMotion(event: MotionEvent) {
+        val nearbyEntity = getNearestEntityInRange() ?: return
+        val entityDistance = mc.thePlayer.getDistanceToEntityBox(nearbyEntity)
+        val stopDistance = RandomUtils.nextDouble(minStopRange.toDouble(), maxStopRange.toDouble())
+
+        confirmStop = (stopRange && entityDistance < stopDistance)
     }
 
     /**
@@ -196,7 +199,7 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
         val timerboost = Random.nextDouble(0.5, 0.56)
         val charged = Random.nextDouble(0.75, 0.91)
 
-        if (playerTicks <= 0) {
+        if (playerTicks <= 0 || confirmStop) {
             timerReset()
             return
         }
@@ -224,13 +227,12 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
         if (timerBoostMode.lowercase() == "smartmove") {
             getNearestEntityInRange()?.let { nearbyEntity ->
                 val entityDistance = mc.thePlayer.getDistanceToEntityBox(nearbyEntity)
-                if (entityDistance <= maxRange && isLookingOnEntities(nearbyEntity, maxAngleDifference.toDouble())) {
-                    if (markMode == "Box") {
+                if (entityDistance in minRange..maxRange && isLookingOnEntities(nearbyEntity, maxAngleDifference.toDouble())) {                    if (markMode == "Box") {
                         drawEntityBox(nearbyEntity, Color(37, 126, 255, 70), outline)
                     } else if (markMode != "Off") {
                         drawPlatform(nearbyEntity, Color(37, 126, 255, 70))
                     }
-                } else if (entityDistance <= maxRange) {
+                } else if (entityDistance in minRange..maxRange) {
                     if (markMode == "Box") {
                         drawEntityBox(nearbyEntity, Color(210, 60, 60, 70), outline)
                     } else if (markMode != "Off") {
@@ -245,7 +247,7 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
      * Check if player is moving
      */
     private fun isPlayerMoving(): Boolean {
-        return mc.thePlayer.moveForward != 0f || mc.thePlayer.moveStrafing != 0f
+        return mc.thePlayer?.moveForward != 0f || mc.thePlayer?.moveStrafing != 0f
     }
 
     /**
@@ -264,7 +266,14 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
         val player = mc.thePlayer
 
         val entitiesInRange = getAllEntities()
-            .filter { player.getDistanceToEntityBox(it) <= rangeValue }
+            .filter {
+                val distance = player.getDistanceToEntityBox(it)
+                when (timerBoostMode.lowercase()) {
+                    "normal" -> distance <= rangeValue
+                    "smart", "smartmove" -> distance in minRange..maxRange
+                    else -> false
+                }
+            }
 
         return entitiesInRange.minByOrNull { player.getDistanceToEntityBox(it) }
     }
@@ -273,8 +282,7 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
      * Separate condition to make it cleaner
      */
     private fun shouldResetTimer(): Boolean {
-        return (playerTicks >= 1
-            || mc.thePlayer.isSpectator || mc.thePlayer.isDead
+        return (mc.thePlayer.isSpectator || mc.thePlayer.isDead
             || mc.thePlayer.isInWater || mc.thePlayer.isInLava
             || mc.thePlayer.isInWeb || mc.thePlayer.isOnLadder
             || mc.thePlayer.isRiding)
@@ -288,38 +296,41 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
     fun onPacket(event: PacketEvent) {
         val packet = event.packet
 
-        if (isPlayerMoving() && !shouldResetTimer()
-            && mc.timer.timerSpeed > 1.0 || mc.timer.timerSpeed < 1.0 ) {
+        if (isPlayerMoving() && !shouldResetTimer() && mc.timer.timerSpeed != 1F) {
 
             // Check for lagback
-            if (resetOnlagBack && confirmLagBack) {
-                if (packet is S08PacketPlayerPosLook) {
-                    confirmLagBack = false
-                    timerReset()
-                    if (chatDebug) {
-                        Chat.print("Lagback Received | Timer Reset")
-                    }
-                    if (notificationDebug) {
-                        hud.addNotification(Notification("Lagback Received | Timer Reset", 1000F))
-                    }
+            if (resetOnlagBack && lagbackDetected) {
+
+                timerReset()
+
+                if (chatDebug) {
+                    Chat.print("Lagback Received | Timer Reset")
+                }
+                if (notificationDebug) {
+                    hud.addNotification(Notification("Lagback Received | Timer Reset", 1000F))
                 }
             }
 
             // Check for knockback
-            if (resetOnKnockback && confirmKnockback) {
-                if (packet is S12PacketEntityVelocity && mc.thePlayer.entityId == packet.entityID
-                    && packet.motionY > 0 && (packet.motionX.toDouble() != 0.0 || packet.motionZ.toDouble() != 0.0)) {
-                    confirmKnockback = false
-                    timerReset()
-                    if (chatDebug) {
-                        Chat.print("Knockback Received | Timer Reset")
-                    }
-                    if (notificationDebug) {
-                        hud.addNotification(Notification("Knockback Received | Timer Reset", 1000F))
-                    }
+            if (resetOnKnockback && velocityDetected) {
+
+                timerReset()
+
+                if (chatDebug) {
+                    Chat.print("Knockback Received | Timer Reset")
+                }
+                if (notificationDebug) {
+                    hud.addNotification(Notification("Knockback Received | Timer Reset", 1000F))
                 }
             }
         }
+
+        // Check for velocity
+        velocityDetected = (packet is S12PacketEntityVelocity && mc.thePlayer.entityId == packet.entityID
+                && packet.motionY > 0 && (packet.motionX != 0 || packet.motionZ != 0))
+
+        // Check for lagback
+        lagbackDetected = packet is S08PacketPlayerPosLook
     }
 
     /**
