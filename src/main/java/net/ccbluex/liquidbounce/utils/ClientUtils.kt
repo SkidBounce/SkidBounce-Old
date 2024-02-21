@@ -12,10 +12,8 @@ import net.minecraft.network.NetworkManager
 import net.minecraft.network.login.client.C01PacketEncryptionResponse
 import net.minecraft.network.login.server.S01PacketEncryptionRequest
 import net.minecraft.util.*
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import net.minecraftforge.fml.relauncher.*
+import org.apache.logging.log4j.*
 import java.lang.reflect.Field
 import java.security.PublicKey
 import javax.crypto.SecretKey
@@ -57,9 +55,9 @@ object ClientUtils : MinecraftInstance() {
         )
     }
 
-    fun displayChatMessage(message: String) {
+    fun displayChatMessage(message: Any) {
         val jsonObject = JsonObject()
-        jsonObject.addProperty("text", message)
+        jsonObject.addProperty("text", message.toString())
         mc.thePlayer.addChatMessage(IChatComponent.Serializer.jsonToComponent(jsonObject.toString()))
     }
 

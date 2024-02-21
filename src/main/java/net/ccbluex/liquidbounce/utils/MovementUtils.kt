@@ -5,20 +5,13 @@
  */
 package net.ccbluex.liquidbounce.utils
 
-import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.Listenable
-import net.ccbluex.liquidbounce.event.MoveEvent
-import net.ccbluex.liquidbounce.event.PacketEvent
-import net.ccbluex.liquidbounce.utils.extensions.stopXZ
-import net.ccbluex.liquidbounce.utils.extensions.toRadiansD
-import net.minecraft.init.Blocks.ice
-import net.minecraft.init.Blocks.packed_ice
+import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.utils.extensions.*
+import net.minecraft.init.Blocks.*
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.potion.Potion
 import net.minecraft.util.BlockPos
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 object MovementUtils : MinecraftInstance(), Listenable {
 
@@ -66,7 +59,7 @@ object MovementUtils : MinecraftInstance(), Listenable {
         return getJumpBoostModifier(baseJumpHeight, true)
     }
     fun getJumpBoostModifier(baseJumpHeight: Double, potionJump: Boolean): Double {
-        var baseJumpHeight = baseJumpHeight
+        @Suppress("NAME_SHADOWING") var baseJumpHeight = baseJumpHeight
         if (mc.thePlayer.isPotionActive(Potion.jump) && potionJump) {
             val amplifier = mc.thePlayer.getActivePotionEffect(Potion.jump).amplifier
             baseJumpHeight += ((amplifier + 1).toFloat() * 0.1f).toDouble()
