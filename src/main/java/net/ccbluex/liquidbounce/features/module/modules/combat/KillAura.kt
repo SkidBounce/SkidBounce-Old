@@ -7,8 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.combat
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.event.EventManager.callEvent
-import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.features.module.modules.targets.*
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
@@ -41,23 +40,15 @@ import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
 import net.ccbluex.liquidbounce.value.*
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.*
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemAxe
-import net.minecraft.item.ItemSword
-import net.minecraft.network.play.client.C02PacketUseEntity
-import net.minecraft.network.play.client.C02PacketUseEntity.Action.ATTACK
-import net.minecraft.network.play.client.C02PacketUseEntity.Action.INTERACT
-import net.minecraft.network.play.client.C07PacketPlayerDigging
+import net.minecraft.item.*
+import net.minecraft.network.play.client.*
+import net.minecraft.network.play.client.C02PacketUseEntity.Action.*
 import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.RELEASE_USE_ITEM
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
-import net.minecraft.network.play.client.C0APacketAnimation
 import net.minecraft.potion.Potion
-import net.minecraft.util.BlockPos
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.MovingObjectPosition
+import net.minecraft.util.*
 import net.minecraft.world.WorldSettings
 import java.awt.Color
 import kotlin.math.max
@@ -235,6 +226,10 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     // Bypass
     private val failSwing by BoolValue("FailSwing", true) { swing != "Off" }
     private val swingOnlyInAir by BoolValue("SwingOnlyInAir", true) { swing != "Off" && failSwing }
+    private val maxRotationDifferenceToSwing by FloatValue("MaxRotationDifferenceToSwing",
+        180f,
+        0f..180f
+    ) { swing != "Off" && failSwing }
     private val noInventoryAttack by BoolValue("NoInvAttack", false, subjective = true)
     private val noInventoryDelay by IntegerValue("NoInvDelay", 200, 0..500, subjective = true)
     { noInventoryAttack }
@@ -458,6 +453,13 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         if (!hittable) {
             if (swing != "Off" && failSwing) {
                 val rotation = currentRotation ?: thePlayer.rotation
+
+                // Can humans keep click consistency when performing massive rotation changes?
+                // (10-30 rotation difference/doing large mouse movements for example)
+                // Maybe apply to attacks too?
+                if (getRotationDifference(rotation) > maxRotationDifferenceToSwing) {
+                    return
+                }
 
                 runWithModifiedRaycastResult(rotation, range.toDouble(), throughWallsRange.toDouble()) {
                     if (swingOnlyInAir && it.typeOfHit != MovingObjectPosition.MovingObjectType.MISS) {
