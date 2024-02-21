@@ -23,7 +23,7 @@ As Of Latest Commit:\
 |      Speed       | :orange_circle: |
 |     LongJump     |  :red_circle:   |
 |       Fly        | :orange_circle: |
-|      NoFall      | :yellow_circle: |
+|      NoFall      | :green_circle:  |
 |       Hud        |  :red_circle:   |
 |    Animations    |  :red_circle:   |
 |      Jesus       |  :red_circle:   |
