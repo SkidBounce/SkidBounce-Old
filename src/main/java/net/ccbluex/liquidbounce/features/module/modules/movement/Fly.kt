@@ -51,7 +51,7 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         Spartan, Spartan2, BugSpartan,
 
         // Other anti-cheats
-        MineSecure, HawkEye, HAC, WatchCat, Vulcan, Wave,
+        MineSecure, HawkEye, HAC, WatchCat, Verus, Vulcan, Wave,
 
         // Other
         Jetpack, KeepAlive, Collide, Jump, Flag, Clip
@@ -79,14 +79,22 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     val hypixelBoostTimer by FloatValue("Hypixel-BoostTimer", 1f, 0.1f..5f)
         { mode == "Hypixel" && hypixelBoost }
 
-    // Other
+    // Vulcan
     val vulcanTimer by FloatValue("Vulcan-Timer", 2f, 1f..3f) { mode == "Vulcan" }
     val vulcanNoClip by BoolValue("Vulcan-NoClip", true) { mode == "Vulcan" }
+
+    // Mineplex
     val mineplexSpeed by FloatValue("Mineplex-Speed", 1f, 0.5f..10f) { mode == "Mineplex" }
+
+    // Redesky
     val redeskyHeight by FloatValue("Redesky-Height", 4f, 1f..7f) { mode == "Redesky" }
+
+    // Wave
     val waveUpSpeed by FloatValue("Wave-UpSpeed", 0.6f, 0f..1f)  { mode == "Wave" }
     val waveDownSpeed by FloatValue("Wave-DownSpeed", 0.6f, 0f..1f)  { mode == "Wave" }
     val waveTimer by FloatValue("Wave-Timer", 1.25f, 1f..2f) { mode == "Wave" }
+
+    // Clip
     val clipX by FloatValue("Clip-X", 2f, -5f..5f) { mode == "Clip" }
     val clipY by FloatValue("Clip-Y", 2f, -5f..5f) { mode == "Clip" }
     val clipZ by FloatValue("Clip-Z", 2f, -5f..5f) { mode == "Clip" }
@@ -97,6 +105,13 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     val clipMotionZ by FloatValue("Clip-MotionZ", 0f, -1f..1f) { mode == "Clip" }
     val clipGroundSpoof by BoolValue("Clip-GroundSpoof", false) { mode == "Clip" }
     val clipGround by BoolValue("Clip-GroundWhenClip", false) { mode == "Clip" }
+
+    // Verus
+    val damage by BoolValue("Damage", false)
+    val timerSlow by BoolValue("TimerSlow", true)
+    val boostTicksValue by IntegerValue("BoostTicks", 20, 1..30)
+    val boostMotion by FloatValue("BoostMotion", 6.5f, 1f..9.85f)
+    val yBoost by FloatValue("YBoost", 0.42f, 0f..10f)
 
     private val mark by BoolValue("Mark", true, subjective = true)
 
