@@ -5,11 +5,9 @@
  */
 package net.ccbluex.liquidbounce.features.module
 
+import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.event.EventManager.registerListener
 import net.ccbluex.liquidbounce.event.EventManager.unregisterListener
-import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.KeyEvent
-import net.ccbluex.liquidbounce.event.Listenable
 import net.ccbluex.liquidbounce.features.command.CommandManager.registerCommand
 import net.ccbluex.liquidbounce.features.module.modules.client.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.*
@@ -72,6 +70,7 @@ object ModuleManager : Listenable {
             AutoBreak,
             AutoClicker,
             AutoFish,
+            AutoProjectile,
             AutoLeave,
             AutoPot,
             AutoRespawn,
