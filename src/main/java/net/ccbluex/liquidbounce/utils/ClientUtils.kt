@@ -21,6 +21,7 @@ import javax.crypto.SecretKey
 @SideOnly(Side.CLIENT)
 object ClientUtils : MinecraftInstance() {
     private var fastRenderField: Field? = null
+    var runTimeTicks = 0
 
     init {
         try {

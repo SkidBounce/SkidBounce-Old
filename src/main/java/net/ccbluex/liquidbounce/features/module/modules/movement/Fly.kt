@@ -6,19 +6,16 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.hypixel.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.ncp.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.ncp.OldNCP
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.rewinside.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanilla.*
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
-import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
-import net.ccbluex.liquidbounce.utils.extensions.stop
-import net.ccbluex.liquidbounce.utils.extensions.stopXZ
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.*
@@ -107,11 +104,11 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     val clipGround by BoolValue("Clip-GroundWhenClip", false) { mode == "Clip" }
 
     // Verus
-    val damage by BoolValue("Damage", false)
-    val timerSlow by BoolValue("TimerSlow", true)
-    val boostTicksValue by IntegerValue("BoostTicks", 20, 1..30)
-    val boostMotion by FloatValue("BoostMotion", 6.5f, 1f..9.85f)
-    val yBoost by FloatValue("YBoost", 0.42f, 0f..10f)
+    val damage by BoolValue("Damage", false) { mode == "Verus" }
+    val timerSlow by BoolValue("TimerSlow", true) { mode == "Verus" }
+    val boostTicksValue by IntegerValue("BoostTicks", 20, 1..30) { mode == "Verus" }
+    val boostMotion by FloatValue("BoostMotion", 6.5f, 1f..9.85f) { mode == "Verus" }
+    val yBoost by FloatValue("YBoost", 0.42f, 0f..10f) { mode == "Verus" }
 
     private val mark by BoolValue("Mark", true, subjective = true)
 

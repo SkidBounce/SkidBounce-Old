@@ -6,17 +6,14 @@
 package net.ccbluex.liquidbounce.features.module.modules.world
 
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.features.module.modules.render.BlockOverlay
 import net.ccbluex.liquidbounce.ui.font.Fonts
-import net.ccbluex.liquidbounce.utils.CPSCounter
+import net.ccbluex.liquidbounce.utils.*
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
-import net.ccbluex.liquidbounce.utils.PlaceRotation
-import net.ccbluex.liquidbounce.utils.Rotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.getAngleDifference
 import net.ccbluex.liquidbounce.utils.RotationUtils.getRotationDifference
@@ -35,9 +32,7 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBorderedRect
-import net.ccbluex.liquidbounce.utils.timing.DelayTimer
-import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.utils.timing.TickDelayTimer
+import net.ccbluex.liquidbounce.utils.timing.*
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
 import net.ccbluex.liquidbounce.value.*
@@ -45,12 +40,9 @@ import net.minecraft.block.BlockBush
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager.resetColor
 import net.minecraft.client.settings.GameSettings
-import net.minecraft.item.ItemBlock
-import net.minecraft.item.ItemStack
-import net.minecraft.network.play.client.C0APacketAnimation
+import net.minecraft.item.*
 import net.minecraft.network.play.client.C0BPacketEntityAction
-import net.minecraft.network.play.client.C0BPacketEntityAction.Action.START_SNEAKING
-import net.minecraft.network.play.client.C0BPacketEntityAction.Action.STOP_SNEAKING
+import net.minecraft.network.play.client.C0BPacketEntityAction.Action.*
 import net.minecraft.util.*
 import net.minecraft.world.WorldSettings
 import net.minecraftforge.event.ForgeEventFactory
@@ -115,7 +107,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
     }
 
     // GodBridge mode subvalues
-    private val useStaticRotation by BoolValue("UseStaticRotation", false)
+    private val useStaticRotation by BoolValue("UseStaticRotation", false) { mode == "GodBridge" }
     private val jumpAutomatically by BoolValue("JumpAutomatically", true) { mode == "GodBridge" }
     private val maxBlocksToJump: IntegerValue = object : IntegerValue("MaxBlocksToJump", 4, 1..8) {
         override fun isSupported() = mode == "GodBridge" && !jumpAutomatically

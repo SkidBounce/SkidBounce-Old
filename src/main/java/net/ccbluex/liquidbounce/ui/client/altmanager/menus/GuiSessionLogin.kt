@@ -11,12 +11,9 @@ import net.ccbluex.liquidbounce.ui.font.Fonts
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.login.LoginUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRect
-import net.minecraft.client.gui.GuiButton
-import net.minecraft.client.gui.GuiScreen
-import net.minecraft.client.gui.GuiTextField
+import net.minecraft.client.gui.*
 import org.lwjgl.input.Keyboard
 import kotlin.concurrent.thread
-
 
 class GuiSessionLogin(private val prevGui: GuiAltManager) : GuiScreen() {
 
@@ -47,7 +44,7 @@ class GuiSessionLogin(private val prevGui: GuiAltManager) : GuiScreen() {
         // Add fields to screen
         sessionTokenField = GuiTextField(666, Fonts.font40, width / 2 - 100, height / 2 - 90, 200, 20)
         sessionTokenField.isFocused = false
-        sessionTokenField.maxStringLength = 32
+        sessionTokenField.maxStringLength = 1000
 
         // Call sub method
         super.initGui()

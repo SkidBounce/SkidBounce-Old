@@ -29,7 +29,7 @@ import net.minecraft.network.play.client.C03PacketPlayer.*
  * @author EclipsesDev
  * @author CCBlueX/LiquidBounce
  */
-object Verus : FlyMode("VerusDamage") {
+object Verus : FlyMode("Verus") {
     private var boostTicks = 0
 
     override fun onEnable() {

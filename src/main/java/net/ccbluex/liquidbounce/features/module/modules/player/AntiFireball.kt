@@ -5,12 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.player
 
-import net.ccbluex.liquidbounce.event.EventState
-import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.MotionEvent
-import net.ccbluex.liquidbounce.event.TickEvent
-import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.isRotationFaced
@@ -19,14 +15,11 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.toRotation
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.entity.Entity
 import net.minecraft.entity.projectile.EntityFireball
-import net.minecraft.network.play.client.C02PacketUseEntity
-import net.minecraft.network.play.client.C0APacketAnimation
-import net.minecraft.util.Vec3
+import net.minecraft.network.play.client.*
+import net.minecraft.world.WorldSettings
 
 object AntiFireball : Module("AntiFireball", ModuleCategory.PLAYER) {
     private val range by FloatValue("Range", 4.5f, 3f..8f)
@@ -63,10 +56,9 @@ object AntiFireball : Module("AntiFireball", ModuleCategory.PLAYER) {
             .sortedBy { player.getDistanceToBox(it.hitBox) }) {
             val nearestPoint = getNearestPointBB(player.eyes, entity.hitBox)
 
-            val entityPrediction =
-                Vec3(entity.posX - entity.prevPosX, entity.posY - entity.prevPosY, entity.posZ - entity.prevPosZ)
+            val entityPrediction = entity.currPos - entity.prevPos
 
-            val distance = player.getDistanceToBox(entity.hitBox)
+            val normalDistance = player.getDistanceToBox(entity.hitBox)
 
             val predictedDistance = player.getDistanceToBox(
                 entity.hitBox.offset(
@@ -76,16 +68,15 @@ object AntiFireball : Module("AntiFireball", ModuleCategory.PLAYER) {
                 )
             )
 
-            // Is the fireball's speed-predicted distance further than the original distance?
-            if (predictedDistance >= distance || distance > range) {
+            // Skip if the predicted distance is (further than/same as) the normal distance or the predicted distance is out of reach
+            if (predictedDistance >= normalDistance || predictedDistance > range) {
                 continue
             }
 
             if (rotations) {
                 setTargetRotation(
-                    limitAngleChange(
-                        currentRotation ?: player.rotation,
-                        toRotation(nearestPoint, true).fixedSensitivity(),
+                    limitAngleChange(currentRotation ?: player.rotation,
+                        toRotation(nearestPoint, true),
                         nextFloat(minTurnSpeed, maxTurnSpeed),
                         smootherMode
                     ),
@@ -103,18 +94,21 @@ object AntiFireball : Module("AntiFireball", ModuleCategory.PLAYER) {
     @EventTarget
     fun onTick(event: TickEvent) {
         val player = mc.thePlayer ?: return
+        val entity = target ?: return
 
         val rotation = currentRotation ?: player.rotation
-        val entity = target ?: return
 
         if (!rotations && player.getDistanceToBox(entity.hitBox) <= range
             || isRotationFaced(entity, range.toDouble(), rotation)
         ) {
-            sendPacket(C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK))
-
             when (swing) {
                 "Normal" -> mc.thePlayer.swingItem()
                 "Packet" -> sendPacket(C0APacketAnimation())
+            }
+            sendPacket(C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK))
+
+            if (mc.playerController.currentGameType != WorldSettings.GameType.SPECTATOR) {
+                player.attackTargetEntityWithCurrentItem(entity)
             }
 
             target = null

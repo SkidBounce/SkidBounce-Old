@@ -212,6 +212,7 @@ object ModuleManager : Listenable {
             XRay,
             Zoot,
             Disabler,
+            ItemPhysics,
         )
 
         InventoryManager.startCoroutine()
