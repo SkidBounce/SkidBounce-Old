@@ -213,6 +213,7 @@ object ModuleManager : Listenable {
             Zoot,
             Disabler,
             ItemPhysics,
+            NoClickDelay,
         )
 
         InventoryManager.startCoroutine()

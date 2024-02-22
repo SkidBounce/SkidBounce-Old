@@ -184,7 +184,7 @@
         "module.inventoryMove.description": "Allows you to walk while an inventory is opened.",
         
         "module.itemESP.description": "Allows you to see items through walls.",
-
+        "module.noClickDelay.description": "Removes the miss penalty added in 1.8",
         "module.itemTeleport.description": "Allows you to pick up items far away.",
         "module.itemPhysics.description": "Allows dropped items to have physics",
         "module.keepAlive.description": "Tries to prevent you from dying.",

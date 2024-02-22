@@ -10,6 +10,7 @@ import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.api.ClientUpdate;
 import net.ccbluex.liquidbounce.event.*;
 import net.ccbluex.liquidbounce.features.module.modules.combat.AutoClicker;
+import net.ccbluex.liquidbounce.features.module.modules.combat.NoClickDelay;
 import net.ccbluex.liquidbounce.features.module.modules.exploit.AbortBreaking;
 import net.ccbluex.liquidbounce.features.module.modules.exploit.MultiActions;
 import net.ccbluex.liquidbounce.features.module.modules.world.FastPlace;
@@ -222,7 +223,7 @@ public abstract class MixinMinecraft {
     public void clickMouse() {
         CPSCounter.INSTANCE.registerClick(CPSCounter.MouseButton.LEFT);
 
-        if (AutoClicker.INSTANCE.handleEvents()) {
+        if (AutoClicker.INSTANCE.handleEvents() || NoClickDelay.INSTANCE.handleEvents()) {
             leftClickCounter = 0;
         }
         if (this.leftClickCounter <= 0) {
@@ -250,6 +251,9 @@ public abstract class MixinMinecraft {
                         }
                 }
             }
+        }
+        if (NoClickDelay.INSTANCE.handleEvents()) {
+            this.leftClickCounter = 0;
         }
     }
 
