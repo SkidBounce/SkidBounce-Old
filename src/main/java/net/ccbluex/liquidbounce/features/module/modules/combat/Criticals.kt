@@ -5,23 +5,20 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat
 
-import net.ccbluex.liquidbounce.event.AttackEvent
-import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.PacketEvent
-import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.other.*
+import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.vanilla.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly
+import net.ccbluex.liquidbounce.utils.PacketUtils
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.network.play.client.C03PacketPlayer
+import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
 object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
-
     private val criticalsModes = arrayOf(
         AACJump,
         BlocksMC,
@@ -29,6 +26,7 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
         Hop,
         Motion,
         NCPPacket,
+        NCPLatest,
         NoGround,
         Packet,
         Packet2,
@@ -53,8 +51,11 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
     private val noWater by BoolValue("NoWater", true) { mode != "NoGround" }
     private val noLava by BoolValue("NoLava", false) { mode != "NoGround" }
     private val noFly by BoolValue("NoFly", false) { mode != "NoGround" }
+
     val motionY by FloatValue("Motion-Y", 0.2f, 0.01f..0.42f) { mode == "Motion" }
     val motionJump by BoolValue("Motion-DoJump", true) { mode == "Motion" }
+
+    val ncplatestAttacks by IntegerValue("NCPLatest-Attacks", 5, 1..10) { mode == "NCPLatest" }
     val msTimer = MSTimer()
 
     @EventTarget
@@ -83,6 +84,11 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
     @EventTarget
     fun onPacket(event: PacketEvent) {
         modeModule.onPacket(event)
+    }
+
+    fun sendPacket(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0, ground: Boolean = false) {
+        val (pX, pY, pZ) = mc.thePlayer
+        PacketUtils.sendPacket(C04PacketPlayerPosition(pX + x, pY + y, pZ + z, ground))
     }
 
     override val tag

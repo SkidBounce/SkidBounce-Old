@@ -214,7 +214,6 @@ public abstract class MixinMinecraft {
         LiquidBounce.INSTANCE.stopClient();
     }
 
-    // TODO: convert to @Inject
     /**
      * @author ManInMyVan / SkidBounce
      * @reason ViaMCP
