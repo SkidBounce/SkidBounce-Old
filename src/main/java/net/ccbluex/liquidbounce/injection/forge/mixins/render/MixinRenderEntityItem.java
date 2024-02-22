@@ -53,7 +53,6 @@ public abstract class MixinRenderEntityItem extends Render<EntityItem> {
         }
     }
 
-
     /**
      * @author Eclipses
      *
@@ -99,7 +98,7 @@ public abstract class MixinRenderEntityItem extends Render<EntityItem> {
         if (isGui3d || this.renderManager.options != null) {
             float rotationYaw = (age / 20.0F + hoverStart) * (180F / (float) Math.PI);
 
-            rotationYaw *= itemPhysics.getRotationSpeed().get() * (1.0F + Math.min(age / 100.0F, 1.0F));
+            rotationYaw *= (isPhysicsState ? itemPhysics.getRotationSpeed().get() : 1f) * (1.0F + Math.min(age / 100.0F, 1.0F));
 
             if (isPhysicsState) {
                 if (itemIn.onGround) {
