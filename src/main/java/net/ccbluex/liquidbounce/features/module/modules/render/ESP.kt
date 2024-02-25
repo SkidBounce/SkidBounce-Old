@@ -5,38 +5,29 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.render
 
-import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.Render2DEvent
-import net.ccbluex.liquidbounce.event.Render3DEvent
-import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
 import net.ccbluex.liquidbounce.ui.font.GameFontRenderer.Companion.getColorIndex
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.EntityUtils.isLookingOnEntities
 import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
-import net.ccbluex.liquidbounce.utils.extensions.hitBox
-import net.ccbluex.liquidbounce.utils.extensions.isClientFriend
-import net.ccbluex.liquidbounce.utils.render.ColorUtils
+import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.render.*
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.draw2D
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawEntityBox
-import net.ccbluex.liquidbounce.utils.render.WorldToScreen
 import net.ccbluex.liquidbounce.utils.render.shader.shaders.GlowShader
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.client.renderer.GlStateManager.enableTexture2D
-import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.*
 import net.minecraft.entity.player.EntityPlayer
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.util.vector.Vector3f
 import java.awt.Color
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.math.*
 
 object ESP : Module("ESP", ModuleCategory.RENDER, subjective = true) {
 
@@ -200,7 +191,7 @@ object ESP : Module("ESP", ModuleCategory.RENDER, subjective = true) {
         renderNameTags = false
 
         try {
-            val entitiesGrouped = getEntitiesByColor(maxRenderDistance.toDouble())
+            val entitiesGrouped = getEntitiesByColor(maxRenderDistanceSq)
 
             entitiesGrouped.forEach { (color, entities) ->
                 GlowShader.startDraw(event.partialTicks, glowRenderScale)
@@ -208,7 +199,7 @@ object ESP : Module("ESP", ModuleCategory.RENDER, subjective = true) {
                 for (entity in entities) {
                     val distanceSquared = mc.thePlayer.getDistanceSqToEntity(entity)
 
-                    if (distanceSquared <= maxRenderDistance) {
+                    if (distanceSquared <= maxRenderDistanceSq) {
 
                         if (onLook && !isLookingOnEntities(entity, maxAngleDifference.toDouble())) {
                             continue
