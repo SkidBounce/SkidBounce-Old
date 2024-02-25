@@ -121,7 +121,6 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
     // Bypass
     private val swing by SwingValue()
-    private val keepSprint by BoolValue("KeepSprint", true)
 
     // AutoBlock
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Packet", "Fake"), "Packet")
@@ -685,42 +684,12 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
 
         sendPacket(C02PacketUseEntity(entity, ATTACK))
 
-        if (keepSprint && !KeepSprint.state) {
-            // Critical Effect
-            if (thePlayer.fallDistance > 0F && !thePlayer.onGround && !thePlayer.isOnLadder && !thePlayer.isInWater && !thePlayer.isPotionActive(
-                    Potion.blindness
-                ) && !thePlayer.isRiding) {
-                thePlayer.onCriticalHit(entity)
-            }
+        if (mc.playerController.currentGameType != WorldSettings.GameType.SPECTATOR)
+            thePlayer.attackTargetEntityWithCurrentItem(entity)
 
-            // Enchant Effect
-            if (EnchantmentHelper.getModifierForCreature(thePlayer.heldItem, entity.creatureAttribute) > 0F) {
-                thePlayer.onEnchantmentCritical(entity)
-            }
-        } else {
-            if (mc.playerController.currentGameType != WorldSettings.GameType.SPECTATOR) {
-                thePlayer.attackTargetEntityWithCurrentItem(entity)
-            }
-        }
-
-        // Extra critical effects
-        repeat(3) {
-            // Critical Effect
-            if (thePlayer.fallDistance > 0F && !thePlayer.onGround && !thePlayer.isOnLadder && !thePlayer.isInWater && !thePlayer.isPotionActive(
-                    Potion.blindness
-                ) && thePlayer.ridingEntity == null || Criticals.handleEvents() && Criticals.msTimer.hasTimePassed(
-                    Criticals.delay
-                ) && !thePlayer.isInWater && !thePlayer.isInLava && !thePlayer.isInWeb) {
-                thePlayer.onCriticalHit(entity)
-            }
-
-            // Enchant Effect
-            if (EnchantmentHelper.getModifierForCreature(thePlayer.heldItem,
-                    entity.creatureAttribute
-                ) > 0f || fakeSharp) {
-                thePlayer.onEnchantmentCritical(entity)
-            }
-        }
+        // FakeSharp
+        if (EnchantmentHelper.getModifierForCreature(thePlayer.heldItem, entity.creatureAttribute) <= 0f && fakeSharp)
+            thePlayer.onEnchantmentCritical(entity)
 
         CPSCounter.registerClick(CPSCounter.MouseButton.LEFT)
 
