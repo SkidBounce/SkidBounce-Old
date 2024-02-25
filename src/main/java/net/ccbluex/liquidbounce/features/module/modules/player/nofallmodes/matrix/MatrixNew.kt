@@ -27,10 +27,6 @@ object MatrixNew : NoFallMode("MatrixNew") {
             }
 
             mc.timer.timerSpeed = if (mc.thePlayer.fallDistance > 3.5) 0.3f else 1f
-//
-//            if (mc.thePlayer.fallDistance > 3.5)
-//                mc.timer.timerSpeed = 0.3f
-//            else mc.timer.timerSpeed = 1F
         }
 
         if (mc.theWorld.getCollidingBoundingBoxes(
