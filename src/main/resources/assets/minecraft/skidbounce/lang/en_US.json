@@ -14,7 +14,7 @@
 
         "notification.moduleEnabled": "Enabled %s",
         "notification.moduleDisabled": "Disabled %s",
-
+        "module.autoPlay.description": "Automatically queues up for next match",
         "module.aimBot.description": "Automatically faces selected entities around you.",
 
         "module.autoArmor.description": "Automatically equips the best armor in your inventory.",

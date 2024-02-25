@@ -214,6 +214,7 @@ object ModuleManager : Listenable {
             Disabler,
             ItemPhysics,
             NoClickDelay,
+            AutoPlay,
         )
 
         InventoryManager.startCoroutine()
