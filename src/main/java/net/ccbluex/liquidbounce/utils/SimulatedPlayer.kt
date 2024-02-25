@@ -12,38 +12,28 @@ import net.minecraft.block.*
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.entity.EntityPlayerSP
-import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.enchantment.EnchantmentProtection
-import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.SharedMonsterAttributes
-import net.minecraft.entity.ai.attributes.BaseAttributeMap
-import net.minecraft.entity.ai.attributes.IAttribute
-import net.minecraft.entity.ai.attributes.IAttributeInstance
-import net.minecraft.entity.ai.attributes.ServersideAttributeMap
-import net.minecraft.entity.item.EntityBoat
-import net.minecraft.entity.item.EntityMinecart
+import net.minecraft.enchantment.*
+import net.minecraft.entity.*
+import net.minecraft.entity.ai.attributes.*
+import net.minecraft.entity.item.*
 import net.minecraft.entity.player.PlayerCapabilities
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.potion.Potion
-import net.minecraft.potion.PotionEffect
+import net.minecraft.potion.*
 import net.minecraft.util.*
 import net.minecraft.util.BlockPos.MutableBlockPos
 import net.minecraft.world.World
 import net.minecraft.world.biome.BiomeGenBase
 import net.minecraft.world.border.WorldBorder
-import net.minecraft.world.chunk.Chunk
-import net.minecraft.world.chunk.IChunkProvider
+import net.minecraft.world.chunk.*
 import net.minecraftforge.common.ForgeModContainer
-import kotlin.math.abs
-import kotlin.math.ceil
+import kotlin.math.*
 
 /**
  * Compatible with client user ONLY. Useful for predicting movement ticks ahead.
  */
 @Suppress("SameParameterValue", "MemberVisibilityCanBePrivate")
-open class SimulatedPlayer(
+class SimulatedPlayer(
     private val player: EntityPlayerSP,
     var box: AxisAlignedBB,
     var movementInput: MovementInput,
@@ -84,8 +74,8 @@ open class SimulatedPlayer(
     private var noClip: Boolean,
     private var isSprinting: Boolean,
     private val foodStats: FoodStats,
-) : MinecraftInstance(), PlayerSimulation {
-    override val pos: Vec3
+) : MinecraftInstance() {
+    val pos: Vec3
         get() = Vec3(posX, posY, posZ)
 
     private var moveForward = 0f
@@ -172,7 +162,7 @@ open class SimulatedPlayer(
         }
     }
 
-    override fun tick() {
+    fun tick() {
         if (!onEntityUpdate() || player.isRiding) {
             return
         }
@@ -367,7 +357,7 @@ open class SimulatedPlayer(
         isSprinting = state
     }
 
-    protected open fun pushOutOfBlocks(x: Double, y: Double, z: Double): Boolean {
+    private fun pushOutOfBlocks(x: Double, y: Double, z: Double): Boolean {
         return if (noClip) {
             false
         } else {
@@ -904,7 +894,7 @@ open class SimulatedPlayer(
         return inWater
     }
 
-    open fun handleMaterialAcceleration(boundingBox: AxisAlignedBB, material: Material): Boolean {
+    private fun handleMaterialAcceleration(boundingBox: AxisAlignedBB, material: Material): Boolean {
         val i = MathHelper.floor_double(boundingBox.minX)
         val j = MathHelper.floor_double(boundingBox.maxX + 1.0)
         val k = MathHelper.floor_double(boundingBox.minY)
@@ -921,20 +911,11 @@ open class SimulatedPlayer(
                 for (l1 in k until l) {
                     for (i2 in i1 until j1) {
                         blockPos[k1, l1] = i2
-                        val state = getBlockState(blockPos)
-                        val block = state!!.block
-                        val result = block.isEntityInsideMaterial(worldObj,
-                            blockPos,
-                            state,
-                            player,
-                            l.toDouble(),
-                            material,
-                            false
-                        )
-                        if (result != null && result) {
-                            flag = true
-                            vec3 = block.modifyAcceleration(worldObj, blockPos, player, vec3)
-                        } else if ((result == null || result) && block.material === material) {
+                        val state = getBlockState(blockPos) ?: continue
+                        val block = state.block ?: continue
+                        // val result = null
+                        // ^^ block.isEntityInsideMaterial(worldObj, blockPos, state, player, l.toDouble(), material, false) always null
+                        if (block.material === material) {
                             val d0 = ((l1 + 1).toFloat() - BlockLiquid.getLiquidHeightPercent((state.getValue(
                                 BlockLiquid.LEVEL
                             ) as Int)
