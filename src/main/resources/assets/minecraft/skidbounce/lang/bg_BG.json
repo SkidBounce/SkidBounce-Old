@@ -90,7 +90,7 @@
         "module.autoBreak.description": "Автоматично чупи блока, който гледате.",
         
         "module.autoFish.description": "Автоматично улавя риба при използване на въдица.",
-        
+        "module.autoProjectile.description": "UNTRANSLATED: Automatically throws egg/snowball.",
         "module.autoRespawn.description": "Автоматично ви преражда, след като умрете.",
         
         "module.autoTool.description": "Автоматично избира най-добрия инструмент във вашия инвентар, за да изкопае блок.",
@@ -182,7 +182,7 @@
         "module.itemESP.description": "Позволява ви да виждате предмети през стени.",
         
         "module.itemTeleport.description": "Позволява ви да взимате предмети от далеч.",
-        
+        "module.itemPhysics.description": "UNTRANSLATED: Allows dropped items to have physics",
         "module.keepAlive.description": "Опитва се да ви попречи да умрете.",
         
         "module.keepContainer.description": "Позволява ви да отворите бивш затворен контейнер за инвентаризация навсякъде. (Натиснете клавиша INSERT, за да отворите)",

@@ -90,7 +90,7 @@
         "module.autoBreak.description": "Автоматически ломает блок, на который смотрите.",
         
         "module.autoFish.description": "Автоматически ловит рыбу",
-        
+        "module.autoProjectile.description": "UNTRANSLATED: Automatically throws egg/snowball.",
         "module.autoRespawn.description": "Автоматическое возраждение после смерти.",
         
         "module.autoTool.description": "Автоматически выбирает инструмент из хотбара для ломания блока.",
@@ -182,7 +182,7 @@
         "module.itemESP.description": "Позволяет видеть лут сквозь стены.",
         
         "module.itemTeleport.description": "Позволяет подбирать лут издалека.",
-        
+        "module.itemPhysics.description": "UNTRANSLATED: Allows dropped items to have physics",
         "module.keepAlive.description": "Пытается не дать вам умереть",
         
         "module.keepContainer.description": "Позволяет открыть ранее закрытый инвентарь в любом месте. (Для открытия нажать INSERT)",

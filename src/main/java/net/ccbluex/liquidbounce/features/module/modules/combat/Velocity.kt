@@ -59,6 +59,9 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     val tickreduceVertical by BoolValue("TickReduce-Vertical", false) { mode == "Custom" && tickreduce }
     val tickreduceHorizontal by BoolValue("TickReduce-Horizontal", false) { mode == "Custom" && tickreduce }
     val reverse by BoolValue("Reverse", false) { mode == "Custom" }
+    val onLook by BoolValue("onLook", false) { reverse }
+    val range by FloatValue("Range", 3.0F, 1F..5.0F) { onLook && reverse }
+    val maxAngleDifference by FloatValue("MaxAngleDifference", 45.0f, 5.0f..90f) { onLook && reverse }
     val reverseSmooth by BoolValue("Reverse-Smooth", false) { mode == "Custom" && reverse }
     val reverseNoGround by BoolValue("Reverse-NoGround", true) { mode == "Custom" && reverse }
     val reverseTicks by IntegerValue("Reverse-StrafeTicks", 1, 1..20) { mode == "Custom" && reverse }

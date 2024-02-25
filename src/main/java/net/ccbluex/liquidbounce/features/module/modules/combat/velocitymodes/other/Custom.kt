@@ -15,6 +15,9 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.horizont
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.jump
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.jumpFailRate
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.jumpMotion
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.maxAngleDifference
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.onLook
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.range
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.reverse
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.reverseNoGround
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.reverseSmooth
@@ -28,9 +31,12 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.tickredu
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.velocityTick
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.verticalMultiplier
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
+import net.ccbluex.liquidbounce.utils.EntityUtils.isLookingOnEntities
+import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
+import net.minecraft.entity.Entity
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 
 /**
@@ -60,17 +66,30 @@ object Custom : VelocityMode("Custom") {
     }
 
     override fun onUpdate() {
-        if (jump && mc.thePlayer.hurtTime == 9 && RandomUtils.nextInt(1, 100) > jumpFailRate) {
+        if (jump && mc.thePlayer.hurtTime == 9 && RandomUtils.nextInt(1, 100) > jumpFailRate)
             mc.thePlayer.jump(jumpMotion)
-        }
         if (reverse && !(reverseNoGround && mc.thePlayer.onGround)) {
-            if (reverseTicks > velocityTick) {
-                if (reverseSmooth) mc.thePlayer.speedInAir = reverseStrength
-                else speed *= reverseStrength
-            } else if (reverseSmooth) mc.thePlayer.speedInAir = 0.02f
+            run {
+                val nearbyEntity = getNearestEntityInRange() ?: return@run
+
+                if (onLook && !isLookingOnEntities(nearbyEntity, maxAngleDifference.toDouble())) {
+                    if (reverseSmooth)
+                        mc.thePlayer.speedInAir = 0.02f
+                    return@run
+                }
+
+                if (reverseTicks > velocityTick)
+                    if (reverseSmooth)
+                        mc.thePlayer.speedInAir = reverseStrength
+                    else
+                        speed *= reverseStrength
+                else if (reverseSmooth)
+                    mc.thePlayer.speedInAir = 0.02f
+            }
         }
         if (tickreduce && tickreduceTicks == velocityTick) {
-            if (tickreduceVertical) mc.thePlayer.motionY *= tickreduceMultiplier
+            if (tickreduceVertical)
+                mc.thePlayer.motionY *= tickreduceMultiplier
             if (tickreduceHorizontal) {
                 mc.thePlayer.motionX *= tickreduceMultiplier
                 mc.thePlayer.motionZ *= tickreduceMultiplier
@@ -79,8 +98,25 @@ object Custom : VelocityMode("Custom") {
     }
 
     override fun onAttack() {
-        if (mc.thePlayer.hurtTime < 3 || !attackReduce) return
-        mc.thePlayer.motionX *= attackReduceMultiplier
-        mc.thePlayer.motionZ *= attackReduceMultiplier
+        if (mc.thePlayer.hurtTime >= 3 && attackReduce) {
+            mc.thePlayer.motionX *= attackReduceMultiplier
+            mc.thePlayer.motionZ *= attackReduceMultiplier
+        }
+    }
+
+    private fun getAllEntities(): List<Entity> {
+        return mc.theWorld.loadedEntityList
+            .filter { isSelected(it, true) }
+            .toList()
+    }
+
+    private fun getNearestEntityInRange(): Entity? {
+        val entitiesInRange = getAllEntities()
+            .filter {
+                val distance = mc.thePlayer.getDistanceToEntityBox(it)
+                (distance <= range)
+            }
+
+        return entitiesInRange.minByOrNull { mc.thePlayer.getDistanceToEntityBox(it) }
     }
 }

@@ -91,7 +91,7 @@
         "module.autoBreak.description": "自动破坏你瞄准的方块。",
         
         "module.autoFish.description": "切换到鱼竿时自动钓鱼。",
-        
+        "module.autoProjectile.description": "自动扔鸡蛋/雪球。",
         "module.autoRespawn.description": "死后自动重生。",
         
         "module.autoTool.description": "挖方块时自动切换到快捷栏中最合适的工具。",
@@ -183,7 +183,7 @@
         "module.itemESP.description": "允许你透过墙壁看到物品。",
         
         "module.itemTeleport.description": "允许你捡起远处的物品。",
-        
+        "module.itemPhysics.description": "使掉落物具有物理特性。",
         "module.keepAlive.description": "尝试防止你死去。",
         
         "module.keepContainer.description": "允许你在任何位置打开上次关闭的容器 (按INSERT键打开)",
