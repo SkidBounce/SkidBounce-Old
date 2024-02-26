@@ -45,7 +45,7 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         // Other server specific flys
         Mineplex, Minesucht, Redesky,
         // Spartan
-        Spartan, Spartan2, BugSpartan,
+        Spartan, Spartan2, BugSpartan, SpartanVanilla,
 
         // Other anti-cheats
         MineSecure, HawkEye, HAC, WatchCat, Verus, Vulcan, Wave,
@@ -62,6 +62,10 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         { mode in arrayOf("Vanilla", "KeepAlive", "MineSecure", "BugSpartan") }
     private val vanillaKickBypass by BoolValue("Vanilla-KickBypass", false)
         { mode in arrayOf("Vanilla", "SmoothVanilla") }
+
+    // SpartanVanilla
+    val spartanvanillaSpeed by FloatValue("SpartanVanilla-Speed", 2f, 0f..10f) { mode == "SpartanVanilla" }
+    val spartanvanillaTimer by FloatValue("SpartanVanilla-Timer", 0.5f, 0.01f..1f) { mode == "SpartanVanilla" }
 
     // AAC
     val aacSpeed by FloatValue("AAC1.9.10-Speed", 0.3f, 0f..1f) { mode == "AAC1.9.10" }
