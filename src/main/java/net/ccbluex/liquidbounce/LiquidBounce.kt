@@ -8,18 +8,14 @@ package net.ccbluex.liquidbounce
 import de.florianmichael.viamcp.ViaMCP
 import net.ccbluex.liquidbounce.api.ClientUpdate.gitInfo
 import net.ccbluex.liquidbounce.cape.CapeService
-import net.ccbluex.liquidbounce.event.ClientShutdownEvent
-import net.ccbluex.liquidbounce.event.EventManager
+import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.event.EventManager.callEvent
 import net.ccbluex.liquidbounce.event.EventManager.registerListener
-import net.ccbluex.liquidbounce.event.StartupEvent
 import net.ccbluex.liquidbounce.features.command.CommandManager
 import net.ccbluex.liquidbounce.features.command.CommandManager.registerCommands
 import net.ccbluex.liquidbounce.features.module.ModuleManager
 import net.ccbluex.liquidbounce.features.module.ModuleManager.registerModules
-import net.ccbluex.liquidbounce.features.special.BungeeCordSpoof
-import net.ccbluex.liquidbounce.features.special.ClientFixes
-import net.ccbluex.liquidbounce.features.special.ClientRichPresence
+import net.ccbluex.liquidbounce.features.special.*
 import net.ccbluex.liquidbounce.features.special.ClientRichPresence.showRichPresenceValue
 import net.ccbluex.liquidbounce.file.FileManager
 import net.ccbluex.liquidbounce.file.FileManager.loadAllConfigs
@@ -28,22 +24,18 @@ import net.ccbluex.liquidbounce.lang.LanguageManager.loadLanguages
 import net.ccbluex.liquidbounce.script.ScriptManager
 import net.ccbluex.liquidbounce.script.ScriptManager.enableScripts
 import net.ccbluex.liquidbounce.script.ScriptManager.loadScripts
+import net.ccbluex.liquidbounce.script.remapper.Remapper
 import net.ccbluex.liquidbounce.script.remapper.Remapper.loadSrg
-import net.ccbluex.liquidbounce.tabs.BlocksTab
-import net.ccbluex.liquidbounce.tabs.ExploitsTab
-import net.ccbluex.liquidbounce.tabs.HeadsTab
+import net.ccbluex.liquidbounce.tabs.*
 import net.ccbluex.liquidbounce.ui.client.GuiClientConfiguration.Companion.updateClientWindow
 import net.ccbluex.liquidbounce.ui.client.altmanager.GuiAltManager.Companion.loadActiveGenerators
 import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui
 import net.ccbluex.liquidbounce.ui.client.hud.HUD
 import net.ccbluex.liquidbounce.ui.font.Fonts.loadFonts
-import net.ccbluex.liquidbounce.utils.Background
+import net.ccbluex.liquidbounce.utils.*
 import net.ccbluex.liquidbounce.utils.ClassUtils.hasForge
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.ClientUtils.disableFastRender
-import net.ccbluex.liquidbounce.utils.MovementUtils
-import net.ccbluex.liquidbounce.utils.PacketUtils
-import net.ccbluex.liquidbounce.utils.RotationUtils
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.utils.render.MiniMapRegister
 import net.ccbluex.liquidbounce.utils.timing.TickedActions
@@ -117,6 +109,10 @@ object LiquidBounce {
         try {
             // Remapper
             loadSrg()
+
+            if (!Remapper.mappingsLoaded) {
+                error("Failed to load SRG mappings.")
+            }
 
             // ScriptManager
             loadScripts()

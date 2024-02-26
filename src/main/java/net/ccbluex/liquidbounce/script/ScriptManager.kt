@@ -6,9 +6,9 @@
 package net.ccbluex.liquidbounce.script
 
 import net.ccbluex.liquidbounce.file.FileManager.dir
+import net.ccbluex.liquidbounce.script.remapper.Remapper
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
-import java.io.File
-import java.io.FileFilter
+import java.io.*
 
 object ScriptManager {
 
@@ -37,6 +37,10 @@ object ScriptManager {
      */
     fun loadScript(scriptFile: File) {
         try {
+            if (!Remapper.mappingsLoaded) {
+                error("The mappings were not loaded, re-start and check your internet connection.")
+            }
+
             val script = Script(scriptFile)
             script.initScript()
             scripts += script
