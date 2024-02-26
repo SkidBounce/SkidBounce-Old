@@ -6,8 +6,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.player
 
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.hypixel.*
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.matrix.*
@@ -18,10 +17,7 @@ import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.utils.MovementUtils.aboveVoid
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlock
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.block.BlockLiquid
 import net.minecraft.util.AxisAlignedBB.fromBounds
 
@@ -71,7 +67,7 @@ object NoFall : Module("NoFall", ModuleCategory.PLAYER) {
         HypSpoof,
 
         Cardinal,
-        Spartan,
+        OldSpartan,
         CubeCraft,
         Medusa,
         Medusa2,

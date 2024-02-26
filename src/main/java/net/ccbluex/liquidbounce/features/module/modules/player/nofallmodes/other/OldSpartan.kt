@@ -13,7 +13,7 @@ import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 /**
  * @author CCBlueX/LiquidBounce
  */
-object Spartan : NoFallMode("Spartan") {
+object OldSpartan : NoFallMode("OldSpartan") {
     private val spartanTimer = TickTimer()
 
     override fun onUpdate() {
