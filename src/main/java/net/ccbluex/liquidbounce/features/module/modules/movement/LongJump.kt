@@ -6,11 +6,10 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.mineplex.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.ncp.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.ncp.NCP
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.other.*
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
@@ -30,7 +29,7 @@ object LongJump : Module("LongJump", ModuleCategory.MOVEMENT) {
         Mineplex, Mineplex2, Mineplex3,
 
         // Redesky
-        Redesky,
+        Redesky, Redesky2,
 
         // Other
         Hycraft, Buzz,
@@ -39,11 +38,19 @@ object LongJump : Module("LongJump", ModuleCategory.MOVEMENT) {
     private val modes = longJumpModes.map { it.modeName }.toTypedArray()
 
     val mode by ListValue("Mode", modes, "NCP")
-    val ncpBoost by FloatValue("NCPBoost", 4.25f, 1f..10f) { mode == "NCP" }
-    val redeskyJumpMovement by FloatValue("RedeskyJumpMovement", 0.15f, 0.05f..0.25f) { mode == "Redesky" }
-    val redeskyMotionY by FloatValue("RedeskyMotionY",0.05f,0.05f..1f) { mode == "Redesky" }
-    val redeskyUseTimer by BoolValue("RedeskyUseTimer", false) { mode == "Redesky" }
-    val redeskyTimer by FloatValue("RedeskyTimer", 0.7f, 0.1f..1f) { mode == "Redesky" }
+    val ncpBoost by FloatValue("NCP-Boost", 4.25f, 1f..10f) { mode == "NCP" }
+    val redeskyJumpMovement by FloatValue("Redesky-JumpMovement", 0.15f, 0.05f..0.25f) { mode == "Redesky" }
+    val redeskyMotionY by FloatValue("Redesky-MotionY",0.05f,0.05f..1f) { mode == "Redesky" }
+    val redeskyUseTimer by BoolValue("Redesky-UseTimer", false) { mode == "Redesky" }
+    val redeskyTimer by FloatValue("Redesky-Timer", 0.7f, 0.1f..1f) { mode == "Redesky" }
+    val redesky2YMotionReducer by BoolValue("Redesky2-YMotionReducer", false) { mode == "Redesky2" }
+    val redesky2YMotion by FloatValue("Redesky2YMotion", 0.08f, 0.01f..0.2f) { mode == "Redesky2" }
+    val redesky2ReduceYMotion by FloatValue("Redesky2-ReduceYMotion", 0.15f, 0.01f..0.2f) { mode == "Redesky2" }
+    val redesky2MinYMotion by FloatValue("Redesky2-MinYMotion", 0.04f, 0.01f..0.2f) { mode == "Redesky2" }
+    val redesky2AirSpeed by FloatValue("Redesky2-AirSpeed", 0.1f,0.05f..0.25f) { mode == "Redesky2" }
+    val redesky2MinAirSpeed by FloatValue("Redesky2-MinAirSpeed", 0.08f, 0.05f..0.25f) { mode == "Redesky2" }
+    val redesky2ReduceAirSpeed by FloatValue("Redesky2-ReduceAirSpeed", 0.16f,0.05f..0.25f) { mode == "Redesky2" }
+    val redesky2AirSpeedReducer by BoolValue("Redesky2-AirSpeedReducer", false) { mode == "Redesky2" }
 
     private val autoJump by BoolValue("AutoJump", false)
 
@@ -52,6 +59,7 @@ object LongJump : Module("LongJump", ModuleCategory.MOVEMENT) {
     var teleported = false
     var canMineplexBoost = false
 
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         if (LadderJump.jumped) speed *= 1.08f
