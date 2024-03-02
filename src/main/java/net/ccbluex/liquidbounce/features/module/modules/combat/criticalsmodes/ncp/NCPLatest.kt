@@ -5,7 +5,6 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.ncp
 
-import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.ncplatestAttacks
 import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.sendPacket
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.minecraft.entity.Entity
