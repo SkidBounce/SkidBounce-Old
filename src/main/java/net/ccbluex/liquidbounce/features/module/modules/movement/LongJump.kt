@@ -13,7 +13,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.n
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.other.*
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.value.*
 
 object LongJump : Module("LongJump", ModuleCategory.MOVEMENT) {
@@ -94,7 +94,7 @@ object LongJump : Module("LongJump", ModuleCategory.MOVEMENT) {
         }
         if (autoJump && mc.thePlayer.onGround && isMoving) {
             jumped = true
-            mc.thePlayer.jump(0.42)
+            mc.thePlayer.jmp()
         }
     }
 

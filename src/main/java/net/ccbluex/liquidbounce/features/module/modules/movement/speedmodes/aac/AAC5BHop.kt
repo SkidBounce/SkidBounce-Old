@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -27,7 +27,7 @@ object AAC5BHop : SpeedMode("AAC5BHop") {
             when {
                 thePlayer.onGround -> {
                     if (legitJump) {
-                        thePlayer.jump(0.42)
+                        thePlayer.jmp()
                         legitJump = false
                         return
                     }

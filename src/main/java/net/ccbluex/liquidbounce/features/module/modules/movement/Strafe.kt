@@ -14,7 +14,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.MovementUtils.direction
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.utils.extensions.toDegreesF
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -51,7 +51,7 @@ object Strafe : Module("Strafe", ModuleCategory.MOVEMENT, gameDetecting = false)
             }
             val yaw = mc.thePlayer.rotationYaw
             mc.thePlayer.rotationYaw = direction.toDegreesF()
-            mc.thePlayer.jump(0.42)
+            mc.thePlayer.jmp()
             mc.thePlayer.rotationYaw = yaw
             jump = true
             if (wasDown) {

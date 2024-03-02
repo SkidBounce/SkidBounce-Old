@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.oth
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.*
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -16,20 +16,19 @@ import net.ccbluex.liquidbounce.utils.extensions.jump
 object Matrix : SpeedMode("Matrix") {
     
     override fun onUpdate() {
-        if (mc.thePlayer.isInWater) return
+        if (mc.thePlayer.isInWater)
+            return
         if (isMoving) {
             if (mc.thePlayer.onGround) {
-                mc.thePlayer.jump(0.42)
+                mc.thePlayer.jmp()
                 mc.thePlayer.speedInAir = 0.02098f
                 mc.timer.timerSpeed = 1.055f
-            } else {
+            } else
                 strafe()
-            }    
-        } else {
-            mc.timer.timerSpeed = 1f    
-        }
+        } else
+            mc.timer.timerSpeed = 1f
     }
-    
+
     override fun onDisable() {
         mc.thePlayer.speedInAir = 0.02f
         mc.timer.timerSpeed = 1f

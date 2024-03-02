@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.ver
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.minecraft.potion.Potion
 
 /**
@@ -23,7 +23,7 @@ object NewVerusLowHop : SpeedMode("NewVerusLowHop") {
 
         if (isMoving) {
             if (mc.thePlayer.onGround) {
-                player.jump(0.42)
+                player.jmp()
                 airTicks = 0
 
                 // Checks the presence of Speed potion effect 1 & 2+
@@ -39,15 +39,11 @@ object NewVerusLowHop : SpeedMode("NewVerusLowHop") {
 
                 // Checks the presence of Slowness potion effect.
                 speed = if (player.isPotionActive(Potion.moveSlowdown)
-                    && player.getActivePotionEffect(Potion.moveSlowdown).amplifier == 1) {
-                    0.3f
-                } else {
-                    0.33f
-                }
+                    && player.getActivePotionEffect(Potion.moveSlowdown).amplifier == 1)
+                    0.3f else 0.33f
             } else {
-                if (airTicks == 0) {
+                if (airTicks == 0)
                     mc.thePlayer.motionY = -0.09800000190734863
-                }
 
                 airTicks++
                 speed *= 0.99f

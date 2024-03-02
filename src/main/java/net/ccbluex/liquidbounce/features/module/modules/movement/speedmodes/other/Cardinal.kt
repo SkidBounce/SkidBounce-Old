@@ -17,9 +17,7 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.isOnGround
 import net.ccbluex.liquidbounce.utils.MovementUtils.onIce
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.getBlock
-import net.ccbluex.liquidbounce.utils.extensions.jump
-import net.ccbluex.liquidbounce.utils.extensions.stopXZ
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.minecraft.init.Blocks.slime_block
 import net.minecraft.init.Blocks.water
 
@@ -37,7 +35,7 @@ object Cardinal : SpeedMode("Cardinal") {
         mc.thePlayer.jumpMovementFactor = 0.026f
 
         if (mc.thePlayer.onGround && !(onIce && IceSpeed.state && cardinalJumpWhenIceSpeed)) {
-            mc.thePlayer.jump(0.42)
+            mc.thePlayer.jmp()
             when (mc.thePlayer.position.down().getBlock()) {
                 water -> mc.thePlayer.motionY *= cardinalAboveWaterMultiplier
                 slime_block -> mc.thePlayer.motionY *= cardinalSlimeMultiplier

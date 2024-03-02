@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.*
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -22,7 +22,7 @@ object AAC2BHop : SpeedMode("AAC2BHop") {
 
         if (isMoving) {
             if (thePlayer.onGround) {
-                thePlayer.jump(0.42)
+                thePlayer.jmp()
                 thePlayer.motionX *= 1.02
                 thePlayer.motionZ *= 1.02
             } else if (thePlayer.motionY > -0.2) {

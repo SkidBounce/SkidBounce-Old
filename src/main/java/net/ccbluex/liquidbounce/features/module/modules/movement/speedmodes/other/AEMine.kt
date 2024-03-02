@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.oth
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 /**
  * @author Aspw-w/NightX-Client
@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.utils.extensions.jump
 object AEMine : SpeedMode("AEMine") {
     override fun onMotion(event: MotionEvent) {
         if (mc.thePlayer.onGround && isMoving) {
-            mc.thePlayer.jump(0.42);
+            mc.thePlayer.jmp()
             mc.timer.timerSpeed = 1f
         } else
             mc.timer.timerSpeed = 1.30919551f

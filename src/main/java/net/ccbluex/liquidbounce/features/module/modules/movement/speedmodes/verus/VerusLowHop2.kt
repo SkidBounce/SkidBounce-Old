@@ -22,7 +22,6 @@ object VerusLowHop2 : SpeedMode("VerusLowHop2") {
             mc.gameSettings.keyBindJump.pressed = false
             if (onGround) {
                 jump(0)
-                motionY = 0.0
                 strafe(0.61f)
                 event.y = 0.41999998688698
             }

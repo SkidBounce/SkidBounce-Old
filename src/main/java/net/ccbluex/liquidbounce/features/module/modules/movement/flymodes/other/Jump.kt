@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
 import net.ccbluex.liquidbounce.event.BlockBBEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.jumpY
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.minecraft.block.BlockLadder
 import net.minecraft.block.material.Material
 import net.minecraft.util.AxisAlignedBB
@@ -21,7 +21,7 @@ object Jump : FlyMode("Jump") {
         if (mc.thePlayer == null)
             return
         if (mc.thePlayer.onGround && !mc.thePlayer.isJumping)
-            mc.thePlayer.jump(0.42)
+            mc.thePlayer.jmp()
         if ((mc.gameSettings.keyBindJump.isKeyDown && !mc.gameSettings.keyBindSneak.isKeyDown) || mc.thePlayer.onGround)
             jumpY = mc.thePlayer.posY
     }

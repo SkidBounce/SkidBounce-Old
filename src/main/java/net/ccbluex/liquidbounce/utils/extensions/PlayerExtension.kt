@@ -222,8 +222,16 @@ fun EntityPlayer.fakeJump() {
     this.triggerAchievement(jumpStat)
 }
 
+fun EntityPlayer.jmp(
+    motion: Number = 0.41999998688697815,
+    boost: Boolean = true,
+    ignoreJumpBoost: Boolean = false,
+    ignoreGround: Boolean = false,
+    whenJumping: Boolean = false
+) = jump(motion, boost, ignoreJumpBoost, ignoreGround, whenJumping)
+
 fun EntityPlayer.jump(
-    motion: Number = 0.42,
+    motion: Number = 0.41999998688697815,
     boost: Boolean = true,
     ignoreJumpBoost: Boolean = false,
     ignoreGround: Boolean = false,
@@ -231,12 +239,11 @@ fun EntityPlayer.jump(
 ) {
     if (!ignoreGround && !onGround) return
     if (!whenJumping && isJumping) return
-    val z = motionX
-    val x = motionZ
+    val x = motionX
+    val z = motionZ
 
     jump()
     motionY = getJumpBoostModifier(motion.toDouble(), !ignoreJumpBoost)
-    motionY -= 0.000000013113021835042815 // why mojang
 
     if (!boost) {
         motionX = x

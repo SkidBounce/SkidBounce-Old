@@ -406,7 +406,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
 
         // Jumping needs to be done here, so it doesn't get detected by movement-sensitive anti-cheats.
         if (mode == "Telly" && player.onGround && isMoving && currRotation == player.rotation && ticksUntilJump >= jumpTicks) {
-            player.jump(0.42)
+            player.jmp()
 
             ticksUntilJump = 0
             jumpTicks = randomDelay(minJumpTicks.get(), maxJumpTicks.get())
@@ -931,7 +931,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
                     if ((!isSneaking || speed != 0f) && it.blockPos == info.blockPos && (it.sideHit != info.enumFacing || shouldJumpForcefully) && isMoving && currRotation.yaw.roundToInt() % 45f == 0f) {
                         if (!isSneaking) {
                             if (player.onGround && !isLookingDiagonally) {
-                                player.jump(0.42)
+                                player.jmp()
                             }
 
                             if (shouldJumpForcefully) {

@@ -6,7 +6,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -22,6 +22,6 @@ object LAAC : NoWebMode("LAAC") {
         if (!mc.gameSettings.keyBindSneak.isKeyDown)
             mc.thePlayer.motionY = 0.0
 
-        mc.thePlayer.jump(0.42)
+        mc.thePlayer.jmp()
     }
 }

@@ -31,5 +31,4 @@ object MiJump : SpeedMode("MiJump") {
         }
         strafe()
     }
-
 }

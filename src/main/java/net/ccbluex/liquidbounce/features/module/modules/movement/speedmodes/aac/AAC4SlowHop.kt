@@ -27,7 +27,7 @@ object AAC4SlowHop : SpeedMode("AAC4SlowHop") {
                 return
             }
 
-            jump(0.42)
+            jmp()
 
             if (!onGround && fallDistance <= 0.1) {
                 speedInAir = 0.02f

@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.oth
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -17,9 +17,8 @@ object MineBlazeHop : SpeedMode("MineBlazeHop") {
         if (mc.thePlayer == null) {
             return
         }
-        if (mc.thePlayer.onGround && isMoving) {
-            mc.thePlayer.jump(0.42)
-        }
+        if (mc.thePlayer.onGround && isMoving)
+            mc.thePlayer.jmp()
         if (mc.thePlayer.motionY > 0.003) {
             mc.thePlayer.motionX *= 1.0015
             mc.thePlayer.motionZ *= 1.0015

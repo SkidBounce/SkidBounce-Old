@@ -6,7 +6,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -16,6 +16,6 @@ object Rewinside : NoWebMode("Rewinside") {
         if (!mc.thePlayer.isInWeb)
             return
         mc.thePlayer.jumpMovementFactor = 0.42f
-        mc.thePlayer.jump(0.42)
+        mc.thePlayer.jmp()
     }
 }

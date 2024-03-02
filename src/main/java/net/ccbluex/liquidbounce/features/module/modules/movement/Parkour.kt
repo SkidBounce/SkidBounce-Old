@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 object Parkour : Module("Parkour", ModuleCategory.MOVEMENT, gameDetecting = false) {
 
@@ -21,6 +21,6 @@ object Parkour : Module("Parkour", ModuleCategory.MOVEMENT, gameDetecting = fals
         if (isMoving && thePlayer.onGround && !thePlayer.isSneaking && !mc.gameSettings.keyBindSneak.isKeyDown &&
                 mc.theWorld.getCollidingBoundingBoxes(thePlayer, thePlayer.entityBoundingBox
                         .offset(0.0, -0.5, 0.0).expand(-0.001, 0.0, -0.001)).isEmpty())
-            thePlayer.jump(0.42)
+            thePlayer.jmp()
     }
 }

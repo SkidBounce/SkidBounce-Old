@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.oth
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -17,7 +17,7 @@ object Legit : SpeedMode("Legit") {
         mc.thePlayer ?: return
 
         if (isMoving)
-            mc.thePlayer.jump(0.42)
+            mc.thePlayer.jmp()
     }
 
     override fun onUpdate() {

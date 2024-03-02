@@ -12,7 +12,7 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.extensions.component1
 import net.ccbluex.liquidbounce.utils.extensions.component2
 import net.ccbluex.liquidbounce.utils.extensions.component3
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
 /**
@@ -31,7 +31,7 @@ object OldNCP : FlyMode("OldNCP") {
 			)
 		}
 
-		mc.thePlayer.jump(0.42)
+		mc.thePlayer.jmp()
 		mc.thePlayer.swingItem()
 	}
 

@@ -11,7 +11,7 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.extensions.fixedSensitivityPitch
 import net.ccbluex.liquidbounce.utils.extensions.fixedSensitivityYaw
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextInt
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
@@ -62,7 +62,7 @@ object AntiAFK : Module("AntiAFK", ModuleCategory.PLAYER, gameDetecting = false)
                 randomTimerDelay = 500L
                 when (nextInt(0, 6)) {
                     0 -> {
-                        if (thePlayer.onGround) thePlayer.jump(0.42)
+                        if (thePlayer.onGround) thePlayer.jmp()
                         delayTimer.reset()
                     }
                     1 -> {
@@ -94,7 +94,7 @@ object AntiAFK : Module("AntiAFK", ModuleCategory.PLAYER, gameDetecting = false)
                     mc.gameSettings.keyBindForward.pressed = true
 
                 if (jump && thePlayer.onGround)
-                    thePlayer.jump(0.42)
+                    thePlayer.jmp()
 
                 if (rotateValue.get() && delayTimer.hasTimePassed(rotationDelay)) {
                     thePlayer.fixedSensitivityYaw += rotationAngle

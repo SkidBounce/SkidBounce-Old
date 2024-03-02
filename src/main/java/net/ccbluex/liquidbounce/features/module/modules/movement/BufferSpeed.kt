@@ -14,7 +14,7 @@ import net.ccbluex.liquidbounce.utils.MovementUtils
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
@@ -98,7 +98,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
             fastHop = false
 
             if (slime && (getBlock(blockPos.down()) is BlockSlime || getBlock(blockPos) is BlockSlime)) {
-                thePlayer.jump(0.42)
+                thePlayer.jmp()
                 // TODO: motX & motZ will be different?
                 thePlayer.motionX = thePlayer.motionY * 1.132
                 thePlayer.motionY = 0.08
@@ -116,7 +116,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
                     "new" -> {
                         fastHop = true
                         if (legitHop) {
-                            thePlayer.jump(0.42)
+                            thePlayer.jmp()
                             thePlayer.onGround = false
                             legitHop = false
                             return
@@ -140,7 +140,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
                         fastHop = true
 
                         if (legitHop) {
-                            thePlayer.jump(0.42)
+                            thePlayer.jmp()
                             thePlayer.onGround = false
                             legitHop = false
                             return
@@ -169,7 +169,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
                 if (thePlayer.posY - thePlayer.posY.toInt() >= 0.12500) {
                     boost(snowBoost)
                 } else {
-                    thePlayer.jump(0.42)
+                    thePlayer.jmp()
                     forceDown = true
                 }
                 return

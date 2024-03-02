@@ -153,14 +153,14 @@ object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
         when (mode.lowercase()) {
             "jump" -> if (mc.thePlayer.onGround && tickTimer.hasTimePassed(jumpDelay)) {
                 mc.thePlayer.fakeJump()
-                mc.thePlayer.jump(0.42)
+                mc.thePlayer.jmp()
             } else if (!mc.thePlayer.onGround) {
                 mc.thePlayer.isAirBorne = false
                 tickTimer.reset()
             }
 
             "motion" -> {
-                mc.thePlayer.jump(boost = false, ignoreJumpBoost = true, whenJumping = true)
+                mc.thePlayer.jump(0.42, boost = false, ignoreJumpBoost = true, whenJumping = true)
                 if (!mc.thePlayer.onGround && mc.thePlayer.motionY < 0.1) {
                     mc.thePlayer.motionY = -0.3
                 }
@@ -172,7 +172,7 @@ object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
             }
 
             "motiontp" -> if (mc.thePlayer.onGround) {
-                mc.thePlayer.jump(boost = false, ignoreJumpBoost = true, whenJumping = true)
+                mc.thePlayer.jump(0.42, boost = false, ignoreJumpBoost = true, whenJumping = true)
             } else if (mc.thePlayer.motionY < 0.23) {
                 mc.thePlayer.setPosition(mc.thePlayer.posX, truncate(mc.thePlayer.posY), mc.thePlayer.posZ)
             }
