@@ -456,6 +456,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onTick(event: TickEvent) {
         val target = placeRotation?.placeInfo
@@ -734,6 +735,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
     }
 
     // Scaffold visuals
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onRender2D(event: Render2DEvent) {
         if (counterDisplay) {
@@ -767,6 +769,7 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
     }
 
     // Visuals
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onRender3D(event: Render3DEvent) {
         val player = mc.thePlayer ?: return

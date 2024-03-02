@@ -340,6 +340,7 @@ object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
      *
      * @param event
      */
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onRender2D(event: Render2DEvent) {
         if (counterDisplay) {

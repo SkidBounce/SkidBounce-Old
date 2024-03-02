@@ -70,13 +70,14 @@ object BoostHypixel : FlyMode("BoostHypixel") {
 	}
 
 	override fun onMotion(event: MotionEvent) {
+		@Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
 		when (event.eventState) {
 			EventState.PRE -> {
 				tickTimer.update()
-				
+
 				if (tickTimer.hasTimePassed(2)) {
 					mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.0E-5, mc.thePlayer.posZ)
-					
+
 					tickTimer.reset()
 				}
 

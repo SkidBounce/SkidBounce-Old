@@ -41,6 +41,7 @@ object AntiAFK : Module("AntiAFK", ModuleCategory.PLAYER, gameDetecting = false)
     private val swingDelayTimer = MSTimer()
     private val delayTimer = MSTimer()
 
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         val thePlayer = mc.thePlayer ?: return

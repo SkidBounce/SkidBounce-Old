@@ -64,6 +64,7 @@ object BufferSpeed : Module("BufferSpeed", ModuleCategory.MOVEMENT) {
     private var hadFastHop = false
     private var legitHop = false
 
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         val thePlayer = mc.thePlayer ?: return

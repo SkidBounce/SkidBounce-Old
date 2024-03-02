@@ -14,6 +14,7 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 object Parkour : Module("Parkour", ModuleCategory.MOVEMENT, gameDetecting = false) {
 
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         val thePlayer = mc.thePlayer ?: return

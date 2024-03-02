@@ -63,6 +63,7 @@ object Step : Module("Step", ModuleCategory.MOVEMENT, gameDetecting = false) {
         thePlayer.stepHeight = 0.6F
     }
 
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         val mode = mode

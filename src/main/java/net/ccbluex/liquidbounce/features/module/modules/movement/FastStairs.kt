@@ -26,6 +26,7 @@ object FastStairs : Module("FastStairs", ModuleCategory.MOVEMENT) {
 
     private var walkingDown = false
 
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         val thePlayer = mc.thePlayer ?: return
