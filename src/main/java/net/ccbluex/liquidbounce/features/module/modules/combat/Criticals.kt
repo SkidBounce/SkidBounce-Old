@@ -55,7 +55,6 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
     val motionY by FloatValue("Motion-Y", 0.2f, 0.01f..0.42f) { mode == "Motion" }
     val motionJump by BoolValue("Motion-DoJump", true) { mode == "Motion" }
 
-    val ncplatestAttacks by IntegerValue("NCPLatest-Attacks", 5, 1..10) { mode == "NCPLatest" }
     val msTimer = MSTimer()
 
     @EventTarget

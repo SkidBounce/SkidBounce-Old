@@ -15,14 +15,9 @@ import net.minecraft.entity.Entity
  * @author Koitoyuu
  */
 object NCPLatest : CriticalsMode("NCPLatest") {
-    private var attacked = 0
     override fun onAttack(entity: Entity) {
-        ++attacked
-        if (attacked >= ncplatestAttacks) {
-            sendPacket(y = 0.00001058293536)
-            sendPacket(y = 0.00000916580235)
-            sendPacket(y = 0.00000010371854)
-            attacked = 0
-        }
+        sendPacket(y = 0.00001058293536)
+        sendPacket(y = 0.00000916580235)
+        sendPacket(y = 0.00000010371854)
     }
 }
