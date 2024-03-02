@@ -40,7 +40,7 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
         criticalsModes.map { it.modeName }.toTypedArray(),
         "Packet"
     )
-    val delay by IntegerValue("Delay", 0, 0..500) { mode != "NoGround" }
+    val delay by IntegerValue("Delay", 0, 0..5000) { mode != "NoGround" }
     private val hurtTime by IntegerValue("HurtTime", 10, 0..10) { mode != "NoGround" }
     private val onlyGround by BoolValue("OnlyGround", false) { mode != "NoGround" }
     private val noMotionUp by BoolValue("NoMotionUp", false) { mode != "NoGround" }
