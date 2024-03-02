@@ -21,7 +21,7 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
         Phase,
         Vulcan, Vulcan2,
         Matrix,
-        NewGrim, OldGrim,
+        Grim, GrimTransaction,
         AAC, AACPush, AACv4, AACZero,
         GhostBlock,
     ).sortedBy { it.modeName }
@@ -67,14 +67,14 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     val reverseTicks by IntegerValue("Reverse-StrafeTicks", 1, 1..20) { mode == "Custom" && reverse }
     val reverseStrength by FloatValue("Reverse-Strength", 1f, 0.02f..1f) { mode == "Custom" && reverse }
 
-    val newgrimAlways by BoolValue("Always", false) { mode == "NewGrim" }
-    val newgrimOnlyAir by BoolValue("OnlyBreakAir", true) { mode == "NewGrim" }
-    val newgrimWorld by BoolValue("BreakOnWorld", false) { mode == "NewGrim" }
-    val newgrimFlagPause by IntegerValue("FlagPauseTime", 10, 0..1000) { mode == "NewGrim" }
-    val newgrimSendC03 by BoolValue("SendC03", true) { mode == "NewGrim" }
-    val newgrimC06 by BoolValue("Send1.17C06", false) { mode == "NewGrim" && newgrimSendC03 } // need via to 1.17+
-    val newgrimTimerTicks by IntegerValue("TimerTicks", 20, 0..100) { mode == "NewGrim" && newgrimSendC03 }
-    val newgrimTimerSpeed by FloatValue("TimerSpeed", 0.8f, 0f..1f) { mode == "NewGrim" && newgrimSendC03 }
+    val grimAlways by BoolValue("Grim-Always", false) { mode == "Grim" }
+    val grimOnlyAir by BoolValue("Grim-OnlyBreakAir", true) { mode == "Grim" }
+    val grimWorld by BoolValue("Grim-BreakOnWorld", false) { mode == "Grim" }
+    val grimFlagPause by IntegerValue("Grim-FlagPauseTime", 10, 0..1000) { mode == "Grim" }
+    val grimPacket by ListValue("Grim-Packet", arrayOf("Flying", "Position", "Rotation", "Full", "None"), "Position") { mode == "Grim" }
+    val grimTimerMode by ListValue("Grim-TimerMode", arrayOf("New", "Old", "Off"), "New") { mode == "Grim" && grimPacket != "None" }
+    val grimTimerTicks by IntegerValue("Grim-TimerTicks", 20, 1..100) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }
+    val grimTimerSpeed by FloatValue("Grim-TimerSpeed", 0.8f, 0f..1f) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }
 
     val aacv4MotionReducer by FloatValue("AACv4MotionReducer", 0.62f, 0f..1f) { mode == "AACv4" }
 

@@ -12,7 +12,7 @@ import net.minecraft.network.play.server.S32PacketConfirmTransaction
 /**
  * @author SkidderMC/FDPClient
  */
-object OldGrim : VelocityMode("OldGrim") {
+object GrimTransaction : VelocityMode("GrimTransaction") {
     private var cancelPacket = 6
     private var resetPersec = 8
     private var grimTCancel = 0
