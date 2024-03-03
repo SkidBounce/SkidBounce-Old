@@ -16,8 +16,8 @@ import net.minecraft.entity.Entity
 object TPHop : CriticalsMode("TPHop") {
     override fun onAttack(entity: Entity) {
         val (x, y, z) = mc.thePlayer
-        sendPacket(y = 0.02)
-        sendPacket(y = 0.01)
+        sendPacket(0.02, false)
+        sendPacket(0.01, false)
         mc.thePlayer.setPosition(x, y + 0.01, z)
     }
 }

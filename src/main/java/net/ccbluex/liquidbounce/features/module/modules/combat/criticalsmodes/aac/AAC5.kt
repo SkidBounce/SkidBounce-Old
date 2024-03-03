@@ -3,7 +3,7 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge, Forked from LiquidBounce.
  * https://github.com/ManInMyVan/SkidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.other
+package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.aac
 
 import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.crit
 import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.sendPacket
@@ -11,12 +11,14 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.Cr
 import net.minecraft.entity.Entity
 
 /**
- * @author CCBlueX/LiquidBounce
+ * @author SkidderMC/FDPClient
  */
-object BlocksMC : CriticalsMode("BlocksMC") {
+object AAC5 : CriticalsMode("AAC5") {
     override fun onAttack(entity: Entity) {
-        sendPacket(0.001091981, true)
-        sendPacket(0.0, false)
+        sendPacket(0.0625, false)
+        sendPacket(0.0433, false)
+        sendPacket(0.2088, false)
+        sendPacket(0.9963, false)
         crit(entity)
     }
 }

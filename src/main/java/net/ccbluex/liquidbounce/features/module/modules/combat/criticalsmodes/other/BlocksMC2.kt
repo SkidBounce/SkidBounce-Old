@@ -5,6 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.other
 
+import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.crit
+import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.sendPacket
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.extensions.component1
@@ -18,12 +20,9 @@ import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
  */
 object BlocksMC2 : CriticalsMode("BlocksMC2") {
     override fun onAttack(entity: Entity) {
-        val (x, y, z) = mc.thePlayer
-        sendPackets(
-            C04PacketPlayerPosition(x, y + 0.001091981, z, true),
-            C04PacketPlayerPosition(x, y + 0.000114514, z, false),
-            C04PacketPlayerPosition(x, y, z, false)
-        )
-        mc.thePlayer.onCriticalHit(entity)
+        sendPacket(0.001091981, true)
+        sendPacket(0.000114514, false)
+        sendPacket(0.0, false)
+        crit(entity)
     }
 }

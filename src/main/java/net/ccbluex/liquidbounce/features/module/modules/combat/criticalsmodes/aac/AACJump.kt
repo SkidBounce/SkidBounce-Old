@@ -3,7 +3,7 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge, Forked from LiquidBounce.
  * https://github.com/ManInMyVan/SkidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.other
+package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.aac
 
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.ccbluex.liquidbounce.utils.extensions.jump
@@ -22,6 +22,5 @@ object AACJump : CriticalsMode("AACJump") {
             mc.thePlayer.motionY = -0.01
             mc.thePlayer.posY = mc.thePlayer.prevPosY
         }
-
     }
 }

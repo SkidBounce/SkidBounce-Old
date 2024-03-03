@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.vanilla
 
+import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.crit
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.minecraft.entity.Entity
 
@@ -12,7 +13,5 @@ import net.minecraft.entity.Entity
  * @author CCBlueX/LiquidBounce
  */
 object Visual : CriticalsMode("Visual") {
-    override fun onAttack(entity: Entity) {
-        mc.thePlayer.onCriticalHit(entity)
-    }
+    override fun onAttack(entity: Entity) = crit(entity)
 }

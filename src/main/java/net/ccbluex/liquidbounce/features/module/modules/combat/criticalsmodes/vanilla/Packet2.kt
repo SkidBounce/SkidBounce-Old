@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.vanilla
 
+import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.crit
 import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.sendPacket
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.minecraft.entity.Entity
@@ -14,10 +15,10 @@ import net.minecraft.entity.Entity
  */
 object Packet2 : CriticalsMode("Packet2") {
     override fun onAttack(entity: Entity) {
-        sendPacket(y = 0.0625, ground = true)
-        sendPacket()
-        sendPacket(y = 1.1E-5)
-        sendPacket()
-        mc.thePlayer.onCriticalHit(entity)
+        sendPacket(0.0625, true)
+        sendPacket(0.0, false)
+        sendPacket(1.1E-5, false)
+        sendPacket(0.0, false)
+        crit(entity)
     }
 }
