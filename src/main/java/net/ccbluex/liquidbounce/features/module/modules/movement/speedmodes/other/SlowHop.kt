@@ -24,5 +24,4 @@ object SlowHop : SpeedMode("SlowHop") {
             mc.thePlayer.motionZ = 0.0
         }
     }
-
 }
