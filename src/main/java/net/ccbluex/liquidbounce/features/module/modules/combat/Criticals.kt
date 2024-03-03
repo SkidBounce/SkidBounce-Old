@@ -31,7 +31,7 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
         Hop,
         Motion,
         NCPPacket,
-        NCPLatest,
+        UNCP,
         NoGround,
         Packet,
         Packet2,

@@ -14,7 +14,7 @@ import net.minecraft.entity.Entity
  * @author SkidderMC/FDPClient
  * @author Koitoyuu
  */
-object NCPLatest : CriticalsMode("NCPLatest") {
+object UNCP : CriticalsMode("UNCP") {
     override fun onAttack(entity: Entity) {
         sendPacket(0.00001058293536, false)
         sendPacket(0.00000916580235, false)
