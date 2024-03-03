@@ -14,7 +14,7 @@ import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 /**
  * @author CCBlueX/LiquidBounce
  */
-object AACGround : SpeedMode("AACGround") {
+object AACGround : SpeedMode("AACGround", true) {
     override fun onUpdate() {
         if (!isMoving)
             return

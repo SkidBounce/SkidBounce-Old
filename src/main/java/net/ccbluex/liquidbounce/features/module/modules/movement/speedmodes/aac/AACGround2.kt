@@ -13,7 +13,7 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 /**
  * @author CCBlueX/LiquidBounce
  */
-object AACGround2 : SpeedMode("AACGround2") {
+object AACGround2 : SpeedMode("AACGround2", true) {
     override fun onUpdate() {
         if (!isMoving)
             return

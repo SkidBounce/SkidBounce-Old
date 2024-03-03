@@ -15,7 +15,7 @@ import kotlin.math.sin
 /**
  * @author CCBlueX/LiquidBounce
  */
-object SpectreOnGround : SpeedMode("SpectreOnGround") {
+object SpectreOnGround : SpeedMode("SpectreOnGround", true) {
     private var speedUp = 0
     override fun onMove(event: MoveEvent) {
         if (!isMoving || mc.thePlayer.movementInput.jump) return

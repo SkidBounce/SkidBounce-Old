@@ -14,9 +14,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
  */
 object OnGround : SpeedMode("OnGround") {
     override fun onMotion(event: MotionEvent) {
-        val thePlayer = mc.thePlayer
+        val thePlayer = mc.thePlayer ?: return
 
-        if (thePlayer == null || !isMoving)
+        if (!isMoving)
             return
 
         if (thePlayer.fallDistance > 3.994)
@@ -40,5 +40,4 @@ object OnGround : SpeedMode("OnGround") {
             mc.timer.timerSpeed = 1.199f
         }
     }
-
 }

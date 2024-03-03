@@ -269,3 +269,5 @@ fun EntityPlayer.swing(type: String) {
         }
     }
 }
+
+val Entity.inLiquid get() = isInWater || isInLava

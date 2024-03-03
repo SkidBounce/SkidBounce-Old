@@ -20,7 +20,7 @@ import kotlin.math.sin
 /**
  * @author CCBlueX/LiquidBounce
  */
-object AACPort : SpeedMode("AACPort") {
+object AACPort : SpeedMode("AACPort", true) {
     override fun onUpdate() {
         val thePlayer = mc.thePlayer ?: return
 
@@ -40,5 +40,4 @@ object AACPort : SpeedMode("AACPort") {
             d += 0.2
         }
     }
-
 }

@@ -19,7 +19,6 @@ object VerusLowHop2 : SpeedMode("VerusLowHop2") {
         mc.thePlayer.run {
             if (isInWeb || isInLava || isInWater || isOnLadder || ridingEntity != null || !isMoving)
                 return
-            mc.gameSettings.keyBindJump.pressed = false
             if (onGround) {
                 jump(0)
                 strafe(0.61f)

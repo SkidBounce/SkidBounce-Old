@@ -21,7 +21,7 @@ import net.minecraft.util.Vec3
 /**
  * @author CCBlueX/LiquidBounce
  */
-object MineplexGround : SpeedMode("MineplexGround") {
+object MineplexGround : SpeedMode("MineplexGround", true) {
     private var spoofSlot = false
     private var speed = 0f
 

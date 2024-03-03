@@ -17,7 +17,7 @@ import kotlin.math.sin
 /**
  * @author CCBlueX/LiquidBounce
  */
-object TeleportCubeCraft : SpeedMode("TeleportCubeCraft") {
+object TeleportCubeCraft : SpeedMode("TeleportCubeCraft", true) {
     private val timer = MSTimer()
     override fun onMove(event: MoveEvent) {
         if (isMoving && mc.thePlayer.onGround && timer.hasTimePassed(300)) {

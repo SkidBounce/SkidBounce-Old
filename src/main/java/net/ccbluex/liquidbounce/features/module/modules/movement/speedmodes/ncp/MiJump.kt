@@ -14,7 +14,7 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 /**
  * @author CCBlueX/LiquidBounce
  */
-object MiJump : SpeedMode("MiJump") {
+object MiJump : SpeedMode("MiJump", true) {
     override fun onMotion(event: MotionEvent) {
         if (!isMoving) return
         if (mc.thePlayer.onGround && !mc.thePlayer.movementInput.jump) {

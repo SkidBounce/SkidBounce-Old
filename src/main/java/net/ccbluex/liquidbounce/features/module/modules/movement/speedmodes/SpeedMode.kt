@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.MoveEvent
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 
-open class SpeedMode(val modeName: String) : MinecraftInstance() {
+open class SpeedMode(val modeName: String, val allowsJumping: Boolean = false) : MinecraftInstance() {
     open fun onMotion(event: MotionEvent) {}
     open fun onPacket(event: PacketEvent) {}
     open fun onUpdate() {}
@@ -19,5 +19,4 @@ open class SpeedMode(val modeName: String) : MinecraftInstance() {
     open fun onStrafe() {}
     open fun onEnable() {}
     open fun onDisable() {}
-
 }
