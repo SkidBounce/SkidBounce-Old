@@ -13,7 +13,7 @@ import net.minecraft.entity.Entity
 /**
  * @author CCBlueX/LiquidBounce
  */
-object NCPPacket : CriticalsMode("NCPPacket") {
+object NCP : CriticalsMode("NCP") {
     override fun onAttack(entity: Entity) {
         sendPacket(0.11, false)
         sendPacket(0.1100013579, false)
