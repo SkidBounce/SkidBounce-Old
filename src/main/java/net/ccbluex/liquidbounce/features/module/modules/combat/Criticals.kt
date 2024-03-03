@@ -25,6 +25,7 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
     private val criticalsModes = arrayOf(
         AACJump,
         AAC5,
+        AAC504,
         AAC431OldHyt,
         BlocksMC,
         BlocksMC2,
