@@ -6,8 +6,8 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan
 
 import net.ccbluex.liquidbounce.event.MoveEvent
-import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.spartanvanillaSpeed
-import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.spartanvanillaTimer
+import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.spartan532Speed
+import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.spartan532Timer
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 
@@ -15,13 +15,13 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
  * @author ManInMyVan/SkidBounce
  * @author ManInMyVan
  */
-object SpartanVanilla : FlyMode("SpartanVanilla") {
+object Spartan532 : FlyMode("Spartan532") {
 	override fun onMove(event: MoveEvent) {
 		mc.thePlayer ?: return
 
-		mc.timer.timerSpeed = spartanvanillaTimer
+		mc.timer.timerSpeed = spartan532Timer
 
-		strafe(spartanvanillaSpeed, true, event)
+		strafe(spartan532Speed, true, event)
 
 		mc.thePlayer.onGround = false
 		mc.thePlayer.isInWeb = false
@@ -31,10 +31,10 @@ object SpartanVanilla : FlyMode("SpartanVanilla") {
 		var ySpeed = 0.0
 
 		if (mc.gameSettings.keyBindJump.isKeyDown)
-			ySpeed += spartanvanillaSpeed
+			ySpeed += spartan532Speed
 
 		if (mc.gameSettings.keyBindSneak.isKeyDown)
-			ySpeed -= spartanvanillaSpeed
+			ySpeed -= spartan532Speed
 
 		mc.thePlayer.motionY = ySpeed
 		event.y = ySpeed

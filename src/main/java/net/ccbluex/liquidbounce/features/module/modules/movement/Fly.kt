@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.hypixel.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.ncp.OldNCP
+import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.rewinside.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan.*
@@ -45,7 +45,7 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
         // Other server specific flys
         Mineplex, Minesucht, Redesky,
         // Spartan
-        Spartan, Spartan2, BugSpartan, SpartanVanilla,
+        Spartan, Spartan2, BugSpartan, Spartan532,
 
         // Other anti-cheats
         MineSecure, HawkEye, HAC, WatchCat, Verus, Vulcan, Wave,
@@ -63,9 +63,9 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     private val vanillaKickBypass by BoolValue("Vanilla-KickBypass", false)
         { mode in arrayOf("Vanilla", "SmoothVanilla") }
 
-    // SpartanVanilla
-    val spartanvanillaSpeed by FloatValue("SpartanVanilla-Speed", 2f, 0f..10f) { mode == "SpartanVanilla" }
-    val spartanvanillaTimer by FloatValue("SpartanVanilla-Timer", 0.5f, 0.01f..1f) { mode == "SpartanVanilla" }
+    // Spartan532
+    val spartan532Speed by FloatValue("Spartan532-Speed", 5f, 0f..10f) { mode == "Spartan532" }
+    val spartan532Timer by FloatValue("Spartan532-Timer", 0.5f, 0.01f..1f) { mode == "Spartan532" }
 
     // AAC
     val aacSpeed by FloatValue("AAC1.9.10-Speed", 0.3f, 0f..1f) { mode == "AAC1.9.10" }
