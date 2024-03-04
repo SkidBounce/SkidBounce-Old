@@ -65,7 +65,7 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
 
     // Spartan532
     val spartan532Speed by FloatValue("Spartan532-Speed", 5f, 0f..10f) { mode == "Spartan532" }
-    val spartan532Timer by FloatValue("Spartan532-Timer", 0.5f, 0.01f..1f) { mode == "Spartan532" }
+    val spartan532Timer by FloatValue("Spartan532-Timer", 0.4f, 0.01f..1f) { mode == "Spartan532" }
 
     // AAC
     val aacSpeed by FloatValue("AAC1.9.10-Speed", 0.3f, 0f..1f) { mode == "AAC1.9.10" }
