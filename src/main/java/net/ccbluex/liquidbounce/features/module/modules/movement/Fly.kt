@@ -44,6 +44,7 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
 
         // Other server specific flys
         Mineplex, Minesucht, Redesky,
+
         // Spartan
         Spartan, Spartan2, BugSpartan, Spartan532,
 
