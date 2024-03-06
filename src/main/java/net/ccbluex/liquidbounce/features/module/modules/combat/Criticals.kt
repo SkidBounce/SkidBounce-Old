@@ -42,6 +42,7 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
         TPHop,
         Visual,
         VerusJump,
+        Vulcan,
     ).sortedBy { it.modeName }
     private val modeModule get() = criticalsModes.find { it.modeName == mode }!!
     val mode by ListValue(
