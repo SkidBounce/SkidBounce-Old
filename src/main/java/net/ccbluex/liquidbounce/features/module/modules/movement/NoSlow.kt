@@ -22,6 +22,7 @@ import net.ccbluex.liquidbounce.value.*
 import net.minecraft.init.Blocks
 import net.minecraft.item.*
 import net.minecraft.network.play.client.*
+import net.minecraft.network.play.client.C0BPacketEntityAction.Action.*
 
 object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false) {
 
@@ -30,7 +31,6 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         SwitchItem,
         OldIntave,
         NCP,
-        NCP2,
         NewNCP,
         UNCP,
         UNCP2,
@@ -85,6 +85,8 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
     private val blockingMode by ListValue("BlockingMode", swordModes.map { it.modeName }.toTypedArray(), "Vanilla") { blocking }
     private val onlyMoveBlocking by BoolValue("OnlyMoveBlocking", true) { blocking && blockingMode !in noNoMoveCheck }
     private val blockingPacketTiming by ListValue("BlockingPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { blocking && blockingMode in arrayOf("Slot", "Place", "EmptyPlace") }
+    val ncpFunnyUsePacket by BoolValue("NCP-FunnyUsePacket", false) { blocking && blockingMode == "NCP" }
+    val ncpFunnyReleasePacket by BoolValue("NCP-FunnyReleasePacket", false) { blocking && blockingMode == "NCP" }
     private val blockForwardMultiplier by FloatValue("BlockForwardMultiplier", 1f, 0.2f..1f) { blocking }
     private val blockStrafeMultiplier by FloatValue("BlockStrafeMultiplier", 1f, 0.2f..1f) { blocking }
 
@@ -118,13 +120,6 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
     val liquidPush by BoolValue("LiquidPush", true)
 
-    private val modeModuleBlocking
-        get() = swordModes.find { it.modeName == blockingMode }!!
-    private val modeModuleBow
-        get() = bowModes.find { it.modeName == bowMode }!!
-    private val modeModuleConsume
-        get() = consumeModes.find { it.modeName == consumeMode }!!
-
     @EventTarget
     fun onMotion(event: MotionEvent) {
         if (serverUsing && !isUsingItem)
@@ -132,33 +127,26 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
 
         Blocks.slime_block.slipperiness = if (slime) slimeFriction else 0.8f
 
-        if (mc.thePlayer.isSneaking && !(onlyMoveSneak && mc.thePlayer.motionX == 0.0 && mc.thePlayer.motionZ == 0.0)) {
+        if (mc.thePlayer.isSneaking && !(onlyMoveSneak && !hasMotion)) {
+            @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
             when (sneakMode) {
                 "Switch" -> when (event.eventState) {
                     PRE -> {
                         sendPackets(
-                            C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING),
-                            C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING)
+                            C0BPacketEntityAction(mc.thePlayer, START_SNEAKING),
+                            C0BPacketEntityAction(mc.thePlayer, STOP_SNEAKING)
                         )
                     }
                     POST -> {
                         sendPackets(
-                            C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING),
-                            C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING)
+                            C0BPacketEntityAction(mc.thePlayer, STOP_SNEAKING),
+                            C0BPacketEntityAction(mc.thePlayer, START_SNEAKING)
                         )
                     }
-                    else -> {}
                 }
                 "MineSecure" -> {
-                    if (event.eventState == PRE)
-                        return
-
-                    sendPacket(
-                        C0BPacketEntityAction(
-                            mc.thePlayer,
-                            C0BPacketEntityAction.Action.START_SNEAKING
-                        )
-                    )
+                    if (event.eventState != PRE)
+                        sendPacket(C0BPacketEntityAction(mc.thePlayer, START_SNEAKING))
                 }
             }
         }
@@ -196,13 +184,6 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
         }
     }
 
-    override val tag
-        get() = if (blocking) blockingMode
-                else if (consuming) consumeMode
-                else if (bows) bowMode
-                else if (sneaking) sneakMode
-                else ""
-
     @EventTarget
     fun onSlowDown(event: SlowDownEvent) {
         event.forward = when (noSlowItem) {
@@ -218,6 +199,20 @@ object NoSlow : Module("NoSlow", ModuleCategory.MOVEMENT, gameDetecting = false)
             NoSlowItem.OTHER -> 0.2f
         }
     }
+
+    override val tag
+        get() = if (blocking) blockingMode
+        else if (consuming) consumeMode
+        else if (bows) bowMode
+        else if (sneaking) sneakMode
+        else ""
+
+    private val modeModuleBlocking
+        get() = swordModes.find { it.modeName == blockingMode }!!
+    private val modeModuleBow
+        get() = bowModes.find { it.modeName == bowMode }!!
+    private val modeModuleConsume
+        get() = consumeModes.find { it.modeName == consumeMode }!!
 
     private val noMoveCheck
         get() = noSlowItem.run {
