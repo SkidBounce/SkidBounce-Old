@@ -8,6 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.combat
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.aac.*
+import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.blocksmc.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.other.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.vanilla.*
@@ -23,15 +24,19 @@ import net.minecraft.potion.Potion.blindness
 
 object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
     private val criticalsModes = arrayOf(
+        AAC,
         AACJump,
         AAC5,
         AAC504,
         AAC431OldHyt,
         BlocksMC,
         BlocksMC2,
+        BlocksMC3,
         Hop,
+        Horizon,
         More,
         Motion,
+        Mineplex,
         NCP,
         NCP2,
         NCP3,
@@ -41,9 +46,11 @@ object Criticals : Module("Criticals", ModuleCategory.COMBAT) {
         Packet2,
         PacketJump,
         TPHop,
+        TakaAC,
         Visual,
         VerusJump,
         Vulcan,
+        Verus,
     ).sortedBy { it.modeName }
     private val modeModule get() = criticalsModes.find { it.modeName == mode }!!
     val mode by ListValue(
