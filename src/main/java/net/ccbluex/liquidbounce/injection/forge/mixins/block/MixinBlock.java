@@ -112,7 +112,7 @@ public abstract class MixinBlock {
             final NoFall noFall = NoFall.INSTANCE;
             final Criticals criticals = Criticals.INSTANCE;
 
-            if (noFall.handleEvents() && noFall.getMode().equals("NoGround") || criticals.handleEvents() && criticals.getMode().equals("NoGround")) {
+            if (noFall.handleEvents() && noFall.getMode().equals("NoGround") || criticals.handleEvents() && criticals.getNoGround()) {
                 f /= 5F;
             }
         }
