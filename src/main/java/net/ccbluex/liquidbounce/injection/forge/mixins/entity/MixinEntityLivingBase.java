@@ -82,7 +82,7 @@ public abstract class MixinEntityLivingBase extends MixinEntity {
         if (isPotionActive(Potion.jump))
             motionY += (float) (getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F;
 
-        if (isSprinting()) {
+        if (isSprinting() && MovementUtils.INSTANCE.isMoving()) {
             float fixedYaw = this.rotationYaw;
 
             final RotationUtils rotationUtils = RotationUtils.INSTANCE;

@@ -60,7 +60,6 @@ object ModuleManager : Listenable {
             AntiBlind,
             AntiBot,
             AntiBounce,
-            AntiHunger,
             AntiFireball,
             AtAllProvider,
             AttackEffects,

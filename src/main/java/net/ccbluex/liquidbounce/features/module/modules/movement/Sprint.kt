@@ -5,8 +5,6 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
-import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.modules.combat.SuperKnockback
@@ -17,8 +15,6 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.strict
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.minecraft.network.play.client.C0BPacketEntityAction
-import net.minecraft.network.play.client.C0BPacketEntityAction.Action.START_SPRINTING
 import net.minecraft.potion.Potion
 import net.minecraft.util.MovementInput
 import kotlin.math.abs
@@ -26,13 +22,24 @@ import kotlin.math.abs
 object Sprint : Module("Sprint", ModuleCategory.MOVEMENT, gameDetecting = false) {
     val onlyOnSprintPress by BoolValue("OnlyOnSprintPress", false)
     private val alwaysCorrect by BoolValue("AlwaysCorrectSprint", false)
-    private val legit by BoolValue("Legit", false)
     val jumpDirections by BoolValue("JumpDirections", false)
 
-    private val allDirections by BoolValue("AllDirections", true) { !legit }
-    private val allDirectionsLimitSpeed by FloatValue("AllDirectionsLimitSpeed", 1f, 0.75f..1f) { !legit && allDirections }
-    private val allDirectionsLimitSpeedGround by BoolValue("AllDirectionsLimitSpeedOnlyGround", true) { !legit && allDirections }
+    private val sideways by BoolValue("Sideways", false)
+    private val sidewaysGround by BoolValue("Sideways-Ground", true) { sideways }
+    private val sidewaysAir by BoolValue("Sideways-Air", true) { sideways }
+    private val backwards by BoolValue("Backwards", false)
+    private val backwardsGround by BoolValue("Backwards-Ground", true) { backwards }
+    private val backwardsAir by BoolValue("Backwards-Air", true) { backwards }
 
+    private val limitSpeed by BoolValue("LimitSpeed", false)
+    private val limitSpeedSideways by BoolValue("LimitSpeed-Sideways", true) { limitSpeed && sideways }
+    private val limitSpeedBackwards by BoolValue("LimitSpeed-Backwards", true) { limitSpeed && backwards }
+    private val limitSpeedForwards by BoolValue("LimitSpeed-Forwards", false) { limitSpeed }
+    private val limitSpeedMulti by FloatValue("LimitSpeed-Multi", 1f, 0.75f..1f) { limitSpeed }
+    private val limitSpeedGround by BoolValue("LimitSpeed-Ground", true) { limitSpeed }
+    private val limitSpeedAir by BoolValue("LimitSpeed-Air", true) { limitSpeed }
+
+    private val still by BoolValue("Still", false)
     private val collide by BoolValue("Collide", true)
     private val blindness by BoolValue("Blindness", true)
     private val sneaking by BoolValue("Sneaking", true)
@@ -41,11 +48,17 @@ object Sprint : Module("Sprint", ModuleCategory.MOVEMENT, gameDetecting = false)
     private val hunger by BoolValue("Hunger", false)
 
     private val checkServerSide by BoolValue("CheckServerSide", false)
-    private val checkServerSideGround by BoolValue("CheckServerSideOnlyGround", false) { checkServerSide }
-    private val silent by BoolValue("Silent", false)
+    private val checkServerSideGround by BoolValue("CheckServerSide-Ground", true) { checkServerSide }
+    private val checkServerSideAir by BoolValue("CheckServerSide-Air", true) { checkServerSide }
+    val silent by BoolValue("Silent", false)
 
     private var isSprinting = false
-
+    private val isBackwards
+        get() = if (backwards) { if (mc.thePlayer.onGround) backwardsGround else backwardsAir } else false
+    private val isSideways
+        get() = if (sideways) { if (mc.thePlayer.onGround) sidewaysGround else sidewaysAir } else false
+    private val doCheckServerSide
+        get() = if (checkServerSide) if (mc.thePlayer.onGround) checkServerSideGround else checkServerSideAir else true
     fun correctSprintState(movementInput: MovementInput, isUsingItem: Boolean) {
         val player = mc.thePlayer ?: return
 
@@ -54,15 +67,25 @@ object Sprint : Module("Sprint", ModuleCategory.MOVEMENT, gameDetecting = false)
             return
         }
 
-        if ((onlyOnSprintPress || !handleEvents()) && !player.isSprinting && !mc.gameSettings.keyBindSprint.isKeyDown && !SuperKnockback.startSprint() && !isSprinting)
-            return
+        if ((onlyOnSprintPress || !handleEvents())
+            && !player.isSprinting
+            && !mc.gameSettings.keyBindSprint.isKeyDown
+            && !SuperKnockback.startSprint()
+            && !isSprinting
+        ) return
 
         if (Scaffold.handleEvents()) {
             if (!Scaffold.sprint) {
                 player.isSprinting = false
                 isSprinting = false
                 return
-            } else if (Scaffold.sprint && Scaffold.eagle == "Normal" && isMoving && player.onGround && Scaffold.eagleSneaking && Scaffold.eagleSprint) {
+            } else if (Scaffold.sprint
+                && Scaffold.eagle == "Normal"
+                && isMoving
+                && player.onGround
+                && Scaffold.eagleSneaking
+                && Scaffold.eagleSprint
+            ) {
                 player.isSprinting = true
                 isSprinting = true
                 return
@@ -72,64 +95,71 @@ object Sprint : Module("Sprint", ModuleCategory.MOVEMENT, gameDetecting = false)
         if (handleEvents() || alwaysCorrect) {
             player.isSprinting = !shouldStopSprinting(movementInput, isUsingItem)
             isSprinting = player.isSprinting
-            if (player.isSprinting && allDirections && !legit) {
-                if (!allDirectionsLimitSpeedGround || player.onGround) {
-                    player.motionX *= allDirectionsLimitSpeed
-                    player.motionZ *= allDirectionsLimitSpeed
-                }
-            }
+            limitSpeed(movementInput)
+        }
+    }
+
+    private fun limitSpeed(movementInput: MovementInput) {
+        if (!limitSpeed || !mc.thePlayer.isSprinting)
+            return
+
+        val modifiedForward =
+            if (currentRotation != null && strict) mc.thePlayer.movementInput.moveForward
+            else movementInput.moveForward
+
+        if (modifiedForward > 0f && !limitSpeedForwards)
+            return
+        if (modifiedForward == 0f && !limitSpeedSideways)
+            return
+        if (modifiedForward < 0f && !limitSpeedBackwards)
+            return
+
+        if ((mc.thePlayer.onGround && limitSpeedGround) || (!mc.thePlayer.onGround && limitSpeedAir)) {
+            mc.thePlayer.motionX *= limitSpeedMulti
+            mc.thePlayer.motionZ *= limitSpeedMulti
         }
     }
 
     private fun shouldStopSprinting(movementInput: MovementInput, isUsingItem: Boolean): Boolean {
         mc.thePlayer ?: return false
 
-        val modifiedForward =
+        if ((!usingItem && isUsingItem)
+            || (!inventory && serverOpenInventory)
+            || (!sneaking && mc.thePlayer.isSneaking)
+            || (!collide && mc.thePlayer.isCollidedHorizontally)
+            || (!blindness && mc.thePlayer.isPotionActive(Potion.blindness) && !mc.thePlayer.isSprinting)
+            || (!hunger && !(mc.thePlayer.foodStats.foodLevel > 6f || mc.thePlayer.capabilities.allowFlying))
+        ) return true
+
+        if (!isMoving)
+            return !still
+
+        val playerForwardInput =
+            if (isSideways && isBackwards) false
+            else if (isSideways) mc.thePlayer.movementInput.moveForward < 0f
+            else if (isBackwards) mc.thePlayer.movementInput.moveForward == 0f
+            else mc.thePlayer.movementInput.moveForward <= 0f
+
+        val absPlayerForwardInput =
+            if (isSideways && isBackwards) false
+            else if (isSideways) abs(mc.thePlayer.movementInput.moveForward) < 0f
+            else if (isBackwards) abs(mc.thePlayer.movementInput.moveForward) == 0f
+            else abs(mc.thePlayer.movementInput.moveForward) <= 0f
+
+        val modifiedInputForward =
             if (currentRotation != null && strict) mc.thePlayer.movementInput.moveForward
             else movementInput.moveForward
 
-        if (!isMoving)
-            return true
+        val modifiedForward =
+            if (isSideways && isBackwards) false
+            else if (isSideways) modifiedInputForward < 0f
+            else if (isBackwards) modifiedInputForward == 0f
+            else modifiedInputForward <= 0f
 
-        if (!collide && mc.thePlayer.isCollidedHorizontally)
-            return true
+        if (!doCheckServerSide)
+            return if (currentRotation == null) playerForwardInput
+                else absPlayerForwardInput || playerForwardInput && modifiedForward
 
-        if (!sneaking && mc.thePlayer.isSneaking)
-            return true
-
-        if (!blindness && mc.thePlayer.isPotionActive(Potion.blindness) && !mc.thePlayer.isSprinting)
-            return true
-
-        if (!hunger && !(mc.thePlayer.foodStats.foodLevel > 6f || mc.thePlayer.capabilities.allowFlying))
-            return true
-
-        if (!usingItem && isUsingItem)
-            return true
-
-        if (!inventory && serverOpenInventory)
-            return true
-
-        if (legit)
-            return modifiedForward <= 0.0
-
-        if (allDirections && !checkServerSide)
-            return false
-
-        val playerForwardInput = mc.thePlayer.movementInput.moveForward
-
-        if (!checkServerSide)
-            return if (currentRotation == null) playerForwardInput <= 0.0
-                else abs(playerForwardInput) <= 0.0 || playerForwardInput <= 0 && modifiedForward <= 0.0
-
-        if (checkServerSideGround && !mc.thePlayer.onGround)
-            return currentRotation == null && modifiedForward <= 0.0
-
-        return modifiedForward <= 0.0
-    }
-
-    @EventTarget
-    fun onPacket(event: PacketEvent) {
-        if (event.packet is C0BPacketEntityAction && silent && event.packet.action == START_SPRINTING && !event.isCancelled)
-            event.cancelEvent()
+        return modifiedForward
     }
 }
