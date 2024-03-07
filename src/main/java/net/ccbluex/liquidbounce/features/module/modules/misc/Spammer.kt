@@ -40,13 +40,14 @@ object Spammer : Module("Spammer", ModuleCategory.MISC) {
     }
 
     private val message by
-        TextValue("Message", "$CLIENT_NAME Client | liquidbounce(.net) | CCBlueX on yt", subjective = true)
+        TextValue("Message", "$CLIENT_NAME Client | github.com/ManInMyVan/SkidBounce", subjective = true)
 
     private val custom by BoolValue("Custom", false)
 
     private val msTimer = MSTimer()
     private var delay = randomDelay(minDelay, maxDelay)
 
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         if (msTimer.hasTimePassed(delay)) {
