@@ -5,8 +5,6 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.aac
 
-import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.crit
-import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.sendPacket
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.minecraft.entity.Entity
 

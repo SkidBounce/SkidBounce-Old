@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Render2DEvent
 import net.ccbluex.liquidbounce.event.Render3DEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.ui.font.Fonts
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.canBeClicked
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
@@ -29,13 +29,13 @@ import net.minecraft.util.BlockPos
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 
-object BlockOverlay : Module("BlockOverlay", ModuleCategory.RENDER, gameDetecting = false, subjective = true) {
+object BlockOverlay : Module("BlockOverlay", RENDER, gameDetecting = false, subjective = true) {
     val info by BoolValue("Info", false)
 
     private val colorRainbow by BoolValue("Rainbow", false)
-        private val colorRed by IntegerValue("R", 68, 0..255) { !colorRainbow }
-        private val colorGreen by IntegerValue("G", 117, 0..255) { !colorRainbow }
-        private val colorBlue by IntegerValue("B", 255, 0..255) { !colorRainbow }
+    private val colorRed by IntegerValue("R", 68, 0..255) { !colorRainbow }
+    private val colorGreen by IntegerValue("G", 117, 0..255) { !colorRainbow }
+    private val colorBlue by IntegerValue("B", 255, 0..255) { !colorRainbow }
 
     val currentBlock: BlockPos?
         get() {
@@ -54,8 +54,10 @@ object BlockOverlay : Module("BlockOverlay", ModuleCategory.RENDER, gameDetectin
         val block = getBlock(blockPos) ?: return
         val partialTicks = event.partialTicks
 
-        val color = if (colorRainbow) rainbow(alpha = 0.4F) else Color(colorRed,
-                colorGreen, colorBlue, (0.4F * 255).toInt())
+        val color = if (colorRainbow) rainbow(alpha = 0.4F) else Color(
+            colorRed,
+            colorGreen, colorBlue, (0.4F * 255).toInt()
+        )
 
         enableBlend()
         tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO)
@@ -95,11 +97,11 @@ object BlockOverlay : Module("BlockOverlay", ModuleCategory.RENDER, gameDetectin
             val (width, height) = ScaledResolution(mc)
 
             drawBorderedRect(
-                    width / 2 - 2F,
-                    height / 2 + 5F,
-                    width / 2 + Fonts.font40.getStringWidth(info) + 2F,
-                    height / 2 + 16F,
-                    3F, Color.BLACK.rgb, Color.BLACK.rgb
+                width / 2 - 2F,
+                height / 2 + 5F,
+                width / 2 + Fonts.font40.getStringWidth(info) + 2F,
+                height / 2 + 16F,
+                3F, Color.BLACK.rgb, Color.BLACK.rgb
             )
 
             resetColor()

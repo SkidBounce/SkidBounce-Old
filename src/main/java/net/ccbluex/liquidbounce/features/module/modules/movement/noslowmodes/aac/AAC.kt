@@ -5,9 +5,9 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.aac
 
-import net.ccbluex.liquidbounce.event.EventState.*
+import net.ccbluex.liquidbounce.event.EventState.POST
+import net.ccbluex.liquidbounce.event.EventState.PRE
 import net.ccbluex.liquidbounce.event.MotionEvent
-import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow.shouldSwap
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoSlowMode
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.minecraft.network.play.client.C07PacketPlayerDigging
@@ -24,6 +24,7 @@ object AAC : NoSlowMode("AAC") {
         when (event.eventState) {
             PRE -> if (mc.thePlayer.ticksExisted % 3 == 0)
                 sendPacket(C07PacketPlayerDigging(RELEASE_USE_ITEM, BlockPos(-1, -1, -1), DOWN))
+
             POST -> if (mc.thePlayer.ticksExisted % 3 != 0)
                 sendPacket(C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem))
         }

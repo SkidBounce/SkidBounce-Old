@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getMaterial
@@ -18,12 +18,16 @@ import net.minecraft.init.Blocks
 import net.minecraft.util.BlockPos
 import org.apache.commons.lang3.BooleanUtils.xor
 
-object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
+object IceSpeed : Module("IceSpeed", MOVEMENT) {
     private val mode by ListValue("Mode", arrayOf("Friction", "AAC", "Spartan", "TakaAC").sortedArray(), "Friction")
     private val iceFriction by FloatValue("IceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
     private val strafeIceFriction by FloatValue("StrafeIceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
     private val packediceFriction by FloatValue("PackedIceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
-    private val strafePackediceFriction by FloatValue("StrafePackedIceFriction", 0.39f, 0.1f..0.98f) { mode == "Friction" }
+    private val strafePackediceFriction by FloatValue(
+        "StrafePackedIceFriction",
+        0.39f,
+        0.1f..0.98f
+    ) { mode == "Friction" }
     private val takaacSpeed by FloatValue("TakaAC-Speed", 0.2f, 0f..1f) { mode == "TakaAC" }
     override fun onEnable() {
         if (mode == "Friction") {
@@ -39,13 +43,14 @@ object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
         Blocks.packed_ice.slipperiness = 0.98f
 
         if (mode in arrayOf("Spartan", "AAC") && (
-            !mc.thePlayer.onGround ||
-            mc.thePlayer.isOnLadder ||
-            mc.thePlayer.isSneaking ||
-            !mc.thePlayer.isSprinting ||
-            !isMoving ||
-            mc.thePlayer == null
-        )) return
+                    !mc.thePlayer.onGround ||
+                            mc.thePlayer.isOnLadder ||
+                            mc.thePlayer.isSneaking ||
+                            !mc.thePlayer.isSprinting ||
+                            !isMoving ||
+                            mc.thePlayer == null
+                    )
+        ) return
 
         when (mode) {
             "Friction" -> {
@@ -57,6 +62,7 @@ object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
                     Blocks.packed_ice.slipperiness = strafePackediceFriction
                 }
             }
+
             "Spartan" -> {
                 getMaterial(mc.thePlayer.position.down()).let {
                     if (it == Blocks.ice || it == Blocks.packed_ice) {
@@ -75,6 +81,7 @@ object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
                     }
                 }
             }
+
             "AAC" -> {
                 getMaterial(mc.thePlayer.position.down()).let {
                     if (it == Blocks.ice || it == Blocks.packed_ice) {
@@ -85,10 +92,11 @@ object IceSpeed : Module("IceSpeed", ModuleCategory.MOVEMENT) {
                     }
                 }
             }
+
             "TakaAC" -> {
                 val speed = if (
-                        mc.thePlayer.isJumping || getBlock(mc.thePlayer.position.up(2)) != Blocks.air
-                    ) takaacSpeed else 0.6f
+                    mc.thePlayer.isJumping || getBlock(mc.thePlayer.position.up(2)) != Blocks.air
+                ) takaacSpeed else 0.6f
 
                 Blocks.ice.slipperiness = speed
                 Blocks.packed_ice.slipperiness = speed

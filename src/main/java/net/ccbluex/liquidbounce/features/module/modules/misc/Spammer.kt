@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextInt
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.randomString
@@ -19,7 +19,7 @@ import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.TextValue
 
-object Spammer : Module("Spammer", ModuleCategory.MISC) {
+object Spammer : Module("Spammer", MISC) {
     private val maxDelayValue: IntegerValue = object : IntegerValue("MaxDelay", 1000, 0..5000) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
 
@@ -40,7 +40,7 @@ object Spammer : Module("Spammer", ModuleCategory.MISC) {
     }
 
     private val message by
-        TextValue("Message", "$CLIENT_NAME Client | github.com/ManInMyVan/SkidBounce", subjective = true)
+    TextValue("Message", "$CLIENT_NAME Client | github.com/ManInMyVan/SkidBounce", subjective = true)
 
     private val custom by BoolValue("Custom", false)
 

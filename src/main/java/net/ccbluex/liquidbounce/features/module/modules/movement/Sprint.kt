@@ -6,7 +6,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.features.module.modules.combat.SuperKnockback
 import net.ccbluex.liquidbounce.features.module.modules.world.Scaffold
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
@@ -19,7 +19,7 @@ import net.minecraft.potion.Potion
 import net.minecraft.util.MovementInput
 import kotlin.math.abs
 
-object Sprint : Module("Sprint", ModuleCategory.MOVEMENT, gameDetecting = false) {
+object Sprint : Module("Sprint", MOVEMENT, gameDetecting = false) {
     val onlyOnSprintPress by BoolValue("OnlyOnSprintPress", false)
     private val alwaysCorrect by BoolValue("AlwaysCorrectSprint", false)
     val jumpDirections by BoolValue("JumpDirections", false)
@@ -54,11 +54,16 @@ object Sprint : Module("Sprint", ModuleCategory.MOVEMENT, gameDetecting = false)
 
     private var isSprinting = false
     private val isBackwards
-        get() = if (backwards) { if (mc.thePlayer.onGround) backwardsGround else backwardsAir } else false
+        get() = if (backwards) {
+            if (mc.thePlayer.onGround) backwardsGround else backwardsAir
+        } else false
     private val isSideways
-        get() = if (sideways) { if (mc.thePlayer.onGround) sidewaysGround else sidewaysAir } else false
+        get() = if (sideways) {
+            if (mc.thePlayer.onGround) sidewaysGround else sidewaysAir
+        } else false
     private val doCheckServerSide
         get() = if (checkServerSide) if (mc.thePlayer.onGround) checkServerSideGround else checkServerSideAir else true
+
     fun correctSprintState(movementInput: MovementInput, isUsingItem: Boolean) {
         val player = mc.thePlayer ?: return
 
@@ -158,7 +163,7 @@ object Sprint : Module("Sprint", ModuleCategory.MOVEMENT, gameDetecting = false)
 
         if (!doCheckServerSide)
             return if (currentRotation == null) playerForwardInput
-                else absPlayerForwardInput || playerForwardInput && modifiedForward
+            else absPlayerForwardInput || playerForwardInput && modifiedForward
 
         return modifiedForward
     }

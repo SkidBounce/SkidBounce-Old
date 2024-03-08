@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.vanilla
 
-import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.motionY
 import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.motionBoost
+import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.motionY
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.minecraft.entity.Entity

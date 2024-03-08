@@ -17,35 +17,35 @@ import java.math.RoundingMode
  * @author CCBlueX/LiquidBounce
  */
 object FreeHypixel : FlyMode("FreeHypixel") {
-	private val timer = TickTimer()
-	private var startYaw = 0f
-	private var startPitch = 0f
+    private val timer = TickTimer()
+    private var startYaw = 0f
+    private var startPitch = 0f
 
-	override fun onEnable() {
-		timer.reset()
+    override fun onEnable() {
+        timer.reset()
 
-		mc.thePlayer.setPositionAndUpdate(mc.thePlayer.posX, mc.thePlayer.posY + 0.42, mc.thePlayer.posZ)
+        mc.thePlayer.setPositionAndUpdate(mc.thePlayer.posX, mc.thePlayer.posY + 0.42, mc.thePlayer.posZ)
 
-		startYaw = mc.thePlayer.rotationYaw
-		startPitch = mc.thePlayer.rotationPitch
-	}
+        startYaw = mc.thePlayer.rotationYaw
+        startPitch = mc.thePlayer.rotationPitch
+    }
 
-	override fun onUpdate() {
-		if (timer.hasTimePassed(10)) {
-			mc.thePlayer.capabilities.isFlying = true
-			return
-		} else {
-			mc.thePlayer.rotationYaw = startYaw
-			mc.thePlayer.rotationPitch = startPitch
-			mc.thePlayer.stop()
-		}
+    override fun onUpdate() {
+        if (timer.hasTimePassed(10)) {
+            mc.thePlayer.capabilities.isFlying = true
+            return
+        } else {
+            mc.thePlayer.rotationYaw = startYaw
+            mc.thePlayer.rotationPitch = startPitch
+            mc.thePlayer.stop()
+        }
 
-		if (startY == BigDecimal(mc.thePlayer.posY).setScale(3, RoundingMode.HALF_DOWN).toDouble())
-			timer.update()
-	}
+        if (startY == BigDecimal(mc.thePlayer.posY).setScale(3, RoundingMode.HALF_DOWN).toDouble())
+            timer.update()
+    }
 
-	override fun onMove(event: MoveEvent) {
-		if (!timer.hasTimePassed(10))
-			event.zero()
-	}
+    override fun onMove(event: MoveEvent) {
+        if (!timer.hasTimePassed(10))
+            event.zero()
+    }
 }

@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.render
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Render3DEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
 import net.ccbluex.liquidbounce.features.module.modules.targets.Teams
 import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
@@ -27,7 +27,7 @@ import net.minecraft.util.Vec3
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 
-object Tracers : Module("Tracers", ModuleCategory.RENDER, subjective = true) {
+object Tracers : Module("Tracers", RENDER, subjective = true) {
 
     private val colorMode by ListValue("Color", arrayOf("Custom", "DistanceColor", "Rainbow"), "Custom")
     private val colorRed by IntegerValue("R", 0, 0..255) { colorMode == "Custom" }
@@ -86,14 +86,16 @@ object Tracers : Module("Tracers", ModuleCategory.RENDER, subjective = true) {
         val thePlayer = mc.thePlayer ?: return
 
         val x = (entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.renderPartialTicks
-            - mc.renderManager.renderPosX)
+                - mc.renderManager.renderPosX)
         val y = (entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * mc.timer.renderPartialTicks
-            - mc.renderManager.renderPosY)
+                - mc.renderManager.renderPosY)
         val z = (entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.timer.renderPartialTicks
-            - mc.renderManager.renderPosZ)
+                - mc.renderManager.renderPosZ)
 
-        val yaw = thePlayer.prevRotationYaw + (thePlayer.rotationYaw - thePlayer.prevRotationYaw) * mc.timer.renderPartialTicks
-        val pitch = thePlayer.prevRotationPitch + (thePlayer.rotationPitch - thePlayer.prevRotationPitch) * mc.timer.renderPartialTicks
+        val yaw =
+            thePlayer.prevRotationYaw + (thePlayer.rotationYaw - thePlayer.prevRotationYaw) * mc.timer.renderPartialTicks
+        val pitch =
+            thePlayer.prevRotationPitch + (thePlayer.rotationPitch - thePlayer.prevRotationPitch) * mc.timer.renderPartialTicks
 
         val eyeVector = Vec3(0.0, 0.0, 1.0).rotatePitch(-pitch.toRadians()).rotateYaw(-yaw.toRadians())
 

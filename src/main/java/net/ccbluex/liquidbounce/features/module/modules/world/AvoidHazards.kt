@@ -3,17 +3,17 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge, Forked from LiquidBounce.
  * https://github.com/ManInMyVan/SkidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.player
+package net.ccbluex.liquidbounce.features.module.modules.world
 
 import net.ccbluex.liquidbounce.event.BlockBBEvent
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.WORLD
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.minecraft.init.Blocks
 import net.minecraft.util.AxisAlignedBB
 
-object AvoidHazards : Module("AvoidHazards", ModuleCategory.WORLD) {
+object AvoidHazards : Module("AvoidHazards", WORLD) {
     private val fire by BoolValue("Fire", true)
     private val cobweb by BoolValue("Cobweb", true)
     private val cactus by BoolValue("Cactus", true)
@@ -43,7 +43,8 @@ object AvoidHazards : Module("AvoidHazards", ModuleCategory.WORLD) {
 
             Blocks.wooden_pressure_plate, Blocks.stone_pressure_plate, Blocks.light_weighted_pressure_plate, Blocks.heavy_weighted_pressure_plate -> {
                 if (plate)
-                    e.boundingBox = AxisAlignedBB(e.x.toDouble(), e.y.toDouble(), e.z.toDouble(), e.x + 1.0, e.y + 0.25, e.z + 1.0)
+                    e.boundingBox =
+                        AxisAlignedBB(e.x.toDouble(), e.y.toDouble(), e.z.toDouble(), e.x + 1.0, e.y + 0.25, e.z + 1.0)
                 return
             }
 

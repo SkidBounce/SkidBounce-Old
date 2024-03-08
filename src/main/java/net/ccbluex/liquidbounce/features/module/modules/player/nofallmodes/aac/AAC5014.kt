@@ -59,11 +59,13 @@ object AAC5014 : NoFallMode("AAC5.0.14") {
             flag = false
 
         if (!flag) return
-        sendPacket(C04PacketPlayerPosition(
-            mc.thePlayer.posX,
-            mc.thePlayer.posY + (if (mc.thePlayer.onGround) 0.5 else (if (aac5014NightX) 0.41999998688698 else 0.42)),
-            mc.thePlayer.posZ,
-            true
-        ))
+        sendPacket(
+            C04PacketPlayerPosition(
+                mc.thePlayer.posX,
+                mc.thePlayer.posY + (if (mc.thePlayer.onGround) 0.5 else (if (aac5014NightX) 0.41999998688698 else 0.42)),
+                mc.thePlayer.posZ,
+                true
+            )
+        )
     }
 }

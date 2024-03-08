@@ -23,6 +23,6 @@ object MineBlaze : NoWebMode("MineBlaze") {
         } else {
             thePlayer.jumpMovementFactor = 0.2F
             thePlayer.onGround = true
-        }  
+        }
     }
 }

@@ -24,6 +24,7 @@ object Medusa : NoFallMode("Medusa") {
             mc.thePlayer.fallDistance = 0f
         }
     }
+
     override fun onPacket(event: PacketEvent) {
         if (event.packet is C03PacketPlayer && needSpoof) {
             event.packet.onGround = true

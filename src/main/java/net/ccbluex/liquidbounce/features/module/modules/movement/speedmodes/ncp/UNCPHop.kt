@@ -30,7 +30,8 @@ object UNCPHop : SpeedMode("UNCPHop") {
 
     override fun onUpdate() {
         if (mc.thePlayer.isInLava || mc.thePlayer.isInWater
-            || mc.thePlayer.isOnLadder || mc.thePlayer.isInWeb) {
+            || mc.thePlayer.isOnLadder || mc.thePlayer.isInWeb
+        ) {
             mc.thePlayer.stopXZ()
             return
         }

@@ -21,37 +21,37 @@ import kotlin.math.sin
  * @author CCBlueX/LiquidBounce
  */
 object Redesky : FlyMode("Redesky") {
-	override fun onEnable() {
-		if (mc.thePlayer.onGround)
-			mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + redeskyHeight, mc.thePlayer.posZ)
-	}
+    override fun onEnable() {
+        if (mc.thePlayer.onGround)
+            mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + redeskyHeight, mc.thePlayer.posZ)
+    }
 
-	override fun onUpdate() {
-		val (x, y, z) = mc.thePlayer
+    override fun onUpdate() {
+        val (x, y, z) = mc.thePlayer
 
-		mc.timer.timerSpeed = 0.3f
+        mc.timer.timerSpeed = 0.3f
 
-		val yaw = mc.thePlayer.rotationYaw.toRadiansD()
-		val sinYaw = sin(yaw)
-		val cosYaw = cos(yaw)
+        val yaw = mc.thePlayer.rotationYaw.toRadiansD()
+        val sinYaw = sin(yaw)
+        val cosYaw = cos(yaw)
 
-		// Simplified version of the original code (weird af)
-		sendPackets(
-			C04PacketPlayerPosition(x - sinYaw * 7, y, z + cosYaw * 7, false),
-			C04PacketPlayerPosition(x, y + 10, z, false)
-		)
+        // Simplified version of the original code (weird af)
+        sendPackets(
+            C04PacketPlayerPosition(x - sinYaw * 7, y, z + cosYaw * 7, false),
+            C04PacketPlayerPosition(x, y + 10, z, false)
+        )
 
-		mc.thePlayer.setPosition(x, y - 0.5, z)
-		mc.thePlayer.setPosition(x - sinYaw * 2, y, z + cosYaw * 2)
+        mc.thePlayer.setPosition(x, y - 0.5, z)
+        mc.thePlayer.setPosition(x - sinYaw * 2, y, z + cosYaw * 2)
 
-		mc.thePlayer.motionX = -sinYaw
-		mc.thePlayer.motionY = -0.01
-		mc.thePlayer.motionZ = cosYaw
-	}
+        mc.thePlayer.motionX = -sinYaw
+        mc.thePlayer.motionY = -0.01
+        mc.thePlayer.motionZ = cosYaw
+    }
 
-	override fun onDisable() {
-		sendPacket(
-			C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.onGround)
-		)
-	}
+    override fun onDisable() {
+        sendPacket(
+            C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.onGround)
+        )
+    }
 }

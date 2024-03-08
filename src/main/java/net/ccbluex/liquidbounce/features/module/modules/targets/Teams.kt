@@ -6,11 +6,11 @@
 package net.ccbluex.liquidbounce.features.module.modules.targets
 
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.TARGETS
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.minecraft.entity.EntityLivingBase
 
-object Teams : Module("Teams", ModuleCategory.TARGETS, gameDetecting = false) {
+object Teams : Module("Teams", TARGETS, gameDetecting = false) {
 
     private val scoreboard by BoolValue("ScoreboardTeam", true)
     private val color by BoolValue("Color", true)
@@ -23,7 +23,8 @@ object Teams : Module("Teams", ModuleCategory.TARGETS, gameDetecting = false) {
         val thePlayer = mc.thePlayer ?: return false
 
         if (scoreboard && thePlayer.team != null && entity.team != null &&
-                thePlayer.team.isSameTeam(entity.team))
+            thePlayer.team.isSameTeam(entity.team)
+        )
             return true
 
         val displayName = thePlayer.displayName

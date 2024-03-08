@@ -7,7 +7,8 @@ package net.ccbluex.liquidbounce.features.module.modules.combat
 
 import net.ccbluex.liquidbounce.LiquidBounce.hud
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.script.api.global.Chat
 import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notification
 import net.ccbluex.liquidbounce.utils.EntityUtils
@@ -16,13 +17,18 @@ import net.ccbluex.liquidbounce.utils.extensions.getDistanceToEntityBox
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawEntityBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
-import net.ccbluex.liquidbounce.value.*
-import net.minecraft.entity.*
-import net.minecraft.network.play.server.*
+import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.ListValue
+import net.minecraft.entity.Entity
+import net.minecraft.entity.EntityLivingBase
+import net.minecraft.network.play.server.S08PacketPlayerPosLook
+import net.minecraft.network.play.server.S12PacketEntityVelocity
 import java.awt.Color
 import kotlin.random.Random
 
-object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
+object TimerRange : Module("TimerRange", COMBAT) {
 
     private var playerTicks = 0
     private var smartTick = 0
@@ -69,10 +75,18 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
     private val minStopRange by FloatValue("MinStopRange", 1f, 1f..5f) { stopRange }
     private val maxStopRange by FloatValue("MaxStopRange", 3f, 1f..5f) { stopRange }
 
-    private val maxAngleDifference by FloatValue("MaxAngleDifference", 5.0f, 5.0f..90f) { timerBoostMode == "SmartMove" }
+    private val maxAngleDifference by FloatValue(
+        "MaxAngleDifference",
+        5.0f,
+        5.0f..90f
+    ) { timerBoostMode == "SmartMove" }
 
     // Mark Option
-    private val markMode by ListValue("Mark", arrayOf("Off", "Box", "Platform"), "Off") { timerBoostMode == "SmartMove" }
+    private val markMode by ListValue(
+        "Mark",
+        arrayOf("Off", "Box", "Platform"),
+        "Off"
+    ) { timerBoostMode == "SmartMove" }
     private val outline by BoolValue("Outline", false) { timerBoostMode == "SmartMove" && markMode == "Box" }
 
     // Optional
@@ -227,7 +241,12 @@ object TimerRange : Module("TimerRange", ModuleCategory.COMBAT) {
         if (timerBoostMode.lowercase() == "smartmove") {
             getNearestEntityInRange()?.let { nearbyEntity ->
                 val entityDistance = mc.thePlayer.getDistanceToEntityBox(nearbyEntity)
-                if (entityDistance in minRange..maxRange && isLookingOnEntities(nearbyEntity, maxAngleDifference.toDouble())) {                    if (markMode == "Box") {
+                if (entityDistance in minRange..maxRange && isLookingOnEntities(
+                        nearbyEntity,
+                        maxAngleDifference.toDouble()
+                    )
+                ) {
+                    if (markMode == "Box") {
                         drawEntityBox(nearbyEntity, Color(37, 126, 255, 70), outline)
                     } else if (markMode != "Off") {
                         drawPlatform(nearbyEntity, Color(37, 126, 255, 70))

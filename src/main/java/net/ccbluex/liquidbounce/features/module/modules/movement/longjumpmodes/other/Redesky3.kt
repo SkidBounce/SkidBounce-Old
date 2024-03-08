@@ -5,13 +5,13 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.other
 
-import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3MovementReducer
-import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3ReduceMovement
-import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3UseTimer
 import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3JumpMovement
 import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3MotionY
+import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3MovementReducer
+import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3ReduceMovement
 import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3ReduceYMotion
 import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3Timer
+import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3UseTimer
 import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.redesky3YMotionReducer
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.LongJumpMode
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
@@ -26,6 +26,7 @@ object Redesky3 : LongJumpMode("Redesky3") {
         mc.timer.resetSpeed()
         airTicks = 0
     }
+
     override fun onUpdate() {
         if (mc.thePlayer.onGround) return
 

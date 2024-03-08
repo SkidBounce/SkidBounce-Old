@@ -13,30 +13,30 @@ import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
  * @author CCBlueX/LiquidBounce
  */
 object AAC316 : FlyMode("AAC3.1.6-Gomme") {
-	private var tick = 0
-	private var noFlag = false
-	
-	override fun onUpdate() {
-		mc.thePlayer.capabilities.isFlying = true
+    private var tick = 0
+    private var noFlag = false
 
-		if (tick == 2) {
-			mc.thePlayer.motionY += 0.05
-		} else if (tick > 2) {
-			mc.thePlayer.motionY -= 0.05
-			tick = 0
-		}
+    override fun onUpdate() {
+        mc.thePlayer.capabilities.isFlying = true
 
-		tick++
+        if (tick == 2) {
+            mc.thePlayer.motionY += 0.05
+        } else if (tick > 2) {
+            mc.thePlayer.motionY -= 0.05
+            tick = 0
+        }
 
-		if (!noFlag)
-			sendPacket(
-				C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.onGround)
-			)
+        tick++
 
-		if (mc.thePlayer.posY <= 0.0) noFlag = true
-	}
+        if (!noFlag)
+            sendPacket(
+                C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.onGround)
+            )
 
-	override fun onDisable() {
-		noFlag = false
-	}
+        if (mc.thePlayer.posY <= 0.0) noFlag = true
+    }
+
+    override fun onDisable() {
+        noFlag = false
+    }
 }

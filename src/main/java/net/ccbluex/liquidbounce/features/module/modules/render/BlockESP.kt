@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Render3DEvent
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlockName
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.searchBlocks
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
@@ -25,16 +25,16 @@ import net.minecraft.init.Blocks.air
 import net.minecraft.util.BlockPos
 import java.awt.Color
 
-object BlockESP : Module("BlockESP", ModuleCategory.RENDER, subjective = true) {
+object BlockESP : Module("BlockESP", RENDER, subjective = true) {
     private val mode by ListValue("Mode", arrayOf("Box", "2D"), "Box")
     private val block by BlockValue("Block", 168)
     private val radius by IntegerValue("Radius", 40, 5..120)
     private val blockLimit by IntegerValue("BlockLimit", 256, 0..2056)
 
     private val colorRainbow by BoolValue("Rainbow", false)
-        private val colorRed by IntegerValue("R", 255, 0..255) { !colorRainbow }
-        private val colorGreen by IntegerValue("G", 179, 0..255) { !colorRainbow }
-        private val colorBlue by IntegerValue("B", 72, 0..255) { !colorRainbow }
+    private val colorRed by IntegerValue("R", 255, 0..255) { !colorRainbow }
+    private val colorGreen by IntegerValue("G", 179, 0..255) { !colorRainbow }
+    private val colorBlue by IntegerValue("B", 72, 0..255) { !colorRainbow }
 
     private val searchTimer = MSTimer()
     private val posList = mutableListOf<BlockPos>()
@@ -51,14 +51,14 @@ object BlockESP : Module("BlockESP", ModuleCategory.RENDER, subjective = true) {
                 return
 
             thread = Thread({
-                val blocks = searchBlocks(radius, setOf(selectedBlock), blockLimit)
-                searchTimer.reset()
+                                val blocks = searchBlocks(radius, setOf(selectedBlock), blockLimit)
+                                searchTimer.reset()
 
-                synchronized(posList) {
-                    posList.clear()
-                    posList += blocks.keys
-                }
-            }, "BlockESP-BlockFinder")
+                                synchronized(posList) {
+                                    posList.clear()
+                                    posList += blocks.keys
+                                }
+                            }, "BlockESP-BlockFinder")
 
             thread!!.start()
         }

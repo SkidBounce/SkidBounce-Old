@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.event.Render2DEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.WORLD
 import net.ccbluex.liquidbounce.features.module.modules.combat.AutoArmor
 import net.ccbluex.liquidbounce.features.module.modules.player.InventoryCleaner
 import net.ccbluex.liquidbounce.features.module.modules.player.InventoryCleaner.canBeSortedTo
@@ -40,7 +40,7 @@ import net.minecraft.network.play.server.S2EPacketCloseWindow
 import net.minecraft.network.play.server.S30PacketWindowItems
 import java.awt.Color
 
-object ChestStealer : Module("ChestStealer", ModuleCategory.WORLD) {
+object ChestStealer : Module("ChestStealer", WORLD) {
 
     private val maxDelay: Int by object : IntegerValue("MaxDelay", 50, 0..500) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
@@ -133,7 +133,7 @@ object ChestStealer : Module("ChestStealer", ModuleCategory.WORLD) {
 
             val itemsToSteal = getItemsToSteal()
 
-            run scheduler@ {
+            run scheduler@{
                 itemsToSteal.forEachIndexed { index, (slot, stack, sortableTo) ->
                     // Wait for NoMove or cancel click
                     if (!shouldOperate()) {
@@ -243,7 +243,12 @@ object ChestStealer : Module("ChestStealer", ModuleCategory.WORLD) {
                         val hotbarStack = stacks.getOrNull(stacks.size - 9 + hotbarIndex)
 
                         // If occupied hotbar slot isn't already sorted or isn't strictly best, sort to it
-                        if (!canBeSortedTo(hotbarIndex, hotbarStack?.item) || !isStackUseful(hotbarStack, stacks, strictlyBest = true)) {
+                        if (!canBeSortedTo(hotbarIndex, hotbarStack?.item) || !isStackUseful(
+                                hotbarStack,
+                                stacks,
+                                strictlyBest = true
+                            )
+                        ) {
                             sortableTo = hotbarIndex
                             sortBlacklist[hotbarIndex] = true
                             break
@@ -291,7 +296,13 @@ object ChestStealer : Module("ChestStealer", ModuleCategory.WORLD) {
 
         drawRect(minX - 2, minY - 2, maxX + 2, maxY + 2, Color(200, 200, 200).rgb)
         drawRect(minX, minY, maxX, maxY, Color(50, 50, 50).rgb)
-        drawRect(minX, minY, minX + (maxX - minX) * easingProgress, maxY, Color.HSBtoRGB(easingProgress / 5, 1f, 1f) or 0xFF0000)
+        drawRect(
+            minX,
+            minY,
+            minX + (maxX - minX) * easingProgress,
+            maxY,
+            Color.HSBtoRGB(easingProgress / 5, 1f, 1f) or 0xFF0000
+        )
     }
 
     @EventTarget
@@ -301,6 +312,7 @@ object ChestStealer : Module("ChestStealer", ModuleCategory.WORLD) {
                 receivedId = null
                 progress = null
             }
+
             is S30PacketWindowItems -> {
                 // Chests never have windowId 0
                 if (packet.func_148911_c() == 0)

@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.player
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.serverOnGround
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
@@ -19,10 +19,10 @@ import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.potion.Potion
 
-object Regen : Module("Regen", ModuleCategory.PLAYER) {
+object Regen : Module("Regen", PLAYER) {
 
     private val mode by ListValue("Mode", arrayOf("Spartan", "Vanilla"), "Vanilla")
-        private val speed by IntegerValue("Speed", 100, 1..100) { mode == "Vanilla" }
+    private val speed by IntegerValue("Speed", 100, 1..100) { mode == "Vanilla" }
 
     private val delay by IntegerValue("Delay", 0, 0..10000)
     private val health by IntegerValue("Health", 18, 0..20)

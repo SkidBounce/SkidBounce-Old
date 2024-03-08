@@ -36,7 +36,11 @@ object YPort : SpeedMode("YPort") {
     private var safeJump = false
     override fun onMotion(event: MotionEvent) {
         if (!safeJump && !mc.gameSettings.keyBindJump.isKeyDown && !mc.thePlayer.isOnLadder && !mc.thePlayer.isInsideOfMaterial(
-                Material.water) && !mc.thePlayer.isInsideOfMaterial(Material.lava) && !mc.thePlayer.isInWater && (getBlock(-1.1) != air && getBlock(-1.1) != air || getBlock(-0.1) != air && mc.thePlayer.motionX != 0.0 && mc.thePlayer.motionZ != 0.0 && !mc.thePlayer.onGround && mc.thePlayer.fallDistance < 3f && mc.thePlayer.fallDistance > 0.05) && level == 3) mc.thePlayer.motionY = -0.3994
+                Material.water
+            ) && !mc.thePlayer.isInsideOfMaterial(Material.lava) && !mc.thePlayer.isInWater && (getBlock(-1.1) != air && getBlock(
+                -1.1
+            ) != air || getBlock(-0.1) != air && mc.thePlayer.motionX != 0.0 && mc.thePlayer.motionZ != 0.0 && !mc.thePlayer.onGround && mc.thePlayer.fallDistance < 3f && mc.thePlayer.fallDistance > 0.05) && level == 3
+        ) mc.thePlayer.motionY = -0.3994
         val xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX
         val zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ
         lastDist = sqrt(xDist * xDist + zDist * zDist)
@@ -79,7 +83,15 @@ object YPort : SpeedMode("YPort") {
             val difference = 0.66 * (lastDist - baseMoveSpeed)
             moveSpeed = lastDist - difference
         } else {
-            if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.entityBoundingBox.offset(0.0, mc.thePlayer.motionY, 0.0)).size > 0 || mc.thePlayer.isCollidedVertically) level = 1
+            if (mc.theWorld.getCollidingBoundingBoxes(
+                    mc.thePlayer,
+                    mc.thePlayer.entityBoundingBox.offset(
+                        0.0,
+                        mc.thePlayer.motionY,
+                        0.0
+                    )
+                ).size > 0 || mc.thePlayer.isCollidedVertically
+            ) level = 1
             moveSpeed = lastDist - lastDist / 159.0
         }
         moveSpeed = moveSpeed.coerceAtLeast(baseMoveSpeed)

@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spa
 
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextDouble
 
 /**

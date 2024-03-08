@@ -5,13 +5,16 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.player
 
-import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.*
-import net.ccbluex.liquidbounce.value.*
+import net.ccbluex.liquidbounce.event.EventTarget
+import net.ccbluex.liquidbounce.event.UpdateEvent
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
+import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 
-object AutoPlay : Module("AutoPlay", ModuleCategory.PLAYER, gameDetecting = false) {
+object AutoPlay : Module("AutoPlay", PLAYER, gameDetecting = false) {
 
     private val mode by ListValue("Mode", arrayOf("BlocksMC", "HypixelSkywars"), "BlocksMC")
 
@@ -49,7 +52,11 @@ object AutoPlay : Module("AutoPlay", ModuleCategory.PLAYER, gameDetecting = fals
                 mc.playerController.updateController()
 
                 if (delayTick >= delay) {
-                    mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.inventoryContainer.getSlot(paper).stack)
+                    mc.playerController.sendUseItem(
+                        mc.thePlayer,
+                        mc.theWorld,
+                        mc.thePlayer.inventoryContainer.getSlot(paper).stack
+                    )
                     delayTick = 0
                 }
             }

@@ -17,7 +17,7 @@ object NoPacket : NoFallMode("NoPacket") {
         if (event.packet is C03PacketPlayer) {
             if (mc.thePlayer.fallDistance > 2 && mc.thePlayer.ticksExisted % 2 == 0)
                 event.packet.onGround = true
-                event.packet.isMoving = false
+            event.packet.isMoving = false
         }
     }
 }

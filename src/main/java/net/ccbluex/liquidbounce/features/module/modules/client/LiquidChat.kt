@@ -11,7 +11,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.SessionEvent
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.login.UserUtils
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
@@ -22,10 +22,10 @@ import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.IChatComponent
 import java.net.URI
 import java.net.URISyntaxException
-import java.util.regex.Pattern
+import java.util.regex.*
 import kotlin.concurrent.thread
 
-object LiquidChat : Module("LiquidChat", ModuleCategory.CLIENT, subjective = true, gameDetecting = false) {
+object LiquidChat : Module("LiquidChat", CLIENT, subjective = true, gameDetecting = false) {
 
     init {
         state = true
@@ -89,6 +89,7 @@ object LiquidChat : Module("LiquidChat", ModuleCategory.CLIENT, subjective = tru
 
                     thePlayer.addChatMessage(chatComponent)
                 }
+
                 is ClientPrivateMessagePacket -> ClientUtils.displayChatMessage("§7[§a§lChat§7] §c(P)§9 ${packet.user.name}: §7${packet.content}")
                 is ClientErrorPacket -> {
                     val message = when (packet.message) {
@@ -112,6 +113,7 @@ object LiquidChat : Module("LiquidChat", ModuleCategory.CLIENT, subjective = tru
 
                     ClientUtils.displayChatMessage("§7[§a§lChat§7] §cError: §7$message")
                 }
+
                 is ClientSuccessPacket -> {
                     when (packet.reason) {
                         "Login" -> {
@@ -125,10 +127,12 @@ object LiquidChat : Module("LiquidChat", ModuleCategory.CLIENT, subjective = tru
 
                             loggedIn = true
                         }
+
                         "Ban" -> ClientUtils.displayChatMessage("§7[§a§lChat§7] §9Successfully banned user!")
                         "Unban" -> ClientUtils.displayChatMessage("§7[§a§lChat§7] §9Successfully unbanned user!")
                     }
                 }
+
                 is ClientNewJWTPacket -> {
                     jwtToken = packet.token
                     jwt = true
@@ -251,7 +255,8 @@ object LiquidChat : Module("LiquidChat", ModuleCategory.CLIENT, subjective = tru
                         component.appendSibling(link)
                     continue
                 }
-            } catch (_: URISyntaxException) { }
+            } catch (_: URISyntaxException) {
+            }
 
             if (component == null) {
                 component = ChatComponentText(url)

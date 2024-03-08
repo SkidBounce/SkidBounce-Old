@@ -5,7 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.hypixel
 
-import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.EventState
+import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.minecraft.network.Packet

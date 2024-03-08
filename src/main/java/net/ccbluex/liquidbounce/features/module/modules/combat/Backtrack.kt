@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.combat
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.player.Blink
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
 import net.ccbluex.liquidbounce.features.module.modules.targets.Friends
@@ -37,11 +37,9 @@ import net.minecraft.util.Vec3
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.*
 
-
-object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
-
+object Backtrack : Module("Backtrack", COMBAT) {
     private val delay by object : IntegerValue("Delay", 80, 0..700) {
         override fun onChange(oldValue: Int, newValue: Int): Int {
             if (mode == "Modern")
@@ -59,7 +57,8 @@ object Backtrack : Module("Backtrack", ModuleCategory.COMBAT) {
     }
 
     // Legacy
-    private val legacyPos by ListValue("Caching mode",
+    private val legacyPos by ListValue(
+        "Caching mode",
         arrayOf("ClientPos", "ServerPos"),
         "ClientPos"
     ) { mode == "Legacy" }

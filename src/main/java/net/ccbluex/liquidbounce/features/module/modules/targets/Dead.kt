@@ -6,6 +6,6 @@
 package net.ccbluex.liquidbounce.features.module.modules.targets
 
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.TARGETS
 
-object Dead : Module("Dead", ModuleCategory.TARGETS, gameDetecting = false, defaultInArray = false)
+object Dead : Module("Dead", TARGETS, gameDetecting = false, defaultInArray = false)

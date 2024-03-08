@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.render
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Render3DEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
 import net.ccbluex.liquidbounce.ui.font.Fonts
 import net.ccbluex.liquidbounce.utils.EntityUtils.getHealth
@@ -37,17 +37,17 @@ import java.util.*
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-object NameTags : Module("NameTags", ModuleCategory.RENDER, subjective = true) {
+object NameTags : Module("NameTags", RENDER, subjective = true) {
     private val health by BoolValue("Health", true)
-        private val healthFromScoreboard by BoolValue("HealthFromScoreboard", false) { health }
-        private val absorption by BoolValue("Absorption", false) { health || healthBar }
-        private val roundedHealth by BoolValue("RoundedHealth", true) { health }
+    private val healthFromScoreboard by BoolValue("HealthFromScoreboard", false) { health }
+    private val absorption by BoolValue("Absorption", false) { health || healthBar }
+    private val roundedHealth by BoolValue("RoundedHealth", true) { health }
 
-        private val healthPrefix by BoolValue("HealthPrefix", false) { health }
-            private val healthPrefixText by TextValue("HealthPrefixText", "") { health && healthPrefix }
+    private val healthPrefix by BoolValue("HealthPrefix", false) { health }
+    private val healthPrefixText by TextValue("HealthPrefixText", "") { health && healthPrefix }
 
-        private val healthSuffix by BoolValue("HealthSuffix", true) { health }
-            private val healthSuffixText by TextValue("HealthSuffixText", " HP") { health && healthSuffix }
+    private val healthSuffix by BoolValue("HealthSuffix", true) { health }
+    private val healthSuffixText by TextValue("HealthSuffixText", " HP") { health && healthSuffix }
 
     private val ping by BoolValue("Ping", false)
     private val healthBar by BoolValue("Bar", true)
@@ -61,16 +61,16 @@ object NameTags : Module("NameTags", ModuleCategory.RENDER, subjective = true) {
     private val fontShadow by BoolValue("Shadow", true)
 
     private val background by BoolValue("Background", true)
-        private val backgroundColorRed by IntegerValue("Background-R", 0, 0..255) { background }
-        private val backgroundColorGreen by IntegerValue("Background-G", 0, 0..255) { background }
-        private val backgroundColorBlue by IntegerValue("Background-B", 0, 0..255) { background }
-        private val backgroundColorAlpha by IntegerValue("Background-Alpha", 70, 0..255) { background }
+    private val backgroundColorRed by IntegerValue("Background-R", 0, 0..255) { background }
+    private val backgroundColorGreen by IntegerValue("Background-G", 0, 0..255) { background }
+    private val backgroundColorBlue by IntegerValue("Background-B", 0, 0..255) { background }
+    private val backgroundColorAlpha by IntegerValue("Background-Alpha", 70, 0..255) { background }
 
     private val border by BoolValue("Border", true)
-        private val borderColorRed by IntegerValue("Border-R", 0, 0..255) { border }
-        private val borderColorGreen by IntegerValue("Border-G", 0, 0..255) { border }
-        private val borderColorBlue by IntegerValue("Border-B", 0, 0..255) { border }
-        private val borderColorAlpha by IntegerValue("Border-Alpha", 100, 0..255) { border }
+    private val borderColorRed by IntegerValue("Border-R", 0, 0..255) { border }
+    private val borderColorGreen by IntegerValue("Border-G", 0, 0..255) { border }
+    private val borderColorBlue by IntegerValue("Border-B", 0, 0..255) { border }
+    private val borderColorAlpha by IntegerValue("Border-Alpha", 100, 0..255) { border }
 
     private val maxRenderDistance by object : IntegerValue("MaxRenderDistance", 100, 1..200) {
         override fun onUpdate(value: Int) {
@@ -301,6 +301,9 @@ object NameTags : Module("NameTags", ModuleCategory.RENDER, subjective = true) {
     }
 
     fun shouldRenderNameTags(entity: Entity) =
-        handleEvents() && entity is EntityLivingBase && (ESP.handleEvents() && ESP.renderNameTags || isSelected(entity, false)
+        handleEvents() && entity is EntityLivingBase && (ESP.handleEvents() && ESP.renderNameTags || isSelected(
+            entity,
+            false
+        )
                 && (bot || !isBot(entity)))
 }

@@ -7,7 +7,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.jmp
+import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
+import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 
 /**
  * @author liquidbounceplusreborn/LiquidbouncePlus-Reborn
@@ -17,6 +19,7 @@ object AAC4SlowHop : SpeedMode("AAC4SlowHop") {
         mc.timer.resetSpeed()
         mc.thePlayer.speedInAir = 0.02f
     }
+
     override fun onUpdate() {
         mc.thePlayer.run {
             if (isInWater)

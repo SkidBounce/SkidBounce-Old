@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.event.Render3DEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
 import net.ccbluex.liquidbounce.utils.Rotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
@@ -33,14 +33,15 @@ import net.minecraft.item.ItemEnderPearl
 import net.minecraft.item.ItemSnowball
 import java.awt.Color
 
-object BowAimBot : Module("BowAimBot", ModuleCategory.COMBAT) {
+object BowAimBot : Module("BowAimBot", COMBAT) {
 
     private val bow by BoolValue("Bow", true, subjective = true)
     private val egg by BoolValue("Egg", true, subjective = true)
     private val snowball by BoolValue("Snowball", true, subjective = true)
     private val pearl by BoolValue("EnderPearl", false, subjective = true)
 
-    private val priority by ListValue("Priority",
+    private val priority by ListValue(
+        "Priority",
         arrayOf("Health", "Distance", "Direction"),
         "Direction",
         subjective = true
@@ -100,7 +101,8 @@ object BowAimBot : Module("BowAimBot", ModuleCategory.COMBAT) {
 
                 target = getTarget(throughWalls, priority)
 
-                targetRotation = faceTrajectory(target ?: return,
+                targetRotation = faceTrajectory(
+                    target ?: return,
                     predict,
                     predictSize,
                     gravity = 0.03f,

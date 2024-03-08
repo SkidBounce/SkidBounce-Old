@@ -7,10 +7,9 @@ package net.ccbluex.liquidbounce.features.module.modules.world
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.WORLD
 import net.ccbluex.liquidbounce.features.module.modules.render.BlockOverlay
 import net.ccbluex.liquidbounce.ui.font.Fonts
-import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.PlaceRotation
 import net.ccbluex.liquidbounce.utils.Rotation
@@ -35,7 +34,6 @@ import net.minecraft.client.renderer.GlStateManager.resetColor
 import net.minecraft.init.Blocks.air
 import net.minecraft.item.ItemBlock
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
-import net.minecraft.network.play.client.C0APacketAnimation
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.MovingObjectPosition
@@ -45,13 +43,23 @@ import java.awt.Color
 import kotlin.math.truncate
 
 
-object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
+object Tower : Module("Tower", WORLD, gameDetecting = false) {
     /**
      * OPTIONS
      */
     private val mode by ListValue(
         "Mode",
-        arrayOf("Jump", "MotionJump", "Motion", "ConstantMotion", "MotionTP", "Packet", "Teleport", "AAC3.3.9", "AAC3.6.4").sortedArray(),
+        arrayOf(
+            "Jump",
+            "MotionJump",
+            "Motion",
+            "ConstantMotion",
+            "MotionTP",
+            "Packet",
+            "Teleport",
+            "AAC3.3.9",
+            "AAC3.6.4"
+        ).sortedArray(),
         "Motion"
     )
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Pick", "Spoof", "Switch"), "Spoof")
@@ -59,7 +67,7 @@ object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
     private val stopWhenBlockAbove by BoolValue("StopWhenBlockAbove", false)
 
     private val rotations by BoolValue("Rotations", true)
-        private val keepRotation by BoolValue("KeepRotation", false) { rotations }
+    private val keepRotation by BoolValue("KeepRotation", false) { rotations }
 
     private val onJump by BoolValue("OnJump", false)
     private val matrix by BoolValue("Matrix", false)
@@ -72,7 +80,11 @@ object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
 
     // ConstantMotion
     private val constantMotion by FloatValue("ConstantMotion", 0.42f, 0.1f..1f) { mode == "ConstantMotion" }
-    private val constantMotionJumpGround by FloatValue("ConstantMotionJumpGround", 0.79f, 0.76f..1f) { mode == "ConstantMotion" }
+    private val constantMotionJumpGround by FloatValue(
+        "ConstantMotionJumpGround",
+        0.79f,
+        0.76f..1f
+    ) { mode == "ConstantMotion" }
 
     // Teleport
     private val teleportHeight by FloatValue("TeleportHeight", 1.15f, 0.1f..5f) { mode == "Teleport" }
@@ -302,7 +314,7 @@ object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
                         val hitVec = posVec + (dirVec * 0.5)
 
                         if (eyesPos.distanceTo(hitVec) > 4.25
-	                        || distanceSqPosVec > eyesPos.squareDistanceTo(posVec + dirVec)
+                            || distanceSqPosVec > eyesPos.squareDistanceTo(posVec + dirVec)
                             || mc.theWorld.rayTraceBlocks(eyesPos, hitVec, false, true, false) != null
                         ) continue
 
@@ -317,7 +329,10 @@ object Tower : Module("Tower", ModuleCategory.WORLD, gameDetecting = false) {
                         if (obj.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK || obj.blockPos != neighbor)
                             continue
 
-                        if (placeRotation == null || getRotationDifference(rotation) < getRotationDifference(placeRotation.rotation))
+                        if (placeRotation == null || getRotationDifference(rotation) < getRotationDifference(
+                                placeRotation.rotation
+                            )
+                        )
                             placeRotation = PlaceRotation(PlaceInfo(neighbor, facingType.opposite, hitVec), rotation)
                     }
                 }

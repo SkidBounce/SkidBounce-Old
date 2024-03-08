@@ -8,10 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 
-object LadderJump : Module("LadderJump", ModuleCategory.MOVEMENT) {
-
+object LadderJump : Module("LadderJump", MOVEMENT) {
     var jumped = false
 
     @EventTarget
@@ -25,5 +24,4 @@ object LadderJump : Module("LadderJump", ModuleCategory.MOVEMENT) {
             mc.thePlayer.motionY += 0.059
         }
     }
-
 }

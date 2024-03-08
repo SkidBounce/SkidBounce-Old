@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.player
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.TickEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
@@ -22,14 +22,16 @@ import net.minecraft.world.WorldSettings
 import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 
-object KeyPearl : Module("KeyPearl", ModuleCategory.PLAYER, gameDetecting = false) {
+object KeyPearl : Module("KeyPearl", PLAYER, gameDetecting = false) {
 
     private val delayedSlotSwitch by BoolValue("DelayedSlotSwitch", true)
     private val mouse by BoolValue("Mouse", false, subjective = true)
-        private val mouseButtonValue = ListValue("MouseButton",
-            arrayOf("Left", "Right", "Middle", "MouseButton4", "MouseButton5"), "Middle", subjective = true) { mouse }
+    private val mouseButtonValue = ListValue(
+        "MouseButton",
+        arrayOf("Left", "Right", "Middle", "MouseButton4", "MouseButton5"), "Middle", subjective = true
+    ) { mouse }
 
-        private val keyName by TextValue("KeyName", "X", subjective = true) { !mouse }
+    private val keyName by TextValue("KeyName", "X", subjective = true) { !mouse }
 
     private val noEnderPearlsMessage by BoolValue("NoEnderPearlsMessage", true, subjective = true)
 
@@ -52,13 +54,15 @@ object KeyPearl : Module("KeyPearl", ModuleCategory.PLAYER, gameDetecting = fals
             sendPackets(
                 C09PacketHeldItemChange(pearlInHotbar - 36),
                 C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem),
-                C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem))
+                C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem)
+            )
             return
         }
 
         sendPackets(
             C09PacketHeldItemChange(pearlInHotbar - 36),
-            C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem))
+            C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem)
+        )
         hasThrown = true
     }
 
@@ -71,10 +75,11 @@ object KeyPearl : Module("KeyPearl", ModuleCategory.PLAYER, gameDetecting = fals
         }
 
         if (mc.currentScreen != null || mc.playerController.currentGameType == WorldSettings.GameType.SPECTATOR
-            || mc.playerController.currentGameType == WorldSettings.GameType.CREATIVE) return
-			
-		val isMouseDown = Mouse.isButtonDown(mouseButtonValue.values.indexOf(mouseButtonValue.get()))
-		val isKeyDown = Keyboard.isKeyDown(Keyboard.getKeyIndex(keyName.uppercase()))
+            || mc.playerController.currentGameType == WorldSettings.GameType.CREATIVE
+        ) return
+
+        val isMouseDown = Mouse.isButtonDown(mouseButtonValue.values.indexOf(mouseButtonValue.get()))
+        val isKeyDown = Keyboard.isKeyDown(Keyboard.getKeyIndex(keyName.uppercase()))
 
         if (mouse && !wasMouseDown && isMouseDown) {
             throwEnderPearl()

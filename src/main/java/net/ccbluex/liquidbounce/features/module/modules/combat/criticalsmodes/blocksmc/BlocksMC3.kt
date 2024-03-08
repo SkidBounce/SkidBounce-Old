@@ -5,7 +5,6 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.blocksmc
 
-import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.minecraft.entity.Entity
 
@@ -14,9 +13,9 @@ import net.minecraft.entity.Entity
  */
 object BlocksMC3 : CriticalsMode("BlocksMC3") {
     override fun onAttack(entity: Entity) {
-        Criticals.sendPacket(0.0825080378093, true)
-        Criticals.sendPacket(0.0215634532004, false)
-        Criticals.sendPacket(0.1040220332227, false)
-        Criticals.crit(entity)
+        sendPacket(0.0825080378093, true)
+        sendPacket(0.0215634532004, false)
+        sendPacket(0.1040220332227, false)
+        crit(entity)
     }
 }

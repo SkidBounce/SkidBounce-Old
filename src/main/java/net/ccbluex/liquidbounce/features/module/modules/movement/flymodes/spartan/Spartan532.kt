@@ -16,27 +16,27 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
  * @author ManInMyVan
  */
 object Spartan532 : FlyMode("Spartan532") {
-	override fun onMove(event: MoveEvent) {
-		mc.thePlayer ?: return
+    override fun onMove(event: MoveEvent) {
+        mc.thePlayer ?: return
 
-		mc.timer.timerSpeed = spartan532Timer
+        mc.timer.timerSpeed = spartan532Timer
 
-		strafe(spartan532Speed, true, event)
+        strafe(spartan532Speed, true, event)
 
-		mc.thePlayer.onGround = false
-		mc.thePlayer.isInWeb = false
+        mc.thePlayer.onGround = false
+        mc.thePlayer.isInWeb = false
 
-		mc.thePlayer.capabilities.isFlying = false
+        mc.thePlayer.capabilities.isFlying = false
 
-		var ySpeed = 0.0
+        var ySpeed = 0.0
 
-		if (mc.gameSettings.keyBindJump.isKeyDown)
-			ySpeed += spartan532Speed
+        if (mc.gameSettings.keyBindJump.isKeyDown)
+            ySpeed += spartan532Speed
 
-		if (mc.gameSettings.keyBindSneak.isKeyDown)
-			ySpeed -= spartan532Speed
+        if (mc.gameSettings.keyBindSneak.isKeyDown)
+            ySpeed -= spartan532Speed
 
-		mc.thePlayer.motionY = ySpeed
-		event.y = ySpeed
-	}
+        mc.thePlayer.motionY = ySpeed
+        event.y = ySpeed
+    }
 }

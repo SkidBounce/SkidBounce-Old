@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui
 import net.ccbluex.liquidbounce.ui.client.hud.designer.GuiHudDesigner
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager
@@ -20,7 +20,7 @@ import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.client.settings.GameSettings
 
-object InventoryMove : Module("InventoryMove", ModuleCategory.MOVEMENT, gameDetecting = false) {
+object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) {
 
     private val notInChests by BoolValue("NotInChests", false)
     val aacAdditionPro by BoolValue("AACAdditionPro", false)
@@ -33,12 +33,13 @@ object InventoryMove : Module("InventoryMove", ModuleCategory.MOVEMENT, gameDete
     private val noMoveGround by InventoryManager.noMoveGroundValue
     private val undetectable by InventoryManager.undetectableValue
 
-        // If player violates nomove check and inventory is open, close inventory and reopen it when still
-        private val silentlyCloseAndReopen by BoolValue("SilentlyCloseAndReopen", false)
-            { noMove && (noMoveAir || noMoveGround) }
-            // Reopen closed inventory just before a click (could flag for clicking too fast after opening inventory)
-            private val reopenOnClick by BoolValue("ReopenOnClick", false)
-                { silentlyCloseAndReopen && noMove && (noMoveAir || noMoveGround) }
+    // If player violates nomove check and inventory is open, close inventory and reopen it when still
+    private val silentlyCloseAndReopen by BoolValue("SilentlyCloseAndReopen", false)
+    { noMove && (noMoveAir || noMoveGround) }
+
+    // Reopen closed inventory just before a click (could flag for clicking too fast after opening inventory)
+    private val reopenOnClick by BoolValue("ReopenOnClick", false)
+    { silentlyCloseAndReopen && noMove && (noMoveAir || noMoveGround) }
 
     private val affectedBindings = arrayOf(
         mc.gameSettings.keyBindForward,
@@ -73,7 +74,7 @@ object InventoryMove : Module("InventoryMove", ModuleCategory.MOVEMENT, gameDete
 
         for (affectedBinding in affectedBindings)
             affectedBinding.pressed = GameSettings.isKeyDown(affectedBinding)
-                || (affectedBinding == mc.gameSettings.keyBindSprint && Sprint.handleEvents() && (!Sprint.onlyOnSprintPress || mc.thePlayer.isSprinting))
+                    || (affectedBinding == mc.gameSettings.keyBindSprint && Sprint.handleEvents() && (!Sprint.onlyOnSprintPress || mc.thePlayer.isSprinting))
     }
 
     @EventTarget
@@ -87,7 +88,7 @@ object InventoryMove : Module("InventoryMove", ModuleCategory.MOVEMENT, gameDete
     fun onJump(event: JumpEvent) {
         if (isIntave) event.cancelEvent()
     }
-    
+
     @EventTarget
     fun onClick(event: ClickWindowEvent) {
         if (!canClickInventory()) event.cancelEvent()

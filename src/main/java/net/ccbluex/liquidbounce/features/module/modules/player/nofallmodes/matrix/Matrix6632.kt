@@ -21,7 +21,7 @@ object Matrix6632 : NoFallMode("Matrix6.6.3-2") {
     private var send = false
     private var firstNfall = true
     private var nearGround = false
-    
+
     override fun onEnable() {
         send = false
         firstNfall = true
@@ -49,8 +49,22 @@ object Matrix6632 : NoFallMode("Matrix6.6.3-2") {
             send = false
             if (abs((collY) - mc.thePlayer.posY) > 2) {
                 event.cancelEvent()
-                sendPacket(C03PacketPlayer.C04PacketPlayerPosition(event.packet.x, event.packet.y, event.packet.z, true))
-                sendPacket(C03PacketPlayer.C04PacketPlayerPosition(event.packet.x, event.packet.y, event.packet.z, false))
+                sendPacket(
+                    C03PacketPlayer.C04PacketPlayerPosition(
+                        event.packet.x,
+                        event.packet.y,
+                        event.packet.z,
+                        true
+                    )
+                )
+                sendPacket(
+                    C03PacketPlayer.C04PacketPlayerPosition(
+                        event.packet.x,
+                        event.packet.y,
+                        event.packet.z,
+                        false
+                    )
+                )
             }
         }
     }

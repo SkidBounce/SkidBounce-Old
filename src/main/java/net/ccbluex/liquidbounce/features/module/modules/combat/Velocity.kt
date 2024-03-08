@@ -6,15 +6,21 @@
 package net.ccbluex.liquidbounce.features.module.modules.combat
 
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.grim.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.other.*
+import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.vanilla.*
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.*
-import net.minecraft.network.play.server.*
+import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.ListValue
+import net.minecraft.network.play.server.S12PacketEntityVelocity
+import net.minecraft.network.play.server.S27PacketExplosion
 
-object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
+object Velocity : Module("Velocity", COMBAT) {
     private val velocityModes = arrayOf(
         Custom,
         Vanilla,
@@ -49,7 +55,11 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     val verticalMultiplier by FloatValue("VerticalMultiplier", 0f, 0f..1f) { mode == "Custom" && !cancelVertical }
     val chance by IntegerValue("Chance", 100, 0..100) { mode == "Custom" }
     val attackReduce by BoolValue("AttackReduce", false) { mode == "Custom" }
-    val attackReduceMultiplier by FloatValue("AttackReduce-Multiplier", 0.8f, 0f..1f) { mode == "Custom" && attackReduce }
+    val attackReduceMultiplier by FloatValue(
+        "AttackReduce-Multiplier",
+        0.8f,
+        0f..1f
+    ) { mode == "Custom" && attackReduce }
     val jump by BoolValue("Jump", false) { mode == "Custom" }
     val jumpMotion by FloatValue("Jump-Motion", 0.42f, 0f..0.42f) { mode == "Custom" && jump }
     val jumpFailRate by IntegerValue("Jump-FailRate", 0, 0..100) { mode == "Custom" && jump }
@@ -71,10 +81,26 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
     val grimOnlyAir by BoolValue("Grim-OnlyBreakAir", true) { mode == "Grim" }
     val grimWorld by BoolValue("Grim-BreakOnWorld", false) { mode == "Grim" }
     val grimFlagPause by IntegerValue("Grim-FlagPauseTime", 10, 0..1000) { mode == "Grim" }
-    val grimPacket by ListValue("Grim-Packet", arrayOf("Flying", "Position", "Rotation", "Full", "None"), "Position") { mode == "Grim" }
-    val grimTimerMode by ListValue("Grim-TimerMode", arrayOf("New", "Old", "Off"), "New") { mode == "Grim" && grimPacket != "None" }
-    val grimTimerTicks by IntegerValue("Grim-TimerTicks", 20, 1..100) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }
-    val grimTimerSpeed by FloatValue("Grim-TimerSpeed", 0.8f, 0f..1f) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }
+    val grimPacket by ListValue(
+        "Grim-Packet",
+        arrayOf("Flying", "Position", "Rotation", "Full", "None"),
+        "Position"
+    ) { mode == "Grim" }
+    val grimTimerMode by ListValue(
+        "Grim-TimerMode",
+        arrayOf("New", "Old", "Off"),
+        "New"
+    ) { mode == "Grim" && grimPacket != "None" }
+    val grimTimerTicks by IntegerValue(
+        "Grim-TimerTicks",
+        20,
+        1..100
+    ) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }
+    val grimTimerSpeed by FloatValue(
+        "Grim-TimerSpeed",
+        0.8f,
+        0f..1f
+    ) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }
 
     val aacv4MotionReducer by FloatValue("AACv4MotionReducer", 0.62f, 0f..1f) { mode == "AACv4" }
 
@@ -108,32 +134,44 @@ object Velocity : Module("Velocity", ModuleCategory.COMBAT) {
         modeModule.onEnable()
     }
 
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         ++velocityTick
         modeModule.onUpdate()
     }
+
     @EventTarget
-    fun onJump(event: JumpEvent) { modeModule.onJump(event) }
+    fun onJump(event: JumpEvent) {
+        modeModule.onJump(event)
+    }
+
     @EventTarget
-    fun onTick(event: TickEvent) { modeModule.onTick(event) }
+    fun onTick(event: TickEvent) {
+        modeModule.onTick(event)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
     @EventTarget
-    fun onAttack(event: AttackEvent) { modeModule.onAttack() }
+    fun onAttack(event: AttackEvent) {
+        modeModule.onAttack()
+    }
+
     @EventTarget(priority = 1)
     fun onPacket(event: PacketEvent) {
         modeModule.onPacket(event)
         val packet = event.packet
-        if (
-            (packet is S27PacketExplosion && explosions)
+        if ((packet is S27PacketExplosion && explosions)
             || (packet is S12PacketEntityVelocity && packet.entityID == mc.thePlayer.entityId)
             && !(noFire && mc.thePlayer.isBurning)
             && !(onlyGround && !mc.thePlayer.onGround)
-            ) {
+        ) {
             velocityTimer.reset()
             velocityTick = 0
             modeModule.onVelocityPacket(event)
         }
     }
+
     @EventTarget
     fun onBlockBB(event: BlockBBEvent) {
         mc.thePlayer ?: return

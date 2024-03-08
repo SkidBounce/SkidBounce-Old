@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.event.WorldEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
@@ -21,7 +21,7 @@ import net.minecraft.network.play.client.C0BPacketEntityAction
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action.START_SNEAKING
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action.STOP_SNEAKING
 
-object Sneak : Module("Sneak", ModuleCategory.MOVEMENT) {
+object Sneak : Module("Sneak", MOVEMENT) {
 
     val mode by ListValue("Mode", arrayOf("Legit", "Vanilla", "Switch", "MineSecure").sortedArray(), "MineSecure")
     val stopMove by BoolValue("StopMove", false)
@@ -53,6 +53,7 @@ object Sneak : Module("Sneak", ModuleCategory.MOVEMENT) {
                             C0BPacketEntityAction(mc.thePlayer, STOP_SNEAKING)
                         )
                     }
+
                     EventState.POST -> {
                         sendPackets(
                             C0BPacketEntityAction(mc.thePlayer, STOP_SNEAKING),
@@ -85,6 +86,7 @@ object Sneak : Module("Sneak", ModuleCategory.MOVEMENT) {
                     mc.gameSettings.keyBindSneak.pressed = false
                 }
             }
+
             "vanilla", "switch", "minesecure" -> sendPacket(C0BPacketEntityAction(player, STOP_SNEAKING))
         }
         sneaking = false

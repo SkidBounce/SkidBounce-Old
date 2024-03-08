@@ -6,27 +6,34 @@
 package net.ccbluex.liquidbounce.features.module.modules.player
 
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
 import net.ccbluex.liquidbounce.features.module.modules.render.Breadcrumbs
 import net.ccbluex.liquidbounce.injection.implementations.IMixinEntity
-import net.ccbluex.liquidbounce.utils.*
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
+import net.ccbluex.liquidbounce.utils.Rotation
+import net.ccbluex.liquidbounce.utils.RotationUtils
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.*
+import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntegerValue
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.network.Packet
 import net.minecraft.network.handshake.client.C00Handshake
 import net.minecraft.network.play.client.*
-import net.minecraft.network.play.server.*
-import net.minecraft.network.status.client.*
+import net.minecraft.network.play.server.S06PacketUpdateHealth
+import net.minecraft.network.play.server.S08PacketPlayerPosLook
+import net.minecraft.network.play.server.S12PacketEntityVelocity
+import net.minecraft.network.play.server.S27PacketExplosion
+import net.minecraft.network.status.client.C00PacketServerQuery
+import net.minecraft.network.status.client.C01PacketPing
 import net.minecraft.util.Vec3
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 
-object FakeLag : Module("FakeLag", ModuleCategory.PLAYER, gameDetecting = false) {
+object FakeLag : Module("FakeLag", PLAYER, gameDetecting = false) {
 
     private val delay by IntegerValue("Delay", 550, 0..1000)
     private val recoilTime by IntegerValue("RecoilTime", 750, 0..2000)

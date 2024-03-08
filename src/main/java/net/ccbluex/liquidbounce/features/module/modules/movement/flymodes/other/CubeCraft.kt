@@ -16,23 +16,23 @@ import kotlin.math.sin
  * @author CCBlueX/LiquidBounce
  */
 object CubeCraft : FlyMode("CubeCraft") {
-	private val tickTimer = TickTimer()
+    private val tickTimer = TickTimer()
 
-	override fun onUpdate() {
-		mc.timer.timerSpeed = 0.6f
-		tickTimer.update()
-	}
+    override fun onUpdate() {
+        mc.timer.timerSpeed = 0.6f
+        tickTimer.update()
+    }
 
-	override fun onMove(event: MoveEvent) {
-		val yaw = mc.thePlayer.rotationYaw.toRadiansD()
+    override fun onMove(event: MoveEvent) {
+        val yaw = mc.thePlayer.rotationYaw.toRadiansD()
 
-		if (tickTimer.hasTimePassed(2)) {
-			event.x = -sin(yaw) * 2.4
-			event.z = cos(yaw) * 2.4
-			tickTimer.reset()
-		} else {
-			event.x = -sin(yaw) * 0.2
-			event.z = cos(yaw) * 0.2
-		}
-	}
+        if (tickTimer.hasTimePassed(2)) {
+            event.x = -sin(yaw) * 2.4
+            event.z = cos(yaw) * 2.4
+            tickTimer.reset()
+        } else {
+            event.x = -sin(yaw) * 0.2
+            event.z = cos(yaw) * 0.2
+        }
+    }
 }

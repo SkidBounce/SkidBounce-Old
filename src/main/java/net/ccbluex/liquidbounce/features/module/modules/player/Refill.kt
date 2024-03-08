@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.player
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.TickEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager.canClickInventory
@@ -22,7 +22,7 @@ import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.play.client.C0EPacketClickWindow
 
-object Refill : Module("Refill", ModuleCategory.PLAYER) {
+object Refill : Module("Refill", PLAYER) {
     private val delay by IntegerValue("Delay", 400, 10..1000)
 
     private val minItemAge by IntegerValue("MinItemAge", 400, 0..1000)
@@ -30,7 +30,7 @@ object Refill : Module("Refill", ModuleCategory.PLAYER) {
     private val mode by ListValue("Mode", arrayOf("Swap", "Merge"), "Swap")
 
     private val invOpen by BoolValue("InvOpen", false)
-        private val simulateInventory by BoolValue("SimulateInventory", false) { !invOpen }
+    private val simulateInventory by BoolValue("SimulateInventory", false) { !invOpen }
 
     private val noMove by InventoryManager.noMoveValue
     private val noMoveAir by InventoryManager.noMoveAirValue
@@ -99,8 +99,10 @@ object Refill : Module("Refill", ModuleCategory.PLAYER) {
         if (simulateInventory) serverOpenInventory = true
 
         sendPacket(
-            C0EPacketClickWindow(mc.thePlayer.openContainer.windowId, slot, button, mode, stack,
-                mc.thePlayer.openContainer.getNextTransactionID(mc.thePlayer.inventory))
+            C0EPacketClickWindow(
+                mc.thePlayer.openContainer.windowId, slot, button, mode, stack,
+                mc.thePlayer.openContainer.getNextTransactionID(mc.thePlayer.inventory)
+            )
         )
     }
 }

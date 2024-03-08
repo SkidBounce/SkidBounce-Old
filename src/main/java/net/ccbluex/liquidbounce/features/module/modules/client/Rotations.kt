@@ -8,16 +8,16 @@ package net.ccbluex.liquidbounce.features.module.modules.client
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.features.module.modules.misc.Derp
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.serverRotation
 import net.ccbluex.liquidbounce.value.BoolValue
 
-object Rotations : Module("Rotations", ModuleCategory.CLIENT, gameDetecting = false, defaultInArray = false, subjective = true) {
+object Rotations : Module("Rotations", CLIENT, gameDetecting = false, defaultInArray = false, subjective = true) {
 
     private val realistic by BoolValue("Realistic", true)
-        private val body by BoolValue("Body", true) { !realistic }
+    private val body by BoolValue("Body", true) { !realistic }
 
     var prevHeadPitch = 0f
     var headPitch = 0f

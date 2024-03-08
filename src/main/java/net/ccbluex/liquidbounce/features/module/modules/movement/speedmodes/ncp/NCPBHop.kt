@@ -28,7 +28,12 @@ object NCPBHop : SpeedMode("NCPBHop") {
     private var timerDelay = 0
     override fun onEnable() {
         mc.timer.timerSpeed = 1f
-        level = if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.entityBoundingBox.offset(0.0, mc.thePlayer.motionY, 0.0)).size > 0 || mc.thePlayer.isCollidedVertically) 1 else 4
+        level =
+            if (mc.theWorld.getCollidingBoundingBoxes(
+                    mc.thePlayer,
+                    mc.thePlayer.entityBoundingBox.offset(0.0, mc.thePlayer.motionY, 0.0)
+                ).size > 0 || mc.thePlayer.isCollidedVertically
+            ) 1 else 4
     }
 
     override fun onDisable() {
@@ -79,7 +84,15 @@ object NCPBHop : SpeedMode("NCPBHop") {
             val difference = 0.66 * (lastDist - baseMoveSpeed)
             moveSpeed = lastDist - difference
         } else {
-            if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.entityBoundingBox.offset(0.0, mc.thePlayer.motionY, 0.0)).isNotEmpty() || mc.thePlayer.isCollidedVertically) level = 1
+            if (mc.theWorld.getCollidingBoundingBoxes(
+                    mc.thePlayer,
+                    mc.thePlayer.entityBoundingBox.offset(
+                        0.0,
+                        mc.thePlayer.motionY,
+                        0.0
+                    )
+                ).isNotEmpty() || mc.thePlayer.isCollidedVertically
+            ) level = 1
             moveSpeed = lastDist - lastDist / 159.0
         }
         moveSpeed = max(moveSpeed, baseMoveSpeed)
@@ -116,7 +129,8 @@ object NCPBHop : SpeedMode("NCPBHop") {
         get() {
             var baseSpeed = 0.2873
             if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) baseSpeed *= 1.0 + 0.2 * (mc.thePlayer.getActivePotionEffect(
-                Potion.moveSpeed)).amplifier + 1
+                Potion.moveSpeed
+            )).amplifier + 1
             return baseSpeed
         }
 

@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Render3DEvent
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.utils.extensions.fixedSensitivityPitch
 import net.ccbluex.liquidbounce.utils.extensions.fixedSensitivityYaw
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
@@ -21,7 +21,7 @@ import net.minecraft.item.EnumAction
 import net.minecraft.util.MovingObjectPosition
 import kotlin.random.Random.Default.nextBoolean
 
-object AutoClicker : Module("AutoClicker", ModuleCategory.COMBAT) {
+object AutoClicker : Module("AutoClicker", COMBAT) {
     private val maxCPSValue: IntegerValue = object : IntegerValue("MaxCPS", 8, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minCPS)
     }

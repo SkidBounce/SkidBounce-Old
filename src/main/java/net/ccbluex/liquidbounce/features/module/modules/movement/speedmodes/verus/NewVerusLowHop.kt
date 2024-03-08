@@ -39,7 +39,8 @@ object NewVerusLowHop : SpeedMode("NewVerusLowHop") {
 
                 // Checks the presence of Slowness potion effect.
                 speed = if (player.isPotionActive(Potion.moveSlowdown)
-                    && player.getActivePotionEffect(Potion.moveSlowdown).amplifier == 1)
+                    && player.getActivePotionEffect(Potion.moveSlowdown).amplifier == 1
+                )
                     0.3f else 0.33f
             } else {
                 if (airTicks == 0)

@@ -29,6 +29,7 @@ object AAC4 : NoWebMode("AAC4") {
         }
         usedTimer = true
     }
+
     fun onJump(event: JumpEvent) {
         event.cancelEvent()
     }

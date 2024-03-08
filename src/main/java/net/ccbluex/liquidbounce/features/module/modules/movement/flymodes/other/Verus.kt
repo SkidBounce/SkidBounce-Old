@@ -5,7 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
 
-import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.JumpEvent
+import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.boostMotion
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.boostTicksValue
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.damage
@@ -14,9 +15,11 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.yBoost
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.stop
+import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.minecraft.network.play.client.C03PacketPlayer
-import net.minecraft.network.play.client.C03PacketPlayer.*
+import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
+import net.minecraft.network.play.client.C03PacketPlayer.C06PacketPlayerPosLook
 
 /**
  * Modified code ported from VerusDamage Script by Arcane
@@ -34,12 +37,42 @@ object Verus : FlyMode("Verus") {
 
     override fun onEnable() {
         boostTicks = 0
-        if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.entityBoundingBox.offset(0.0, 3.0001, 0.0).expand(0.0, 0.0, 0.0)).isEmpty()) {
+        if (mc.theWorld.getCollidingBoundingBoxes(
+                mc.thePlayer,
+                mc.thePlayer.entityBoundingBox.offset(0.0, 3.0001, 0.0)
+                    .expand(0.0, 0.0, 0.0)
+            ).isEmpty()
+        ) {
             if (damage)
-                sendPacket(C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 3.0001, mc.thePlayer.posZ, false))
+                sendPacket(
+                    C04PacketPlayerPosition(
+                        mc.thePlayer.posX,
+                        mc.thePlayer.posY + 3.0001,
+                        mc.thePlayer.posZ,
+                        false
+                    )
+                )
 
-            sendPacket(C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false))
-            sendPacket(C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, true))
+            sendPacket(
+                C06PacketPlayerPosLook(
+                    mc.thePlayer.posX,
+                    mc.thePlayer.posY,
+                    mc.thePlayer.posZ,
+                    mc.thePlayer.rotationYaw,
+                    mc.thePlayer.rotationPitch,
+                    false
+                )
+            )
+            sendPacket(
+                C06PacketPlayerPosLook(
+                    mc.thePlayer.posX,
+                    mc.thePlayer.posY,
+                    mc.thePlayer.posZ,
+                    mc.thePlayer.rotationYaw,
+                    mc.thePlayer.rotationPitch,
+                    true
+                )
+            )
         }
         mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + yBoost.toDouble(), mc.thePlayer.posZ)
     }
@@ -68,7 +101,7 @@ object Verus : FlyMode("Verus") {
                 mc.timer.timerSpeed = 0.08f
             }
         }
-// separate
+        // separate
         strafe(boostMotion, true)
     }
 

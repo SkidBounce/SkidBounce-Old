@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.EventState.PRE
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.Rotation
@@ -33,13 +33,13 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.client.C09PacketHeldItemChange
 import net.minecraft.potion.Potion
 
-object AutoPot : Module("AutoPot", ModuleCategory.COMBAT) {
+object AutoPot : Module("AutoPot", COMBAT) {
 
     private val health by FloatValue("Health", 15F, 1F..20F)
     private val delay by IntegerValue("Delay", 500, 500..1000)
 
     private val openInventory by BoolValue("OpenInv", false)
-        private val simulateInventory by BoolValue("SimulateInventory", true) { !openInventory }
+    private val simulateInventory by BoolValue("SimulateInventory", true) { !openInventory }
 
     private val groundDistance by FloatValue("GroundDistance", 2F, 0F..5F)
     private val mode by ListValue("Mode", arrayOf("Normal", "Jump", "Port"), "Normal")
@@ -102,6 +102,7 @@ object AutoPot : Module("AutoPot", ModuleCategory.COMBAT) {
                     msTimer.reset()
                 }
             }
+
             POST -> {
                 if (potion >= 0 && serverRotation.pitch >= 75F) {
                     val itemStack = thePlayer.inventoryContainer.getSlot(potion).stack

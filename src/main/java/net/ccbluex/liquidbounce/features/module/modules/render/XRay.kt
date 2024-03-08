@@ -6,45 +6,45 @@
 package net.ccbluex.liquidbounce.features.module.modules.render
 
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.minecraft.init.Blocks
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
+import net.minecraft.init.Blocks.*
 
-object XRay : Module("XRay", ModuleCategory.RENDER, gameDetecting = false, subjective = true) {
+object XRay : Module("XRay", RENDER, gameDetecting = false, subjective = true) {
 
     val xrayBlocks = mutableListOf(
-        Blocks.coal_ore,
-        Blocks.iron_ore,
-        Blocks.gold_ore,
-        Blocks.redstone_ore,
-        Blocks.lapis_ore,
-        Blocks.diamond_ore,
-        Blocks.emerald_ore,
-        Blocks.quartz_ore,
-        Blocks.clay,
-        Blocks.glowstone,
-        Blocks.crafting_table,
-        Blocks.torch,
-        Blocks.ladder,
-        Blocks.tnt,
-        Blocks.coal_block,
-        Blocks.iron_block,
-        Blocks.gold_block,
-        Blocks.diamond_block,
-        Blocks.emerald_block,
-        Blocks.lapis_block,
-        Blocks.fire,
-        Blocks.mossy_cobblestone,
-        Blocks.mob_spawner,
-        Blocks.end_portal_frame,
-        Blocks.enchanting_table,
-        Blocks.bookshelf,
-        Blocks.command_block,
-        Blocks.lava,
-        Blocks.flowing_lava,
-        Blocks.water,
-        Blocks.flowing_water,
-        Blocks.furnace,
-        Blocks.lit_furnace
+        coal_ore,
+        iron_ore,
+        gold_ore,
+        redstone_ore,
+        lapis_ore,
+        diamond_ore,
+        emerald_ore,
+        quartz_ore,
+        clay,
+        glowstone,
+        crafting_table,
+        torch,
+        ladder,
+        tnt,
+        coal_block,
+        iron_block,
+        gold_block,
+        diamond_block,
+        emerald_block,
+        lapis_block,
+        fire,
+        mossy_cobblestone,
+        mob_spawner,
+        end_portal_frame,
+        enchanting_table,
+        bookshelf,
+        command_block,
+        lava,
+        flowing_lava,
+        water,
+        flowing_water,
+        furnace,
+        lit_furnace,
     )
 
     private var prevGammaLevel = 0f

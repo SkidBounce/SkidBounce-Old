@@ -51,7 +51,11 @@ object MineplexGround : SpeedMode("MineplexGround", true) {
         val blockPos = BlockPos(mc.thePlayer).down()
         val vec = Vec3(blockPos).addVector(0.4, 0.4, 0.4) + Vec3(EnumFacing.UP.directionVec)
 
-        mc.thePlayer.onPlayerRightClick(blockPos, EnumFacing.UP, Vec3(vec.xCoord * 0.4f, vec.yCoord * 0.4f, vec.zCoord * 0.4f))
+        mc.thePlayer.onPlayerRightClick(
+            blockPos,
+            EnumFacing.UP,
+            Vec3(vec.xCoord * 0.4f, vec.yCoord * 0.4f, vec.zCoord * 0.4f)
+        )
 
         speed = (speed + mineplexGroundSpeed / 8).coerceAtMost(mineplexGroundSpeed)
 

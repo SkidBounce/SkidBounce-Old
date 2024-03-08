@@ -9,8 +9,8 @@ import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 
-open class NoSlowMode(val modeName: String): MinecraftInstance() {
-	open fun onMotion(event: MotionEvent) {}
-	open fun onUpdate() {}
-	open fun onPacket(event: PacketEvent) {}
+open class NoSlowMode(val modeName: String) : MinecraftInstance() {
+    open fun onMotion(event: MotionEvent) {}
+    open fun onUpdate() {}
+    open fun onPacket(event: PacketEvent) {}
 }

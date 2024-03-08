@@ -5,20 +5,26 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat
 
-import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.event.EventTarget
+import net.ccbluex.liquidbounce.event.UpdateEvent
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
 import net.ccbluex.liquidbounce.utils.RaycastUtils.raycastEntity
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.*
-import net.minecraft.init.Items.*
+import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.ListValue
+import net.minecraft.init.Items.egg
+import net.minecraft.init.Items.snowball
 
 /**
  * @author EclipsesDev
  * @author CCBlueX/LiquidBounce
  */
-object AutoProjectile : Module("AutoProjectile", ModuleCategory.COMBAT) {
+object AutoProjectile : Module("AutoProjectile", COMBAT) {
     private val facingEnemy by BoolValue("FacingEnemy", true)
 
     private val mode by ListValue("Mode", arrayOf("Normal", "Smart"), "Normal")
@@ -45,7 +51,8 @@ object AutoProjectile : Module("AutoProjectile", ModuleCategory.COMBAT) {
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
-        val usingProjectile = (mc.thePlayer.isUsingItem && (mc.thePlayer.heldItem?.item == snowball || mc.thePlayer.heldItem?.item == egg)) || projectileInUse
+        val usingProjectile =
+            (mc.thePlayer.isUsingItem && (mc.thePlayer.heldItem?.item == snowball || mc.thePlayer.heldItem?.item == egg)) || projectileInUse
 
         if (usingProjectile) {
             if (projectilePullTimer.hasTimePassed(switchBackDelay)) {
@@ -126,7 +133,11 @@ object AutoProjectile : Module("AutoProjectile", ModuleCategory.COMBAT) {
 
         mc.thePlayer.inventory.currentItem = projectile - 36
 
-        mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.inventoryContainer.getSlot(projectile).stack)
+        mc.playerController.sendUseItem(
+            mc.thePlayer,
+            mc.theWorld,
+            mc.thePlayer.inventoryContainer.getSlot(projectile).stack
+        )
 
         projectileInUse = true
         projectilePullTimer.reset()

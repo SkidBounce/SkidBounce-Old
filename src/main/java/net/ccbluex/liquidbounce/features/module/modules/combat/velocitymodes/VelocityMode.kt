@@ -11,7 +11,7 @@ import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.event.TickEvent
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 
-open class VelocityMode(val modeName: String): MinecraftInstance() {
+open class VelocityMode(val modeName: String) : MinecraftInstance() {
     open fun onUpdate() {}
     open fun onTick(event: TickEvent) {}
     open fun onAttack() {}

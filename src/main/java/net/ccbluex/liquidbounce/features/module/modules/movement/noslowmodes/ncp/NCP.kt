@@ -5,7 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp
 
-import net.ccbluex.liquidbounce.event.EventState.*
+import net.ccbluex.liquidbounce.event.EventState.POST
+import net.ccbluex.liquidbounce.event.EventState.PRE
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow.ncpFunnyReleasePacket
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow.ncpFunnyUsePacket
@@ -31,6 +32,7 @@ object NCP : NoSlowMode("NCP") {
                     DOWN
                 )
             )
+
             POST -> sendPacket(
                 C08PacketPlayerBlockPlacement(
                     if (ncpFunnyUsePacket) ORIGIN else BlockPos(-1, -1, -1),

@@ -5,9 +5,10 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.vanilla
 
-import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.sendPacket
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.component1
+import net.ccbluex.liquidbounce.utils.extensions.component2
+import net.ccbluex.liquidbounce.utils.extensions.component3
 import net.minecraft.entity.Entity
 
 /**

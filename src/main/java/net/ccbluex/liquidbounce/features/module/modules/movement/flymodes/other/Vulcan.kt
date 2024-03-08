@@ -7,8 +7,8 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
 
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.state
-import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vulcanTimer
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vulcanNoClip
+import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vulcanTimer
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.MovementUtils
@@ -39,7 +39,11 @@ object Vulcan : FlyMode("Vulcan") {
         ticks = 0
         modifyTicks = 0
         flags = 0
-        mc.thePlayer.setPosition(mc.thePlayer.posX, (mc.thePlayer.posY * 2).roundToInt().toDouble() / 2, mc.thePlayer.posZ)
+        mc.thePlayer.setPosition(
+            mc.thePlayer.posX,
+            (mc.thePlayer.posY * 2).roundToInt().toDouble() / 2,
+            mc.thePlayer.posZ
+        )
         stage = FlyStage.WAITING
         ClientUtils.displayChatMessage("§3Press Sneak on ground to land.")
     }
@@ -62,28 +66,78 @@ object Vulcan : FlyMode("Vulcan") {
                     mc.timer.timerSpeed = 1.0f
                 }
                 if (vulcanNoClip) mc.thePlayer.noClip = true
-                if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && modifyTicks>=6 && (mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, 0.5, 0.0)).isEmpty() || vulcanNoClip)) {
-                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY+0.5, mc.thePlayer.posZ)
+                if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && modifyTicks >= 6 && (mc.theWorld.getCollisionBoxes(
+                        mc.thePlayer.entityBoundingBox.offset(0.0, 0.5, 0.0)
+                    ).isEmpty() || vulcanNoClip)
+                ) {
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.5, mc.thePlayer.posZ)
                     modifyTicks = 0
                 }
-                if (!MovementUtils.isMoving && ticks == 1 && (GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) || GameSettings.isKeyDown(mc.gameSettings.keyBindJump)) && modifyTicks>=5) {
+                if (!MovementUtils.isMoving && ticks == 1 && (GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) || GameSettings.isKeyDown(
+                        mc.gameSettings.keyBindJump
+                    )) && modifyTicks >= 5
+                ) {
                     val playerYaw = mc.thePlayer.rotationYaw * Math.PI / 180
-                    mc.thePlayer.setPosition(mc.thePlayer.posX + 0.05 * -sin(playerYaw)
-                        , mc.thePlayer.posY
-                        , mc.thePlayer.posZ + 0.05 * cos(playerYaw)
+                    mc.thePlayer.setPosition(
+                        mc.thePlayer.posX + 0.05 * -sin(playerYaw),
+                        mc.thePlayer.posY,
+                        mc.thePlayer.posZ + 0.05 * cos(playerYaw)
                     )
                 }
-                if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && modifyTicks>=6 && (mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, -0.5, 0.0)).isEmpty() || vulcanNoClip)) {
-                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY-0.5, mc.thePlayer.posZ)
+                if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && modifyTicks >= 6 && (mc.theWorld.getCollisionBoxes(
+                        mc.thePlayer.entityBoundingBox.offset(0.0, -0.5, 0.0)
+                    ).isEmpty() || vulcanNoClip)
+                ) {
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 0.5, mc.thePlayer.posZ)
                     modifyTicks = 0
-                } else if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && !(GameSettings.isKeyDown(mc.gameSettings.keyBindForward) || GameSettings.isKeyDown(mc.gameSettings.keyBindBack) || GameSettings.isKeyDown(mc.gameSettings.keyBindLeft) || GameSettings.isKeyDown(mc.gameSettings.keyBindRight)) && mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, -0.5, 0.0))
-                        .isNotEmpty()) {
-                    PacketUtils.sendPacket(C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX+0.05,mc.thePlayer.posY,mc.thePlayer.posZ,true))
-                    PacketUtils.sendPacket(C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX,mc.thePlayer.posY,mc.thePlayer.posZ,true))
-                    PacketUtils.sendPacket(C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX,mc.thePlayer.posY+0.42,mc.thePlayer.posZ,true))
-                    PacketUtils.sendPacket(C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX,mc.thePlayer.posY+0.7532,mc.thePlayer.posZ,true))
-                    PacketUtils.sendPacket(C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX,mc.thePlayer.posY+1.0,mc.thePlayer.posZ,true))
-                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY+1.0, mc.thePlayer.posZ)
+                } else if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && !(GameSettings.isKeyDown(
+                        mc.gameSettings.keyBindForward
+                    ) || GameSettings.isKeyDown(mc.gameSettings.keyBindBack) || GameSettings.isKeyDown(mc.gameSettings.keyBindLeft) || GameSettings.isKeyDown(
+                        mc.gameSettings.keyBindRight
+                    )) && mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, -0.5, 0.0))
+                        .isNotEmpty()
+                ) {
+                    PacketUtils.sendPacket(
+                        C03PacketPlayer.C04PacketPlayerPosition(
+                            mc.thePlayer.posX + 0.05,
+                            mc.thePlayer.posY,
+                            mc.thePlayer.posZ,
+                            true
+                        )
+                    )
+                    PacketUtils.sendPacket(
+                        C03PacketPlayer.C04PacketPlayerPosition(
+                            mc.thePlayer.posX,
+                            mc.thePlayer.posY,
+                            mc.thePlayer.posZ,
+                            true
+                        )
+                    )
+                    PacketUtils.sendPacket(
+                        C03PacketPlayer.C04PacketPlayerPosition(
+                            mc.thePlayer.posX,
+                            mc.thePlayer.posY + 0.42,
+                            mc.thePlayer.posZ,
+                            true
+                        )
+                    )
+                    PacketUtils.sendPacket(
+                        C03PacketPlayer.C04PacketPlayerPosition(
+                            mc.thePlayer.posX,
+                            mc.thePlayer.posY + 0.7532,
+                            mc.thePlayer.posZ,
+                            true
+                        )
+                    )
+                    PacketUtils.sendPacket(
+                        C03PacketPlayer.C04PacketPlayerPosition(
+                            mc.thePlayer.posX,
+                            mc.thePlayer.posY + 1.0,
+                            mc.thePlayer.posZ,
+                            true
+                        )
+                    )
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.0, mc.thePlayer.posZ)
                     stage = FlyStage.WAIT_APPLY
                     modifyTicks = 0
                     groundY = mc.thePlayer.posY - 1.0
@@ -93,6 +147,7 @@ object Vulcan : FlyMode("Vulcan") {
                 mc.thePlayer.onGround = true
                 mc.thePlayer.motionY = 0.0
             }
+
             FlyStage.WAIT_APPLY -> {
                 mc.timer.timerSpeed = 1.0f
                 mc.thePlayer.motionX = 0.0
@@ -102,20 +157,22 @@ object Vulcan : FlyMode("Vulcan") {
                 if (modifyTicks >= 10) {
                     val playerYaw = mc.thePlayer.rotationYaw * Math.PI / 180
                     if (modifyTicks % 2 != 0) {
-                        mc.thePlayer.setPosition(mc.thePlayer.posX + 0.1 * -sin(playerYaw)
-                            , mc.thePlayer.posY
-                            , mc.thePlayer.posZ + 0.1 * cos(playerYaw)
+                        mc.thePlayer.setPosition(
+                            mc.thePlayer.posX + 0.1 * -sin(playerYaw),
+                            mc.thePlayer.posY,
+                            mc.thePlayer.posZ + 0.1 * cos(playerYaw)
                         )
                     } else {
-                        mc.thePlayer.setPosition(mc.thePlayer.posX - 0.1 * -sin(playerYaw)
-                            , mc.thePlayer.posY
-                            , mc.thePlayer.posZ - 0.1 * cos(playerYaw)
+                        mc.thePlayer.setPosition(
+                            mc.thePlayer.posX - 0.1 * -sin(playerYaw),
+                            mc.thePlayer.posY,
+                            mc.thePlayer.posZ - 0.1 * cos(playerYaw)
                         )
                         if (modifyTicks >= 16 && ticks == 2) {
                             modifyTicks = 16
-                            mc.thePlayer.setPosition(mc.thePlayer.posX
-                                , mc.thePlayer.posY + 0.5
-                                , mc.thePlayer.posZ)
+                            mc.thePlayer.setPosition(
+                                mc.thePlayer.posX, mc.thePlayer.posY + 0.5, mc.thePlayer.posZ
+                            )
                         }
                     }
                 }
@@ -133,6 +190,7 @@ object Vulcan : FlyMode("Vulcan") {
                 }
                 packet.onGround = true
             }
+
             is S08PacketPlayerPosLook -> {
                 if (stage == FlyStage.WAITING) {
                     flags++
@@ -142,14 +200,18 @@ object Vulcan : FlyMode("Vulcan") {
                     }
                 }
                 if (stage == FlyStage.WAIT_APPLY) {
-                    if (sqrt((packet.x - groundX) * (packet.x - groundX)
-                                + (packet.z - groundZ) * (packet.z - groundZ)) < 1.4 && packet.y >= (groundY - 0.5)) {
+                    if (sqrt(
+                            (packet.x - groundX) * (packet.x - groundX)
+                                    + (packet.z - groundZ) * (packet.z - groundZ)
+                        ) < 1.4 && packet.y >= (groundY - 0.5)
+                    ) {
                         state = false
                         return
                     }
                 }
                 event.cancelEvent()
             }
+
             is C0BPacketEntityAction -> {
                 event.cancelEvent()
             }

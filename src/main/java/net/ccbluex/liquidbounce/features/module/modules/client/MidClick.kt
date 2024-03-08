@@ -8,14 +8,14 @@ package net.ccbluex.liquidbounce.features.module.modules.client
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Render2DEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.file.FileManager
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.render.ColorUtils
 import net.minecraft.entity.player.EntityPlayer
 import org.lwjgl.input.Mouse
 
-object MidClick : Module("MidClick", ModuleCategory.CLIENT, subjective = true, gameDetecting = false) {
+object MidClick : Module("MidClick", CLIENT, subjective = true, gameDetecting = false) {
     private var wasDown = false
 
     @EventTarget

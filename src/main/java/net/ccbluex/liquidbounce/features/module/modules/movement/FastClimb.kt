@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.BlockBBEvent
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.MoveEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlockIntersects
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
@@ -22,16 +22,17 @@ import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 
-object FastClimb : Module("FastClimb", ModuleCategory.MOVEMENT) {
+object FastClimb : Module("FastClimb", MOVEMENT) {
 
-    val mode by ListValue("Mode",
-            arrayOf("Vanilla", "Delay", "Clip", "AAC3.0.0", "AAC3.0.5", "SAAC3.1.2", "AAC3.1.2").sortedArray(), "Vanilla")
-        private val speed by FloatValue("Speed", 1F, 0.01F..5F) { mode == "Vanilla" }
+    val mode by ListValue(
+        "Mode",
+        arrayOf("Vanilla", "Delay", "Clip", "AAC3.0.0", "AAC3.0.5", "SAAC3.1.2", "AAC3.1.2").sortedArray(), "Vanilla"
+    )
+    private val speed by FloatValue("Speed", 1F, 0.01F..5F) { mode == "Vanilla" }
 
-        // Delay mode | Separated Vanilla & Delay speed value
-        private val climbSpeed by FloatValue("ClimbSpeed", 1F, 0.01F..5F) { mode == "Delay" }
-        private val tickDelay by IntegerValue("TickDelay", 10, 1..20) { mode == "Delay" }
-
+    // Delay mode | Separated Vanilla & Delay speed value
+    private val climbSpeed by FloatValue("ClimbSpeed", 1F, 0.01F..5F) { mode == "Delay" }
+    private val tickDelay by IntegerValue("TickDelay", 10, 1..20) { mode == "Delay" }
 
     private val climbDelay = tickDelay
     private var climbCount = 0
@@ -60,20 +61,21 @@ object FastClimb : Module("FastClimb", ModuleCategory.MOVEMENT) {
 
                 if (climbCount >= climbDelay) {
 
-                        event.y = climbSpeed.toDouble()
-                        playerClimb()
+                    event.y = climbSpeed.toDouble()
+                    playerClimb()
 
-                        val currentPos = C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true)
+                    val currentPos =
+                        C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true)
 
-                        sendPacket(currentPos)
+                    sendPacket(currentPos)
 
-                        climbCount = 0
+                    climbCount = 0
 
-                    } else {
-                        thePlayer.posY = thePlayer.prevPosY
+                } else {
+                    thePlayer.posY = thePlayer.prevPosY
 
-                        playerClimb()
-                        climbCount += 1
+                    playerClimb()
+                    climbCount += 1
 
                 }
             }
@@ -152,8 +154,9 @@ object FastClimb : Module("FastClimb", ModuleCategory.MOVEMENT) {
 
     @EventTarget
     fun onBlockBB(event: BlockBBEvent) {
-        if (mc.thePlayer != null && (event.block is BlockLadder|| event.block is BlockVine) &&
-                mode == "AAC3.0.5" && mc.thePlayer.isOnLadder)
+        if (mc.thePlayer != null && (event.block is BlockLadder || event.block is BlockVine) &&
+            mode == "AAC3.0.5" && mc.thePlayer.isOnLadder
+        )
             event.boundingBox = null
     }
 

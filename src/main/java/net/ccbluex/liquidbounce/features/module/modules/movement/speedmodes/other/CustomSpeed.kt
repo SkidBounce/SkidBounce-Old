@@ -23,6 +23,7 @@ object CustomSpeed : SpeedMode("Custom") {
                     strafe(Speed.customSpeed)
                     mc.thePlayer.motionY = Speed.customY.toDouble()
                 }
+
                 Speed.customStrafe -> strafe(Speed.customSpeed)
                 else -> strafe()
             }

@@ -6,6 +6,6 @@
 package net.ccbluex.liquidbounce.features.module.modules.targets
 
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.TARGETS
 
-object Players : Module("Players", ModuleCategory.TARGETS, gameDetecting = false, defaultInArray = false)
+object Players : Module("Players", TARGETS, gameDetecting = false, defaultInArray = false)

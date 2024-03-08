@@ -17,7 +17,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.isOnGround
 import net.ccbluex.liquidbounce.utils.MovementUtils.onIce
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.getBlock
+import net.ccbluex.liquidbounce.utils.extensions.jmp
+import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.minecraft.init.Blocks.slime_block
 import net.minecraft.init.Blocks.water
 

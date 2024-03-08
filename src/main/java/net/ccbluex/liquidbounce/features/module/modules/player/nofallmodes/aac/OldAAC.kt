@@ -31,10 +31,12 @@ object OldAAC : NoFallMode("OldAAC") {
                 mc.thePlayer.motionY = 0.1
                 currentState = 4
             }
+
             4 -> {
                 mc.thePlayer.motionY = 0.1
                 currentState = 5
             }
+
             5 -> {
                 mc.thePlayer.motionY = 0.1
                 currentState = 1

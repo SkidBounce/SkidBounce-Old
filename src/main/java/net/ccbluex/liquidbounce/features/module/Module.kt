@@ -12,12 +12,14 @@ import net.ccbluex.liquidbounce.file.FileManager.modulesConfig
 import net.ccbluex.liquidbounce.file.FileManager.saveConfig
 import net.ccbluex.liquidbounce.lang.translation
 import net.ccbluex.liquidbounce.ui.client.hud.HUD.addNotification
-import net.ccbluex.liquidbounce.ui.client.hud.element.elements.*
+import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Arraylist
+import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notification
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 import net.ccbluex.liquidbounce.utils.extensions.toLowerCamelCase
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.timing.TickedActions.TickScheduler
-import net.ccbluex.liquidbounce.value.*
+import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.Value
 import net.minecraft.client.audio.PositionedSoundRecord
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.input.Keyboard
@@ -34,9 +36,9 @@ open class Module @JvmOverloads constructor(
     // Adds spaces between lowercase and uppercase letters (KillAura -> Kill Aura)
     val spacedName: String = name.split("(?<=[a-z])(?=[A-Z])".toRegex()).joinToString(separator = " "),
     val subjective: Boolean = category == ModuleCategory.RENDER,
-    val gameDetecting: Boolean = canBeEnabled
+    val gameDetecting: Boolean = canBeEnabled,
 
-) : MinecraftInstance(), Listenable {
+    ) : MinecraftInstance(), Listenable {
 
     // Value that determines whether the module should depend on GameDetector
     private val onlyInGameValue = BoolValue("OnlyInGame", true, subjective = true) { GameDetector.state }
@@ -81,7 +83,14 @@ open class Module @JvmOverloads constructor(
             // Play sound and add notification
             if (!isStarting) {
                 mc.soundHandler.playSound(PositionedSoundRecord.create(ResourceLocation("random.click"), 1F))
-                addNotification(Notification(translation("notification.module" + if (value) "Enabled" else "Disabled", getName())))
+                addNotification(
+                    Notification(
+                        translation(
+                            "notification.module" + if (value) "Enabled" else "Disabled",
+                            getName()
+                        )
+                    )
+                )
             }
 
             // Call on enabled or disabled

@@ -7,11 +7,14 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.MovementUtils.direction
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlockIntersects
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.jmp
+import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
+import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
@@ -22,8 +25,21 @@ import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
 
-object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
-    private val mode by ListValue("Mode", arrayOf("Vanilla", "Checker", "Collide", "AAC3.3.12", "AACGlide", "AACv4", "Vulcan", "Verus").sortedArray(), "Vanilla")
+object Spider : Module("Spider", MOVEMENT) {
+    private val mode by ListValue(
+        "Mode",
+        arrayOf(
+            "Vanilla",
+            "Checker",
+            "Collide",
+            "AAC3.3.12",
+            "AACGlide",
+            "AACv4",
+            "Vulcan",
+            "Verus"
+        ).sortedArray(),
+        "Vanilla"
+    )
     private val collideGlitch by BoolValue("Collide-Glitch", true) { mode == "Collide" }
     private val collideJumpMotion by FloatValue("Collide-JumpMotion", 0.42f, 0.1f..1f) { mode == "Collide" }
     private val collideFast by BoolValue("Collide-Fast", true) { mode == "Collide" }
@@ -47,6 +63,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                 event.y = vanillaMotion.toDouble()
                 mc.thePlayer.motionY = if (vanillaFastStop) 0.0 else vanillaMotion.toDouble()
             }
+
             "Checker" -> if (checkerMode == "New" && mc.thePlayer.movementInput.moveForward > 0.0 && isInsideBlock) {
                 event.x = 0.0
                 event.z = 0.0
@@ -77,14 +94,17 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                     } else if (collideFast && mc.thePlayer.motionY < 0)
                         mc.thePlayer.motionY = -collideFastSpeed.toDouble()
             }
+
             "Checker" -> {
                 when (checkerMode) {
                     "Old" -> if (isInsideBlock && checkerMotion != 0f)
-                            mc.thePlayer.motionY = checkerMotion.toDouble()
+                        mc.thePlayer.motionY = checkerMotion.toDouble()
+
                     "New" -> if (mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround)
                         mc.thePlayer.jmp()
                 }
             }
+
             "AAC3.3.12" -> if (mc.thePlayer.isCollidedHorizontally && !mc.thePlayer.isOnLadder) {
                 waited++
                 when (waited) {
@@ -93,10 +113,12 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                     else -> if (waited >= 30) waited = 0
                 }
             } else if (mc.thePlayer.onGround) waited = 0
+
             "AACGlide" -> {
                 if (mc.thePlayer.isCollidedHorizontally && !mc.thePlayer.isOnLadder)
                     mc.thePlayer.motionY = -0.19
             }
+
             "AACv4" -> {
                 if (!isMoving || (!mc.thePlayer.isCollidedHorizontally && !isInsideBlock))
                     return
@@ -108,6 +130,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                     mc.timer.timerSpeed = 0.4f
                 }
             }
+
             "Vulcan" -> {
                 if (!isMoving || (!mc.thePlayer.isCollidedHorizontally && !isInsideBlock)) {
                     waited = 0
@@ -127,6 +150,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
                     }
                 }
             }
+
             "Verus" -> {
                 if (!mc.thePlayer.isCollidedHorizontally || mc.thePlayer.isInWater || mc.thePlayer.isInLava || mc.thePlayer.isOnLadder || mc.thePlayer.isInWeb || mc.thePlayer.isOnLadder) {
                     canClimb = false
@@ -176,18 +200,22 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
         when (mode) {
             "Checker" -> when (checkerMode) {
                 "Old" -> if (event.y > mc.thePlayer.posY)
-                        event.boundingBox = null
+                    event.boundingBox = null
+
                 "New" -> if (event.y > mc.thePlayer.posY && (isInsideBlock || mc.thePlayer.isCollidedHorizontally))
                     event.boundingBox = AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
             }
+
             "Collide" -> {
                 if (event.block == air &&
                     event.y < mc.thePlayer.posY &&
                     mc.thePlayer.isCollidedHorizontally &&
                     !mc.thePlayer.isOnLadder && !mc.thePlayer.isInWater && !mc.thePlayer.isInLava
-                    ) event.boundingBox =
-                        AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 1.0, 1.0, 1.0).offset(mc.thePlayer.posX, mc.thePlayer.posY.toInt() - 1.0, mc.thePlayer.posZ)
+                ) event.boundingBox =
+                    AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+                        .offset(mc.thePlayer.posX, mc.thePlayer.posY.toInt() - 1.0, mc.thePlayer.posZ)
             }
+
             "AACv4" -> {
                 if (isMoving && mc.thePlayer.isCollidedHorizontally && mc.thePlayer.motionY <= 0.0) {
                     event.boundingBox = AxisAlignedBB.fromBounds(
@@ -213,6 +241,7 @@ object Spider : Module("Spider", ModuleCategory.MOVEMENT) {
         mc.timer.resetSpeed()
         usedTimer = false
     }
+
     private val isInsideBlock
         get() = collideBlockIntersects(mc.thePlayer.entityBoundingBox) { it != air }
 

@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.translateAlternateColorCodes
 import net.ccbluex.liquidbounce.value.BoolValue
@@ -20,7 +20,7 @@ import net.minecraft.network.play.server.S40PacketDisconnect
 import java.util.*
 import kotlin.random.Random
 
-object NameProtect : Module("NameProtect", ModuleCategory.MISC, subjective = true, gameDetecting = false) {
+object NameProtect : Module("NameProtect", MISC, subjective = true, gameDetecting = false) {
 
     val allPlayers by BoolValue("AllPlayers", false)
 
@@ -45,7 +45,7 @@ object NameProtect : Module("NameProtect", ModuleCategory.MISC, subjective = tru
     }
 
     private val playerRandomNames = mutableMapOf<UUID, Pair<String, Int>>()
-    private val characters =  ('a'..'z') + ('0'..'9') + ('A'..'Z') + "_"
+    private val characters = ('a'..'z') + ('0'..'9') + ('A'..'Z') + "_"
 
     private var savedName = -1
     private var savedMinName = -1

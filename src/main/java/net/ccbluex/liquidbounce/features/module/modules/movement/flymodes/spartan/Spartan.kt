@@ -14,22 +14,22 @@ import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
  * @author CCBlueX/LiquidBounce
  */
 object Spartan : FlyMode("Spartan") {
-	private val timer = TickTimer()
+    private val timer = TickTimer()
 
-	override fun onEnable() {
-		timer.reset()
-	}
+    override fun onEnable() {
+        timer.reset()
+    }
 
-	override fun onUpdate() {
-		mc.thePlayer.motionY = 0.0
+    override fun onUpdate() {
+        mc.thePlayer.motionY = 0.0
 
-		timer.update()
-		if (timer.hasTimePassed(12)) {
-			sendPackets(
-				C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 8, mc.thePlayer.posZ, true),
-				C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY - 8, mc.thePlayer.posZ, true)
-			)
-			timer.reset()
-		}
-	}
+        timer.update()
+        if (timer.hasTimePassed(12)) {
+            sendPackets(
+                C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 8, mc.thePlayer.posZ, true),
+                C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY - 8, mc.thePlayer.posZ, true)
+            )
+            timer.reset()
+        }
+    }
 }

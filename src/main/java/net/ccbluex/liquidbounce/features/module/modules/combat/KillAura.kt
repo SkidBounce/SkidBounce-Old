@@ -7,11 +7,12 @@ package net.ccbluex.liquidbounce.features.module.modules.combat
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.event.EventManager.callEvent
-import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.features.module.modules.targets.*
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
-import net.ccbluex.liquidbounce.utils.*
+import net.ccbluex.liquidbounce.utils.CPSCounter
 import net.ccbluex.liquidbounce.utils.ClientUtils.runTimeTicks
 import net.ccbluex.liquidbounce.utils.CooldownHelper.getAttackCooldownProgress
 import net.ccbluex.liquidbounce.utils.CooldownHelper.resetLastAttackedTicks
@@ -20,6 +21,7 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.RaycastUtils.raycastEntity
 import net.ccbluex.liquidbounce.utils.RaycastUtils.runWithModifiedRaycastResult
+import net.ccbluex.liquidbounce.utils.Rotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.getRotationDifference
 import net.ccbluex.liquidbounce.utils.RotationUtils.getVectorForRotation
@@ -29,6 +31,7 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.limitAngleChange
 import net.ccbluex.liquidbounce.utils.RotationUtils.searchCenter
 import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.toRotation
+import net.ccbluex.liquidbounce.utils.SimulatedPlayer
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
@@ -41,20 +44,28 @@ import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
 import net.ccbluex.liquidbounce.value.*
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.entity.*
+import net.minecraft.entity.Entity
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.*
-import net.minecraft.network.play.client.*
-import net.minecraft.network.play.client.C02PacketUseEntity.Action.*
+import net.minecraft.item.ItemAxe
+import net.minecraft.item.ItemSword
+import net.minecraft.network.play.client.C02PacketUseEntity
+import net.minecraft.network.play.client.C02PacketUseEntity.Action.ATTACK
+import net.minecraft.network.play.client.C02PacketUseEntity.Action.INTERACT
+import net.minecraft.network.play.client.C07PacketPlayerDigging
 import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.RELEASE_USE_ITEM
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
+import net.minecraft.network.play.client.C0APacketAnimation
 import net.minecraft.potion.Potion
-import net.minecraft.util.*
+import net.minecraft.util.BlockPos
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.WorldSettings
 import java.awt.Color
 import kotlin.math.max
 
-object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
+object KillAura : Module("KillAura", COMBAT) {
     /**
      * OPTIONS
      */
@@ -189,14 +200,14 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     private val livingRaycast by BoolValue("LivingRayCast", true) { raycastValue.isActive() }
 
     // Bypass
-//    // AAC value also modifies target selection a bit, not just rotations, but it is minor
-//    private val aacValue = BoolValue("AAC", false)
-//    private val aac by aacValue
+    //    // AAC value also modifies target selection a bit, not just rotations, but it is minor
+    //    private val aacValue = BoolValue("AAC", false)
+    //    private val aac by aacValue
     private val useHitDelay by BoolValue("UseHitDelay", false)
     private val hitDelayTicks by IntegerValue("HitDelayTicks", 1, 1..5) { useHitDelay }
 
     private val keepRotationTicks by object : IntegerValue("KeepRotationTicks", 5, 1..20) {
-//        override fun isSupported() = !aacValue.isActive()
+        //        override fun isSupported() = !aacValue.isActive()
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minimum)
     }
     private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f)
@@ -207,7 +218,8 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     // Rotations
     private val silentRotationValue = BoolValue("SilentRotation", true)
     private val silentRotation by silentRotationValue
-    private val rotationStrafe by ListValue("Strafe",
+    private val rotationStrafe by ListValue(
+        "Strafe",
         arrayOf("Off", "Strict", "Silent"),
         "Off"
     ) { silentRotationValue.isActive() }
@@ -226,17 +238,19 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
     private val failSwing by BoolValue("FailSwing", true) { swing != "Off" }
     private val swingOnlyInAir by BoolValue("SwingOnlyInAir", true) { swing != "Off" && failSwing }
     private val maxRotationDifferenceToSwing by FloatValue("MaxRotationDifferenceToSwing", 180f, 0f..180f)
-    { swing != "Off"  && failSwing }
+    { swing != "Off" && failSwing }
     private val swingWhenTicksLate = object : BoolValue("SwingWhenTicksLate", false) {
         override fun isSupported() = swing != "Off" && failSwing && maxRotationDifferenceToSwing != 180f
     }
     private val ticksLateToSwing by IntegerValue("TicksLateToSwing", 4, 0..20)
-    { swing != "Off"  && failSwing && swingWhenTicksLate.isActive() }
+    { swing != "Off" && failSwing && swingWhenTicksLate.isActive() }
+
     // Inventory
     private val simulateClosingInventory by BoolValue("SimulateClosingInventory", false) { !noInventoryAttack }
     private val noInventoryAttack by BoolValue("NoInvAttack", false)
     private val noInventoryDelay by IntegerValue("NoInvDelay", 200, 0..500) { noInventoryAttack }
-    private val noConsumeAttack by ListValue("NoConsumeAttack",
+    private val noConsumeAttack by ListValue(
+        "NoConsumeAttack",
         arrayOf("Off", "NoHits", "NoRotation"),
         "Off",
     )
@@ -734,7 +748,8 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         // Get our current rotation. Otherwise, player rotation.
         val currentRotation = currentRotation ?: player.rotation
 
-        var limitedRotation = limitAngleChange(currentRotation,
+        var limitedRotation = limitAngleChange(
+            currentRotation,
             rotation,
             nextFloat(minTurnSpeed, maxTurnSpeed),
             smootherMode
@@ -744,7 +759,8 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
             // Is player facing the entity with current rotation?
             if (isRotationFaced(entity, maxRange.toDouble(), currentRotation)) {
                 // Limit angle change but this time modify the turn speed.
-                limitedRotation = limitAngleChange(currentRotation, rotation,
+                limitedRotation = limitAngleChange(
+                    currentRotation, rotation,
                     nextFloat(endInclusive = micronizedStrength)
                 )
             }
@@ -781,7 +797,8 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         var chosenEntity: Entity? = null
 
         if (raycast) {
-            chosenEntity = raycastEntity(range.toDouble(),
+            chosenEntity = raycastEntity(
+                range.toDouble(),
                 currentRotation.yaw,
                 currentRotation.pitch
             ) { entity -> !livingRaycast || entity is EntityLivingBase && entity !is EntityArmorStand }
@@ -819,13 +836,15 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
                 }
 
                 // Recreate raycast logic
-                val intercept = targetToCheck.hitBox.calculateIntercept(eyes,
+                val intercept = targetToCheck.hitBox.calculateIntercept(
+                    eyes,
                     eyes + getVectorForRotation(currentRotation) * range.toDouble()
                 )
 
                 if (intercept != null) {
                     // Is the entity box raycast vector visible? If not, check through-wall range
-                    hittable = isVisible(intercept.hitVec) || mc.thePlayer.getDistanceToEntityBox(targetToCheck) <= throughWallsRange
+                    hittable =
+                        isVisible(intercept.hitVec) || mc.thePlayer.getDistanceToEntityBox(targetToCheck) <= throughWallsRange
 
                     if (hittable) {
                         checkNormally = false
@@ -842,12 +861,14 @@ object KillAura : Module("KillAura", ModuleCategory.COMBAT) {
         }
 
         // Recreate raycast logic
-        val intercept = targetToCheck.hitBox.calculateIntercept(eyes,
+        val intercept = targetToCheck.hitBox.calculateIntercept(
+            eyes,
             eyes + getVectorForRotation(currentRotation) * range.toDouble()
         )
 
         // Is the entity box raycast vector visible? If not, check through-wall range
-        hittable = isVisible(intercept.hitVec) || mc.thePlayer.getDistanceToEntityBox(targetToCheck) <= throughWallsRange
+        hittable =
+            isVisible(intercept.hitVec) || mc.thePlayer.getDistanceToEntityBox(targetToCheck) <= throughWallsRange
     }
 
     /**

@@ -8,12 +8,12 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.MoveEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.value.FloatValue
 
-object NoClip : Module("NoClip", ModuleCategory.MOVEMENT) {
-val speed by FloatValue("Speed", 0.5f, 0f..10f)
+object NoClip : Module("NoClip", MOVEMENT) {
+    val speed by FloatValue("Speed", 0.5f, 0f..10f)
 
     override fun onDisable() {
         mc.thePlayer?.noClip = false
@@ -23,7 +23,7 @@ val speed by FloatValue("Speed", 0.5f, 0f..10f)
     fun onMove(event: MoveEvent) {
         val thePlayer = mc.thePlayer ?: return
 
-	    strafe(speed, stopWhenNoInput = true, event)
+        strafe(speed, stopWhenNoInput = true, event)
 
         thePlayer.noClip = true
         thePlayer.onGround = false

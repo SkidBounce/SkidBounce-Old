@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.event.WorldEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.TARGETS
 import net.ccbluex.liquidbounce.utils.extensions.getFullName
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.stripColor
 import net.ccbluex.liquidbounce.value.BoolValue
@@ -24,16 +24,16 @@ import net.minecraft.network.play.server.S13PacketDestroyEntities
 import net.minecraft.network.play.server.S14PacketEntity
 import net.minecraft.network.play.server.S20PacketEntityProperties
 
-object AntiBot : Module("AntiBot", ModuleCategory.TARGETS) {
+object AntiBot : Module("AntiBot", TARGETS) {
 
     private val tab by BoolValue("Tab", true)
-        private val tabMode by ListValue("TabMode", arrayOf("Equals", "Contains"), "Contains") { tab }
+    private val tabMode by ListValue("TabMode", arrayOf("Equals", "Contains"), "Contains") { tab }
 
     private val entityID by BoolValue("EntityID", true)
     private val color by BoolValue("Color", false)
 
     private val livingTime by BoolValue("LivingTime", false)
-        private val livingTimeTicks by IntegerValue("LivingTimeTicks", 40, 1..200) { livingTime }
+    private val livingTimeTicks by IntegerValue("LivingTimeTicks", 40, 1..200) { livingTime }
 
     private val ground by BoolValue("Ground", true)
     private val air by BoolValue("Air", false)
@@ -50,7 +50,7 @@ object AntiBot : Module("AntiBot", ModuleCategory.TARGETS) {
     private val properties by BoolValue("Properties", false)
 
     private val alwaysInRadius by BoolValue("AlwaysInRadius", false)
-        private val alwaysRadius by FloatValue("AlwaysInRadiusBlocks", 20f, 5f..30f) { alwaysInRadius }
+    private val alwaysRadius by FloatValue("AlwaysInRadiusBlocks", 20f, 5f..30f) { alwaysInRadius }
 
     private val groundList = mutableListOf<Int>()
     private val airList = mutableListOf<Int>()
@@ -104,7 +104,8 @@ object AntiBot : Module("AntiBot", ModuleCategory.TARGETS) {
 
         if (armor) {
             if (entity.inventory.armorInventory[0] == null && entity.inventory.armorInventory[1] == null &&
-                    entity.inventory.armorInventory[2] == null && entity.inventory.armorInventory[3] == null)
+                entity.inventory.armorInventory[2] == null && entity.inventory.armorInventory[3] == null
+            )
                 return true
         }
 
@@ -134,11 +135,13 @@ object AntiBot : Module("AntiBot", ModuleCategory.TARGETS) {
         }
 
         if (duplicateInWorld &&
-            mc.theWorld.loadedEntityList.count { it is EntityPlayer && it.displayNameString == it.displayNameString } > 1) // TODO: I'm 99% certain this doesn't make sense
+            mc.theWorld.loadedEntityList.count { it is EntityPlayer && it.displayNameString == it.displayNameString } > 1
+        ) // TODO: I'm 99% certain this doesn't make sense
             return true
 
         if (duplicateInTab &&
-            mc.netHandler.playerInfoMap.count { entity.name == stripColor(it.getFullName()) } > 1)
+            mc.netHandler.playerInfoMap.count { entity.name == stripColor(it.getFullName()) } > 1
+        )
             return true
 
         if (alwaysInRadius && entity.entityId !in notAlwaysInRadiusList)
@@ -147,11 +150,7 @@ object AntiBot : Module("AntiBot", ModuleCategory.TARGETS) {
         return entity.name.isEmpty() || entity.name == mc.thePlayer.name
     }
 
-    override fun onDisable() {
-        super.onDisable()
-    }
-
-    @EventTarget(ignoreCondition=true)
+    @EventTarget(ignoreCondition = true)
     fun onPacket(event: PacketEvent) {
         if (mc.thePlayer == null || mc.theWorld == null)
             return
@@ -191,7 +190,7 @@ object AntiBot : Module("AntiBot", ModuleCategory.TARGETS) {
             val entity = mc.theWorld.getEntityByID(packet.entityID)
 
             if (entity != null && entity is EntityLivingBase && packet.animationType == 0
-                    && entity.entityId !in swingList
+                && entity.entityId !in swingList
             )
                 swingList += entity.entityId
         }
@@ -223,7 +222,7 @@ object AntiBot : Module("AntiBot", ModuleCategory.TARGETS) {
         }
     }
 
-    @EventTarget(ignoreCondition=true)
+    @EventTarget(ignoreCondition = true)
     fun onAttack(e: AttackEvent) {
         val entity = e.targetEntity
 
@@ -231,7 +230,7 @@ object AntiBot : Module("AntiBot", ModuleCategory.TARGETS) {
             hitList += entity.entityId
     }
 
-    @EventTarget(ignoreCondition=true)
+    @EventTarget(ignoreCondition = true)
     fun onWorld(event: WorldEvent) {
         clearAll()
     }

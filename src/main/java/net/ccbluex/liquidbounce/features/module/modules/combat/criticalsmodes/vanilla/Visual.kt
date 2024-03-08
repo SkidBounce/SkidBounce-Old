@@ -5,7 +5,6 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.vanilla
 
-import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals.crit
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.minecraft.entity.Entity
 

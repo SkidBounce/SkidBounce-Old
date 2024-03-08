@@ -9,7 +9,6 @@ import net.ccbluex.liquidbounce.event.EventState;
 import net.ccbluex.liquidbounce.event.EventTarget;
 import net.ccbluex.liquidbounce.event.MotionEvent;
 import net.ccbluex.liquidbounce.features.module.Module;
-import net.ccbluex.liquidbounce.features.module.ModuleCategory;
 import net.ccbluex.liquidbounce.utils.*;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
@@ -17,6 +16,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.util.Vec3;
 
+import static net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT;
 import static net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket;
 import static net.minecraft.network.play.client.C02PacketUseEntity.Action.ATTACK;
 import static net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition;
@@ -24,8 +24,9 @@ import static net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerP
 public class TeleportHit extends Module {
 
     public TeleportHit() {
-        super("TeleportHit", ModuleCategory.COMBAT);
+        super("TeleportHit", COMBAT);
     }
+
     private EntityLivingBase targetEntity;
     private boolean shouldHit;
 

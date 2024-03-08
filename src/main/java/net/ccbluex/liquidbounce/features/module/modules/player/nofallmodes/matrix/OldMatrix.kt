@@ -40,8 +40,18 @@ object OldMatrix : NoFallMode("OldMatrix") {
             falling = false
             event.cancelEvent()
             mc.thePlayer.onGround = false
-            sendPacket(C03PacketPlayer.C04PacketPlayerPosition(event.packet.x, event.packet.y - 256, event.packet.z, false), false)
-            sendPacket(C03PacketPlayer.C04PacketPlayerPosition(event.packet.x, (-10).toDouble() , event.packet.z, true), false)
+            sendPacket(
+                C03PacketPlayer.C04PacketPlayerPosition(
+                    event.packet.x,
+                    event.packet.y - 256,
+                    event.packet.z,
+                    false
+                ), false
+            )
+            sendPacket(
+                C03PacketPlayer.C04PacketPlayerPosition(event.packet.x, (-10).toDouble(), event.packet.z, true),
+                false
+            )
             mc.timer.timerSpeed = 0.18f
         }
     }

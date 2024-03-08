@@ -8,11 +8,11 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.jmp
 
-object Parkour : Module("Parkour", ModuleCategory.MOVEMENT, gameDetecting = false) {
+object Parkour : Module("Parkour", MOVEMENT, gameDetecting = false) {
 
     @Suppress("UNUSED_PARAMETER")
     @EventTarget
@@ -20,8 +20,11 @@ object Parkour : Module("Parkour", ModuleCategory.MOVEMENT, gameDetecting = fals
         val thePlayer = mc.thePlayer ?: return
 
         if (isMoving && thePlayer.onGround && !thePlayer.isSneaking && !mc.gameSettings.keyBindSneak.isKeyDown &&
-                mc.theWorld.getCollidingBoundingBoxes(thePlayer, thePlayer.entityBoundingBox
-                        .offset(0.0, -0.5, 0.0).expand(-0.001, 0.0, -0.001)).isEmpty())
+            mc.theWorld.getCollidingBoundingBoxes(
+                thePlayer, thePlayer.entityBoundingBox
+                    .offset(0.0, -0.5, 0.0).expand(-0.001, 0.0, -0.001)
+            ).isEmpty()
+        )
             thePlayer.jmp()
     }
 }

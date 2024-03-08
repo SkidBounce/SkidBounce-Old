@@ -6,6 +6,6 @@
 package net.ccbluex.liquidbounce.features.module.modules.render
 
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 
-object NoScoreboard : Module("NoScoreboard", ModuleCategory.RENDER, gameDetecting = false, subjective = true)
+object NoScoreboard : Module("NoScoreboard", RENDER, gameDetecting = false, subjective = true)

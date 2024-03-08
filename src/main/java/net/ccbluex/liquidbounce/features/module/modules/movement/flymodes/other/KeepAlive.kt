@@ -15,16 +15,16 @@ import net.minecraft.network.play.client.C00PacketKeepAlive
  * @author CCBlueX/LiquidBounce
  */
 object KeepAlive : FlyMode("KeepAlive") {
-	override fun onUpdate() {
-		sendPacket(C00PacketKeepAlive())
-		mc.thePlayer.capabilities.isFlying = false
+    override fun onUpdate() {
+        sendPacket(C00PacketKeepAlive())
+        mc.thePlayer.capabilities.isFlying = false
 
-		mc.thePlayer.motionY = when {
-			mc.gameSettings.keyBindJump.isKeyDown -> vanillaSpeed.toDouble()
-			mc.gameSettings.keyBindSneak.isKeyDown -> -vanillaSpeed.toDouble()
-			else -> 0.0
-		}
+        mc.thePlayer.motionY = when {
+            mc.gameSettings.keyBindJump.isKeyDown -> vanillaSpeed.toDouble()
+            mc.gameSettings.keyBindSneak.isKeyDown -> -vanillaSpeed.toDouble()
+            else -> 0.0
+        }
 
-		strafe(vanillaSpeed, true)
-	}
+        strafe(vanillaSpeed, true)
+    }
 }

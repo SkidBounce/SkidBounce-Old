@@ -18,10 +18,12 @@ object AACZero : VelocityMode("AACZero") {
     override fun onEnable() {
         hasVelocity = false
     }
+
     override fun onVelocityPacket(event: PacketEvent) {
         if (!mc.thePlayer.isInWater && !mc.thePlayer.isInLava && !mc.thePlayer.isInWeb)
             hasVelocity = true
     }
+
     override fun onUpdate() {
         if (mc.thePlayer.isInWater || mc.thePlayer.isInLava || mc.thePlayer.isInWeb) return
         if (mc.thePlayer.hurtTime > 0) {
@@ -31,6 +33,7 @@ object AACZero : VelocityMode("AACZero") {
             mc.thePlayer.onGround = true
         } else hasVelocity = false
     }
+
     override fun onJump(event: JumpEvent) {
         if (mc.thePlayer.hurtTime > 0)
             event.cancelEvent()

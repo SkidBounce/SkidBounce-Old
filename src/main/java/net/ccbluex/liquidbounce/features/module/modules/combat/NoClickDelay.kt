@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat
 
-import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 
-object NoClickDelay : Module("NoClickDelay", ModuleCategory.COMBAT)
+object NoClickDelay : Module("NoClickDelay", COMBAT)

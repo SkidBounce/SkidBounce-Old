@@ -12,14 +12,14 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.Glid
  * @author CCBlueX/LiquidBounce
  */
 object NeruxVace : GlideMode("NeruxVace") {
-	private var tick = 0
-	override fun onUpdate() {
-		if (!mc.thePlayer.onGround)
-			tick++
+    private var tick = 0
+    override fun onUpdate() {
+        if (!mc.thePlayer.onGround)
+            tick++
 
-		if (tick >= neruxVaceTicks && !mc.thePlayer.onGround) {
-			tick = 0
-			mc.thePlayer.motionY = .015
-		}
-	}
+        if (tick >= neruxVaceTicks && !mc.thePlayer.onGround) {
+            tick = 0
+            mc.thePlayer.motionY = .015
+        }
+    }
 }

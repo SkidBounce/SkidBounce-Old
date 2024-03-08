@@ -35,10 +35,12 @@ object AAC5BHop : SpeedMode("AAC5BHop") {
                     thePlayer.onGround = false
                     strafe(0.374f)
                 }
+
                 thePlayer.motionY < 0.0 -> {
                     thePlayer.speedInAir = 0.0201f
                     mc.timer.timerSpeed = 1.02f
                 }
+
                 else -> mc.timer.timerSpeed = 1.01f
             }
         } else {

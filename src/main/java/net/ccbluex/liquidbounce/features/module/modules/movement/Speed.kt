@@ -7,25 +7,22 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.contains
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spartan.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spectre.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.verus.*
-import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
-import net.ccbluex.liquidbounce.utils.extensions.*
-import net.ccbluex.liquidbounce.value.*
-import net.minecraft.client.settings.KeyBinding
+import net.ccbluex.liquidbounce.utils.extensions.inLiquid
+import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
+import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.ListValue
 
-object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
-
+object Speed : Module("Speed", MOVEMENT) {
     private val speedModes = arrayOf(
-
         // NCP
         NCPBHop,
         NCPFHop,
@@ -139,12 +136,21 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
     val resetY by BoolValue("CustomResetY", false) { modes contains "Custom" }
 
     val aacPortLength by FloatValue("AAC-PortLength", 1f, 1f..20f) { modes contains "AACPort" }
-    val aacGroundTimer by FloatValue("AACGround-Timer", 3f, 1.1f..10f) { modes contains arrayOf("AACGround", "AACGround2") }
+    val aacGroundTimer by FloatValue("AACGround-Timer", 3f, 1.1f..10f) {
+        modes contains arrayOf(
+            "AACGround",
+            "AACGround2"
+        )
+    }
     val cubecraftPortLength by FloatValue("CubeCraft-PortLength", 1f, 0.1f..2f) { modes contains "TeleportCubeCraft" }
     val mineplexGroundSpeed by FloatValue("MineplexGround-Speed", 0.5f, 0.1f..1f) { modes contains "MineplexGround" }
     val cardinalStrafeHeight by FloatValue("Cardinal-StrafeHeight", 0.3f, 0.1f..1f) { modes contains "Cardinal" }
     val cardinalStrafeStrength by FloatValue("Cardinal-StrafeStrength", 0.1f, 0f..0.5f) { modes contains "Cardinal" }
-    val cardinalAboveWaterMultiplier by FloatValue("Cardinal-AboveWaterMultiplier", 0.87f, 0.4f..1f) { modes contains "Cardinal" }
+    val cardinalAboveWaterMultiplier by FloatValue(
+        "Cardinal-AboveWaterMultiplier",
+        0.87f,
+        0.4f..1f
+    ) { modes contains "Cardinal" }
     val cardinalSlimeMultiplier by FloatValue("Cardinal-SlimeMultiplier", 0.7f, 0.4f..1f) { modes contains "Cardinal" }
     val cardinalJumpWhenIceSpeed by BoolValue("Cardinal-JumpWhenIceSpeed", true) { modes contains "Cardinal" }
     val uncpyportDamageBoost by BoolValue("UNCPYPort-DamageBoost", true) { modes contains "UNCPYPort" }
@@ -152,7 +158,6 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
 
     var mode = normalMode
 
-    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         val thePlayer = mc.thePlayer ?: return
@@ -203,7 +208,6 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         modeModule.onMove(event)
     }
 
-    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onTick(event: TickEvent) {
         if (mc.thePlayer.isSneaking)
@@ -217,7 +221,6 @@ object Speed : Module("Speed", ModuleCategory.MOVEMENT) {
         modeModule.onPacket(event)
     }
 
-    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onStrafe(event: StrafeEvent) {
         if (mc.thePlayer.isSneaking)

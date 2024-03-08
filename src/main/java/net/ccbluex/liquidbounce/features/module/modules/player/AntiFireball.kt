@@ -5,8 +5,12 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.player
 
-import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.event.EventState
+import net.ccbluex.liquidbounce.event.EventTarget
+import net.ccbluex.liquidbounce.event.MotionEvent
+import net.ccbluex.liquidbounce.event.TickEvent
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.isRotationFaced
@@ -15,13 +19,16 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.toRotation
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
-import net.ccbluex.liquidbounce.value.*
+import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.entity.Entity
 import net.minecraft.entity.projectile.EntityFireball
-import net.minecraft.network.play.client.*
+import net.minecraft.network.play.client.C02PacketUseEntity
+import net.minecraft.network.play.client.C0APacketAnimation
 import net.minecraft.world.WorldSettings
 
-object AntiFireball : Module("AntiFireball", ModuleCategory.PLAYER) {
+object AntiFireball : Module("AntiFireball", PLAYER) {
     private val range by FloatValue("Range", 4.5f, 3f..8f)
     private val swing by ListValue("Swing", arrayOf("Normal", "Packet", "None"), "Normal")
 
@@ -75,7 +82,8 @@ object AntiFireball : Module("AntiFireball", ModuleCategory.PLAYER) {
 
             if (rotations) {
                 setTargetRotation(
-                    limitAngleChange(currentRotation ?: player.rotation,
+                    limitAngleChange(
+                        currentRotation ?: player.rotation,
                         toRotation(nearestPoint, true),
                         nextFloat(minTurnSpeed, maxTurnSpeed),
                         smootherMode

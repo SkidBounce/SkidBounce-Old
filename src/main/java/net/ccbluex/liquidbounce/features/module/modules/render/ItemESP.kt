@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Render2DEvent
 import net.ccbluex.liquidbounce.event.Render3DEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.features.module.modules.player.InventoryCleaner
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
@@ -22,18 +22,18 @@ import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.entity.item.EntityItem
 import java.awt.Color
 
-object ItemESP : Module("ItemESP", ModuleCategory.RENDER, subjective = true) {
+object ItemESP : Module("ItemESP", RENDER, subjective = true) {
     private val mode by ListValue("Mode", arrayOf("Box", "OtherBox", "Glow"), "Box")
 
-        private val glowRenderScale by FloatValue("Glow-Renderscale", 1f, 0.5f..2f) { mode == "Glow" }
-        private val glowRadius by IntegerValue("Glow-Radius", 4, 1..5) { mode == "Glow" }
-        private val glowFade by IntegerValue("Glow-Fade", 10, 0..30) { mode == "Glow" }
-        private val glowTargetAlpha by FloatValue("Glow-Target-Alpha", 0f, 0f..1f) { mode == "Glow" }
+    private val glowRenderScale by FloatValue("Glow-Renderscale", 1f, 0.5f..2f) { mode == "Glow" }
+    private val glowRadius by IntegerValue("Glow-Radius", 4, 1..5) { mode == "Glow" }
+    private val glowFade by IntegerValue("Glow-Fade", 10, 0..30) { mode == "Glow" }
+    private val glowTargetAlpha by FloatValue("Glow-Target-Alpha", 0f, 0f..1f) { mode == "Glow" }
 
     private val colorRainbow by BoolValue("Rainbow", true)
-        private val colorRed by IntegerValue("R", 0, 0..255) { !colorRainbow }
-        private val colorGreen by IntegerValue("G", 255, 0..255) { !colorRainbow }
-        private val colorBlue by IntegerValue("B", 0, 0..255) { !colorRainbow }
+    private val colorRed by IntegerValue("R", 0, 0..255) { !colorRainbow }
+    private val colorGreen by IntegerValue("G", 255, 0..255) { !colorRainbow }
+    private val colorBlue by IntegerValue("B", 0, 0..255) { !colorRainbow }
 
     val color
         get() = if (colorRainbow) rainbow() else Color(colorRed, colorGreen, colorBlue)
@@ -89,5 +89,6 @@ object ItemESP : Module("ItemESP", ModuleCategory.RENDER, subjective = true) {
         }
     }
 
-    override fun handleEvents() = super.handleEvents() || (InventoryCleaner.handleEvents() && InventoryCleaner.highlightUseful)
+    override fun handleEvents() =
+        super.handleEvents() || (InventoryCleaner.handleEvents() && InventoryCleaner.highlightUseful)
 }

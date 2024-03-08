@@ -8,13 +8,13 @@ package net.ccbluex.liquidbounce.features.module.modules.client
 import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.ui.client.hud.designer.GuiHudDesigner
 import net.ccbluex.liquidbounce.utils.ClientUtils.resource
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.minecraft.client.gui.GuiChat
 
-object HUD : Module("HUD", ModuleCategory.CLIENT, defaultInArray = false, gameDetecting = false, subjective = true) {
+object HUD : Module("HUD", CLIENT, defaultInArray = false, gameDetecting = false, subjective = true) {
     val blackHotbar by BoolValue("BlackHotbar", true)
     val inventoryParticle by BoolValue("InventoryParticle", false)
     private val blur by BoolValue("Blur", false)
@@ -38,10 +38,12 @@ object HUD : Module("HUD", ModuleCategory.CLIENT, defaultInArray = false, gameDe
     fun onScreen(event: ScreenEvent) {
         if (mc.theWorld == null || mc.thePlayer == null) return
         if (state && blur && !mc.entityRenderer.isShaderActive && event.guiScreen != null &&
-                !(event.guiScreen is GuiChat || event.guiScreen is GuiHudDesigner)) mc.entityRenderer.loadShader(
+            !(event.guiScreen is GuiChat || event.guiScreen is GuiHudDesigner)
+        ) mc.entityRenderer.loadShader(
             resource("blur.json")
         ) else if (mc.entityRenderer.shaderGroup != null &&
-            "${LiquidBounce.CLIENT_NAME.lowercase()}/blur.json" in mc.entityRenderer.shaderGroup.shaderGroupName) mc.entityRenderer.stopUseShader()
+            "${LiquidBounce.CLIENT_NAME.lowercase()}/blur.json" in mc.entityRenderer.shaderGroup.shaderGroupName
+        ) mc.entityRenderer.stopUseShader()
     }
 
     init {

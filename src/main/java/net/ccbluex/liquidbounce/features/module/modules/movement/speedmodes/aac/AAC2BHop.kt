@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 /**
  * @author CCBlueX/LiquidBounce

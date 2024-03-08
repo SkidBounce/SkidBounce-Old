@@ -15,7 +15,10 @@ import net.minecraft.network.play.client.C03PacketPlayer
  */
 object HypixelFlag : NoFallMode("HypixelFlag") {
     private var isDmgFalling = false
-    override fun onEnable() { isDmgFalling = false }
+    override fun onEnable() {
+        isDmgFalling = false
+    }
+
     override fun onUpdate() {
         if (mc.thePlayer.fallDistance > 3) {
             isDmgFalling = true

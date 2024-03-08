@@ -5,8 +5,11 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat
 
-import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.event.EventState
+import net.ccbluex.liquidbounce.event.EventTarget
+import net.ccbluex.liquidbounce.event.MotionEvent
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.player.Reach
 import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
 import net.ccbluex.liquidbounce.utils.RotationUtils.getRotationDifference
@@ -17,13 +20,14 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.toRotation
 import net.ccbluex.liquidbounce.utils.SimulatedPlayer
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.*
+import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntegerValue
 import net.minecraft.entity.Entity
 import java.util.*
 import kotlin.math.atan
 
-object AimBot : Module("AimBot", ModuleCategory.COMBAT) {
-
+object AimBot : Module("AimBot", COMBAT) {
     private val range by FloatValue("Range", 4.4F, 1F..8F)
     private val turnSpeed by FloatValue("TurnSpeed", 10f, 1F..180F)
     private val inViewTurnSpeed by FloatValue("InViewTurnSpeed", 35f, 1f..180f)
@@ -121,7 +125,8 @@ object AimBot : Module("AimBot", ModuleCategory.COMBAT) {
         val destinationRotation = if (center) {
             toRotation(boundingBox.center, true)
         } else {
-            searchCenter(boundingBox,
+            searchCenter(
+                boundingBox,
                 outborder = false,
                 random = false,
                 gaussianOffset = false,

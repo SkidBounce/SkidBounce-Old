@@ -56,6 +56,6 @@ object Matrix62x : NoFallMode("Matrix6.2.X") {
     override fun onPacket(event: PacketEvent) {
         if (event.packet is C03PacketPlayer && spoof)
             event.packet.onGround = true
-            spoof = false
+        spoof = false
     }
 }

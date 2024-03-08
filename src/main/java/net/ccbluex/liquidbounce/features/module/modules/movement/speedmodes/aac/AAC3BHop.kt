@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -20,7 +20,7 @@ object AAC3BHop : SpeedMode("AAC3BHop") {
         val thePlayer = mc.thePlayer ?: return
 
         mc.timer.timerSpeed = 1f
-        
+
         if (thePlayer.isInWater)
             return
 
@@ -36,10 +36,12 @@ object AAC3BHop : SpeedMode("AAC3BHop") {
                     thePlayer.onGround = false
                     strafe(0.374f)
                 }
+
                 thePlayer.motionY < 0.0 -> {
                     thePlayer.speedInAir = 0.0201f
                     mc.timer.timerSpeed = 1.02f
                 }
+
                 else -> mc.timer.timerSpeed = 1.01f
             }
         } else {

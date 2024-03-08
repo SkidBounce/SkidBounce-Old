@@ -5,7 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.grim
 
-import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.TickEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimAlways
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimFlagPause
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimOnlyAir
@@ -16,7 +17,10 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimTime
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimWorld
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.component1
+import net.ccbluex.liquidbounce.utils.extensions.component2
+import net.ccbluex.liquidbounce.utils.extensions.component3
+import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C03PacketPlayer.*
@@ -101,11 +105,13 @@ object Grim : VelocityMode("Grim") {
                 }
             }
 
-            sendPacket(C07PacketPlayerDigging(
-                STOP_DESTROY_BLOCK,
-                pos,
-                DOWN
-            ))
+            sendPacket(
+                C07PacketPlayerDigging(
+                    STOP_DESTROY_BLOCK,
+                    pos,
+                    DOWN
+                )
+            )
 
             if (grimWorld)
                 mc.theWorld.setBlockToAir(pos)

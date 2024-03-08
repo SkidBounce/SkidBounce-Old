@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.render
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Render3DEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getState
 import net.ccbluex.liquidbounce.utils.extensions.rotation
@@ -40,11 +40,11 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-object Projectiles : Module("Projectiles", ModuleCategory.RENDER, gameDetecting = false, subjective = true) {
+object Projectiles : Module("Projectiles", RENDER, gameDetecting = false, subjective = true) {
     private val colorMode by ListValue("Color", arrayOf("Custom", "BowPower", "Rainbow"), "Custom")
-        private val colorRed by IntegerValue("R", 0, 0..255) { colorMode == "Custom" }
-        private val colorGreen by IntegerValue("G", 160, 0..255) { colorMode == "Custom" }
-        private val colorBlue by IntegerValue("B", 255, 0..255) { colorMode == "Custom" }
+    private val colorRed by IntegerValue("R", 0, 0..255) { colorMode == "Custom" }
+    private val colorGreen by IntegerValue("G", 160, 0..255) { colorMode == "Custom" }
+    private val colorBlue by IntegerValue("B", 255, 0..255) { colorMode == "Custom" }
 
     @EventTarget
     fun onRender3D(event: Render3DEvent) {

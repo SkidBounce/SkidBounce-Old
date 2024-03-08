@@ -18,6 +18,6 @@ object AAC : NoWebMode("AAC") {
         mc.thePlayer.jumpMovementFactor = 0.59f
 
         if (!mc.gameSettings.keyBindSneak.isKeyDown)
-            mc.thePlayer.motionY = 0.0    
+            mc.thePlayer.motionY = 0.0
     }
 }

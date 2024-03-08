@@ -6,14 +6,17 @@
 package net.ccbluex.liquidbounce.features.module.modules.world
 
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.WORLD
 import net.ccbluex.liquidbounce.features.module.modules.render.BlockOverlay
 import net.ccbluex.liquidbounce.ui.font.Fonts
-import net.ccbluex.liquidbounce.utils.*
+import net.ccbluex.liquidbounce.utils.CPSCounter
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
+import net.ccbluex.liquidbounce.utils.PlaceRotation
+import net.ccbluex.liquidbounce.utils.Rotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.getAngleDifference
 import net.ccbluex.liquidbounce.utils.RotationUtils.getRotationDifference
@@ -32,7 +35,9 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBorderedRect
-import net.ccbluex.liquidbounce.utils.timing.*
+import net.ccbluex.liquidbounce.utils.timing.DelayTimer
+import net.ccbluex.liquidbounce.utils.timing.MSTimer
+import net.ccbluex.liquidbounce.utils.timing.TickDelayTimer
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
 import net.ccbluex.liquidbounce.value.*
@@ -40,9 +45,11 @@ import net.minecraft.block.BlockBush
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager.resetColor
 import net.minecraft.client.settings.GameSettings
-import net.minecraft.item.*
+import net.minecraft.item.ItemBlock
+import net.minecraft.item.ItemStack
 import net.minecraft.network.play.client.C0BPacketEntityAction
-import net.minecraft.network.play.client.C0BPacketEntityAction.Action.*
+import net.minecraft.network.play.client.C0BPacketEntityAction.Action.START_SNEAKING
+import net.minecraft.network.play.client.C0BPacketEntityAction.Action.STOP_SNEAKING
 import net.minecraft.util.*
 import net.minecraft.world.WorldSettings
 import net.minecraftforge.event.ForgeEventFactory
@@ -52,7 +59,7 @@ import javax.vecmath.Color3f
 import kotlin.math.*
 
 
-object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
+object Scaffold : Module("Scaffold", WORLD) {
 
     private val mode by ListValue("Mode", arrayOf("Normal", "Rewinside", "Expand", "Telly", "GodBridge"), "Normal")
 
@@ -87,7 +94,8 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
         override fun isSupported() = extraClicks && !extraClickMaxCPSValue.isMinimal()
     }
 
-    private val placementAttempt by ListValue("PlacementAttempt",
+    private val placementAttempt by ListValue(
+        "PlacementAttempt",
         arrayOf("Fail", "Independent"),
         "Fail"
     ) { extraClicks }
@@ -164,14 +172,16 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
     private val eagleSpeed by FloatValue("EagleSpeed", 0.3f, 0.3f..1.0f) { eagleValue.isSupported() && eagle != "Off" }
     val eagleSprint by BoolValue("EagleSprint", false) { eagleValue.isSupported() && eagle == "Normal" }
     private val blocksToEagle by IntegerValue("BlocksToEagle", 0, 0..10) { eagleValue.isSupported() && eagle != "Off" }
-    private val edgeDistance by FloatValue("EagleEdgeDistance",
+    private val edgeDistance by FloatValue(
+        "EagleEdgeDistance",
         0f,
         0f..0.5f
     ) { eagleValue.isSupported() && eagle != "Off" }
 
     // Rotation Options
     private val rotationMode by ListValue("Rotations", arrayOf("Off", "Normal", "Stabilized", "GodBridge"), "Normal")
-    private val smootherMode by ListValue("SmootherMode",
+    private val smootherMode by ListValue(
+        "SmootherMode",
         arrayOf("Linear", "Relative"),
         "Relative"
     ) { rotationMode != "Off" }
@@ -198,7 +208,8 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
         override fun isSupported() = !maxTurnSpeedValue.isMinimal() && rotationMode != "Off"
     }
 
-    private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset",
+    private val angleThresholdUntilReset by FloatValue(
+        "AngleThresholdUntilReset",
         5f,
         0.1f..180f
     ) { rotationMode != "Off" && silentRotation }
@@ -268,7 +279,8 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
 
     // Downwards
     private val shouldGoDown
-        get() = down && !sameY && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && mode !in arrayOf("GodBridge",
+        get() = down && !sameY && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && mode !in arrayOf(
+            "GodBridge",
             "Telly"
         ) && blocksAmount > 1
 
@@ -297,7 +309,8 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
             // Round the rotation to the nearest multiple of 45 degrees so that way we check if the player faces diagonally
             val yaw = round(abs(MathHelper.wrapAngleTo180_float(player.rotationYaw)).roundToInt() / 45f) * 45f
 
-            return floatArrayOf(45f,
+            return floatArrayOf(
+                45f,
                 135f
             ).any { yaw == it } && player.movementInput.moveForward != 0f && player.movementInput.moveStrafe == 0f
         }
@@ -437,7 +450,8 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
 
                 val targetRotation = Rotation(placeRotation.yaw, pitch).fixedSensitivity()
 
-                val limitedRotation = limitAngleChange(rotation,
+                val limitedRotation = limitAngleChange(
+                    rotation,
                     targetRotation,
                     nextFloat(minTurnSpeed, maxTurnSpeed),
                     smootherMode
@@ -633,7 +647,14 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
         }
 
         // Line 437-440
-        if ((stack.item as? ItemBlock)?.canPlaceBlockOnSide(world, placeInfo.blockPos, placeInfo.enumFacing, player, stack) == false) {
+        if ((stack.item as? ItemBlock)?.canPlaceBlockOnSide(
+                world,
+                placeInfo.blockPos,
+                placeInfo.enumFacing,
+                player,
+                stack
+            ) == false
+        ) {
             return
         }
 
@@ -741,7 +762,8 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
         if (counterDisplay) {
             glPushMatrix()
 
-            if (BlockOverlay.handleEvents() && BlockOverlay.info && BlockOverlay.currentBlock != null) glTranslatef(0f,
+            if (BlockOverlay.handleEvents() && BlockOverlay.info && BlockOverlay.currentBlock != null) glTranslatef(
+                0f,
                 15f,
                 0f
             )
@@ -774,7 +796,8 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
     fun onRender3D(event: Render3DEvent) {
         val player = mc.thePlayer ?: return
 
-        val shouldBother = !(shouldGoDown || mode == "Expand" && expandLength > 1) && extraClicks && (isMoving || speed > 0.03)
+        val shouldBother =
+            !(shouldGoDown || mode == "Expand" && expandLength > 1) && extraClicks && (isMoving || speed > 0.03)
 
         if (shouldBother) {
             currRotation.let {
@@ -915,7 +938,8 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
         placeRotation ?: return false
 
         if (useStaticRotation && mode == "GodBridge") {
-            placeRotation = PlaceRotation(placeRotation.placeInfo,
+            placeRotation = PlaceRotation(
+                placeRotation.placeInfo,
                 Rotation(placeRotation.rotation.yaw, if (isLookingDiagonally) 75.6f else 73.5f)
             )
         }
@@ -1245,7 +1269,8 @@ object Scaffold : Module("Scaffold", ModuleCategory.WORLD) {
                 val notOnGround = !player.onGround || !player.isCollidedVertically
 
                 if (player.onGround) {
-                    mc.gameSettings.keyBindSneak.pressed = eagleSneaking || GameSettings.isKeyDown(mc.gameSettings.keyBindSneak)
+                    mc.gameSettings.keyBindSneak.pressed =
+                        eagleSneaking || GameSettings.isKeyDown(mc.gameSettings.keyBindSneak)
                 }
 
                 if (input.jump || mc.gameSettings.keyBindJump.isKeyDown || notOnGround) {

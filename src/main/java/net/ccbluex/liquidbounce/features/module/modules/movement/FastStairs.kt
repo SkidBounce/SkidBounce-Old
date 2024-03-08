@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.extensions.jmp
@@ -17,16 +17,19 @@ import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.BlockStairs
 import net.minecraft.util.BlockPos
 
-object FastStairs : Module("FastStairs", ModuleCategory.MOVEMENT) {
+object FastStairs : Module("FastStairs", MOVEMENT) {
 
-    private val mode by ListValue("Mode", arrayOf("Step", "NCP", "AAC3.1.0", "AAC3.3.6", "AAC3.3.13").sortedArray(), "NCP")
-        private val longJump by BoolValue("LongJump", false) { mode.startsWith("AAC") }
+    private val mode by ListValue(
+        "Mode",
+        arrayOf("Step", "NCP", "AAC3.1.0", "AAC3.3.6", "AAC3.3.13").sortedArray(),
+        "NCP"
+    )
+    private val longJump by BoolValue("LongJump", false) { mode.startsWith("AAC") }
 
     private var canJump = false
 
     private var walkingDown = false
 
-    @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         val thePlayer = mc.thePlayer ?: return

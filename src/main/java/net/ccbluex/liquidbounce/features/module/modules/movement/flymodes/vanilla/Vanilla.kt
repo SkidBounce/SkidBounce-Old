@@ -15,10 +15,10 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
  * @author CCBlueX/LiquidBounce
  */
 object Vanilla : FlyMode("Vanilla") {
-	override fun onMove(event: MoveEvent) {
+    override fun onMove(event: MoveEvent) {
         val thePlayer = mc.thePlayer ?: return
 
-		strafe(vanillaSpeed, true, event)
+        strafe(vanillaSpeed, true, event)
 
         thePlayer.onGround = false
         thePlayer.isInWeb = false
@@ -36,6 +36,6 @@ object Vanilla : FlyMode("Vanilla") {
         thePlayer.motionY = ySpeed
         event.y = ySpeed
 
-		handleVanillaKickBypass()
-	}
+        handleVanillaKickBypass()
+    }
 }

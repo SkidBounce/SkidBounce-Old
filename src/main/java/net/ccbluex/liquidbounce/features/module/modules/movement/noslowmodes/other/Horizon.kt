@@ -19,7 +19,7 @@ import net.minecraft.util.BlockPos.ORIGIN
 object Horizon : NoSlowMode("Horizon") {
     override fun onPacket(event: PacketEvent) {
         if (event.packet is C08PacketPlayerBlockPlacement) {
-            if (event.packet.placedBlockDirection == 255 && event.packet.position == BlockPos(-1,-1,-1)) {
+            if (event.packet.placedBlockDirection == 255 && event.packet.position == BlockPos(-1, -1, -1)) {
                 event.cancelEvent()
                 sendPacket(C08PacketPlayerBlockPlacement(ORIGIN, 255, mc.thePlayer.heldItem, 0f, 0f, 0f))
             }

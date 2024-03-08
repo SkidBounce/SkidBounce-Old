@@ -7,7 +7,8 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.jmp
+import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 
 /**
  * @author liquidbounceplusreborn/LiquidbouncePlus-Reborn
@@ -17,6 +18,7 @@ object AAC4Hop : SpeedMode("AAC4Hop") {
         mc.timer.timerSpeed = 1f
         mc.thePlayer.speedInAir = 0.02f
     }
+
     override fun onUpdate() {
         mc.thePlayer!!.run {
             if (isInWater)
@@ -39,7 +41,7 @@ object AAC4Hop : SpeedMode("AAC4Hop") {
                 mc.timer.timerSpeed = 1.8f
             }
 
-            if (fallDistance >= 1.3){
+            if (fallDistance >= 1.3) {
                 mc.timer.timerSpeed = 1f
                 speedInAir = 0.02f
             }

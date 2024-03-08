@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
@@ -35,9 +35,9 @@ import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.max
 
-object BugUp : Module("BugUp", ModuleCategory.MOVEMENT) {
-
-    private val mode by ListValue("Mode",
+object BugUp : Module("BugUp", MOVEMENT) {
+    private val mode by ListValue(
+        "Mode",
         arrayOf("TeleportBack", "FlyFlag", "OnGroundSpoof", "MotionTeleport-Flag", "GhostBlock").sortedArray(),
         "FlyFlag"
     )
@@ -79,7 +79,8 @@ object BugUp : Module("BugUp", ModuleCategory.MOVEMENT) {
             detectedLocation = fallingPlayer.findCollision(60)?.pos
 
             if (detectedLocation != null && abs(thePlayer.posY - detectedLocation!!.y) +
-                thePlayer.fallDistance <= maxFallDistance) {
+                thePlayer.fallDistance <= maxFallDistance
+            ) {
                 lastFound = thePlayer.fallDistance
             }
 
@@ -119,7 +120,8 @@ object BugUp : Module("BugUp", ModuleCategory.MOVEMENT) {
     fun onBlockBB(event: BlockBBEvent) {
         if (mode == "GhostBlock" && shouldSimulateBlock) {
             if (event.y < mc.thePlayer.posY.toInt()) {
-                event.boundingBox = AxisAlignedBB(event.x.toDouble(),
+                event.boundingBox = AxisAlignedBB(
+                    event.x.toDouble(),
                     event.y.toDouble(),
                     event.z.toDouble(),
                     event.x + 1.0,
@@ -143,7 +145,8 @@ object BugUp : Module("BugUp", ModuleCategory.MOVEMENT) {
         val thePlayer = mc.thePlayer ?: return
 
         if (detectedLocation == null || !indicator ||
-            thePlayer.fallDistance + (thePlayer.posY - (detectedLocation!!.y + 1)) < 3)
+            thePlayer.fallDistance + (thePlayer.posY - (detectedLocation!!.y + 1)) < 3
+        )
             return
 
         val (x, y, z) = detectedLocation ?: return

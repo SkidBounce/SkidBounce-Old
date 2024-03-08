@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Render3DEvent
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.WORLD
 import net.ccbluex.liquidbounce.features.module.modules.player.AutoTool
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.RotationUtils.faceBlock
@@ -17,7 +17,8 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getCenterDistance
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.searchBlocks
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.eyes
+import net.ccbluex.liquidbounce.utils.extensions.swing
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
 import net.ccbluex.liquidbounce.utils.timing.TickTimer
 import net.ccbluex.liquidbounce.value.*
@@ -33,9 +34,11 @@ import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.Vec3
 import java.awt.Color
+import kotlin.collections.component1
+import kotlin.collections.component2
 import kotlin.math.roundToInt
 
-object Nuker : Module("Nuker", ModuleCategory.WORLD, gameDetecting = false) {
+object Nuker : Module("Nuker", WORLD, gameDetecting = false) {
 
     /**
      * OPTIONS
@@ -48,7 +51,7 @@ object Nuker : Module("Nuker", ModuleCategory.WORLD, gameDetecting = false) {
     private val swing by SwingValue()
 
     private val rotations by BoolValue("Rotations", true)
-        private val strafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off") { rotations }
+    private val strafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off") { rotations }
 
     private val layer by BoolValue("Layer", false)
     private val hitDelay by IntegerValue("HitDelay", 4, 0..20)

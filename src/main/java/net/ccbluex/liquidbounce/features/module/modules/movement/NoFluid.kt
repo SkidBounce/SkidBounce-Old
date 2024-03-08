@@ -5,21 +5,17 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
-import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.UpdateEvent
+import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.PacketUtils
 import net.ccbluex.liquidbounce.utils.extensions.getBlock
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.init.Blocks.*
 import net.minecraft.network.play.client.C07PacketPlayerDigging
-import net.minecraft.util.BlockPos
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.*
 
-object NoFluid : Module("NoFluid", ModuleCategory.MOVEMENT) {
+object NoFluid : Module("NoFluid", MOVEMENT) {
 
     val Water by BoolValue("Water", true)
     val Lava by BoolValue("Lava", true)
@@ -67,6 +63,7 @@ object NoFluid : Module("NoFluid", ModuleCategory.MOVEMENT) {
             )
         }
     }
+
     override val tag
         get() = mode
 }

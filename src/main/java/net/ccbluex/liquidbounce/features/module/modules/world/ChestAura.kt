@@ -7,12 +7,11 @@ package net.ccbluex.liquidbounce.features.module.modules.world
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.WORLD
 import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura
 import net.ccbluex.liquidbounce.features.module.modules.player.Blink
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
 import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
-import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.RotationUtils
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.getVectorForRotation
@@ -33,7 +32,6 @@ import net.ccbluex.liquidbounce.value.*
 import net.minecraft.block.BlockChest
 import net.minecraft.block.BlockEnderChest
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.network.play.client.C0APacketAnimation
 import net.minecraft.network.play.server.S0EPacketSpawnObject
 import net.minecraft.network.play.server.S24PacketBlockAction
 import net.minecraft.network.play.server.S29PacketSoundEffect
@@ -49,7 +47,7 @@ import java.util.*
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-object ChestAura : Module("ChestAura", ModuleCategory.WORLD) {
+object ChestAura : Module("ChestAura", WORLD) {
 
     private val chest by BoolValue("Chest", true)
     private val enderChest by BoolValue("EnderChest", false)
@@ -101,7 +99,8 @@ object ChestAura : Module("ChestAura", ModuleCategory.WORLD) {
 
     private val keepRotation by IntegerValue("KeepRotationTicks", 5, 1..20) { silentRotation && rotations }
 
-    private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset",
+    private val angleThresholdUntilReset by FloatValue(
+        "AngleThresholdUntilReset",
         5f,
         0.1f..180f
     ) { silentRotation && rotations }
@@ -126,15 +125,18 @@ object ChestAura : Module("ChestAura", ModuleCategory.WORLD) {
 
     @EventTarget
     fun onMotion(event: MotionEvent) {
-        if (Blink.handleEvents() || KillAura.isBlockingChestAura || event.eventState != EventState.POST || !timer.hasTimePassed(delay))
+        if (Blink.handleEvents() || KillAura.isBlockingChestAura || event.eventState != EventState.POST || !timer.hasTimePassed(
+                delay
+            )
+        )
             return
 
         val thePlayer = mc.thePlayer ?: return
 
         // Check if there is an opponent in range
         if (mc.theWorld.loadedEntityList.any {
-            isSelected(it, true) && thePlayer.getDistanceSqToEntity(it) < minDistanceFromOpponentSq
-        }) return
+                isSelected(it, true) && thePlayer.getDistanceSqToEntity(it) < minDistanceFromOpponentSq
+            }) return
 
         if (serverOpenContainer && tileTarget != null) {
             timer.reset()
@@ -150,7 +152,11 @@ object ChestAura : Module("ChestAura", ModuleCategory.WORLD) {
         val pointsInRange = mc.theWorld.tickableTileEntities
             // Check if tile entity is correct type, not already clicked, not blocked by a block and in range
             .filter {
-                shouldClickTileEntity(it) && it.getDistanceSq(thePlayer.posX, thePlayer.posY, thePlayer.posZ) <= searchRadiusSq
+                shouldClickTileEntity(it) && it.getDistanceSq(
+                    thePlayer.posX,
+                    thePlayer.posY,
+                    thePlayer.posZ
+                ) <= searchRadiusSq
             }.flatMap { entity ->
                 val box = entity.blockType.getSelectedBoundingBox(mc.theWorld, entity.pos)
 
@@ -302,8 +308,9 @@ object ChestAura : Module("ChestAura", ModuleCategory.WORLD) {
                     val actionMsg = if (packet.data2 == 1) "§a§lOpened§3" else "§c§lClosed§3"
                     val timeTakenMsg = if (packet.data2 == 0 && prevTime != null)
                         ", took §b${decimalFormat.format((System.currentTimeMillis() - prevTime) / 1000.0)} s§3"
-                        else ""
-                    val playerMsg = if (player == mc.thePlayer) actionMsg else "§b${player.name} §3${actionMsg.lowercase()}"
+                    else ""
+                    val playerMsg =
+                        if (player == mc.thePlayer) actionMsg else "§b${player.name} §3${actionMsg.lowercase()}"
 
                     displayChatMessage("§8[§9§lChestAura§8] $playerMsg chest from §b$distance m§3$timeTakenMsg.")
 

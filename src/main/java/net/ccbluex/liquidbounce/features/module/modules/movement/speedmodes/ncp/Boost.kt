@@ -22,7 +22,15 @@ object Boost : SpeedMode("Boost") {
         var offset = 4.69
         var shouldOffset = true
 
-        if (mc.theWorld.getCollidingBoundingBoxes(thePlayer, thePlayer.entityBoundingBox.offset(thePlayer.motionX / offset, 0.0, thePlayer.motionZ / offset)).isNotEmpty()) {
+        if (mc.theWorld.getCollidingBoundingBoxes(
+                thePlayer,
+                thePlayer.entityBoundingBox.offset(
+                    thePlayer.motionX / offset,
+                    0.0,
+                    thePlayer.motionZ / offset
+                )
+            ).isNotEmpty()
+        ) {
             shouldOffset = false
         }
 
@@ -49,12 +57,18 @@ object Boost : SpeedMode("Boost") {
                     thePlayer.motionX *= speed
                     thePlayer.motionZ *= speed
                 }
+
                 2 -> {
                     thePlayer.motionX /= 1.458
                     thePlayer.motionZ /= 1.458
                 }
+
                 4 -> {
-                    if (shouldOffset) thePlayer.setPosition(thePlayer.posX + thePlayer.motionX / offset, thePlayer.posY, thePlayer.posZ + thePlayer.motionZ / offset)
+                    if (shouldOffset) thePlayer.setPosition(
+                        thePlayer.posX + thePlayer.motionX / offset,
+                        thePlayer.posY,
+                        thePlayer.posZ + thePlayer.motionZ / offset
+                    )
                     motionDelay = 0
                 }
             }

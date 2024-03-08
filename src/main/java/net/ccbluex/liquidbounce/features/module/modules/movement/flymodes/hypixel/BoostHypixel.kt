@@ -13,7 +13,10 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.direction
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.component1
+import net.ccbluex.liquidbounce.utils.extensions.component2
+import net.ccbluex.liquidbounce.utils.extensions.component3
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.utils.timing.TickTimer
 import net.minecraft.init.Blocks.air
 import net.minecraft.network.play.client.C03PacketPlayer
@@ -29,133 +32,139 @@ import kotlin.math.sqrt
  * @author CCBlueX/LiquidBounce
  */
 object BoostHypixel : FlyMode("BoostHypixel") {
-	private var state = 1
-	private var moveSpeed = 0.0
-	private var lastDistance = 0.0
-	private val tickTimer = TickTimer()
-	
-	override fun onEnable() {
-		if (!mc.thePlayer.onGround) return
-		
-		tickTimer.reset()
-		
-		val (x, y, z) = mc.thePlayer
+    private var state = 1
+    private var moveSpeed = 0.0
+    private var lastDistance = 0.0
+    private val tickTimer = TickTimer()
 
-		repeat(10) {
-			//Imagine flagging to NCP.
-			sendPacket(C04PacketPlayerPosition(x, y, z, true))
-		}
+    override fun onEnable() {
+        if (!mc.thePlayer.onGround) return
 
-		var fallDistance = 3.0125 //add 0.0125 to ensure we get the fall dmg
+        tickTimer.reset()
 
-		while (fallDistance > 0) {
-			sendPackets(
-				C04PacketPlayerPosition(x, y + 0.0624986421, z, false),
-				C04PacketPlayerPosition(x, y + 0.0625, z, false),
-				C04PacketPlayerPosition(x, y + 0.0624986421, z, false),
-				C04PacketPlayerPosition(x, y + 0.0000013579, z, false)
-			)
-			fallDistance -= 0.0624986421
-		}
+        val (x, y, z) = mc.thePlayer
 
-		sendPacket(C04PacketPlayerPosition(x, y, z, true))
+        repeat(10) {
+            //Imagine flagging to NCP.
+            sendPacket(C04PacketPlayerPosition(x, y, z, true))
+        }
 
-		mc.thePlayer.jmp()
+        var fallDistance = 3.0125 //add 0.0125 to ensure we get the fall dmg
 
-		mc.thePlayer.posY += 0.42f // Visual
-		
-		state = 1
-		moveSpeed = 0.1
-		lastDistance = 0.0
-	}
+        while (fallDistance > 0) {
+            sendPackets(
+                C04PacketPlayerPosition(x, y + 0.0624986421, z, false),
+                C04PacketPlayerPosition(x, y + 0.0625, z, false),
+                C04PacketPlayerPosition(x, y + 0.0624986421, z, false),
+                C04PacketPlayerPosition(x, y + 0.0000013579, z, false)
+            )
+            fallDistance -= 0.0624986421
+        }
 
-	override fun onMotion(event: MotionEvent) {
-		@Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
-		when (event.eventState) {
-			EventState.PRE -> {
-				tickTimer.update()
+        sendPacket(C04PacketPlayerPosition(x, y, z, true))
 
-				if (tickTimer.hasTimePassed(2)) {
-					mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.0E-5, mc.thePlayer.posZ)
+        mc.thePlayer.jmp()
 
-					tickTimer.reset()
-				}
+        mc.thePlayer.posY += 0.42f // Visual
 
-				mc.thePlayer.motionY = 0.0
-			}
-			EventState.POST -> {
-				val xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX
-				val zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ
-				lastDistance = sqrt(xDist * xDist + zDist * zDist)
-			}
-		}
-	}
+        state = 1
+        moveSpeed = 0.1
+        lastDistance = 0.0
+    }
 
-	override fun onMove(event: MoveEvent) {
-		if (!isMoving) {
-			event.zeroXZ()
-			return
-		}
+    override fun onMotion(event: MotionEvent) {
+        @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
+        when (event.eventState) {
+            EventState.PRE -> {
+                tickTimer.update()
 
-		val amplifier =
-			1 + (if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) 0.2 * (mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier + 1.0) else 0.0)
+                if (tickTimer.hasTimePassed(2)) {
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.0E-5, mc.thePlayer.posZ)
 
-		val baseSpeed = 0.29 * amplifier
+                    tickTimer.reset()
+                }
 
-		when (state) {
-			1 -> {
-				moveSpeed = (if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) 1.56 else 2.034) * baseSpeed
-				state++
-			}
-			2 -> {
-				moveSpeed *= 2.16
-				state++
-			}
-			3 -> {
-				moveSpeed = lastDistance - (if (mc.thePlayer.ticksExisted % 2 == 0) 0.0103 else 0.0123) * (lastDistance - baseSpeed)
-				state++
-			}
-			else -> moveSpeed = lastDistance - lastDistance / 159.8
-		}
+                mc.thePlayer.motionY = 0.0
+            }
 
-		moveSpeed = moveSpeed.coerceAtMost(0.3)
+            EventState.POST -> {
+                val xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX
+                val zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ
+                lastDistance = sqrt(xDist * xDist + zDist * zDist)
+            }
+        }
+    }
 
-		val yaw = direction
+    override fun onMove(event: MoveEvent) {
+        if (!isMoving) {
+            event.zeroXZ()
+            return
+        }
 
-		event.x = -sin(yaw) * moveSpeed
-		event.z = cos(yaw) * moveSpeed
+        val amplifier =
+            1 + (if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) 0.2 * (mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier + 1.0) else 0.0)
 
-		mc.thePlayer.motionX = event.x
-		mc.thePlayer.motionZ = event.z
-	}
+        val baseSpeed = 0.29 * amplifier
 
-	override fun onPacket(event: PacketEvent) {
-		when (val packet = event.packet) {
-			is S08PacketPlayerPosLook -> {
-				Fly.state = false
-				displayChatMessage("§8[§c§lBoostHypixel-§a§lFly§8] §cSetback detected.")
-			}
-			is C03PacketPlayer -> packet.onGround = false
-		}
-	}
+        when (state) {
+            1 -> {
+                moveSpeed = (if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) 1.56 else 2.034) * baseSpeed
+                state++
+            }
 
-	override fun onBB(event: BlockBBEvent) {
-		if (event.block == air && event.y < mc.thePlayer.posY)
-			event.boundingBox = AxisAlignedBB.fromBounds(
-				event.x.toDouble(),
-				event.y.toDouble(),
-				event.z.toDouble(),
-				event.x + 1.0,
-				mc.thePlayer.posY,
-				event.z + 1.0
-			)
-	}
+            2 -> {
+                moveSpeed *= 2.16
+                state++
+            }
 
-	override fun onJump(event: JumpEvent) {
-		event.cancelEvent()
-	}
+            3 -> {
+                moveSpeed =
+                    lastDistance - (if (mc.thePlayer.ticksExisted % 2 == 0) 0.0103 else 0.0123) * (lastDistance - baseSpeed)
+                state++
+            }
 
-	override fun onStep(event: StepEvent) {
-		event.stepHeight = 0f
-	}
+            else -> moveSpeed = lastDistance - lastDistance / 159.8
+        }
+
+        moveSpeed = moveSpeed.coerceAtMost(0.3)
+
+        val yaw = direction
+
+        event.x = -sin(yaw) * moveSpeed
+        event.z = cos(yaw) * moveSpeed
+
+        mc.thePlayer.motionX = event.x
+        mc.thePlayer.motionZ = event.z
+    }
+
+    override fun onPacket(event: PacketEvent) {
+        when (val packet = event.packet) {
+            is S08PacketPlayerPosLook -> {
+                Fly.state = false
+                displayChatMessage("§8[§c§lBoostHypixel-§a§lFly§8] §cSetback detected.")
+            }
+
+            is C03PacketPlayer -> packet.onGround = false
+        }
+    }
+
+    override fun onBB(event: BlockBBEvent) {
+        if (event.block == air && event.y < mc.thePlayer.posY)
+            event.boundingBox = AxisAlignedBB.fromBounds(
+                event.x.toDouble(),
+                event.y.toDouble(),
+                event.z.toDouble(),
+                event.x + 1.0,
+                mc.thePlayer.posY,
+                event.z + 1.0
+            )
+    }
+
+    override fun onJump(event: JumpEvent) {
+        event.cancelEvent()
+    }
+
+    override fun onStep(event: StepEvent) {
+        event.stepHeight = 0f
+    }
 }

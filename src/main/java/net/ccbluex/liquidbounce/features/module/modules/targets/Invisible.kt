@@ -6,6 +6,6 @@
 package net.ccbluex.liquidbounce.features.module.modules.targets
 
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.TARGETS
 
-object Invisible : Module("Invisible", ModuleCategory.TARGETS, gameDetecting = false, defaultInArray = false)
+object Invisible : Module("Invisible", TARGETS, gameDetecting = false, defaultInArray = false)

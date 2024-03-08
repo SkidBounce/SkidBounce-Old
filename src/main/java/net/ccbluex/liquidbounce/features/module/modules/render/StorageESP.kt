@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Render2DEvent
 import net.ccbluex.liquidbounce.event.Render3DEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.features.module.modules.world.ChestAura.clickedTileEntities
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.ClientUtils.disableFastRender
@@ -30,14 +30,14 @@ import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import kotlin.math.pow
 
-object StorageESP : Module("StorageESP", ModuleCategory.RENDER, subjective = true) {
+object StorageESP : Module("StorageESP", RENDER, subjective = true) {
     private val mode by
-        ListValue("Mode", arrayOf("Box", "OtherBox", "Outline", "Glow", "2D", "WireFrame"), "Outline")
+    ListValue("Mode", arrayOf("Box", "OtherBox", "Outline", "Glow", "2D", "WireFrame"), "Outline")
 
-        private val glowRenderScale by FloatValue("Glow-Renderscale", 1f, 0.5f..2f) { mode == "Glow" }
-        private val glowRadius by IntegerValue("Glow-Radius", 4, 1..5) { mode == "Glow" }
-        private val glowFade by IntegerValue("Glow-Fade", 10, 0..30) { mode == "Glow" }
-        private val glowTargetAlpha by FloatValue("Glow-Target-Alpha", 0f, 0f..1f) { mode == "Glow" }
+    private val glowRenderScale by FloatValue("Glow-Renderscale", 1f, 0.5f..2f) { mode == "Glow" }
+    private val glowRadius by IntegerValue("Glow-Radius", 4, 1..5) { mode == "Glow" }
+    private val glowFade by IntegerValue("Glow-Fade", 10, 0..30) { mode == "Glow" }
+    private val glowTargetAlpha by FloatValue("Glow-Target-Alpha", 0f, 0f..1f) { mode == "Glow" }
 
     private val maxRenderDistance by object : IntegerValue("MaxRenderDistance", 100, 1..500) {
         override fun onUpdate(value: Int) {
@@ -212,7 +212,7 @@ object StorageESP : Module("StorageESP", ModuleCategory.RENDER, subjective = tru
 
             glColor(Color(255, 255, 255, 255))
             mc.gameSettings.gammaSetting = gamma
-            } catch (ignored: Exception) {
+        } catch (ignored: Exception) {
         }
     }
 
@@ -257,6 +257,6 @@ object StorageESP : Module("StorageESP", ModuleCategory.RENDER, subjective = tru
             LOGGER.error("An error occurred while rendering all storages for shader esp", ex)
         }
 
-       GlowShader.stopDraw(Color(0, 66, 255), glowRadius, glowFade, glowTargetAlpha)
+        GlowShader.stopDraw(Color(0, 66, 255), glowRadius, glowFade, glowTargetAlpha)
     }
 }

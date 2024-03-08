@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.event.WorldEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.utils.misc.StringUtils.contains
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.IntegerValue
@@ -20,7 +20,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.potion.Potion
 
-object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting = false) {
+object GameDetector : Module("GameDetector", CLIENT, gameDetecting = false) {
     // Check if player's gamemode is Survival or Adventure
     private val gameMode by BoolValue("GameModeCheck", true)
 
@@ -74,7 +74,8 @@ object GameDetector: Module("GameDetector", ModuleCategory.CLIENT, gameDetecting
             return
 
         if (GameDetector.capabilities &&
-            (!capabilities.allowEdit || capabilities.allowFlying || capabilities.isFlying || capabilities.disableDamage))
+            (!capabilities.allowEdit || capabilities.allowFlying || capabilities.isFlying || capabilities.disableDamage)
+        )
             return
 
         if (tabList && netHandler.playerInfoMap.size <= 1)

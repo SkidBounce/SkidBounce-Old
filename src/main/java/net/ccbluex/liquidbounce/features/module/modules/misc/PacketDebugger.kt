@@ -8,22 +8,28 @@ package net.ccbluex.liquidbounce.features.module.modules.misc
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.minecraft.network.handshake.client.C00Handshake
-import net.minecraft.network.login.client.*
-import net.minecraft.network.login.server.*
+import net.minecraft.network.login.client.C00PacketLoginStart
+import net.minecraft.network.login.client.C01PacketEncryptionResponse
+import net.minecraft.network.login.server.S00PacketDisconnect
+import net.minecraft.network.login.server.S01PacketEncryptionRequest
+import net.minecraft.network.login.server.S02PacketLoginSuccess
+import net.minecraft.network.login.server.S03PacketEnableCompression
 import net.minecraft.network.play.client.*
 import net.minecraft.network.play.client.C03PacketPlayer.*
 import net.minecraft.network.play.server.*
 import net.minecraft.network.play.server.S14PacketEntity.*
-import net.minecraft.network.status.client.*
-import net.minecraft.network.status.server.*
+import net.minecraft.network.status.client.C00PacketServerQuery
+import net.minecraft.network.status.client.C01PacketPing
+import net.minecraft.network.status.server.S00PacketServerInfo
+import net.minecraft.network.status.server.S01PacketPong
 import net.minecraft.util.BlockPos
 import net.minecraft.util.Vec3
 
-object PacketDebugger : Module("PacketDebugger", ModuleCategory.MISC) {
+object PacketDebugger : Module("PacketDebugger", MISC) {
     private val fields by BoolValue("ShowFields", true)
     private val fieldMap = hashMapOf(
         "field_149600_a" to "Version",
@@ -424,7 +430,7 @@ object PacketDebugger : Module("PacketDebugger", ModuleCategory.MISC) {
     private val S05 by BoolValue("S05PacketSpawnPosition", false)
     private val S06 by BoolValue("S06PacketUpdateHealth", false)
     private val S07 by BoolValue("S07PacketRespawn", false)
-    private val S08 by BoolValue("S08PacketPlayerPosLook",false)
+    private val S08 by BoolValue("S08PacketPlayerPosLook", false)
     private val S09 by BoolValue("S09PacketHeldItemChange", false)
     private val S0A by BoolValue("S0APacketUseBed", false)
     private val S0B by BoolValue("S0BPacketAnimation", false)
@@ -449,20 +455,20 @@ object PacketDebugger : Module("PacketDebugger", ModuleCategory.MISC) {
     private val S1E by BoolValue("S1EPacketRemoveEntityEffect", false)
     private val S1F by BoolValue("S1FPacketSetExperience", false)
     private val S20 by BoolValue("S20PacketEntityProperties", false)
-    private val S21 by BoolValue("S21PacketChunkData",false)
+    private val S21 by BoolValue("S21PacketChunkData", false)
     private val S22 by BoolValue("S22PacketMultiBlockChange", false)
     private val S23 by BoolValue("S23PacketBlockChange", false)
-    private val S24 by BoolValue("S24PacketBlockAction",false)
+    private val S24 by BoolValue("S24PacketBlockAction", false)
     private val S25 by BoolValue("S25PacketBlockBreakAnim", false)
     private val S26 by BoolValue("S26PacketMapChunkBulk", false)
-    private val S27 by BoolValue("S27PacketExplosion",false)
-    private val S28 by BoolValue("S28PacketEffect",false)
+    private val S27 by BoolValue("S27PacketExplosion", false)
+    private val S28 by BoolValue("S28PacketEffect", false)
     private val S29 by BoolValue("S29PacketSoundEffect", false)
     private val S2A by BoolValue("S2APacketParticles", false)
-    private val S2B by BoolValue("S2BPacketChangeGameState",false)
+    private val S2B by BoolValue("S2BPacketChangeGameState", false)
     private val S2C by BoolValue("S2CPacketSpawnGlobalEntity", false)
     private val S2D by BoolValue("S2DPacketOpenWindow", false)
-    private val S2E by BoolValue("S2EPacketCloseWindow",false)
+    private val S2E by BoolValue("S2EPacketCloseWindow", false)
     private val S2F by BoolValue("S2FPacketSetSlot", false)
     private val S30 by BoolValue("S30PacketWindowItems", false)
     private val S31 by BoolValue("S31PacketWindowProperty", false)

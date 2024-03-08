@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.world
 
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.WORLD
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.faceBlock
@@ -15,20 +15,23 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.limitAngleChange
 import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getCenterDistance
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.rotation
+import net.ccbluex.liquidbounce.utils.extensions.swing
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
-import net.ccbluex.liquidbounce.value.*
+import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.SwingValue
 import net.minecraft.init.Blocks.air
 import net.minecraft.init.Blocks.bedrock
 import net.minecraft.network.play.client.C07PacketPlayerDigging
 import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.*
-import net.minecraft.network.play.client.C0APacketAnimation
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
 import java.awt.Color
 
-object CivBreak : Module("CivBreak", ModuleCategory.WORLD) {
+object CivBreak : Module("CivBreak", WORLD) {
 
     private val range by FloatValue("Range", 5F, 1F..6F)
     private val swing by SwingValue()

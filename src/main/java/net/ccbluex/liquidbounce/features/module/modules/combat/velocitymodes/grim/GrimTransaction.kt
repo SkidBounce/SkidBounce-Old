@@ -40,7 +40,7 @@ object GrimTransaction : VelocityMode("GrimTransaction") {
         if (resetPersec > 0) {
             if (updates >= 0 || updates >= resetPersec) {
                 updates = 0
-                if (grimTCancel > 0){
+                if (grimTCancel > 0) {
                     grimTCancel--
                 }
             }

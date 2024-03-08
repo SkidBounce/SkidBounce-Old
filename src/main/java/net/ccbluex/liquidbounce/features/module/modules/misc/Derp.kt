@@ -6,17 +6,17 @@
 package net.ccbluex.liquidbounce.features.module.modules.misc
 
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.utils.Rotation
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 
-object Derp : Module("Derp", ModuleCategory.MISC) {
+object Derp : Module("Derp", MISC) {
 
     private val headless by BoolValue("Headless", false)
     private val spinny by BoolValue("Spinny", false)
-        private val increment by FloatValue("Increment", 1F, 0F..50F) { spinny }
+    private val increment by FloatValue("Increment", 1F, 0F..50F) { spinny }
 
     private var currentSpin = 0F
 

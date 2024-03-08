@@ -6,7 +6,8 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.features.module.*
+import net.ccbluex.liquidbounce.features.module.Module
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.hypixel.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.ncp.*
@@ -15,15 +16,20 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.rewins
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanilla.*
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
-import net.ccbluex.liquidbounce.utils.extensions.*
+import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
+import net.ccbluex.liquidbounce.utils.extensions.stop
+import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.*
+import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import net.minecraft.util.AxisAlignedBB
 import java.awt.Color
 
-object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
+object Fly : Module("Fly", MOVEMENT) {
     private val flyModes = arrayOf(
         Vanilla, SmoothVanilla,
 
@@ -60,9 +66,9 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     val mode by ListValue("Mode", modes, "Vanilla")
 
     val vanillaSpeed by FloatValue("Vanilla-Speed", 2f, 0f..10f)
-        { mode in arrayOf("Vanilla", "KeepAlive", "MineSecure", "BugSpartan") }
+    { mode in arrayOf("Vanilla", "KeepAlive", "MineSecure", "BugSpartan") }
     private val vanillaKickBypass by BoolValue("Vanilla-KickBypass", false)
-        { mode in arrayOf("Vanilla", "SmoothVanilla") }
+    { mode in arrayOf("Vanilla", "SmoothVanilla") }
 
     // Spartan532
     val spartan532Speed by FloatValue("Spartan532-Speed", 5f, 0f..10f) { mode == "Spartan532" }
@@ -77,9 +83,9 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     // Hypixel
     val hypixelBoost by BoolValue("Hypixel-Boost", true) { mode == "Hypixel" }
     val hypixelBoostDelay by IntegerValue("Hypixel-BoostDelay", 1200, 50..2000)
-        { mode == "Hypixel" && hypixelBoost }
+    { mode == "Hypixel" && hypixelBoost }
     val hypixelBoostTimer by FloatValue("Hypixel-BoostTimer", 1f, 0.1f..5f)
-        { mode == "Hypixel" && hypixelBoost }
+    { mode == "Hypixel" && hypixelBoost }
 
     // Vulcan
     val vulcanTimer by FloatValue("Vulcan-Timer", 2f, 1f..3f) { mode == "Vulcan" }
@@ -92,8 +98,8 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     val redeskyHeight by FloatValue("Redesky-Height", 4f, 1f..7f) { mode == "Redesky" }
 
     // Wave
-    val waveUpSpeed by FloatValue("Wave-UpSpeed", 0.6f, 0f..1f)  { mode == "Wave" }
-    val waveDownSpeed by FloatValue("Wave-DownSpeed", 0.6f, 0f..1f)  { mode == "Wave" }
+    val waveUpSpeed by FloatValue("Wave-UpSpeed", 0.6f, 0f..1f) { mode == "Wave" }
+    val waveDownSpeed by FloatValue("Wave-DownSpeed", 0.6f, 0f..1f) { mode == "Wave" }
     val waveTimer by FloatValue("Wave-Timer", 1.25f, 1f..2f) { mode == "Wave" }
 
     // Clip
@@ -203,6 +209,7 @@ object Fly : Module("Fly", ModuleCategory.MOVEMENT) {
     fun onMove(event: MoveEvent) {
         modeModule.onMove(event)
     }
+
     @EventTarget
     fun onWorld(event: WorldEvent) {
         // breaks when you join a server with it on for some reason

@@ -19,6 +19,7 @@ object Redesky : LongJumpMode("Redesky") {
     override fun onDisable() {
         mc.timer.resetSpeed()
     }
+
     override fun onUpdate() {
         mc.thePlayer.jumpMovementFactor = redeskyJumpMovement
         mc.thePlayer.motionY += redeskyMotionY / 10
