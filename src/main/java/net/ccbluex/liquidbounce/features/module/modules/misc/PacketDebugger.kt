@@ -11,6 +11,7 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.Value
 import net.minecraft.network.handshake.client.C00Handshake
 import net.minecraft.network.login.client.C00PacketLoginStart
 import net.minecraft.network.login.client.C01PacketEncryptionResponse
@@ -29,8 +30,9 @@ import net.minecraft.network.status.server.S01PacketPong
 import net.minecraft.util.BlockPos
 import net.minecraft.util.Vec3
 
-object PacketDebugger : Module("PacketDebugger", MISC) {
-    private val fields by BoolValue("ShowFields", true)
+object PacketDebugger : Module("PacketDebugger", MISC, gameDetecting = false) {
+    private val fieldsValue = BoolValue("ShowFields", true)
+    private val fields by fieldsValue
     private val fieldMap = hashMapOf(
         "field_149600_a" to "Version",
         "field_149598_b" to "Ip",
@@ -385,264 +387,179 @@ object PacketDebugger : Module("PacketDebugger", MISC) {
         "field_149074_a" to "Entity",
         "field_179781_a" to "Entity",
     )
-    private val CHS by BoolValue("C00Handshake", false)
-    private val CL0 by BoolValue("C00PacketLoginStart", false)
-    private val CL1 by BoolValue("C01PacketEncryptionResponse", false)
-    private val SL0 by BoolValue("S00PacketDisconnect", false)
-    private val SL1 by BoolValue("S01PacketEncryptionRequest", false)
-    private val SL2 by BoolValue("S02PacketLoginSuccess", false)
-    private val SL3 by BoolValue("S03PacketEnableCompression", false)
-    private val CS0 by BoolValue("C00PacketServerQuery", false)
-    private val CS1 by BoolValue("C01PacketPing", false)
-    private val SS0 by BoolValue("S00PacketServerInfo", false)
-    private val SS1 by BoolValue("S01PacketPong", false)
-    private val C00 by BoolValue("C00PacketKeepAlive", false)
-    private val C01 by BoolValue("C01PacketChatMessage", false)
-    private val C02 by BoolValue("C02PacketUseEntity", false)
-    private val C03 by BoolValue("C03PacketPlayer", false)
-    private val C04 by BoolValue("C04PacketPlayerPosition", false)
-    private val C05 by BoolValue("C05PacketPlayerLook", false)
-    private val C06 by BoolValue("C06PacketPlayerPosLook", false)
-    private val C07 by BoolValue("C07PacketPlayerDigging", false)
-    private val C08 by BoolValue("C08PacketPlayerBlockPlacement", false)
-    private val C09 by BoolValue("C09PacketHeldItemChange", false)
-    private val C0A by BoolValue("C0APacketAnimation", false)
-    private val C0B by BoolValue("C0BPacketEntityAction", false)
-    private val C0C by BoolValue("C0CPacketInput", false)
-    private val C0D by BoolValue("C0DPacketCloseWindow", false)
-    private val C0E by BoolValue("C0EPacketClickWindow", false)
-    private val C0F by BoolValue("C0FPacketConfirmTransaction", false)
-    private val C10 by BoolValue("C10PacketCreativeInventoryAction", false)
-    private val C11 by BoolValue("C11PacketEnchantItem", false)
-    private val C12 by BoolValue("C12PacketUpdateSign", false)
-    private val C13 by BoolValue("C13PacketPlayerAbilities", false)
-    private val C14 by BoolValue("C14PacketTabComplete", false)
-    private val C15 by BoolValue("C15PacketClientSettings", false)
-    private val C16 by BoolValue("C16PacketClientStatus", false)
-    private val C17 by BoolValue("C17PacketCustomPayload", false)
-    private val C18 by BoolValue("C18PacketSpectate", false)
-    private val C19 by BoolValue("C19PacketResourcePackStatus", false)
-    private val S00 by BoolValue("S00PacketKeepAlive", false)
-    private val S01 by BoolValue("S01PacketJoinGame", false)
-    private val S02 by BoolValue("S02PacketChat", false)
-    private val S03 by BoolValue("S03PacketTimeUpdate", false)
-    private val S04 by BoolValue("S04PacketEntityEquipment", false)
-    private val S05 by BoolValue("S05PacketSpawnPosition", false)
-    private val S06 by BoolValue("S06PacketUpdateHealth", false)
-    private val S07 by BoolValue("S07PacketRespawn", false)
-    private val S08 by BoolValue("S08PacketPlayerPosLook", false)
-    private val S09 by BoolValue("S09PacketHeldItemChange", false)
-    private val S0A by BoolValue("S0APacketUseBed", false)
-    private val S0B by BoolValue("S0BPacketAnimation", false)
-    private val S0C by BoolValue("S0CPacketSpawnPlayer", false)
-    private val S0D by BoolValue("S0DPacketCollectItem", false)
-    private val S0E by BoolValue("S0EPacketSpawnObject", false)
-    private val S0F by BoolValue("S0FPacketSpawnMob", false)
-    private val S10 by BoolValue("S10PacketSpawnPainting", false)
-    private val S11 by BoolValue("S11PacketSpawnExperienceOrb", false)
-    private val S12 by BoolValue("S12PacketEntityVelocity", false)
-    private val S13 by BoolValue("S13PacketDestroyEntities", false)
-    private val S14 by BoolValue("S14PacketEntity", false)
-    private val S15 by BoolValue("S15PacketEntityRelMove", false)
-    private val S16 by BoolValue("S16PacketEntityLook", false)
-    private val S17 by BoolValue("S17PacketEntityLookMove", false)
-    private val S18 by BoolValue("S18PacketEntityTeleport", false)
-    private val S19 by BoolValue("S19PacketEntityHeadLook", false)
-    private val S1A by BoolValue("S19PacketEntityStatus", false)
-    private val S1B by BoolValue("S1BPacketEntityAttach", false)
-    private val S1C by BoolValue("S1CPacketEntityMetadata", false)
-    private val S1D by BoolValue("S1DPacketEntityEffect", false)
-    private val S1E by BoolValue("S1EPacketRemoveEntityEffect", false)
-    private val S1F by BoolValue("S1FPacketSetExperience", false)
-    private val S20 by BoolValue("S20PacketEntityProperties", false)
-    private val S21 by BoolValue("S21PacketChunkData", false)
-    private val S22 by BoolValue("S22PacketMultiBlockChange", false)
-    private val S23 by BoolValue("S23PacketBlockChange", false)
-    private val S24 by BoolValue("S24PacketBlockAction", false)
-    private val S25 by BoolValue("S25PacketBlockBreakAnim", false)
-    private val S26 by BoolValue("S26PacketMapChunkBulk", false)
-    private val S27 by BoolValue("S27PacketExplosion", false)
-    private val S28 by BoolValue("S28PacketEffect", false)
-    private val S29 by BoolValue("S29PacketSoundEffect", false)
-    private val S2A by BoolValue("S2APacketParticles", false)
-    private val S2B by BoolValue("S2BPacketChangeGameState", false)
-    private val S2C by BoolValue("S2CPacketSpawnGlobalEntity", false)
-    private val S2D by BoolValue("S2DPacketOpenWindow", false)
-    private val S2E by BoolValue("S2EPacketCloseWindow", false)
-    private val S2F by BoolValue("S2FPacketSetSlot", false)
-    private val S30 by BoolValue("S30PacketWindowItems", false)
-    private val S31 by BoolValue("S31PacketWindowProperty", false)
-    private val S32 by BoolValue("S32PacketConfirmTransaction", false)
-    private val S33 by BoolValue("S33PacketUpdateSign", false)
-    private val S34 by BoolValue("S34PacketMaps", false)
-    private val S35 by BoolValue("S35PacketUpdateTileEntity", false)
-    private val S36 by BoolValue("S36PacketSignEditorOpen", false)
-    private val S37 by BoolValue("S37PacketStatistics", false)
-    private val S38 by BoolValue("S38PacketPlayerListItem", false)
-    private val S39 by BoolValue("S39PacketPlayerAbilities", false)
-    private val S3A by BoolValue("S3APacketTabComplete", false)
-    private val S3B by BoolValue("S3BPacketScoreboardObjective", false)
-    private val S3C by BoolValue("S3CPacketUpdateScore", false)
-    private val S3D by BoolValue("S3DPacketDisplayScoreboard", false)
-    private val S3E by BoolValue("S3EPacketTeams", false)
-    private val S3F by BoolValue("S3FPacketCustomPayload", false)
-    private val S40 by BoolValue("S40PacketDisconnect", false)
-    private val S41 by BoolValue("S41PacketServerDifficulty", false)
-    private val S42 by BoolValue("S42PacketCombatEvent", false)
-    private val S43 by BoolValue("S43PacketCamera", false)
-    private val S44 by BoolValue("S44PacketWorldBorder", false)
-    private val S45 by BoolValue("S45PacketTitle", false)
-    private val S46 by BoolValue("S46PacketSetCompressionLevel", false)
-    private val S47 by BoolValue("S47PacketPlayerListHeaderFooter", false)
-    private val S48 by BoolValue("S48PacketResourcePackSend", false)
-    private val S49 by BoolValue("S49PacketUpdateEntityNBT", false)
+
+    private var settings = arrayListOf<Value<*>>(fieldsValue)
+
+    init {
+        arrayListOf(
+            C00Handshake::class.java,
+            C00PacketLoginStart::class.java,
+            C01PacketEncryptionResponse::class.java,
+            S00PacketDisconnect::class.java,
+            S01PacketEncryptionRequest::class.java,
+            S02PacketLoginSuccess::class.java,
+            S03PacketEnableCompression::class.java,
+            C00PacketServerQuery::class.java,
+            C01PacketPing::class.java,
+            S00PacketServerInfo::class.java,
+            S01PacketPong::class.java,
+            C00PacketKeepAlive::class.java,
+            C01PacketChatMessage::class.java,
+            C02PacketUseEntity::class.java,
+            C03PacketPlayer::class.java,
+            C04PacketPlayerPosition::class.java,
+            C05PacketPlayerLook::class.java,
+            C06PacketPlayerPosLook::class.java,
+            C07PacketPlayerDigging::class.java,
+            C08PacketPlayerBlockPlacement::class.java,
+            C09PacketHeldItemChange::class.java,
+            C0APacketAnimation::class.java,
+            C0BPacketEntityAction::class.java,
+            C0CPacketInput::class.java,
+            C0DPacketCloseWindow::class.java,
+            C0EPacketClickWindow::class.java,
+            C0FPacketConfirmTransaction::class.java,
+            C10PacketCreativeInventoryAction::class.java,
+            C11PacketEnchantItem::class.java,
+            C12PacketUpdateSign::class.java,
+            C13PacketPlayerAbilities::class.java,
+            C14PacketTabComplete::class.java,
+            C15PacketClientSettings::class.java,
+            C16PacketClientStatus::class.java,
+            C17PacketCustomPayload::class.java,
+            C18PacketSpectate::class.java,
+            C19PacketResourcePackStatus::class.java,
+            S00PacketKeepAlive::class.java,
+            S01PacketJoinGame::class.java,
+            S02PacketChat::class.java,
+            S03PacketTimeUpdate::class.java,
+            S04PacketEntityEquipment::class.java,
+            S05PacketSpawnPosition::class.java,
+            S06PacketUpdateHealth::class.java,
+            S07PacketRespawn::class.java,
+            S08PacketPlayerPosLook::class.java,
+            S09PacketHeldItemChange::class.java,
+            S0APacketUseBed::class.java,
+            S0BPacketAnimation::class.java,
+            S0CPacketSpawnPlayer::class.java,
+            S0DPacketCollectItem::class.java,
+            S0EPacketSpawnObject::class.java,
+            S0FPacketSpawnMob::class.java,
+            S10PacketSpawnPainting::class.java,
+            S11PacketSpawnExperienceOrb::class.java,
+            S12PacketEntityVelocity::class.java,
+            S13PacketDestroyEntities::class.java,
+            S14PacketEntity::class.java,
+            S15PacketEntityRelMove::class.java,
+            S16PacketEntityLook::class.java,
+            S17PacketEntityLookMove::class.java,
+            S18PacketEntityTeleport::class.java,
+            S19PacketEntityHeadLook::class.java,
+            S19PacketEntityStatus::class.java,
+            S1BPacketEntityAttach::class.java,
+            S1CPacketEntityMetadata::class.java,
+            S1DPacketEntityEffect::class.java,
+            S1EPacketRemoveEntityEffect::class.java,
+            S1FPacketSetExperience::class.java,
+            S20PacketEntityProperties::class.java,
+            S21PacketChunkData::class.java,
+            S22PacketMultiBlockChange::class.java,
+            S23PacketBlockChange::class.java,
+            S24PacketBlockAction::class.java,
+            S25PacketBlockBreakAnim::class.java,
+            S26PacketMapChunkBulk::class.java,
+            S27PacketExplosion::class.java,
+            S28PacketEffect::class.java,
+            S29PacketSoundEffect::class.java,
+            S2APacketParticles::class.java,
+            S2BPacketChangeGameState::class.java,
+            S2CPacketSpawnGlobalEntity::class.java,
+            S2DPacketOpenWindow::class.java,
+            S2EPacketCloseWindow::class.java,
+            S2FPacketSetSlot::class.java,
+            S30PacketWindowItems::class.java,
+            S31PacketWindowProperty::class.java,
+            S32PacketConfirmTransaction::class.java,
+            S33PacketUpdateSign::class.java,
+            S34PacketMaps::class.java,
+            S35PacketUpdateTileEntity::class.java,
+            S36PacketSignEditorOpen::class.java,
+            S37PacketStatistics::class.java,
+            S38PacketPlayerListItem::class.java,
+            S39PacketPlayerAbilities::class.java,
+            S3APacketTabComplete::class.java,
+            S3BPacketScoreboardObjective::class.java,
+            S3CPacketUpdateScore::class.java,
+            S3DPacketDisplayScoreboard::class.java,
+            S3EPacketTeams::class.java,
+            S3FPacketCustomPayload::class.java,
+            S40PacketDisconnect::class.java,
+            S41PacketServerDifficulty::class.java,
+            S42PacketCombatEvent::class.java,
+            S43PacketCamera::class.java,
+            S44PacketWorldBorder::class.java,
+            S45PacketTitle::class.java,
+            S46PacketSetCompressionLevel::class.java,
+            S47PacketPlayerListHeaderFooter::class.java,
+            S48PacketResourcePackSend::class.java,
+            S49PacketUpdateEntityNBT::class.java
+        ).forEach {
+            settings += BoolValue(it.simpleName, false)
+        }
+    }
 
     @EventTarget(priority = Int.MIN_VALUE)
     fun onPacket(event: PacketEvent) {
         if (event.isCancelled || !state) return
         val packet = event.packet
-        val clazz: Class<*> = if (packet.javaClass.isMemberClass) packet.javaClass.declaringClass else packet.javaClass
-        when (packet) {
-            is C00Handshake -> if (!CHS) return
-            is C00PacketLoginStart -> if (!CL0) return
-            is C01PacketEncryptionResponse -> if (!CL1) return
-            is S00PacketDisconnect -> if (!SL0) return
-            is S01PacketEncryptionRequest -> if (!SL1) return
-            is S02PacketLoginSuccess -> if (!SL2) return
-            is S03PacketEnableCompression -> if (!SL3) return
-            is C00PacketServerQuery -> if (!CS0) return
-            is C01PacketPing -> if (!CS1) return
-            is S00PacketServerInfo -> if (!SS0) return
-            is S01PacketPong -> if (!SS1) return
-            is C00PacketKeepAlive -> if (!C00) return
-            is C01PacketChatMessage -> if (!C01) return
-            is C02PacketUseEntity -> if (!C02) return
-            is C04PacketPlayerPosition -> if (!C04) return
-            is C05PacketPlayerLook -> if (!C05) return
-            is C06PacketPlayerPosLook -> if (!C06) return
-            is C03PacketPlayer -> if (!C03) return
-            is C07PacketPlayerDigging -> if (!C07) return
-            is C08PacketPlayerBlockPlacement -> if (!C08) return
-            is C09PacketHeldItemChange -> if (!C09) return
-            is C0APacketAnimation -> if (!C0A) return
-            is C0BPacketEntityAction -> if (!C0B) return
-            is C0CPacketInput -> if (!C0C) return
-            is C0DPacketCloseWindow -> if (!C0D) return
-            is C0EPacketClickWindow -> if (!C0E) return
-            is C0FPacketConfirmTransaction -> if (!C0F) return
-            is C10PacketCreativeInventoryAction -> if (!C10) return
-            is C11PacketEnchantItem -> if (!C11) return
-            is C12PacketUpdateSign -> if (!C12) return
-            is C13PacketPlayerAbilities -> if (!C13) return
-            is C14PacketTabComplete -> if (!C14) return
-            is C15PacketClientSettings -> if (!C15) return
-            is C16PacketClientStatus -> if (!C16) return
-            is C17PacketCustomPayload -> if (!C17) return
-            is C18PacketSpectate -> if (!C18) return
-            is C19PacketResourcePackStatus -> if (!C19) return
-            is S00PacketKeepAlive -> if (!S00) return
-            is S01PacketJoinGame -> if (!S01) return
-            is S02PacketChat -> if (!S02) return
-            is S03PacketTimeUpdate -> if (!S03) return
-            is S04PacketEntityEquipment -> if (!S04) return
-            is S05PacketSpawnPosition -> if (!S05) return
-            is S06PacketUpdateHealth -> if (!S06) return
-            is S07PacketRespawn -> if (!S07) return
-            is S08PacketPlayerPosLook -> if (!S08) return
-            is S09PacketHeldItemChange -> if (!S09) return
-            is S0APacketUseBed -> if (!S0A) return
-            is S0BPacketAnimation -> if (!S0B) return
-            is S0CPacketSpawnPlayer -> if (!S0C) return
-            is S0DPacketCollectItem -> if (!S0D) return
-            is S0EPacketSpawnObject -> if (!S0E) return
-            is S0FPacketSpawnMob -> if (!S0F) return
-            is S10PacketSpawnPainting -> if (!S10) return
-            is S11PacketSpawnExperienceOrb -> if (!S11) return
-            is S12PacketEntityVelocity -> if (!S12) return
-            is S13PacketDestroyEntities -> if (!S13) return
-            is S15PacketEntityRelMove -> if (!S15) return
-            is S16PacketEntityLook -> if (!S16) return
-            is S17PacketEntityLookMove -> if (!S17) return
-            is S14PacketEntity -> if (!S14) return
-            is S18PacketEntityTeleport -> if (!S18) return
-            is S19PacketEntityHeadLook -> if (!S19) return
-            is S19PacketEntityStatus -> if (!S1A) return
-            is S1BPacketEntityAttach -> if (!S1B) return
-            is S1CPacketEntityMetadata -> if (!S1C) return
-            is S1DPacketEntityEffect -> if (!S1D) return
-            is S1EPacketRemoveEntityEffect -> if (!S1E) return
-            is S1FPacketSetExperience -> if (!S1F) return
-            is S20PacketEntityProperties -> if (!S20) return
-            is S21PacketChunkData -> if (!S21) return
-            is S22PacketMultiBlockChange -> if (!S22) return
-            is S23PacketBlockChange -> if (!S23) return
-            is S24PacketBlockAction -> if (!S24) return
-            is S25PacketBlockBreakAnim -> if (!S25) return
-            is S26PacketMapChunkBulk -> if (!S26) return
-            is S27PacketExplosion -> if (!S27) return
-            is S28PacketEffect -> if (!S28) return
-            is S29PacketSoundEffect -> if (!S29) return
-            is S2APacketParticles -> if (!S2A) return
-            is S2BPacketChangeGameState -> if (!S2B) return
-            is S2CPacketSpawnGlobalEntity -> if (!S2C) return
-            is S2DPacketOpenWindow -> if (!S2D) return
-            is S2EPacketCloseWindow -> if (!S2E) return
-            is S2FPacketSetSlot -> if (!S2F) return
-            is S30PacketWindowItems -> if (!S30) return
-            is S31PacketWindowProperty -> if (!S31) return
-            is S32PacketConfirmTransaction -> if (!S32) return
-            is S33PacketUpdateSign -> if (!S33) return
-            is S34PacketMaps -> if (!S34) return
-            is S35PacketUpdateTileEntity -> if (!S35) return
-            is S36PacketSignEditorOpen -> if (!S36) return
-            is S37PacketStatistics -> if (!S37) return
-            is S38PacketPlayerListItem -> if (!S38) return
-            is S39PacketPlayerAbilities -> if (!S39) return
-            is S3APacketTabComplete -> if (!S3A) return
-            is S3BPacketScoreboardObjective -> if (!S3B) return
-            is S3CPacketUpdateScore -> if (!S3C) return
-            is S3DPacketDisplayScoreboard -> if (!S3D) return
-            is S3EPacketTeams -> if (!S3E) return
-            is S3FPacketCustomPayload -> if (!S3F) return
-            is S40PacketDisconnect -> if (!S40) return
-            is S41PacketServerDifficulty -> if (!S41) return
-            is S42PacketCombatEvent -> if (!S42) return
-            is S43PacketCamera -> if (!S43) return
-            is S44PacketWorldBorder -> if (!S44) return
-            is S45PacketTitle -> if (!S45) return
-            is S46PacketSetCompressionLevel -> if (!S46) return
-            is S47PacketPlayerListHeaderFooter -> if (!S47) return
-            is S48PacketResourcePackSend -> if (!S48) return
-            is S49PacketUpdateEntityNBT -> if (!S49) return
-            else -> return
-        }
-        ClientUtils.displayChatMessage("§6${packet.javaClass.simpleName}")
-        if (!fields) return
-        clazz.declaredFields.forEach {
-            it.isAccessible = true
-            when (it.name) {
-                "field_179726_a" -> null
-                "field_149590_d" -> if (packet is C12PacketUpdateSign) ClientUtils.displayChatMessage("  §9${if (fieldMap[it.name] != null) fieldMap[it.name] else it.name}§7: ${packet.lines.asList()}")
-                else -> {
-                    val field = it.get(packet)
-                    val color = when (field) {
-                        is BlockPos, is Vec3 -> ""
-                        null -> "§4"
-                        is String -> "§2"
-                        is Number -> "§e"
-                        true -> "§a"
-                        false -> "§c"
-                        else -> "§d"
-                    }
-                    val displayedField = when (field) {
-                        is String -> "\"${field}\""
-                        is Vec3 -> "§e${field.xCoord}§7, §e${field.yCoord}§7, §e${field.zCoord}"
-                        is BlockPos -> "§e${field.x}§7, §e${field.y}§7, §e${field.z}"
-                        else -> "$field"
-                    }
-                    ClientUtils.displayChatMessage("  §9${if (fieldMap[it.name] != null) fieldMap[it.name] else it.name}§7: $color$displayedField")
+
+        val value = settings.filterIsInstance<BoolValue>().find { it.name == packet.javaClass.simpleName } ?: return
+        if (!value.get())
+            return
+
+        val javaClass = packet.javaClass
+        var lines = arrayOf("§6${javaClass.simpleName}")
+
+        if (fields) {
+            val packetFields = if (javaClass.isMemberClass)
+                javaClass.declaringClass.declaredFields else javaClass.declaredFields
+
+            for (field in packetFields) {
+                field.isAccessible = true
+
+                val name = fieldMap[field.name] ?: field.name
+                @Suppress("NAME_SHADOWING") var value: Any? = null
+
+                when (field.name) {
+                    "field_179726_a" -> continue
+                    "field_149590_d" -> if (packet is C12PacketUpdateSign)
+                        value = packet.lines.asList()
+                    else -> value = field.get(packet)
                 }
+
+                val color = when (value) {
+                    is BlockPos, is Vec3 -> ""
+                    null -> "§4"
+                    is String -> "§2"
+                    is Number -> "§e"
+                    true -> "§a"
+                    false -> "§c"
+                    else -> "§d"
+                }
+                val displayedField = when (value) {
+                    is String -> "\"$value\""
+                    is Vec3 -> "§e${value.xCoord}§7, §e${value.yCoord}§7, §e${value.zCoord}"
+                    is BlockPos -> "§e${value.x}§7, §e${value.y}§7, §e${value.z}"
+                    else -> "$value"
+                }
+
+                lines += "§9$name§7: $color$displayedField"
             }
         }
+
+        ClientUtils.displayChatMessage(lines.joinToString("\n  "))
     }
+
+    override val values: List<Value<*>>
+        get() = settings
 }

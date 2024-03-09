@@ -7,6 +7,7 @@ package net.ccbluex.liquidbounce.utils
 
 import com.google.gson.JsonObject
 import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
+import net.minecraft.client.gui.GuiNewChat
 import net.minecraft.client.settings.GameSettings
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.login.client.C01PacketEncryptionResponse
@@ -41,15 +42,14 @@ object ClientUtils : MinecraftInstance() {
 
                 it.setBoolean(mc.gameSettings, false)
             }
-        } catch (ignored: IllegalAccessException) {
-        }
+        } catch (ignored: IllegalAccessException) {}
     }
 
     fun sendEncryption(
         networkManager: NetworkManager,
         secretKey: SecretKey?,
         publicKey: PublicKey?,
-        encryptionRequest: S01PacketEncryptionRequest
+        encryptionRequest: S01PacketEncryptionRequest,
     ) {
         networkManager.sendPacket(C01PacketEncryptionResponse(secretKey, publicKey, encryptionRequest.verifyToken),
             { networkManager.enableEncryption(secretKey) }
@@ -59,10 +59,13 @@ object ClientUtils : MinecraftInstance() {
     fun displayChatMessage(message: Any) {
         val jsonObject = JsonObject()
         jsonObject.addProperty("text", message.toString())
-        mc.thePlayer.addChatMessage(IChatComponent.Serializer.jsonToComponent(jsonObject.toString()))
+        val chatComponent = IChatComponent.Serializer.jsonToComponent(jsonObject.toString())
+        try {
+            mc.ingameGUI.chatGUI.printChatMessage(chatComponent)
+        } catch (e: Throwable) {
+            LOGGER.error(e)
+        }
     }
 
-    fun resource(directory: String): ResourceLocation {
-        return ResourceLocation("${CLIENT_NAME.lowercase()}/$directory")
-    }
+    fun resource(directory: String) = ResourceLocation("${CLIENT_NAME.lowercase()}/$directory")
 }
