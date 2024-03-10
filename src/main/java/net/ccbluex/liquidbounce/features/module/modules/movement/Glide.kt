@@ -8,8 +8,8 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
-import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.other.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.vulcan.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.GlideMode
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
@@ -20,15 +20,7 @@ import net.ccbluex.liquidbounce.value.ListValue
 import java.awt.Color
 
 object Glide : Module("Glide", MOVEMENT) {
-    private val glideModes = arrayOf(
-        NCP,
-        AAC3312,
-        AAC4X,
-        NeruxVace,
-        Vulcan,
-        OldVulcan,
-        VulcanTest,
-    ).sortedBy { it.modeName }
+    private val glideModes = this.javaClass.`package`.getAllObjects<GlideMode>()
 
     private val modes = glideModes.map { it.modeName }.toTypedArray()
 

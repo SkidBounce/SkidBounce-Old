@@ -81,7 +81,7 @@ object LiquidBounce {
     fun startClient() {
         isStarting = true
 
-        LOGGER.info("Starting $CLIENT_NAME $clientVersionText $clientCommit, by $CLIENT_CREATOR")
+        LOGGER.info("Starting $CLIENT_NAME $clientVersionText ${if (IN_DEV) clientCommit else ""}")
 
         // Load languages
         loadLanguages()

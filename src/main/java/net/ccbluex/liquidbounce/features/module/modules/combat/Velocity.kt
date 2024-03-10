@@ -8,10 +8,8 @@ package net.ccbluex.liquidbounce.features.module.modules.combat
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
-import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.aac.*
-import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.grim.*
-import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.other.*
-import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.vanilla.*
+import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -21,16 +19,7 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.network.play.server.S27PacketExplosion
 
 object Velocity : Module("Velocity", COMBAT) {
-    private val velocityModes = arrayOf(
-        Custom,
-        Vanilla,
-        Phase,
-        Vulcan, Vulcan2,
-        Matrix,
-        Grim, GrimTransaction,
-        AAC, AACPush, AACv4, AACZero,
-        GhostBlock,
-    ).sortedBy { it.modeName }
+    private val velocityModes = this.javaClass.`package`.getAllObjects<VelocityMode>()
 
     private val modeModule get() = velocityModes.find { it.modeName == mode }!!
     override val tag get() = mode

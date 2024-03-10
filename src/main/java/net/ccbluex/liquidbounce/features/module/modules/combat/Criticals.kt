@@ -10,11 +10,8 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
-import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.aac.*
-import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.blocksmc.*
-import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.ncp.*
-import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.other.*
-import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.vanilla.*
+import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -23,37 +20,10 @@ import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.entity.EntityLivingBase
 
 object Criticals : Module("Criticals", COMBAT) {
-    private val criticalsModes = arrayOf(
-        AAC,
-        AACJump,
-        AAC5,
-        AAC504,
-        AAC431OldHyt,
-        BlocksMC,
-        BlocksMC2,
-        BlocksMC3,
-        Hop,
-        Horizon,
-        More,
-        Motion,
-        Mineplex,
-        NCP,
-        NCP2,
-        NCP3,
-        UNCP,
-        NoGround,
-        Packet,
-        Packet2,
-        PacketJump,
-        TPHop,
-        TakaAC,
-        Visual,
-        VerusJump,
-        Vulcan,
-        Verus,
-    ).sortedBy { it.modeName }
+    private val criticalsModes = this.javaClass.`package`.getAllObjects<CriticalsMode>()
     private val modeModule get() = criticalsModes.find { it.modeName == mode }!!
-    val noGround get() = modeModule == NoGround
+    val noGround get() = mode == "NoGround"
+
     private val mode by ListValue("Mode", criticalsModes.map { it.modeName }.toTypedArray(), "Packet")
     private val delay by IntegerValue("Delay", 0, 0..5000) { mode != "NoGround" }
     private val attacks by IntegerValue("Attacks", 0, 0..10) { mode != "NoGround" }

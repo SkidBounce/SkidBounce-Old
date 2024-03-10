@@ -8,6 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
+import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.hypixel.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.ncp.*
@@ -15,6 +16,10 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other.
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.rewinside.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanilla.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.GlideMode
+import net.ccbluex.liquidbounce.utils.ClassUtils
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllClassesIn
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stop
@@ -30,36 +35,7 @@ import net.minecraft.util.AxisAlignedBB
 import java.awt.Color
 
 object Fly : Module("Fly", MOVEMENT) {
-    private val flyModes = arrayOf(
-        Vanilla, SmoothVanilla,
-
-        // NCP
-        OldNCP,
-
-        // AAC
-        AAC1910, AAC305, AAC316, AAC3312, AAC3313,
-
-        // CubeCraft
-        CubeCraft,
-
-        // Hypixel
-        Hypixel, BoostHypixel, FreeHypixel,
-
-        // Rewinside
-        Rewinside, TeleportRewinside,
-
-        // Other server specific flys
-        Mineplex, Minesucht, Redesky,
-
-        // Spartan
-        Spartan, Spartan2, BugSpartan, Spartan532,
-
-        // Other anti-cheats
-        MineSecure, HawkEye, HAC, WatchCat, Verus, Vulcan, Wave,
-
-        // Other
-        Jetpack, KeepAlive, Collide, Jump, Flag, Clip
-    ).sortedBy { it.modeName }
+    private val flyModes = this.javaClass.`package`.getAllObjects<FlyMode>()
 
     private val modes = flyModes.map { it.modeName }.toTypedArray()
 

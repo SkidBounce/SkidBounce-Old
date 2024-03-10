@@ -8,13 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.player
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
-import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac.*
-import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.hypixel.*
-import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.matrix.*
-import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.other.*
-import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vanilla.*
-import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vulcan.*
+import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.MovementUtils.aboveVoid
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlock
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
@@ -26,57 +22,7 @@ import net.minecraft.block.BlockLiquid
 import net.minecraft.util.AxisAlignedBB.fromBounds
 
 object NoFall : Module("NoFall", PLAYER) {
-    private val noFallModes = arrayOf(
-        SpoofGround,
-        NoGround,
-        NoPacket,
-        Packet,
-        Packet2,
-        Packet3,
-        Packet4,
-        Motion,
-        MLG,
-        Cancel,
-        Damage,
-        Phase,
-        Less,
-
-        OldAAC,
-        AAC4,
-        AAC442,
-        AAC44xFlag,
-        LAAC,
-        AAC3311,
-        AAC3315,
-        AAC504,
-        AAC5014,
-
-        Matrix62x,
-        Matrix62xPacket,
-        Matrix663,
-        Matrix6632,
-        MatrixCollide,
-        MatrixNew,
-        OldMatrix,
-
-        Vulcan,
-        Vulcan2,
-        OldVulcan,
-
-        Hypixel,
-        Hypixel2,
-        Hypixel3,
-        HypixelFlag,
-        HypixelBlink,
-        HypSpoof,
-
-        Cardinal,
-        OldSpartan,
-        CubeCraft,
-        Medusa,
-        Medusa2,
-        Verus,
-    ).sortedBy { it.modeName }
+    private val noFallModes = this.javaClass.`package`.getAllObjects<NoFallMode>()
 
     val mode by ListValue("Mode", noFallModes.map { it.modeName }.toTypedArray(), "SpoofGround")
 

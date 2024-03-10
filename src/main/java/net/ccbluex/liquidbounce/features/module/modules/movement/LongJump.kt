@@ -11,10 +11,9 @@ import net.ccbluex.liquidbounce.event.MoveEvent
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.aac.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.mineplex.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.ncp.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.other.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.LongJumpMode
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllClassesIn
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.extensions.jmp
@@ -23,22 +22,7 @@ import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 
 object LongJump : Module("LongJump", MOVEMENT) {
-    private val longJumpModes = arrayOf(
-        // NCP
-        NCP,
-
-        // AAC
-        AACv1, AACv2, AACv3,
-
-        // Mineplex
-        Mineplex, Mineplex2, Mineplex3,
-
-        // Redesky
-        Redesky, Redesky2, Redesky3,
-
-        // Other
-        Hycraft, Buzz,
-    ).sortedBy { it.modeName }
+    private val longJumpModes = this.javaClass.`package`.getAllObjects<LongJumpMode>()
 
     private val modes = longJumpModes.map { it.modeName }.toTypedArray()
 

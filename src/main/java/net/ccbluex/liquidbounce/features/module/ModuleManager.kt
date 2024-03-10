@@ -11,10 +11,11 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.KeyEvent
 import net.ccbluex.liquidbounce.event.Listenable
 import net.ccbluex.liquidbounce.features.command.CommandManager.registerCommand
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllClassesIn
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.ClassUtils.isObject
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager
-import org.apache.logging.log4j.core.config.plugins.ResolverUtil
 import java.util.*
 
 object ModuleManager : Listenable {
@@ -30,26 +31,18 @@ object ModuleManager : Listenable {
      * Register all modules
      */
     fun registerModules() {
-        LOGGER.info("[ModuleManager] Loading modules...")
-
-        val resolver = ResolverUtil()
-        resolver.classLoader = Module::class.java.classLoader
-        val test = object : ResolverUtil.ClassTest() {
-            override fun matches(type: Class<*>) = type.superclass == Module::class.java
+        val classes = getAllClassesIn<Module>(this.javaClass.`package`.name).run {
+            // Register modules which need to be instanced (Java classes)
+            this.filter { !it.isObject }.forEach { registerModule(it) }
+            this
         }
-        resolver.findInPackage(test, "${this.javaClass.`package`.name}.modules")
 
-        @Suppress("UNCHECKED_CAST")
-        val moduleClasses = resolver.classes as Set<Class<Module>>
-
-        for (module in moduleClasses) {
-            if (module.isObject) registerModule(module.fields.find { it.name == "INSTANCE" }!!.get(module) as Module)
-            else registerModule(module)
-        }
+        // Register modules which have already been instanced (Kotlin objects)
+        registerModules(*classes.getAllObjects())
 
         InventoryManager.startCoroutine()
 
-        LOGGER.info("[ModuleManager] Loaded ${modules.size} modules.")
+        LOGGER.info("Loaded ${modules.size} modules")
     }
 
     /**

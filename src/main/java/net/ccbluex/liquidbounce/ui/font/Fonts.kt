@@ -40,9 +40,6 @@ object Fonts : MinecraftInstance() {
     private val CUSTOM_FONT_RENDERERS = hashMapOf<FontInfo, FontRenderer>()
 
     fun loadFonts() {
-        val l = System.currentTimeMillis()
-        LOGGER.info("Loading Fonts.")
-
         downloadFonts()
         font35 = GameFontRenderer(getFont("Roboto-Medium.ttf", 35))
         font40 = GameFontRenderer(getFont("Roboto-Medium.ttf", 40))
@@ -70,7 +67,7 @@ object Fonts : MinecraftInstance() {
             e.printStackTrace()
         }
 
-        LOGGER.info("Loaded Fonts. (" + (System.currentTimeMillis() - l) + "ms)")
+        LOGGER.info("Loaded Fonts")
     }
 
     private fun downloadFonts() {

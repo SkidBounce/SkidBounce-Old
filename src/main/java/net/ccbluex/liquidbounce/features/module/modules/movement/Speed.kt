@@ -8,12 +8,9 @@ package net.ccbluex.liquidbounce.features.module.modules.movement
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.ncp.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spartan.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.spectre.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.verus.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllClassesIn
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.inLiquid
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
@@ -22,85 +19,11 @@ import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 
 object Speed : Module("Speed", MOVEMENT) {
-    private val speedModes = arrayOf(
-        // NCP
-        NCPBHop,
-        NCPFHop,
-        SNCPBHop,
-        NCPHop,
-        NCPYPort,
-        UNCPHop,
-        UNCPYPort,
-        UNCPHop2,
-
-        // YPort
-        YPort,
-        YPort2,
-
-        // AAC
-        AACBHop,
-        AAC2BHop,
-        AAC3BHop,
-        AACv4BHop,
-        AAC4BHop,
-        AAC4Hop,
-        AAC4SlowHop,
-        AAC5BHop,
-        AAC6BHop,
-        AAC7BHop,
-        AACHop3310,
-        AACHop3313,
-        AACHop350,
-        AACHop438,
-        OldAACBHop,
-        AACLowHop,
-        AACLowHop2,
-        AACLowHop3,
-        AACGround,
-        AACGround2,
-        AACYPort,
-        AACYPort2,
-        AACPort,
-
-        // Spartan
-        SpartanYPort,
-
-        // Spectre
-        SpectreLowHop,
-        SpectreBHop,
-        SpectreOnGround,
-
-        // Verus
-        VerusHop,
-        VerusLowHop,
-        VerusLowHop2,
-        NewVerusLowHop,
-
-        // Server specific
-        HypixelHop,
-        TeleportCubeCraft,
-        HiveHop,
-        Mineplex,
-        MineplexGround,
-
-        // Other
-        Cardinal,
-        Matrix,
-        Boost,
-        Frame,
-        MiJump,
-        OnGround,
-        SlowHop,
-        Legit,
-        CustomSpeed,
-        MineBlazeHop,
-        MineBlazeTimer,
-        WaveLowHop,
-        AEMine,
-    ).sortedBy { it.modeName }
+    private val speedModes = this.javaClass.`package`.getAllObjects<SpeedMode>()
 
     private val moduleModes = speedModes.map { it.modeName }.toTypedArray()
 
+    private val alwaysSprint by BoolValue("AlwaysSprint", false)
     private val normalMode: String by object : ListValue("NormalMode", moduleModes, "NCPBHop") {
         override fun onChange(oldValue: String, newValue: String): String {
             if (state && mode == normalMode)
@@ -181,7 +104,7 @@ object Speed : Module("Speed", MOVEMENT) {
         if (thePlayer.isSneaking)
             return
 
-        if (isMoving && !sprintManually)
+        if (isMoving && !alwaysSprint)
             thePlayer.isSprinting = true
 
         modeModule.onUpdate()
@@ -194,7 +117,7 @@ object Speed : Module("Speed", MOVEMENT) {
         if (thePlayer.isSneaking || event.eventState != EventState.PRE)
             return
 
-        if (isMoving && !sprintManually)
+        if (isMoving && !alwaysSprint)
             thePlayer.isSprinting = true
 
         modeModule.onMotion(event)
@@ -250,10 +173,6 @@ object Speed : Module("Speed", MOVEMENT) {
 
     private val modeModule
         get() = speedModes.find { it.modeName == mode }!!
-
-    private val sprintManually
-        // Maybe there are more but for now there's the Legit mode.
-        get() = modeModule in arrayOf(Legit)
 
     private val modes get() = arrayOf(normalMode, jumpingMode)
     private infix fun Array<String>.contains(other: Array<String>): Boolean = this.any { it in other }

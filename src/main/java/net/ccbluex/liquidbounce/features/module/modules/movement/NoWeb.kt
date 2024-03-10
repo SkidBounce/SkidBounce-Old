@@ -9,45 +9,20 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.aac.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllClassesIn
+import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 
 object NoWeb : Module("NoWeb", MOVEMENT) {
-    private val noWebModes = arrayOf(
-        Vanilla,
-        Custom,
-
-        // AAC
-        AAC,
-        AACv4,
-        AAC4,
-        AAC5,
-        OldAAC,
-        LAAC,
-
-        // Other
-        Cardinal,
-        FastFall,
-        Grim,
-        Horizon,
-        IntaveTest,
-        Matrix,
-        MineBlaze,
-        Negativity,
-        Rewinside,
-        Spartan,
-        Test
-    ).sortedBy { it.modeName }
+    private val noWebModes = this.javaClass.`package`.getAllObjects<NoWebMode>()
 
     private val modes = noWebModes.map { it.modeName }.toTypedArray()
 
-    val mode by ListValue(
-        "Mode", modes, "Vanilla"
-    )
+    val mode by ListValue("Mode", modes, "Vanilla")
 
     val horizonSpeed by FloatValue("HorizonSpeed", 0.1F, 0.01F..0.8F) { mode == "Horizon" }
     val customFloat by BoolValue("CustomFloat", true) { mode == "Custom" }

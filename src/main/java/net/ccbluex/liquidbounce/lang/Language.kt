@@ -49,12 +49,11 @@ object LanguageManager : MinecraftInstance() {
                 val languageFile = javaClass.getResourceAsStream("/assets/minecraft/${CLIENT_NAME.lowercase()}/lang/$language.json")
                 val languageJson = PRETTY_GSON.fromJson(languageFile.bufferedReader(), Language::class.java)
                 languageMap[language] = languageJson
-            }.onSuccess {
-                LOGGER.info("Loaded language $language")
             }.onFailure {
                 LOGGER.error("Failed to load language $language", it)
             }
         }
+        LOGGER.info("Loaded ${knownLanguages.size} languages")
     }
 
     /**
