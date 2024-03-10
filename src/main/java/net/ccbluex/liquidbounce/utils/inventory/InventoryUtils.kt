@@ -197,12 +197,7 @@ object InventoryUtils : MinecraftInstance(), Listenable {
             }
 
             is C09PacketHeldItemChange -> {
-                // Support for Singleplayer
-                // (client packets get sent and received, duplicates would get cancelled, making slot changing impossible)
-                if (event.eventType == EventState.RECEIVE) return
-
-                if (packet.slotId == _serverSlot) event.cancelEvent()
-                else _serverSlot = packet.slotId
+                _serverSlot = packet.slotId
             }
 
             is S09PacketHeldItemChange -> {
@@ -230,6 +225,7 @@ object InventoryUtils : MinecraftInstance(), Listenable {
         _serverOpenInventory = false
         _serverSlot = 0
         serverOpenContainer = false
+        _serverUsing = false
     }
 
     override fun handleEvents() = true

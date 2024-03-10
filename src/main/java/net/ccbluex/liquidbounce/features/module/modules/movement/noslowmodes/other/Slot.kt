@@ -19,7 +19,7 @@ import net.minecraft.network.play.client.C09PacketHeldItemChange
  */
 object Slot : NoSlowMode("Slot") {
     override fun onMotion(event: MotionEvent) {
-        if (packetTiming(event.eventState)) // has to be NoEvent for some reason
-            sendPacket(C09PacketHeldItemChange(serverSlot), false)
+        if (packetTiming(event.eventState))
+            sendPacket(C09PacketHeldItemChange(serverSlot))
     }
 }
