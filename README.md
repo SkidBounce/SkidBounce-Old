@@ -18,29 +18,29 @@ As Of Latest Commit:\
 |      Thing       |   Completion    |
 |:----------------:|:---------------:|
 |      Total       | :orange_circle: |
-|      NoSlow      | :yellow_circle: |
 |      NoWeb       | :green_circle:  |
-|      Speed       | :orange_circle: |
-|     LongJump     |  :red_circle:   |
-|       Fly        | :orange_circle: |
 |      NoFall      | :green_circle:  |
+|      Spider      | :green_circle:  |
+|      NoSlow      | :yellow_circle: |
+|      Speed       | :orange_circle: |
+|       Fly        | :orange_circle: |
+|    Criticals     | :orange_circle: |
+|     Disabler     | :orange_circle: |
+|     Velocity     | :orange_circle: |
 |       Hud        |  :red_circle:   |
 |    Animations    |  :red_circle:   |
+|     LongJump     |  :red_circle:   |
 |      Jesus       |  :red_circle:   |
-|     Disabler     | :orange_circle: |
 |      Phase       |  :red_circle:   |
-|     Velocity     | :orange_circle: |
 |     ClickGUI     |  :red_circle:   |
 |    AutoBlock     |  :red_circle:   |
 |     Modules      |  :red_circle:   |
 |     Scaffold     |  :red_circle:   |
 |      Tower       |  :red_circle:   |
 |       Step       |  :red_circle:   |
-|    Criticals     |  :red_circle:   |
 |     AntiVoid     |  :red_circle:   |
 |    FastClimb     |  :red_circle:   |
 | InventoryManager |  :red_circle:   |
-|      Spider      | :green_circle:  |
 |     FastUse      |  :red_circle:   |
 | Everything Else  |  :red_circle:   |
 
