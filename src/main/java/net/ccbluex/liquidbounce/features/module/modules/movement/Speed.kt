@@ -24,32 +24,8 @@ object Speed : Module("Speed", MOVEMENT) {
     private val moduleModes = speedModes.map { it.modeName }.toTypedArray()
 
     private val alwaysSprint by BoolValue("AlwaysSprint", false)
-    private val normalMode: String by object : ListValue("NormalMode", moduleModes, "NCPBHop") {
-        override fun onChange(oldValue: String, newValue: String): String {
-            if (state && mode == normalMode)
-                onDisable()
-
-            return super.onChange(oldValue, newValue)
-        }
-
-        override fun onChanged(oldValue: String, newValue: String) {
-            if (state && mode == normalMode)
-                onEnable()
-        }
-    }
-    private val jumpingMode: String by object : ListValue("JumpingMode", arrayOf("None") + moduleModes, "None") {
-        override fun onChange(oldValue: String, newValue: String): String {
-            if (state && mode == jumpingMode)
-                onDisable()
-
-            return super.onChange(oldValue, newValue)
-        }
-
-        override fun onChanged(oldValue: String, newValue: String) {
-            if (state && mode == jumpingMode)
-                onEnable()
-        }
-    }
+    private val normalMode by ListValue("NormalMode", moduleModes, "NCPBHop")
+    private val jumpingMode by ListValue("JumpingMode", arrayOf("None") + moduleModes, "None")
 
     val customSpeed by FloatValue("CustomSpeed", 1.6f, 0.2f..2f) { modes contains "Custom" }
     val customY by FloatValue("CustomY", 0f, 0f..4f) { modes contains "Custom" }
@@ -59,21 +35,12 @@ object Speed : Module("Speed", MOVEMENT) {
     val resetY by BoolValue("CustomResetY", false) { modes contains "Custom" }
 
     val aacPortLength by FloatValue("AAC-PortLength", 1f, 1f..20f) { modes contains "AACPort" }
-    val aacGroundTimer by FloatValue("AACGround-Timer", 3f, 1.1f..10f) {
-        modes contains arrayOf(
-            "AACGround",
-            "AACGround2"
-        )
-    }
+    val aacGroundTimer by FloatValue("AACGround-Timer", 3f, 1.1f..10f) { modes contains arrayOf("AACGround", "AACGround2") }
     val cubecraftPortLength by FloatValue("CubeCraft-PortLength", 1f, 0.1f..2f) { modes contains "TeleportCubeCraft" }
     val mineplexGroundSpeed by FloatValue("MineplexGround-Speed", 0.5f, 0.1f..1f) { modes contains "MineplexGround" }
     val cardinalStrafeHeight by FloatValue("Cardinal-StrafeHeight", 0.3f, 0.1f..1f) { modes contains "Cardinal" }
     val cardinalStrafeStrength by FloatValue("Cardinal-StrafeStrength", 0.1f, 0f..0.5f) { modes contains "Cardinal" }
-    val cardinalAboveWaterMultiplier by FloatValue(
-        "Cardinal-AboveWaterMultiplier",
-        0.87f,
-        0.4f..1f
-    ) { modes contains "Cardinal" }
+    val cardinalAboveWaterMultiplier by FloatValue("Cardinal-AboveWaterMultiplier", 0.87f, 0.4f..1f) { modes contains "Cardinal" }
     val cardinalSlimeMultiplier by FloatValue("Cardinal-SlimeMultiplier", 0.7f, 0.4f..1f) { modes contains "Cardinal" }
     val cardinalJumpWhenIceSpeed by BoolValue("Cardinal-JumpWhenIceSpeed", true) { modes contains "Cardinal" }
     val uncpyportDamageBoost by BoolValue("UNCPYPort-DamageBoost", true) { modes contains "UNCPYPort" }
@@ -85,14 +52,14 @@ object Speed : Module("Speed", MOVEMENT) {
     fun onUpdate(event: UpdateEvent) {
         val thePlayer = mc.thePlayer ?: return
 
-        if (jumpingMode != "None" && !mc.thePlayer.inLiquid) {
+        if (jumpingMode != "None") {
             val last = modeModule
-            mode = if (mc.gameSettings.keyBindJump.pressed) jumpingMode else normalMode
+            mode = if (mc.gameSettings.keyBindJump.pressed && !mc.thePlayer.inLiquid) jumpingMode else normalMode
             if (mode != last.modeName) {
                 last.onDisable()
                 modeModule.onEnable()
             }
-        }
+        } else mode = normalMode
 
         if (!modeModule.allowsJumping) {
             if (!mc.thePlayer.inLiquid)
