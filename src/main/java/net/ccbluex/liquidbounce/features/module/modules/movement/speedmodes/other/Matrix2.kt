@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other
 
+import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.matrix2SprintBypass
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
@@ -27,11 +28,11 @@ object Matrix2 : SpeedMode("Matrix2") {
                 mc.timer.timerSpeed = 0.525f
                 strafe()
 
-                sendPacket(C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING))
+                if (matrix2SprintBypass) sendPacket(C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING))
             } else {
                 mc.timer.timerSpeed = 1.075f
 
-                sendPacket(C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING))
+                if (matrix2SprintBypass) sendPacket(C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING))
             }
 
             mc.thePlayer.speedInAir = if (mc.thePlayer.fallDistance <= 0.8 && mc.thePlayer.moveStrafing == 0f)
