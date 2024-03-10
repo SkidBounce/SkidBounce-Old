@@ -34,7 +34,7 @@ object Mineplex : FlyMode("Mineplex") {
         if (mc.thePlayer.heldItem != null) {
             mc.timer.timerSpeed = 1f
             Fly.state = false
-            displayClientMessage("§8[§cFly§8] §aSelect an empty slot to fly.")
+            displayClientMessage("§aSelect an empty slot to fly.")
             return
         }
 

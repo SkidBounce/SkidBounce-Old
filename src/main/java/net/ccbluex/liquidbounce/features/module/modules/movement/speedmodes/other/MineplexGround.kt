@@ -44,7 +44,7 @@ object MineplexGround : SpeedMode("MineplexGround", true) {
             return
         }
         if (!spoofSlot && mc.thePlayer.heldItem != null) {
-            displayClientMessage("§8[§cSpeed§8] §cYou need one empty slot.")
+            displayClientMessage("§cYou need one empty slot.")
             return
         }
 
