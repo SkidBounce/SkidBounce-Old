@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.LiquidBounce.moduleManager
 import net.ccbluex.liquidbounce.api.ClientApi
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.file.FileManager
-import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.misc.HttpUtils
 import net.ccbluex.liquidbounce.utils.misc.StringUtils
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.translateAlternateColorCodes
@@ -34,12 +34,12 @@ object SettingsUtils {
             val args = s.split(" ").toTypedArray()
 
             if (args.size <= 1) {
-                displayChatMessage("§cSyntax error at line '$index' in setting script.\n§8§lLine: §7$s")
+                displayClientMessage("§cSyntax error at line '$index' in setting script.\n§8§lLine: §7$s")
                 return@forEachIndexed
             }
 
             when (args[0]) {
-                "chat" -> displayChatMessage(
+                "chat" -> displayClientMessage(
                     "§e${
                         translateAlternateColorCodes(
                             StringUtils.toCompleteString(
@@ -50,7 +50,7 @@ object SettingsUtils {
                     }"
                 )
 
-                "unchat" -> displayChatMessage(
+                "unchat" -> displayClientMessage(
                     translateAlternateColorCodes(
                         StringUtils.toCompleteString(
                             args,
@@ -76,15 +76,15 @@ object SettingsUtils {
 
                         applyScript(settings)
                     }.onSuccess {
-                        displayChatMessage("§7[§3§lAutoSettings§7] §7Loaded settings §a§l$url§7.")
+                        displayClientMessage("§7Loaded settings §a§l$url§7.")
                     }.onFailure {
-                        displayChatMessage("§7Failed to load settings §c§l$url§7.")
+                        displayClientMessage("§7Failed to load settings §c§l$url§7.")
                     }
                 }
 
                 else -> {
                     if (args.size < 3) {
-                        displayChatMessage("§cSyntax error at line '$index' in setting script.\n§8§lLine: §7$s")
+                        displayClientMessage("§cSyntax error at line '$index' in setting script.\n§8§lLine: §7$s")
                         return@forEachIndexed
                     }
 
@@ -94,7 +94,7 @@ object SettingsUtils {
                     val module = moduleManager[moduleName]
 
                     if (module == null) {
-                        displayChatMessage("§cModule §a$moduleName§c does not exist!")
+                        displayClientMessage("§cModule §a$moduleName§c does not exist!")
                         return@forEachIndexed
                     }
 
@@ -121,7 +121,7 @@ object SettingsUtils {
         val moduleValue = module[valueName]
 
         if (moduleValue == null) {
-            displayChatMessage("§cValue §a§l$valueName§c wasn't found in module §a§l${module.getName()}§c.")
+            displayClientMessage("§cValue §a§l$valueName§c wasn't found in module §a§l${module.getName()}§c.")
             return
         }
 
@@ -134,7 +134,7 @@ object SettingsUtils {
                 is ListValue -> moduleValue.changeValue(value)
             }
         } catch (e: Exception) {
-            displayChatMessage("§a§l${e.javaClass.name}§7(${e.message}) §cAn Exception occurred while setting §a§l$value§c to §a§l${moduleValue.name}§c in §a§l${module.getName()}§c.")
+            displayClientMessage("§a§l${e.javaClass.name}§7(${e.message}) §cAn Exception occurred while setting §a§l$value§c to §a§l${moduleValue.name}§c in §a§l${module.getName()}§c.")
         }
     }
 

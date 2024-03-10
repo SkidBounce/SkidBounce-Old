@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.state
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vulcanNoClip
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vulcanTimer
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
-import net.ccbluex.liquidbounce.utils.ClientUtils
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.MovementUtils
 import net.ccbluex.liquidbounce.utils.PacketUtils
 import net.minecraft.client.settings.GameSettings
@@ -45,7 +45,7 @@ object Vulcan : FlyMode("Vulcan") {
             mc.thePlayer.posZ
         )
         stage = FlyStage.WAITING
-        ClientUtils.displayChatMessage("§3Press Sneak on ground to land.")
+        displayClientMessage("§3Press Sneak on ground to land.")
     }
 
     override fun onDisable() {

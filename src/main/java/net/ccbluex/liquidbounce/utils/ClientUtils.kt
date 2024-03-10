@@ -6,6 +6,7 @@
 package net.ccbluex.liquidbounce.utils
 
 import com.google.gson.JsonObject
+import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_NAME
 import net.minecraft.client.gui.GuiNewChat
 import net.minecraft.client.settings.GameSettings
@@ -66,6 +67,7 @@ object ClientUtils : MinecraftInstance() {
             LOGGER.error(e)
         }
     }
+    fun displayClientMessage(message: Any) = displayChatMessage("§8[§9$CLIENT_NAME§8] §r$message")
 
     fun resource(directory: String) = ResourceLocation("${CLIENT_NAME.lowercase()}/$directory")
 }

@@ -5,6 +5,8 @@
  */
 package net.ccbluex.liquidbounce.utils
 
+import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
+
 object ClassUtils {
 
     private val cachedClasses = mutableMapOf<String, Boolean>()
@@ -28,4 +30,6 @@ object ClassUtils {
 
     fun hasForge() = hasClass("net.minecraftforge.common.MinecraftForge")
 
+    val Class<*>.isObject: Boolean
+        get() = fields.any { it.name == "INSTANCE" }
 }

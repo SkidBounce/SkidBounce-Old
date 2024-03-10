@@ -11,18 +11,10 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.KeyEvent
 import net.ccbluex.liquidbounce.event.Listenable
 import net.ccbluex.liquidbounce.features.command.CommandManager.registerCommand
-import net.ccbluex.liquidbounce.features.module.modules.client.*
-import net.ccbluex.liquidbounce.features.module.modules.combat.*
-import net.ccbluex.liquidbounce.features.module.modules.exploit.*
-import net.ccbluex.liquidbounce.features.module.modules.misc.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.*
-import net.ccbluex.liquidbounce.features.module.modules.player.*
-import net.ccbluex.liquidbounce.features.module.modules.render.*
-import net.ccbluex.liquidbounce.features.module.modules.targets.*
-import net.ccbluex.liquidbounce.features.module.modules.world.*
-import net.ccbluex.liquidbounce.features.module.modules.world.Timer
+import net.ccbluex.liquidbounce.utils.ClassUtils.isObject
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager
+import org.apache.logging.log4j.core.config.plugins.ResolverUtil
 import java.util.*
 
 object ModuleManager : Listenable {
@@ -40,184 +32,20 @@ object ModuleManager : Listenable {
     fun registerModules() {
         LOGGER.info("[ModuleManager] Loading modules...")
 
-        // Register modules which need to be instanced (Java classes)
-        registerModules(
-            Ignite::class.java,
-            ItemTeleport::class.java,
-            Phase::class.java,
-            Teleport::class.java,
-            TeleportHit::class.java
-        )
+        val resolver = ResolverUtil()
+        resolver.classLoader = Module::class.java.classLoader
+        val test = object : ResolverUtil.ClassTest() {
+            override fun matches(type: Class<*>) = type.superclass == Module::class.java
+        }
+        resolver.findInPackage(test, "${this.javaClass.`package`.name}.modules")
 
-        // Register modules which have already been instanced (Kotlin objects)
-        registerModules(
-            AbortBreaking,
-            AimBot,
-            AirJump,
-            AirLadder,
-            Ambience,
-            Animals,
-            Animations,
-            AntiAFK,
-            AntiBlind,
-            AntiBot,
-            AntiBounce,
-            AntiFireball,
-            AtAllProvider,
-            AttackEffects,
-            AutoAccount,
-            AutoArmor,
-            AutoBow,
-            AutoBreak,
-            AutoClicker,
-            AutoFish,
-            AutoProjectile,
-            AutoLeave,
-            AutoPot,
-            AutoRespawn,
-            AutoRod,
-            AutoSoup,
-            AutoTool,
-            AutoWalk,
-            AutoWeapon,
-            AvoidHazards,
-            Backtrack,
-            BedGodMode,
-            BedProtectionESP,
-            Blink,
-            BlockESP,
-            BlockOverlay,
-            BowAimBot,
-            Breadcrumbs,
-            BufferSpeed,
-            BugUp,
-            CameraClip,
-            Chams,
-            ChestAura,
-            ChestStealer,
-            CivBreak,
-            ClickGUI,
-            Clip,
-            ComponentOnHover,
-            ConsoleSpammer,
-            Criticals,
-            Damage,
-            Dead,
-            Derp,
-            ESP,
-            Eagle,
-            FakeLag,
-            FastBow,
-            FastBreak,
-            FastClimb,
-            FastPlace,
-            FastStairs,
-            FastUse,
-            Fly,
-            ForceUnicodeChat,
-            FreeCam,
-            Freeze,
-            Fucker,
-            Fullbright,
-            GameDetector,
-            Ghost,
-            GhostHand,
-            Glide,
-            GodMode,
-            HUD,
-            HighJump,
-            HitBox,
-            IceSpeed,
-            InventoryCleaner,
-            InventoryMove,
-            Invisible,
-            ItemESP,
-            KeepAlive,
-            KeepContainer,
-            KeepSprint,
-            KeyPearl,
-            Kick,
-            KillAura,
-            LadderJump,
-            LiquidChat,
-            Jesus,
-            Liquids,
-            LongJump,
-            MidClick,
-            Mobs,
-            MoreCarry,
-            MultiActions,
-            NameProtect,
-            NameTags,
-            NoBob,
-            NoBooks,
-            NoClip,
-            NoFOV,
-            NoFall,
-            NoFluid,
-            Friends,
-            NoHurtCam,
-            NoJumpDelay,
-            NoPitchLimit,
-            NoRotate,
-            NoScoreboard,
-            NoSlotSet,
-            NoSlow,
-            NoSlowBreak,
-            NoSwing,
-            NoWeb,
-            Nuker,
-            PacketDebugger,
-            Parkour,
-            PerfectHorseJump,
-            PingSpoof,
-            Players,
-            Plugins,
-            PortalMenu,
-            PotionSaver,
-            PotionSpoof,
-            Projectiles,
-            ProphuntESP,
-            Reach,
-            Refill,
-            Regen,
-            ResourcePackSpoof,
-            ReverseStep,
-            Rotations,
-            SafeWalk,
-            Scaffold,
-            ServerCrasher,
-            SkinDerp,
-            SlimeJump,
-            Sneak,
-            Spammer,
-            Speed,
-            Sprint,
-            Step,
-            StorageESP,
-            Strafe,
-            SuperKnockback,
-            TNTBlock,
-            TNTESP,
-            Teams,
-            TimerRange,
-            Timer,
-            Tower,
-            Tracers,
-            TriggerBot,
-            TrueSight,
-            VehicleOneHit,
-            Velocity,
-            Spider,
-            WaterSpeed,
-            XRay,
-            Zoot,
-            Disabler,
-            ItemPhysics,
-            NoClickDelay,
-            AutoPlay,
-            Gapple,
-        )
+        @Suppress("UNCHECKED_CAST")
+        val moduleClasses = resolver.classes as Set<Class<Module>>
+
+        for (module in moduleClasses) {
+            if (module.isObject) registerModule(module.fields.find { it.name == "INSTANCE" }!!.get(module) as Module)
+            else registerModule(module)
+        }
 
         InventoryManager.startCoroutine()
 

@@ -9,7 +9,7 @@ import kotlinx.coroutines.*
 import net.ccbluex.liquidbounce.features.module.modules.combat.AutoArmor
 import net.ccbluex.liquidbounce.features.module.modules.player.InventoryCleaner
 import net.ccbluex.liquidbounce.features.module.modules.world.ChestStealer
-import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.serverOnGround
@@ -145,7 +145,7 @@ object InventoryManager: MinecraftInstance() {
 					manageInventory()
 				}.onFailure {
 					// TODO: Remove when stable, probably in b86
-					displayChatMessage("§cReworked coroutine inventory management had ran into an issue! Please report this: ${it.message ?: it.cause}")
+					displayClientMessage("§cReworked coroutine inventory management had ran into an issue! Please report this: ${it.message ?: it.cause}")
 
 					it.printStackTrace()
 				}

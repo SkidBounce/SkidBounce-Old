@@ -12,7 +12,7 @@ import net.ccbluex.liquidbounce.event.StepEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.mineplexSpeed
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
-import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
@@ -34,7 +34,7 @@ object Mineplex : FlyMode("Mineplex") {
         if (mc.thePlayer.heldItem != null) {
             mc.timer.timerSpeed = 1f
             Fly.state = false
-            displayChatMessage("§8[§c§lMineplex-§a§lFly§8] §aSelect an empty slot to fly.")
+            displayClientMessage("§8[§cFly§8] §aSelect an empty slot to fly.")
             return
         }
 

@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.Render2DEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.file.FileManager
-import net.ccbluex.liquidbounce.utils.ClientUtils
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.render.ColorUtils
 import net.minecraft.entity.player.EntityPlayer
 import org.lwjgl.input.Mouse
@@ -32,15 +32,15 @@ object MidClick : Module("MidClick", CLIENT, subjective = true, gameDetecting = 
                 if (!FileManager.friendsConfig.isFriend(playerName)) {
                     FileManager.friendsConfig.addFriend(playerName)
                     FileManager.saveConfig(FileManager.friendsConfig)
-                    ClientUtils.displayChatMessage("§a§l$playerName§c was added to your friends.")
+                    displayClientMessage("§a$playerName§c was added to your friends.")
                 } else {
                     FileManager.friendsConfig.removeFriend(playerName)
                     FileManager.saveConfig(FileManager.friendsConfig)
-                    ClientUtils.displayChatMessage("§a§l$playerName§c was removed from your friends.")
+                    displayClientMessage("§a$playerName§c was removed from your friends.")
                 }
 
             } else
-                ClientUtils.displayChatMessage("§c§lError: §aYou need to select a player.")
+                displayClientMessage("§cError: §aYou need to select a player.")
         }
         wasDown = Mouse.isButtonDown(2)
     }

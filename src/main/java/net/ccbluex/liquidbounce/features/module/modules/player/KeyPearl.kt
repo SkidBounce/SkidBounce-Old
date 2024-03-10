@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.TickEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
-import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.value.BoolValue
@@ -44,7 +44,7 @@ object KeyPearl : Module("KeyPearl", PLAYER, gameDetecting = false) {
 
         if (pearlInHotbar == null) {
             if (noEnderPearlsMessage) {
-                displayChatMessage("§6§lWarning: §aThere are no ender pearls in your hotbar.")
+                displayClientMessage("§6§lWarning: §aThere are no ender pearls in your hotbar.")
             }
             return
         }

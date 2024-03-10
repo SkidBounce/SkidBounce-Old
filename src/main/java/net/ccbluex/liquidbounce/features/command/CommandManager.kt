@@ -11,7 +11,7 @@ import net.ccbluex.liquidbounce.features.command.shortcuts.ShortcutParser
 import net.ccbluex.liquidbounce.features.command.special.*
 import net.ccbluex.liquidbounce.file.FileManager.saveConfig
 import net.ccbluex.liquidbounce.file.FileManager.shortcutsConfig
-import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 
 object CommandManager {
     val commands = mutableListOf<Command>()
@@ -80,7 +80,7 @@ object CommandManager {
             }
         }
 
-        displayChatMessage("§cCommand not found. Type ${prefix}help to view all commands.")
+        displayClientMessage("§cCommand not found. Type ${prefix}help to view all commands.")
     }
 
     /**

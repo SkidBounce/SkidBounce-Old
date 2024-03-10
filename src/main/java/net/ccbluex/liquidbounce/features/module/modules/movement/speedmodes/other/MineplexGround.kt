@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.oth
 import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.mineplexGroundSpeed
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
-import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.onPlayerRightClick
@@ -44,7 +44,7 @@ object MineplexGround : SpeedMode("MineplexGround", true) {
             return
         }
         if (!spoofSlot && mc.thePlayer.heldItem != null) {
-            displayChatMessage("§8[§c§lMineplex§aSpeed§8] §cYou need one empty slot.")
+            displayClientMessage("§8[§cSpeed§8] §cYou need one empty slot.")
             return
         }
 
