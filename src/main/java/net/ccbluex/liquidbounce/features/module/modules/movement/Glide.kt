@@ -20,7 +20,7 @@ import net.ccbluex.liquidbounce.value.ListValue
 import java.awt.Color
 
 object Glide : Module("Glide", MOVEMENT) {
-    private val glideModes = this.javaClass.`package`.getAllObjects<GlideMode>()
+    private val glideModes = this.javaClass.`package`.getAllObjects<GlideMode>().sortedBy { it.modeName }
 
     private val modes = glideModes.map { it.modeName }.toTypedArray()
 

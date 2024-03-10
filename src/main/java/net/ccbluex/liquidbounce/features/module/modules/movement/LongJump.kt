@@ -22,7 +22,7 @@ import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 
 object LongJump : Module("LongJump", MOVEMENT) {
-    private val longJumpModes = this.javaClass.`package`.getAllObjects<LongJumpMode>()
+    private val longJumpModes = this.javaClass.`package`.getAllObjects<LongJumpMode>().sortedBy { it.modeName }
 
     private val modes = longJumpModes.map { it.modeName }.toTypedArray()
 
