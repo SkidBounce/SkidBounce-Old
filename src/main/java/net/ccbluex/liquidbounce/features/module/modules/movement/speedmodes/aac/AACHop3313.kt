@@ -23,9 +23,7 @@ object AACHop3313 : SpeedMode("AACHop3.3.13") {
     override fun onUpdate() {
         val thePlayer = mc.thePlayer ?: return
 
-        if (!isMoving || thePlayer.isInWater || thePlayer.isInLava ||
-            thePlayer.isOnLadder || thePlayer.isRiding || thePlayer.hurtTime > 0
-        ) return
+        if (!isMoving || thePlayer.hurtTime > 0) return
         if (thePlayer.onGround && thePlayer.isCollidedVertically) {
             // MotionXYZ
             val yawRad = thePlayer.rotationYaw.toRadians()

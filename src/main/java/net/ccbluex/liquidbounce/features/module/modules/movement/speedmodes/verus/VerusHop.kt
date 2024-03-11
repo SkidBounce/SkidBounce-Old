@@ -18,9 +18,7 @@ object VerusHop : SpeedMode("VerusHop") {
     private var speed = 0.0f
 
     override fun onUpdate() {
-        if (mc.thePlayer == null) {
-            return
-        }
+        mc.thePlayer ?: return
         if (isMoving) {
             if (mc.thePlayer.onGround) {
                 speed = if (mc.thePlayer.isPotionActive(Potion.moveSpeed)
@@ -29,9 +27,7 @@ object VerusHop : SpeedMode("VerusHop") {
                     0.46f else 0.34f
 
                 mc.thePlayer.jmp()
-            } else {
-                speed *= 0.98f
-            }
+            } else speed *= 0.98f
 
             strafe(speed, false)
         }

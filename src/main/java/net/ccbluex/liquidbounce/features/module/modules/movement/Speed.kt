@@ -9,7 +9,6 @@ import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
-import net.ccbluex.liquidbounce.utils.ClassUtils.getAllClassesIn
 import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.inLiquid
@@ -24,6 +23,12 @@ object Speed : Module("Speed", MOVEMENT) {
     private val moduleModes = speedModes.map { it.modeName }.toTypedArray()
 
     private val alwaysSprint by BoolValue("AlwaysSprint", false)
+    private val whenSneaking by BoolValue("WhenSneaking", false)
+    private val inLiquid by BoolValue("InLiquid", false)
+    private val inWeb by BoolValue("InWeb", false)
+    private val onLadder by BoolValue("OnLadder", false)
+    private val whenRiding by BoolValue("WhenRiding", false)
+
     private val normalMode by ListValue("NormalMode", moduleModes, "NCPBHop")
     private val jumpingMode by ListValue("JumpingMode", arrayOf("None") + moduleModes, "None")
 
@@ -63,14 +68,10 @@ object Speed : Module("Speed", MOVEMENT) {
             }
         } else mode = normalMode
 
-        if (!modeModule.allowsJumping) {
-            if (!mc.thePlayer.inLiquid)
-                mc.gameSettings.keyBindJump.pressed = false
-            else if (mc.thePlayer.onGround)
-                mc.gameSettings.keyBindJump.pressed = false
-        }
+        if (!modeModule.allowsJumping && !mc.thePlayer.inLiquid)
+            mc.gameSettings.keyBindJump.pressed = false
 
-        if (thePlayer.isSneaking)
+        if (!shouldSpeed)
             return
 
         if (isMoving && !alwaysSprint)
@@ -83,7 +84,7 @@ object Speed : Module("Speed", MOVEMENT) {
     fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer ?: return
 
-        if (thePlayer.isSneaking || event.eventState != EventState.PRE)
+        if (!shouldSpeed || event.eventState != EventState.PRE)
             return
 
         if (isMoving && !alwaysSprint)
@@ -94,7 +95,7 @@ object Speed : Module("Speed", MOVEMENT) {
 
     @EventTarget
     fun onMove(event: MoveEvent) {
-        if (mc.thePlayer.isSneaking)
+        if (!shouldSpeed)
             return
 
         modeModule.onMove(event)
@@ -102,7 +103,7 @@ object Speed : Module("Speed", MOVEMENT) {
 
     @EventTarget
     fun onTick(event: TickEvent) {
-        if (mc.thePlayer.isSneaking)
+        if (!shouldSpeed)
             return
 
         modeModule.onTick()
@@ -115,7 +116,7 @@ object Speed : Module("Speed", MOVEMENT) {
 
     @EventTarget
     fun onStrafe(event: StrafeEvent) {
-        if (mc.thePlayer.isSneaking)
+        if (!shouldSpeed)
             return
 
         modeModule.onStrafe()
@@ -144,6 +145,21 @@ object Speed : Module("Speed", MOVEMENT) {
         get() = speedModes.find { it.modeName == mode }!!
 
     private val modes get() = arrayOf(normalMode, jumpingMode)
+
+    private val shouldSpeed: Boolean
+        get() {
+            val shouldSpeed = (inLiquid || !mc.thePlayer.inLiquid)
+                    && (whenSneaking || !mc.thePlayer.isSneaking)
+                    && (inWeb || !mc.thePlayer.isInWeb)
+                    && (onLadder || !mc.thePlayer.isOnLadder)
+                    && (whenRiding || !mc.thePlayer.isRiding)
+
+            if (!shouldSpeed)
+                mc.timer.resetSpeed()
+
+            return shouldSpeed
+        }
+
     private infix fun Array<String>.contains(other: Array<String>): Boolean = this.any { it in other }
     private infix fun Array<String>.contains(other: String): Boolean = other in this
 }

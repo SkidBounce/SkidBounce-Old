@@ -16,8 +16,6 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
 object Matrix : SpeedMode("Matrix") {
 
     override fun onUpdate() {
-        if (mc.thePlayer.isInWater || mc.thePlayer.isInLava || mc.thePlayer.isInWeb || mc.thePlayer.isOnLadder)
-            return
         if (isMoving) {
             if (mc.thePlayer.onGround) {
                 mc.thePlayer.jmp()

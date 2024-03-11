@@ -18,7 +18,7 @@ object MineBlazeTimer : SpeedMode("MineBlazeTimer") {
 
         mc.timer.timerSpeed = 1f
 
-        if (!isMoving || thePlayer.isInWater || thePlayer.isInLava || thePlayer.isOnLadder || thePlayer.isRiding)
+        if (!isMoving)
             return
 
         if (thePlayer.onGround)

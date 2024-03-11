@@ -17,7 +17,7 @@ import net.ccbluex.liquidbounce.utils.extensions.jump
 object VerusLowHop2 : SpeedMode("VerusLowHop2") {
     override fun onMove(event: MoveEvent) {
         mc.thePlayer.run {
-            if (isInWeb || isInLava || isInWater || isOnLadder || ridingEntity != null || !isMoving)
+            if (!isMoving)
                 return
             if (onGround) {
                 jump(0)

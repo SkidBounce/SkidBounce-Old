@@ -17,9 +17,6 @@ object AAC2BHop : SpeedMode("AAC2BHop") {
     override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer
 
-        if (thePlayer.isInWater)
-            return
-
         if (isMoving) {
             if (thePlayer.onGround) {
                 thePlayer.jmp()

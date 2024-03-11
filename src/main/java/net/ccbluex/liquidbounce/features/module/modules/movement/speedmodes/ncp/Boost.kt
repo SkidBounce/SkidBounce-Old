@@ -12,7 +12,7 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 /**
  * @author CCBlueX/LiquidBounce
  */
-object Boost : SpeedMode("Boost") {
+object Boost : SpeedMode("Boost", true) {
     private var motionDelay = 0
     private var ground = 0f
     override fun onMotion(event: MotionEvent) {

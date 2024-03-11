@@ -19,9 +19,6 @@ object AACBHop : SpeedMode("AACBHop") {
     override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer ?: return
 
-        if (thePlayer.isInWater)
-            return
-
         if (isMoving) {
             mc.timer.timerSpeed = 1.08f
 

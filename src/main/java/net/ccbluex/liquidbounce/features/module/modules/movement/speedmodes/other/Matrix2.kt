@@ -19,9 +19,6 @@ import net.minecraft.network.play.client.C0BPacketEntityAction
  */
 object Matrix2 : SpeedMode("Matrix2") {
     override fun onUpdate() {
-        if (mc.thePlayer.isInWater || mc.thePlayer.isInLava || mc.thePlayer.isInWeb || mc.thePlayer.isOnLadder)
-            return
-
         if (isMoving) {
             if (mc.thePlayer.onGround) {
                 mc.thePlayer.jmp()

@@ -15,8 +15,6 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
 object AACv4BHop : SpeedMode("AACv4BHop") {
     override fun onMotion(event: MotionEvent) {
         mc.thePlayer.run {
-            if (isInWater)
-                return
             if (moveForward > 0) {
                 if (onGround) {
                     jmp()

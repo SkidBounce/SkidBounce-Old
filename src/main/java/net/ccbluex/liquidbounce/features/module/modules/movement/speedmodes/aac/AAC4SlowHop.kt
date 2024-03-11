@@ -22,9 +22,6 @@ object AAC4SlowHop : SpeedMode("AAC4SlowHop") {
 
     override fun onUpdate() {
         mc.thePlayer.run {
-            if (isInWater)
-                return
-
             if (!isMoving) {
                 stopXZ()
                 return

@@ -20,7 +20,7 @@ object AAC7BHop : SpeedMode("AAC7BHop") {
     override fun onUpdate() {
         val thePlayer = mc.thePlayer ?: return
 
-        if (!isMoving || thePlayer.ridingEntity != null || thePlayer.hurtTime > 0)
+        if (!isMoving || thePlayer.hurtTime > 0)
             return
 
         if (thePlayer.onGround) {

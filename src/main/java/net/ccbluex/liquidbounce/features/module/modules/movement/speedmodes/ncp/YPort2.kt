@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
  */
 object YPort2 : SpeedMode("YPort2") {
     override fun onMotion(event: MotionEvent) {
-        if (mc.thePlayer.isOnLadder || mc.thePlayer.isInWater || mc.thePlayer.isInLava || mc.thePlayer.isInWeb || !isMoving)
+        if (!isMoving)
             return
         if (mc.thePlayer.onGround) mc.thePlayer.jmp() else mc.thePlayer.motionY = -1.0
         strafe()

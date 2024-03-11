@@ -16,7 +16,6 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
  */
 object SlowHop : SpeedMode("SlowHop") {
     override fun onMotion(event: MotionEvent) {
-        if (mc.thePlayer.isInWater) return
         if (isMoving) {
             if (mc.thePlayer.onGround) mc.thePlayer.jmp() else speed *= 1.011f
         } else {

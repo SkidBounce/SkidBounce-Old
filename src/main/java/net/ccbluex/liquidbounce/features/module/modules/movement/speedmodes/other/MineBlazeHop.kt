@@ -14,15 +14,15 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
  */
 object MineBlazeHop : SpeedMode("MineBlazeHop") {
     override fun onUpdate() {
-        if (mc.thePlayer == null) {
-            return
-        }
-        if (mc.thePlayer.onGround && isMoving)
-            mc.thePlayer.jmp()
-        if (mc.thePlayer.motionY > 0.003) {
-            mc.thePlayer.motionX *= 1.0015
-            mc.thePlayer.motionZ *= 1.0015
-            mc.timer.timerSpeed = 1.06f
+        mc.thePlayer ?: return
+        mc.thePlayer.run {
+            if (onGround && isMoving)
+                jmp()
+            if (motionY > 0.003) {
+                motionX *= 1.0015
+                motionZ *= 1.0015
+                mc.timer.timerSpeed = 1.06f
+            }
         }
     }
 }

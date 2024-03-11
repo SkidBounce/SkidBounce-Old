@@ -18,7 +18,7 @@ object AACHop350 : SpeedMode("AACHop3.5.0") {
     override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer ?: return
 
-        if (isMoving && !thePlayer.isInWater && !thePlayer.isInLava && !thePlayer.isSneaking) {
+        if (isMoving) {
             thePlayer.jumpMovementFactor += 0.00208f
             if (thePlayer.fallDistance <= 1f) {
                 if (thePlayer.onGround) {

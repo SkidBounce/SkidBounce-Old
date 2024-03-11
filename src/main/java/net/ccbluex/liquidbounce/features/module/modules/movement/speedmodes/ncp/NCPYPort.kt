@@ -19,7 +19,7 @@ import kotlin.math.sin
 object NCPYPort : SpeedMode("NCPYPort") {
     private var jumps = 0
     override fun onMotion(event: MotionEvent) {
-        if (mc.thePlayer.isOnLadder || mc.thePlayer.isInWater || mc.thePlayer.isInLava || mc.thePlayer.isInWeb || !isMoving || mc.thePlayer.isInWater) return
+        if (!isMoving) return
         if (jumps >= 4 && mc.thePlayer.onGround) jumps = 0
         if (mc.thePlayer.onGround) {
             mc.thePlayer.motionY = if (jumps <= 1) 0.42 else 0.4

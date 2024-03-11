@@ -15,9 +15,6 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
  */
 object HypixelHop : SpeedMode("HypixelHop") {
     override fun onStrafe() {
-        if (mc.thePlayer.isInWater || mc.thePlayer.isInLava)
-            return
-
         if (mc.thePlayer.onGround && isMoving) {
             if (mc.thePlayer.isUsingItem) {
                 mc.thePlayer.jmp()

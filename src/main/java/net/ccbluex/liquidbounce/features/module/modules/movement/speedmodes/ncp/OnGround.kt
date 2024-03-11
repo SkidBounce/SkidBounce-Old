@@ -21,7 +21,7 @@ object OnGround : SpeedMode("OnGround") {
 
         if (thePlayer.fallDistance > 3.994)
             return
-        if (thePlayer.isInWater || thePlayer.isOnLadder || thePlayer.isCollidedHorizontally)
+        if (thePlayer.isCollidedHorizontally)
             return
 
         thePlayer.posY -= 0.3993000090122223

@@ -21,9 +21,6 @@ object AAC3BHop : SpeedMode("AAC3BHop") {
 
         mc.timer.timerSpeed = 1f
 
-        if (thePlayer.isInWater)
-            return
-
         if (isMoving) {
             when {
                 thePlayer.onGround -> {
