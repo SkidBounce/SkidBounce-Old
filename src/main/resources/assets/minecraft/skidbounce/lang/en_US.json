@@ -30,7 +30,7 @@
         "module.autoRod.description": "Auto use fishing rod to PVP.",
 
         "module.autoSoup.description": "Makes you automatically eat soup whenever your health is low.",
-
+        "module.staffDetector.description": "Detects and notify user of staff members on the server",
         "module.autoWeapon.description": "Automatically selects the best weapon in your hotbar.",
 
         "module.backtrack.description": "Allows you to hit players by attacking their previous cached positions.",
