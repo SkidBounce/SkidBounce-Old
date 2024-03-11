@@ -19,6 +19,6 @@ object AEMine : SpeedMode("AEMine") {
             mc.thePlayer.jmp()
             mc.timer.timerSpeed = 1f
         } else
-            mc.timer.timerSpeed = 1.30919551f
+            mc.timer.timerSpeed = 1.3091955f
     }
 }

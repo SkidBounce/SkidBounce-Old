@@ -12,23 +12,27 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
 
 /**
  * @author CCBlueX/LiquidBounce
+ * @author EclipsesDev
  */
-object Matrix : SpeedMode("Matrix") {
-
+object VulcanHop2 : SpeedMode("VulcanHop2") {
     override fun onUpdate() {
         if (isMoving) {
+            if (mc.thePlayer.isAirBorne && mc.thePlayer.fallDistance > 2) {
+                mc.timer.timerSpeed = 1f
+                return
+            }
+
             if (mc.thePlayer.onGround) {
                 mc.thePlayer.jmp()
-                mc.thePlayer.speedInAir = 0.02098f
-                mc.timer.timerSpeed = 1.055f
-            } else
-                strafe()
-        } else
-            mc.timer.timerSpeed = 1f
+                if (mc.thePlayer.motionY > 0)
+                    mc.timer.timerSpeed = 1.1253f
+                strafe(0.4815f)
+            } else if (mc.thePlayer.motionY < 0)
+                mc.timer.timerSpeed = 0.8935f
+        } else mc.timer.timerSpeed = 1f
     }
 
     override fun onDisable() {
-        mc.thePlayer.speedInAir = 0.02f
         mc.timer.timerSpeed = 1f
     }
 }
