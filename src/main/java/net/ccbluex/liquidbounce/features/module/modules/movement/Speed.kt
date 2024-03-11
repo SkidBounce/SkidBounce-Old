@@ -27,12 +27,12 @@ object Speed : Module("Speed", MOVEMENT) {
     private val normalMode by ListValue("NormalMode", moduleModes, "NCPBHop")
     private val jumpingMode by ListValue("JumpingMode", arrayOf("None") + moduleModes, "None")
 
-    val customSpeed by FloatValue("CustomSpeed", 1.6f, 0.2f..2f) { modes contains "Custom" }
-    val customY by FloatValue("CustomY", 0f, 0f..4f) { modes contains "Custom" }
-    val customTimer by FloatValue("CustomTimer", 1f, 0.1f..2f) { modes contains "Custom" }
-    val customStrafe by BoolValue("CustomStrafe", true) { modes contains "Custom" }
-    val resetXZ by BoolValue("CustomResetXZ", false) { modes contains "Custom" }
-    val resetY by BoolValue("CustomResetY", false) { modes contains "Custom" }
+    val customSpeed by FloatValue("Custom-Speed", 1.6f, 0.2f..2f) { modes contains "Custom" }
+    val customY by FloatValue("Custom-Y", 0f, 0f..4f) { modes contains "Custom" }
+    val customTimer by FloatValue("Custom-Timer", 1f, 0.1f..2f) { modes contains "Custom" }
+    val customStrafe by BoolValue("Custom-Strafe", true) { modes contains "Custom" }
+    val resetXZ by BoolValue("Custom-ResetXZ", false) { modes contains "Custom" }
+    val resetY by BoolValue("Custom-ResetY", false) { modes contains "Custom" }
 
     val aacPortLength by FloatValue("AAC-PortLength", 1f, 1f..20f) { modes contains "AACPort" }
     val aacGroundTimer by FloatValue("AACGround-Timer", 3f, 1.1f..10f) { modes contains arrayOf("AACGround", "AACGround2") }
