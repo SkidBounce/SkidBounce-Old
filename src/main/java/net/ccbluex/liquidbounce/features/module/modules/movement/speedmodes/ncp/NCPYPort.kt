@@ -30,5 +30,4 @@ object NCPYPort : SpeedMode("NCPYPort") {
         } else if (jumps <= 1) mc.thePlayer.motionY = -5.0
         strafe()
     }
-
 }

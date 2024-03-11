@@ -30,7 +30,7 @@ object UNCPYPort : SpeedMode("UNCPYPort") {
         if (mc.thePlayer.onGround && isMoving) {
             mc.thePlayer.jump(0.3993535)
         }
-        if (speed > 1.75f) speed = 1.75f
+        speed = speed.coerceAtMost(1.75f)
         strafe(speed, true)
     }
 

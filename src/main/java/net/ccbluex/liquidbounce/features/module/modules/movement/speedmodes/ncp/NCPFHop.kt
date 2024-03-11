@@ -9,6 +9,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jmp
+import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -35,10 +36,6 @@ object NCPFHop : SpeedMode("NCPFHop") {
             }
             mc.thePlayer.motionY -= 0.00099999
             strafe()
-        } else {
-            mc.thePlayer.motionX = 0.0
-            mc.thePlayer.motionZ = 0.0
-        }
+        } else mc.thePlayer.stopXZ()
     }
-
 }

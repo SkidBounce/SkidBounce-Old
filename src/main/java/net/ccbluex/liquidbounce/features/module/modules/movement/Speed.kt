@@ -153,6 +153,7 @@ object Speed : Module("Speed", MOVEMENT) {
                     && (inWeb || !mc.thePlayer.isInWeb)
                     && (onLadder || !mc.thePlayer.isOnLadder)
                     && (whenRiding || !mc.thePlayer.isRiding)
+                    && mc.thePlayer != null
 
             if (!shouldSpeed)
                 mc.timer.resetSpeed()
