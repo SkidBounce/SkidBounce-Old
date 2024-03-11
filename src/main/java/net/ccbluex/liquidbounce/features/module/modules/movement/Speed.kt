@@ -46,6 +46,7 @@ object Speed : Module("Speed", MOVEMENT) {
     val uncpyportDamageBoost by BoolValue("UNCPYPort-DamageBoost", true) { modes contains "UNCPYPort" }
     val wavelowhopTimer by FloatValue("WaveLowHop-Timer", 1.25f, 1f..2f) { modes contains "WaveLowHop" }
     val matrix2SprintBypass by BoolValue("Matrix2-SprintBypass", false) { modes contains "Matrix2" } // Useless, but I'll keep it anyway
+    val vulcanhopFast by BoolValue("VulcanHop-Fast", true) { mode == "VulcanHop" }
 
     var mode = normalMode
 

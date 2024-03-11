@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other
 
+import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.vulcanhopFast
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
@@ -22,9 +23,9 @@ object VulcanHop : SpeedMode("VulcanHop") {
         if (isMoving) {
             if (mc.thePlayer.onGround) {
                 mc.thePlayer.jmp()
-                mc.timer.timerSpeed = 0.45f
-                strafe(0.45f)
-            } else mc.timer.timerSpeed = 1.125f
+                mc.timer.timerSpeed = if (vulcanhopFast) 0.4645f else 0.45f
+                strafe(if (vulcanhopFast) 0.475f else 0.45f)
+            } else mc.timer.timerSpeed = if (vulcanhopFast) 1.1425f else 1.125f
         } else mc.timer.timerSpeed = 1f
     }
 
