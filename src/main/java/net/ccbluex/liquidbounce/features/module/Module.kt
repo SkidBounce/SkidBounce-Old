@@ -7,6 +7,7 @@ package net.ccbluex.liquidbounce.features.module
 
 import net.ccbluex.liquidbounce.LiquidBounce.isStarting
 import net.ccbluex.liquidbounce.event.Listenable
+import net.ccbluex.liquidbounce.features.module.AutoDisable
 import net.ccbluex.liquidbounce.features.module.modules.client.GameDetector
 import net.ccbluex.liquidbounce.file.FileManager.modulesConfig
 import net.ccbluex.liquidbounce.file.FileManager.saveConfig
@@ -26,7 +27,6 @@ import org.lwjgl.input.Keyboard
 
 // TODO: Remove @JvmOverloads when all modules are ported to kotlin.
 open class Module @JvmOverloads constructor(
-
     val name: String,
     val category: ModuleCategory,
     defaultKeyBind: Int = Keyboard.KEY_NONE,
@@ -37,8 +37,7 @@ open class Module @JvmOverloads constructor(
     val spacedName: String = name.split("(?<=[a-z])(?=[A-Z])".toRegex()).joinToString(separator = " "),
     val subjective: Boolean = category == ModuleCategory.RENDER,
     val gameDetecting: Boolean = canBeEnabled,
-
-    ) : MinecraftInstance(), Listenable {
+) : MinecraftInstance(), Listenable {
 
     // Value that determines whether the module should depend on GameDetector
     private val onlyInGameValue = BoolValue("OnlyInGame", true, subjective = true) { GameDetector.state }
@@ -108,7 +107,6 @@ open class Module @JvmOverloads constructor(
             saveConfig(modulesConfig)
         }
 
-
     // HUD
     val hue = nextFloat()
     var slide = 0F
@@ -117,6 +115,10 @@ open class Module @JvmOverloads constructor(
     // Tag
     open val tag: String?
         get() = null
+
+    // AutoDisable
+    @Suppress("PropertyName")
+    val AutoDisable = AutoDisable()
 
     /**
      * Toggle module
