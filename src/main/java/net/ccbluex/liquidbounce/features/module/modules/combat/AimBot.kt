@@ -28,6 +28,8 @@ import java.util.*
 import kotlin.math.atan
 
 object AimBot : Module("AimBot", COMBAT) {
+    private val horizontalAim by BoolValue("HorizontalAim", true)
+    private val verticalAim by BoolValue("VerticalAim", true)
     private val range by FloatValue("Range", 4.4F, 1F..8F)
     private val turnSpeed by FloatValue("TurnSpeed", 10f, 1F..180F)
     private val inViewTurnSpeed by FloatValue("InViewTurnSpeed", 35f, 1f..180f)
@@ -168,7 +170,7 @@ object AimBot : Module("AimBot", COMBAT) {
         val realisticTurnSpeed = rotationDiff * ((supposedTurnSpeed + (gaussian - 0.5)) / 180)
         val rotation = limitAngleChange(player.rotation, destinationRotation, realisticTurnSpeed.toFloat())
 
-        rotation.toPlayer(player)
+        rotation.toPlayer(player, horizontalAim, verticalAim)
 
         player.setPosAndPrevPos(currPos, oldPos)
 
