@@ -5,7 +5,6 @@
  */
 package net.ccbluex.liquidbounce
 
-import de.florianmichael.viamcp.ViaMCP
 import net.ccbluex.liquidbounce.api.ClientUpdate.gitInfo
 import net.ccbluex.liquidbounce.cape.CapeService
 import net.ccbluex.liquidbounce.event.*
@@ -176,15 +175,6 @@ object LiquidBounce {
             LOGGER.info("Successfully loaded background.")
         }
 
-        // ViaMCP
-        // TODO: Sword fix for 1.9+
-        // TODO: Jump height fix for 1.9+
-        try {
-            ViaMCP.create()
-        } catch (throwable: Throwable) {
-            LOGGER.error("Failed to setup ViaMCP.", throwable)
-        }
-
         // Set is starting status
         isStarting = false
 
@@ -204,5 +194,4 @@ object LiquidBounce {
         // Shutdown discord rpc
         clientRichPresence.shutdown()
     }
-
 }

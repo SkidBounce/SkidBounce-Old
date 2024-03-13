@@ -5,7 +5,6 @@
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.client;
 
-import de.florianmichael.viamcp.fixes.AttackOrder;
 import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.api.ClientUpdate;
 import net.ccbluex.liquidbounce.event.*;
@@ -218,41 +217,12 @@ public abstract class MixinMinecraft {
      * @author ManInMyVan / SkidBounce
      * @reason ViaMCP
      */
-    @Overwrite
-    public void clickMouse() {
+    @Inject(method = "clickMouse", at = @At("HEAD"))
+    private void clickMouse(CallbackInfo callbackInfo) {
         CPSCounter.INSTANCE.registerClick(CPSCounter.MouseButton.LEFT);
 
         if (AutoClicker.INSTANCE.handleEvents() || NoClickDelay.INSTANCE.handleEvents()) {
             leftClickCounter = 0;
-        }
-        if (this.leftClickCounter <= 0) {
-            AttackOrder.sendConditionalSwing(this.objectMouseOver);
-            if (this.objectMouseOver == null) {
-                logger.error("Null returned as 'hitResult', this shouldn't happen!");
-                if (this.playerController.isNotCreative()) {
-                    this.leftClickCounter = 10;
-                }
-            } else {
-                switch (this.objectMouseOver.typeOfHit) {
-                    case ENTITY:
-                        AttackOrder.sendFixedAttack(this.thePlayer, this.objectMouseOver.entityHit);
-                        break;
-                    case BLOCK:
-                        BlockPos blockpos = this.objectMouseOver.getBlockPos();
-                        if (this.theWorld.getBlockState(blockpos).getBlock().getMaterial() != Material.air) {
-                            this.playerController.clickBlock(blockpos, this.objectMouseOver.sideHit);
-                            break;
-                        }
-                    case MISS:
-                    default:
-                        if (this.playerController.isNotCreative()) {
-                            this.leftClickCounter = 10;
-                        }
-                }
-            }
-        }
-        if (NoClickDelay.INSTANCE.handleEvents()) {
-            this.leftClickCounter = 0;
         }
     }
 

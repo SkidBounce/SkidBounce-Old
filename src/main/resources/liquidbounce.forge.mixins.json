@@ -41,15 +41,12 @@
     "gui.MixinGuiSlot",
     "gui.MixinGuiSpectator",
     "gui.MixinServerSelectionList",
-    "item.MixinItemBlock",
     "item.MixinItemRenderer",
     "item.MixinMixinItemStack",
     "network.MixinNetHandlerPlayClient",
     "network.MixinNetworkManager",
     "network.MixinNetworkPlayerInfo",
     "packets.MixinC00Handshake",
-    "packets.MixinC0FPacketConfirmTransaction",
-    "packets.MixinS32PacketConfirmTransaction",
     "render.MixinEffectRenderer",
     "render.MixinEntityRenderer",
     "render.MixinFontRenderer",
@@ -68,7 +65,6 @@
     "resources.MixinSkinManager",
     "tweaks.MixinAnvilChunkLoader",
     "world.MixinChunk",
-    "world.MixinWorld",
     "world.MixinWorldClient"
   ]
 }

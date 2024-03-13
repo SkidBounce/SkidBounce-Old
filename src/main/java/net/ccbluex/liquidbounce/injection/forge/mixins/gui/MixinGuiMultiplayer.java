@@ -5,7 +5,6 @@
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.gui;
 
-import de.florianmichael.viamcp.gui.GuiProtocolSelector;
 import net.ccbluex.liquidbounce.features.special.BungeeCordSpoof;
 import net.ccbluex.liquidbounce.file.FileManager;
 import net.ccbluex.liquidbounce.ui.client.GuiClientFixes;
@@ -20,25 +19,36 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.IOException;
 
-@Mixin(GuiMultiplayer.class)
+@Mixin(value = GuiMultiplayer.class, priority = 1001)
 public abstract class MixinGuiMultiplayer extends MixinGuiScreen {
 
     private GuiButton bungeeCordSpoofButton;
 
     @Inject(method = "initGui", at = @At("RETURN"))
     private void initGui(CallbackInfo callbackInfo) {
-        buttonList.add(new GuiButton(997, 5, 8, 45, 20, "Fixes"));
-        buttonList.add(bungeeCordSpoofButton = new GuiButton(998, 55, 8, 98, 20, "BungeeCord Spoof: " + (BungeeCordSpoof.INSTANCE.getEnabled() ? "On" : "Off")));
+        // Detect ViaForge button
+        GuiButton button = buttonList.stream().filter(b -> b.displayString.equals("ViaForge")).findFirst().orElse(null);
+
+        int increase = 0;
+
+        if (button != null) {
+            // Set it next to the BungeeCord Spoof button
+            button.xPosition = 158;
+            button.yPosition = 8;
+//            increase += 105;
+        }
+
+        buttonList.add(new GuiButton(997, 5 + increase, 8, 45, 20, "Fixes"));
+        buttonList.add(bungeeCordSpoofButton = new GuiButton(998, 55 + increase, 8, 98, 20, "BungeeCord Spoof: " + (BungeeCordSpoof.INSTANCE.getEnabled() ? "On" : "Off")));
         buttonList.add(new GuiButton(999, width - 104, 8, 98, 20, "Tools"));
-        buttonList.add(new GuiButton(996, 158, 8, 45, 20, "Version"));
     }
 
     @Inject(method = "actionPerformed", at = @At("HEAD"))
     private void actionPerformed(GuiButton button, CallbackInfo callbackInfo) throws IOException {
         switch (button.id) {
-            case 996:
-                mc.displayGuiScreen(new GuiProtocolSelector((GuiScreen) (Object) this));
-                break;
+//            case 996:
+//                mc.displayGuiScreen(new GuiProtocolSelector((GuiScreen) (Object) this));
+//                break;
             case 997:
                 mc.displayGuiScreen(new GuiClientFixes((GuiScreen) (Object) this));
                 break;
