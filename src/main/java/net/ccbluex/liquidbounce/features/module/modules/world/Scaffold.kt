@@ -33,6 +33,7 @@ import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
+import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextInt
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBorderedRect
 import net.ccbluex.liquidbounce.utils.timing.DelayTimer
@@ -83,6 +84,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     // Extra clicks
     private val extraClicks by BoolValue("DoExtraClicks", false)
+    private val simulateDoubleClicking by BoolValue("SimulateDoubleClicking", false) { extraClicks }
     private val extraClickMaxCPSValue: IntegerValue = object : IntegerValue("ExtraClickMaxCPS", 7, 0..50) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(extraClickMinCPS)
         override fun isSupported() = extraClicks
@@ -476,7 +478,9 @@ object Scaffold : Module("Scaffold", WORLD) {
         val target = placeRotation?.placeInfo
 
         if (extraClicks) {
-            while (extraClick.clicks > 0) {
+            val doubleClick = if (simulateDoubleClicking) nextInt(-1, 1) else 0
+
+            repeat(extraClick.clicks + doubleClick) {
                 extraClick.clicks--
 
                 doPlaceAttempt()
