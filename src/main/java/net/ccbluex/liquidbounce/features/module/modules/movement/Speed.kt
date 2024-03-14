@@ -16,6 +16,7 @@ import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
+import net.minecraft.client.settings.GameSettings.isKeyDown
 
 object Speed : Module("Speed", MOVEMENT) {
     private val speedModes = this.javaClass.`package`.getAllObjects<SpeedMode>().sortedBy { it.modeName }
@@ -59,6 +60,8 @@ object Speed : Module("Speed", MOVEMENT) {
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         val thePlayer = mc.thePlayer ?: return
+
+        mc.gameSettings.keyBindJump.pressed = isKeyDown(mc.gameSettings.keyBindJump)
 
         if (jumpingMode != "None") {
             val last = modeModule

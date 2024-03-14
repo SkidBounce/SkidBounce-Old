@@ -13,7 +13,7 @@ import net.ccbluex.liquidbounce.ui.font.Fonts
 import net.ccbluex.liquidbounce.utils.EntityUtils.getHealth
 import net.ccbluex.liquidbounce.utils.extensions.getDistanceToEntityBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.deltaTime
-import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBorderedRect
+import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRoundedBorderRect
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRectNew
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawScaledCustomSizeModalRect
 import net.ccbluex.liquidbounce.value.BoolValue
@@ -35,6 +35,8 @@ import kotlin.math.pow
 @ElementInfo(name = "Target")
 class Target : Element() {
 
+    private val roundedRectRadius by FloatValue("Rounded-Radius", 3F, 0F..5F)
+
     private val fadeSpeed by FloatValue("FadeSpeed", 2F, 1F..9F)
     private val absorption by BoolValue("Absorption", true)
     private val healthFromScoreboard by BoolValue("HealthFromScoreboard", true)
@@ -49,6 +51,17 @@ class Target : Element() {
         if (KillAura.handleEvents() && target is EntityPlayer) {
             val targetHealth = getHealth(target, healthFromScoreboard, absorption)
 
+            // Calculate health color based on entity's health
+            val healthColor = when {
+                target.health <= 0 -> Color(255, 0, 0)
+                else -> {
+                    val healthRatio = targetHealth / target.maxHealth
+                    val red = (255 * (1 - healthRatio)).toInt()
+                    val green = (255 * healthRatio).toInt()
+                    Color(red, green, 0)
+                }
+            }
+
             if (target != lastTarget || easingHealth < 0 || easingHealth > target.maxHealth ||
                     abs(easingHealth - targetHealth) < 0.01
             ) {
@@ -58,14 +71,14 @@ class Target : Element() {
             val width = (38f + (target.name?.let(Fonts.font40::getStringWidth) ?: 0)).coerceAtLeast(118f)
 
             // Draw rect box
-            drawBorderedRect(0F, 0F, width, 36F, 3F, Color.BLACK.rgb, Color.BLACK.rgb)
+            drawRoundedBorderRect(0F, 0F, width, 36F, 3F, Color.BLACK.rgb, Color.BLACK.rgb, roundedRectRadius)
 
             // Damage animation
             if (easingHealth > targetHealth.coerceAtMost(target.maxHealth))
                 drawRectNew(0F, 34F, (easingHealth / target.maxHealth).coerceAtMost(1f) * width, 36F, Color(252, 185, 65).rgb)
 
             // Health bar
-            drawRectNew(0F, 34F, (targetHealth / target.maxHealth).coerceAtMost(1f) * width, 36F, Color(252, 96, 66).rgb)
+            drawRectNew(0F, 34F, (targetHealth / target.maxHealth).coerceAtMost(1f) * width, 36F, healthColor.rgb)
 
             // Heal animation
             if (easingHealth < targetHealth)

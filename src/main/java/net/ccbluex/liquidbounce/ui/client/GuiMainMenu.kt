@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.LiquidBounce.clientVersionText
 import net.ccbluex.liquidbounce.lang.translationMenu
 import net.ccbluex.liquidbounce.ui.client.altmanager.GuiAltManager
 import net.ccbluex.liquidbounce.ui.font.Fonts
-import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRect
+import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRoundedRect
 import net.minecraft.client.gui.*
 import net.minecraft.client.resources.I18n
 
@@ -36,7 +36,14 @@ class GuiMainMenu : GuiScreen() {
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         drawBackground(0)
 
-        drawRect(width / 2f - 115, height / 4f + 35, width / 2f + 115, height / 4f + 151, Integer.MIN_VALUE)
+        drawRoundedRect(
+            width / 2f - 115,
+            height / 4f + 35,
+            width / 2f + 115,
+            height / 4f + 151,
+            Integer.MIN_VALUE,
+            3F
+        )
 
         Fonts.fontBold180.drawCenteredString(CLIENT_NAME, width / 2F, height / 8F, 4673984, true)
         Fonts.font35.drawCenteredString(clientVersionText, width / 2F + 148, height / 8F + Fonts.font35.fontHeight, 0xffffff, true)

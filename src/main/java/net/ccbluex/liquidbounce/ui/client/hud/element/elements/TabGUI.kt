@@ -52,10 +52,8 @@ class TabGUI(x: Double = 5.0, y: Double = 25.0) : Element(x = x, y = y) {
             private val borderBlue by IntegerValue("Border Blue", 0, 0..255) { borderValue && !borderRainbow }
             private val borderAlpha by IntegerValue("Border Alpha", 150, 0..255) { borderValue && !borderRainbow }
 
-    private val rainbowX by FloatValue("Rainbow-X", -1000F, -2000F..2000F)
-        { rectRainbow || (borderValue && borderRainbow) }
-    private val rainbowY by FloatValue("Rainbow-Y", -1000F, -2000F..2000F)
-        { rectRainbow || (borderValue && borderRainbow) }
+    private val rainbowX by FloatValue("Rainbow-X", -1000F, -2000F..2000F) { rectRainbow || (borderValue && borderRainbow) }
+    private val rainbowY by FloatValue("Rainbow-Y", -1000F, -2000F..2000F) { rectRainbow || (borderValue && borderRainbow) }
 
     private val arrows by BoolValue("Arrows", true)
     private val font by FontValue("Font", Fonts.font35)
@@ -125,7 +123,10 @@ class TabGUI(x: Double = 5.0, y: Double = 25.0) : Element(x = x, y = y) {
         val rectColor = if (rectRainbow) Color.black else Color(rectRed, rectGreen, rectBlue, rectAlpha)
 
         RainbowShader.begin(rectRainbow, if (rainbowX == 0f) 0f else 1f / rainbowX, if (rainbowY == 0f) 0f else 1f / rainbowY, System.currentTimeMillis() % 10000 / 10000F).use {
-            drawRoundedRect2(1F, 1 + tabY - 1, width, tabY + tabHeight, rectColor, roundedRectRadius)
+            if (!borderValue)
+                drawRoundedRect2(1F, 1 + tabY - 1, width, tabY + tabHeight, rectColor, roundedRectRadius)
+            else
+                drawRoundedRect2(2.5F, 5 + tabY - 3.5F, width - 2F, tabY + tabHeight - 1.5F, rectColor, roundedRectRadius)
         }
 
         glColor4f(1f, 1f, 1f, 1f)
