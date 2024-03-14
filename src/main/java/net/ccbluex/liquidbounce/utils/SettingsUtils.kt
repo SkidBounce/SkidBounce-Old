@@ -38,72 +38,25 @@ object SettingsUtils {
                 return@forEachIndexed
             }
 
-            when (args[0]) {
-                "chat" -> displayClientMessage(
-                    "§e${
-                        translateAlternateColorCodes(
-                            StringUtils.toCompleteString(
-                                args,
-                                1
-                            )
-                        )
-                    }"
-                )
+            if (args.size < 3) {
+                displayClientMessage("§cSyntax error at line '$index' in setting script.\n§8§lLine: §7$s")
+                return@forEachIndexed
+            }
 
-                "unchat" -> displayClientMessage(
-                    translateAlternateColorCodes(
-                        StringUtils.toCompleteString(
-                            args,
-                            1
-                        )
-                    )
-                )
+            val moduleName = args[0]
+            val valueName = args[1]
+            val value = args[2]
+            val module = moduleManager[moduleName]
 
-                "load" -> {
-                    val url = StringUtils.toCompleteString(args, 1)
-                    runCatching {
-                        val settings = if (url.startsWith("http")) {
-                            val (text, code) = HttpUtils.get(url)
+            if (module == null) {
+                displayClientMessage("§cModule §a$moduleName§c does not exist!")
+                return@forEachIndexed
+            }
 
-                            if (code != 200) {
-                                error(text)
-                            }
-
-                            text
-                        } else {
-                            ClientApi.requestSettingsScript(url)
-                        }
-
-                        applyScript(settings)
-                    }.onSuccess {
-                        displayClientMessage("§7Loaded settings §a§l$url§7.")
-                    }.onFailure {
-                        displayClientMessage("§7Failed to load settings §c§l$url§7.")
-                    }
-                }
-
-                else -> {
-                    if (args.size < 3) {
-                        displayClientMessage("§cSyntax error at line '$index' in setting script.\n§8§lLine: §7$s")
-                        return@forEachIndexed
-                    }
-
-                    val moduleName = args[0]
-                    val valueName = args[1]
-                    val value = args[2]
-                    val module = moduleManager[moduleName]
-
-                    if (module == null) {
-                        displayClientMessage("§cModule §a$moduleName§c does not exist!")
-                        return@forEachIndexed
-                    }
-
-                    when (valueName) {
-                        "toggle" -> setToggle(module, value)
-                        "bind" -> setBind(module, value)
-                        else -> setValue(module, valueName, value, args)
-                    }
-                }
+            when (valueName) {
+                "toggle" -> setToggle(module, value)
+                "bind" -> setBind(module, value)
+                else -> setValue(module, valueName, value, args)
             }
         }
 

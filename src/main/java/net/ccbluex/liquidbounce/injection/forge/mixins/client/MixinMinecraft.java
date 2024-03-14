@@ -16,7 +16,6 @@ import net.ccbluex.liquidbounce.features.module.modules.world.FastPlace;
 import net.ccbluex.liquidbounce.injection.forge.SplashProgressLock;
 import net.ccbluex.liquidbounce.ui.client.GuiClientConfiguration;
 import net.ccbluex.liquidbounce.ui.client.GuiMainMenu;
-import net.ccbluex.liquidbounce.ui.client.GuiUpdate;
 import net.ccbluex.liquidbounce.utils.CPSCounter;
 import net.ccbluex.liquidbounce.utils.ClientUtils;
 import net.ccbluex.liquidbounce.utils.render.IconUtils;
@@ -127,13 +126,6 @@ public abstract class MixinMinecraft {
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;displayGuiScreen(Lnet/minecraft/client/gui/GuiScreen;)V", shift = At.Shift.AFTER))
-    private void afterMainScreen(CallbackInfo callbackInfo) {
-        if (ClientUpdate.INSTANCE.hasUpdate()) {
-            displayGuiScreen(new GuiUpdate());
         }
     }
 
