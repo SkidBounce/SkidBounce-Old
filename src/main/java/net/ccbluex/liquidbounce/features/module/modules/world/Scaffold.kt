@@ -118,14 +118,15 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     // GodBridge mode subvalues
     private val useStaticRotation by BoolValue("UseStaticRotation", false) { mode == "GodBridge" }
-    private val jumpAutomatically by BoolValue("JumpAutomatically", true) { mode == "GodBridge" }
+    private val autoJump by BoolValue("AutoJump", true) { mode == "GodBridge" }
+    private val jumpAutomatically by BoolValue("JumpAutomatically", true) { mode == "GodBridge" && autoJump }
     private val maxBlocksToJump: IntegerValue = object : IntegerValue("MaxBlocksToJump", 4, 1..8) {
-        override fun isSupported() = mode == "GodBridge" && !jumpAutomatically
+        override fun isSupported() = mode == "GodBridge" && !jumpAutomatically && autoJump
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minBlocksToJump.get())
     }
 
     private val minBlocksToJump: IntegerValue = object : IntegerValue("MinBlocksToJump", 4, 1..8) {
-        override fun isSupported() = mode == "GodBridge" && !jumpAutomatically && !maxBlocksToJump.isMinimal()
+        override fun isSupported() = mode == "GodBridge" && !jumpAutomatically && !maxBlocksToJump.isMinimal() && autoJump
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxBlocksToJump.get())
     }
 
@@ -960,7 +961,7 @@ object Scaffold : Module("Scaffold", WORLD) {
                     val isSneaking = player.movementInput.sneak
 
                     if ((!isSneaking || speed != 0f) && it.blockPos == info.blockPos && (it.sideHit != info.enumFacing || shouldJumpForcefully) && isMoving && currRotation.yaw.roundToInt() % 45f == 0f) {
-                        if (!isSneaking) {
+                        if (!isSneaking && autoJump) {
                             if (player.onGround && !isLookingDiagonally) {
                                 player.jmp()
                             }
@@ -1232,7 +1233,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
             mc.thePlayer.swing(swing)
 
-            if (isManualJumpOptionActive)
+            if (isManualJumpOptionActive && autoJump)
                 blocksPlacedUntilJump++
 
             updatePlacedBlocksForTelly()
