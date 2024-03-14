@@ -61,11 +61,11 @@
         "module.abortBreaking.description": "允许你停止破坏方块而不会丢失破坏进度。",
 
         "module.ambience.description": "改变世界时间和天气。(视觉上)",
-
+        "module.staffDetector.description": "检测服务器上的工作人员并提醒用户。",
         "module.antiHunger.description": "防止饥饿。",
-
+        "module.autoPlay.description": "自动为下一场比赛排队。",
         "module.bedGodMode.description": "允许你躺在床上四处走动。(对于1.9)",
-
+        "module.bedProtectionESP.description": "帮助你找到保护床所需放置方块的位置。 ",
         "module.clip.description": "允许你clip通过方块。",
         
         "module.airJump.description": "允许你在空中跳跃。",
@@ -327,7 +327,7 @@
         "module.xRay.description": "允许你透过墙壁看到矿石。",
         
         "module.zoot.description": "移除所有负面药水效果/火焰。",
-        "module.bedProtectionESP.description": "让您了解应该将方块放置在哪里来保护床",
+
         "module.disabler.description": "禁用服务器或特定的反作弊检测"
     }
 }
