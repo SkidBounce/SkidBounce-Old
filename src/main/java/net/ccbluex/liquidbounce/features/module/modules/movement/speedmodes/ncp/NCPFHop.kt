@@ -17,13 +17,6 @@ import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 object NCPFHop : SpeedMode("NCPFHop") {
     override fun onEnable() {
         mc.timer.timerSpeed = 1.0866f
-        super.onEnable()
-    }
-
-    override fun onDisable() {
-        mc.thePlayer.speedInAir = 0.02f
-        mc.timer.timerSpeed = 1f
-        super.onDisable()
     }
 
     override fun onUpdate() {

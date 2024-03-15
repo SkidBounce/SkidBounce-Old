@@ -28,5 +28,4 @@ object OldAACBHop : SpeedMode("OldAACBHop") {
             thePlayer.motionZ = 0.0
         }
     }
-
 }

@@ -12,15 +12,10 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 /**
  * @author CCBlueX/LiquidBounce
  */
-object HiveHop : SpeedMode("HiveHop") {
+object Hive : SpeedMode("Hive") {
     override fun onEnable() {
         mc.thePlayer.speedInAir = 0.0425f
         mc.timer.timerSpeed = 1.04f
-    }
-
-    override fun onDisable() {
-        mc.thePlayer.speedInAir = 0.02f
-        mc.timer.timerSpeed = 1f
     }
 
     override fun onUpdate() {
@@ -36,5 +31,4 @@ object HiveHop : SpeedMode("HiveHop") {
             mc.timer.timerSpeed = 1f
         }
     }
-
 }

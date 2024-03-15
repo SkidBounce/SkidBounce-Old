@@ -14,7 +14,7 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 /**
  * @author CCBlueX/LiquidBounce
  */
-object CustomSpeed : SpeedMode("Custom") {
+object Custom : SpeedMode("Custom") {
     override fun onMotion(event: MotionEvent) {
         if (isMoving) {
             mc.timer.timerSpeed = Speed.customTimer
@@ -32,7 +32,6 @@ object CustomSpeed : SpeedMode("Custom") {
             mc.thePlayer.motionX = mc.thePlayer.motionZ
         }
     }
-
     override fun onEnable() {
         if (Speed.resetXZ) {
             mc.thePlayer.motionZ = 0.0
@@ -41,10 +40,4 @@ object CustomSpeed : SpeedMode("Custom") {
         if (Speed.resetY) mc.thePlayer.motionY = 0.0
         super.onEnable()
     }
-
-    override fun onDisable() {
-        mc.timer.timerSpeed = 1f
-        super.onDisable()
-    }
-
 }

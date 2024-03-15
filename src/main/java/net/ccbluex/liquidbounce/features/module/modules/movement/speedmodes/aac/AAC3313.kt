@@ -19,7 +19,7 @@ import kotlin.math.sin
 /**
  * @author CCBlueX/LiquidBounce
  */
-object AACHop3313 : SpeedMode("AACHop3.3.13") {
+object AAC3313 : SpeedMode("AAC3.3.13") {
     override fun onUpdate() {
         val thePlayer = mc.thePlayer ?: return
 
@@ -44,9 +44,5 @@ object AACHop3313 : SpeedMode("AACHop3.3.13") {
             // Motion Y
             if (!thePlayer.isCollidedHorizontally) thePlayer.motionY -= 0.014999993f
         } else thePlayer.jumpMovementFactor = 0.02f
-    }
-
-    override fun onDisable() {
-        mc.thePlayer.jumpMovementFactor = 0.02f
     }
 }

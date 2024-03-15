@@ -12,7 +12,7 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
 /**
  * @author CCBlueX/LiquidBounce
  */
-object MineBlazeHop : SpeedMode("MineBlazeHop") {
+object MineBlaze : SpeedMode("MineBlaze") {
     override fun onUpdate() {
         mc.thePlayer ?: return
         mc.thePlayer.run {

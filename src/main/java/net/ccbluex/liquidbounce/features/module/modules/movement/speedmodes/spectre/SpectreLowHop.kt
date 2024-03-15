@@ -23,5 +23,4 @@ object SpectreLowHop : SpeedMode("SpectreLowHop", true) {
         }
         strafe()
     }
-
 }

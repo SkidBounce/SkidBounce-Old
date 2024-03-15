@@ -13,7 +13,7 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
 /**
  * @author CCBlueX/LiquidBounce
  */
-object AACHop350 : SpeedMode("AACHop3.5.0") {
+object AAC350 : SpeedMode("AAC3.5.0") {
 
     override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer ?: return

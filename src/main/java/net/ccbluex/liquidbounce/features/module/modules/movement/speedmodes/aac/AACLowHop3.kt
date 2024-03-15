@@ -53,5 +53,4 @@ object AACLowHop3 : SpeedMode("AACLowHop3") {
         thePlayer.motionX = sin(direction) * -speed
         thePlayer.motionZ = cos(direction) * speed
     }
-
 }

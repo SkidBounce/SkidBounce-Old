@@ -47,9 +47,4 @@ object AAC3BHop : SpeedMode("AAC3BHop") {
             thePlayer.motionZ = 0.0
         }
     }
-
-    override fun onDisable() {
-        mc.thePlayer.speedInAir = 0.02f
-        mc.timer.timerSpeed = 1f
-    }
 }

@@ -33,7 +33,6 @@ object SNCPBHop : SpeedMode("SNCPBHop") {
     }
 
     override fun onDisable() {
-        mc.timer.timerSpeed = 1f
         moveSpeed = baseMoveSpeed
         level = 0
     }

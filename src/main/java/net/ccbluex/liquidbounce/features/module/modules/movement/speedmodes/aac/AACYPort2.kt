@@ -26,5 +26,4 @@ object AACYPort2 : SpeedMode("AACYPort2") {
             } else thePlayer.motionY = -0.21
         }
     }
-
 }

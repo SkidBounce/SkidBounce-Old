@@ -45,8 +45,4 @@ object Cardinal : SpeedMode("Cardinal") {
         }
         strafe(strength = if (isOnGround(cardinalStrafeHeight.toDouble())) 1f else cardinalStrafeStrength)
     }
-
-    override fun onDisable() {
-        mc.thePlayer.jumpMovementFactor = 0.02f
-    }
 }

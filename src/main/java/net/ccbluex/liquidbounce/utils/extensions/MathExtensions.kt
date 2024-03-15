@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.utils.extensions
 
+import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.minecraft.block.Block
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.entity.Entity
@@ -121,3 +122,5 @@ fun Number.round(digits: Number = 0, base: Number = 10): Double {
 	val multi = base.toDouble().pow(digits.toDouble())
 	return kotlin.math.round(this.toDouble() * multi) / multi
 }
+
+infix fun <T> Collection<T?>.overlapsWith(other: Collection<T?>) = this.any { it in other }

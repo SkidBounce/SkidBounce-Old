@@ -38,8 +38,4 @@ object UNCPYPort : SpeedMode("UNCPYPort") {
         if (uncpyportDamageBoost && event.packet is S12PacketEntityVelocity && event.packet.entityID == mc.thePlayer.entityId)
             speed *= 2f
     }
-
-    override fun onDisable() {
-        mc.timer.timerSpeed = 1f
-    }
 }

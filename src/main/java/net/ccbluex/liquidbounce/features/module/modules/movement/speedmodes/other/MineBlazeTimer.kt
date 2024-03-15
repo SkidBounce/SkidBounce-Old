@@ -32,5 +32,4 @@ object MineBlazeTimer : SpeedMode("MineBlazeTimer") {
                 mc.timer.timerSpeed = 1f
         }
     }
-
 }

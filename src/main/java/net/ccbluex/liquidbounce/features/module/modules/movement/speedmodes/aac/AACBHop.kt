@@ -39,8 +39,4 @@ object AACBHop : SpeedMode("AACBHop") {
             mc.timer.timerSpeed = 1f
         }
     }
-
-    override fun onDisable() {
-        mc.timer.timerSpeed = 1f
-    }
 }

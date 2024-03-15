@@ -13,14 +13,14 @@ import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 /**
  * @author liquidbounceplusreborn/LiquidbouncePlus-Reborn
  */
-object AAC4Hop : SpeedMode("AAC4Hop") {
+object AAC4 : SpeedMode("AAC4") {
     override fun onDisable() {
         mc.timer.timerSpeed = 1f
         mc.thePlayer.speedInAir = 0.02f
     }
 
     override fun onUpdate() {
-        mc.thePlayer!!.run {
+        mc.thePlayer.run {
             if (!isMoving) {
                 stopXZ()
                 return

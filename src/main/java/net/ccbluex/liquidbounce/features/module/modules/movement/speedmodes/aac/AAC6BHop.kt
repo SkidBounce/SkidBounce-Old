@@ -47,9 +47,4 @@ object AAC6BHop : SpeedMode("AAC6BHop") {
     override fun onEnable() {
         legitJump = true
     }
-
-    override fun onDisable() {
-        mc.timer.timerSpeed = 1f
-        mc.thePlayer?.speedInAir = 0.02f
-    }
 }

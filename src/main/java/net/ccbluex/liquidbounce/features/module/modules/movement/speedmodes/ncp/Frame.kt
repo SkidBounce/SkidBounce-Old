@@ -42,5 +42,4 @@ object Frame : SpeedMode("Frame") {
             tickTimer.update()
         }
     }
-
 }

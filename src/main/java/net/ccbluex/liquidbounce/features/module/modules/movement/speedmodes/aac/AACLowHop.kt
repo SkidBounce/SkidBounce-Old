@@ -40,5 +40,4 @@ object AACLowHop : SpeedMode("AACLowHop") {
             thePlayer.motionZ = 0.0
         }
     }
-
 }

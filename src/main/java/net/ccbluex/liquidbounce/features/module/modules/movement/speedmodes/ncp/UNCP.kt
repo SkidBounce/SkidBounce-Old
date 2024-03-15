@@ -15,17 +15,12 @@ import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 /**
  * @author CCBlueX/LiquidBounce
  */
-object UNCPHop : SpeedMode("UNCPHop") {
+object UNCP : SpeedMode("UNCP") {
 
     private var keyDown = false
 
     override fun onDisable() {
-        airSpeedReset()
         mc.thePlayer?.stopXZ()
-    }
-
-    private fun airSpeedReset() {
-        mc.thePlayer.speedInAir = 0.02f
     }
 
     override fun onUpdate() {
@@ -44,7 +39,7 @@ object UNCPHop : SpeedMode("UNCPHop") {
             // Prevent from getting flag while airborne/falling & fall damage
             if (mc.thePlayer.isAirBorne && mc.thePlayer.fallDistance >= 3) {
                 mc.thePlayer.stopXZ()
-                airSpeedReset()
+                mc.thePlayer.speedInAir = 0.02f
             }
 
         } else {

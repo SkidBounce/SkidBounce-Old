@@ -15,10 +15,11 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
  */
 object AEMine : SpeedMode("AEMine") {
     override fun onMotion(event: MotionEvent) {
-        if (mc.thePlayer.onGround && isMoving) {
-            mc.thePlayer.jmp()
-            mc.timer.timerSpeed = 1f
-        } else
-            mc.timer.timerSpeed = 1.3091955f
+        if (isMoving) {
+            if (mc.thePlayer.onGround) {
+                mc.thePlayer.jmp()
+                mc.timer.timerSpeed = 1f
+            } else mc.timer.timerSpeed = 1.3091955f
+        } else mc.timer.timerSpeed = 1f
     }
 }

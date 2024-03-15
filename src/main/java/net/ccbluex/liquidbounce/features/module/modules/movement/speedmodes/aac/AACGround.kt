@@ -22,8 +22,4 @@ object AACGround : SpeedMode("AACGround", true) {
         mc.timer.timerSpeed = aacGroundTimer
         sendPacket(C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true))
     }
-
-    override fun onDisable() {
-        mc.timer.timerSpeed = 1f
-    }
 }

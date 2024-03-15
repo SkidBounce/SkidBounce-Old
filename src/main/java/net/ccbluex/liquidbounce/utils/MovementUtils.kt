@@ -9,7 +9,8 @@ import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.minecraft.init.Blocks.*
 import net.minecraft.network.play.client.C03PacketPlayer
-import net.minecraft.potion.Potion
+import net.minecraft.potion.Potion.moveSpeed
+import net.minecraft.potion.Potion.jump
 import net.minecraft.util.BlockPos
 import kotlin.math.*
 
@@ -43,24 +44,21 @@ object MovementUtils : MinecraftInstance(), Listenable {
         set(value) { strafe(value) }
 
     val baseMoveSpeed
-        get() = 0.2873 * 1.0 + if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) 0.2 * (mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier + 1).toDouble() else 0.0
+        get() = 0.2873 * 1.0 + if (mc.thePlayer.isPotionActive(moveSpeed)) 0.2 * (mc.thePlayer.getActivePotionEffect(moveSpeed).amplifier + 1).toDouble() else 0.0
 
     fun getBaseMoveSpeed(customSpeed: Double): Double {
         var baseSpeed = if (onIce) 0.258977700006 else customSpeed
-        if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
-            val amplifier = mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier
+        if (mc.thePlayer.isPotionActive(moveSpeed)) {
+            val amplifier = mc.thePlayer.getActivePotionEffect(moveSpeed).amplifier
             baseSpeed *= 1.0 + 0.2 * (amplifier + 1)
         }
         return baseSpeed
     }
-    fun getJumpBoostModifier(baseJumpHeight: Double): Double {
-        return getJumpBoostModifier(baseJumpHeight, true)
-    }
-    fun getJumpBoostModifier(baseJumpHeight: Double, potionJump: Boolean): Double {
+    fun getJumpBoostModifier(baseJumpHeight: Double, potionJump: Boolean = true): Double {
         @Suppress("NAME_SHADOWING") var baseJumpHeight = baseJumpHeight
-        if (mc.thePlayer.isPotionActive(Potion.jump) && potionJump) {
-            val amplifier = mc.thePlayer.getActivePotionEffect(Potion.jump).amplifier
-            baseJumpHeight += ((amplifier + 1).toFloat() * 0.1f).toDouble()
+        if (mc.thePlayer.isPotionActive(jump) && potionJump) {
+            val amplifier = mc.thePlayer.getActivePotionEffect(jump).amplifier
+            baseJumpHeight += (amplifier + 1f * 0.1f).toDouble()
         }
         return baseJumpHeight
     }
@@ -71,7 +69,7 @@ object MovementUtils : MinecraftInstance(), Listenable {
         get() = mc.thePlayer?.run { motionX != .0 || motionY != .0 || motionZ != .0 } ?: false
 
     @JvmOverloads
-    fun strafe(speed: Float = this.speed, stopWhenNoInput: Boolean = false, moveEvent: MoveEvent? = null, strength: Float = 1f) =
+    fun strafe(speed: Number = this.speed, stopWhenNoInput: Boolean = false, moveEvent: MoveEvent? = null, strength: Number = 1f) =
         mc.thePlayer?.run {
             if (!isMoving) {
                 if (stopWhenNoInput) {
@@ -82,8 +80,8 @@ object MovementUtils : MinecraftInstance(), Listenable {
                 return@run
             }
 
-            val x = -sin(direction) * (speed * strength) + (mc.thePlayer.motionX * (1 - strength))
-            val z = cos(direction) * (speed * strength) + (mc.thePlayer.motionZ * (1 - strength))
+            val x = -sin(direction) * (speed.toDouble() * strength.toDouble()) + (mc.thePlayer.motionX * (1 - strength.toDouble()))
+            val z = cos(direction) * (speed.toDouble() * strength.toDouble()) + (mc.thePlayer.motionZ * (1 - strength.toDouble()))
 
             if (moveEvent != null) {
                 moveEvent.x = x

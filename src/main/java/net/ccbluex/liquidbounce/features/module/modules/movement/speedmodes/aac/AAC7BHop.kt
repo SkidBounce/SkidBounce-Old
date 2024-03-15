@@ -36,6 +36,4 @@ object AAC7BHop : SpeedMode("AAC7BHop") {
         thePlayer.motionX = -sin(yaw) * speed
         thePlayer.motionZ = cos(yaw) * speed
     }
-
-
 }

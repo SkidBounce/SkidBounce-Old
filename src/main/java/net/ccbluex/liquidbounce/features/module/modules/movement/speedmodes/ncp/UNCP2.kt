@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.utils.extensions.stopXZ
  * @author ManInMyVan/SkidBounce
  * @author ManInMyVan
  */
-object UNCPHop2 : SpeedMode("UNCPHop2") {
+object UNCP2 : SpeedMode("UNCP2") {
     override fun onMotion(event: MotionEvent) {
         if (!isMoving) {
             mc.timer.timerSpeed = 1f
@@ -28,9 +28,5 @@ object UNCPHop2 : SpeedMode("UNCPHop2") {
         strafe()
         mc.thePlayer.jumpMovementFactor = 0.024f
         mc.thePlayer.jump(0.39935305)
-    }
-
-    override fun onDisable() {
-        mc.thePlayer.jumpMovementFactor = 0.02f
     }
 }

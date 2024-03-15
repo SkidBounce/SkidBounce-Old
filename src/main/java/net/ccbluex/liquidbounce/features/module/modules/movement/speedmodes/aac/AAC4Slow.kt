@@ -14,7 +14,7 @@ import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 /**
  * @author liquidbounceplusreborn/LiquidbouncePlus-Reborn
  */
-object AAC4SlowHop : SpeedMode("AAC4SlowHop") {
+object AAC4Slow : SpeedMode("AAC4Slow") {
     override fun onDisable() {
         mc.timer.resetSpeed()
         mc.thePlayer.speedInAir = 0.02f
