@@ -15,6 +15,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac.
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.matrix.MatrixSlow
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.ncp.UNCPYPort
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.vulcan.Vulcan
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.vulcan.Vulcan2
 import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.extensions.overlapsWith
@@ -61,6 +62,7 @@ object Speed : Module("Speed", MOVEMENT) {
     val wavelowhopTimer by FloatValue("WaveLowHop-Timer", 1.25f, 1f..2f) { WaveLowHop in modes }
     val matrixslowSprintBypass by BoolValue("MatrixSlow-SprintBypass", false) { MatrixSlow in modes }
     val matrixslowFast by BoolValue("MatrixSlow-Fast", true) { MatrixSlow in modes }
+    val vulcanFast by BoolValue("Vulcan-Fast", true) { Vulcan in modes }
     val vulcan2Fast by BoolValue("Vulcan2-Fast", true) { Vulcan2 in modes }
 
     private var currentMode = normalMode
