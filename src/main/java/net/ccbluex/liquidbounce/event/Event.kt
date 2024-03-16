@@ -26,7 +26,7 @@ open class CancellableEvent : Event() {
 
 }
 
-enum class EventState(val stateName: String) {
-    PRE("PRE"), POST("POST"), // MotionEvent
-    SEND("SEND"), RECEIVE("RECEIVE") // PacketEvent
+enum class EventState {
+    PRE, POST, // MotionEvent
+    SEND, RECEIVE // PacketEvent
 }

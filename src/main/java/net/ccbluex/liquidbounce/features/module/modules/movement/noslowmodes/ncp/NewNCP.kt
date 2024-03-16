@@ -28,6 +28,7 @@ object NewNCP : NoSlowMode("NewNCP") {
 
             POST -> if (mc.thePlayer.ticksExisted % 2 != 0)
                 sendPacket(C08PacketPlayerBlockPlacement(BlockPos(-1, -1, -1), 255, mc.thePlayer.heldItem, 0f, 0f, 0f))
+            else -> {}
         }
     }
 }

@@ -126,7 +126,7 @@ object Tower : Module("Tower", WORLD, gameDetecting = false) {
         val eventState = event.eventState
 
         // Force use of POST event when Packet mode is selected, it doesn't work with PRE mode
-        if (eventState.stateName == (if (mode == "Packet") "POST" else placeMode.uppercase()))
+        if (eventState.name == (if (mode == "Packet") "POST" else placeMode.uppercase()))
             place()
 
         if (eventState == EventState.PRE) {

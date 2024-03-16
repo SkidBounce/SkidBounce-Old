@@ -73,7 +73,6 @@ object BoostHypixel : FlyMode("BoostHypixel") {
     }
 
     override fun onMotion(event: MotionEvent) {
-        @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
         when (event.eventState) {
             EventState.PRE -> {
                 tickTimer.update()
@@ -92,6 +91,7 @@ object BoostHypixel : FlyMode("BoostHypixel") {
                 val zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ
                 lastDistance = sqrt(xDist * xDist + zDist * zDist)
             }
+            else -> {}
         }
     }
 

@@ -41,6 +41,7 @@ object NCP : NoSlowMode("NCP") {
                     0f, 0f, 0f
                 )
             )
+            else -> {}
         }
     }
 }

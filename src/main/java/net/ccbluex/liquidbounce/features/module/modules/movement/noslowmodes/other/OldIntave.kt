@@ -25,6 +25,7 @@ object OldIntave : NoSlowMode("OldIntave") {
             }
 
             POST -> sendPacket(C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem))
+            else -> {}
         }
     }
 }

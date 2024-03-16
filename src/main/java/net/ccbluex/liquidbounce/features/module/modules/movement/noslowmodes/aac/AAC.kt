@@ -27,6 +27,7 @@ object AAC : NoSlowMode("AAC") {
 
             POST -> if (mc.thePlayer.ticksExisted % 3 != 0)
                 sendPacket(C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem))
+            else -> {}
         }
     }
 }

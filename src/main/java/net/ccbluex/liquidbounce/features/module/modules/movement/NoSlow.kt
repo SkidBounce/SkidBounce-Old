@@ -154,7 +154,6 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         Blocks.slime_block.slipperiness = if (slime) slimeFriction else 0.8f
 
         if (mc.thePlayer.isSneaking && !(onlyMoveSneak && !hasMotion)) {
-            @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
             when (sneakMode) {
                 "Switch" -> when (event.eventState) {
                     PRE -> {
@@ -170,6 +169,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
                             C0BPacketEntityAction(mc.thePlayer, START_SNEAKING)
                         )
                     }
+                    else -> {}
                 }
 
                 "MineSecure" -> {
@@ -257,9 +257,9 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
 
     fun packetTiming(eventState: EventState) =
         when (noSlowItem) {
-            NoSlowItem.SWORD -> eventState.stateName == blockingPacketTiming.uppercase() || blockingPacketTiming == "Any"
-            NoSlowItem.BOW -> eventState.stateName == bowPacketTiming.uppercase() || bowPacketTiming == "Any"
-            NoSlowItem.CONSUMABLE -> eventState.stateName == consumePacketTiming.uppercase() || consumePacketTiming == "Any"
+            NoSlowItem.SWORD -> eventState.name == blockingPacketTiming.uppercase() || blockingPacketTiming == "Any"
+            NoSlowItem.BOW -> eventState.name == bowPacketTiming.uppercase() || bowPacketTiming == "Any"
+            NoSlowItem.CONSUMABLE -> eventState.name == consumePacketTiming.uppercase() || consumePacketTiming == "Any"
             NoSlowItem.OTHER -> false
         }
 

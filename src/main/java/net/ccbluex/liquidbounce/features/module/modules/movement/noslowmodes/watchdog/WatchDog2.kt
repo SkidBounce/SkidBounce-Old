@@ -25,6 +25,7 @@ object WatchDog2 : NoSlowMode("WatchDog2") {
         when (event.eventState) {
             PRE -> sendPacket(C07PacketPlayerDigging(RELEASE_USE_ITEM, ORIGIN, DOWN))
             POST -> sendPacket(C08PacketPlayerBlockPlacement(BlockPos(-1, -1, -1), 255, null, 0f, 0f, 0f))
+            else -> {}
         }
     }
 }

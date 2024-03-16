@@ -54,7 +54,6 @@ object AutoPot : Module("AutoPot", COMBAT) {
 
         val thePlayer = mc.thePlayer ?: return
 
-        @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
         when (motionEvent.eventState) {
             PRE -> {
                 // Hotbar Potion
@@ -119,6 +118,7 @@ object AutoPot : Module("AutoPot", COMBAT) {
                     potion = -1
                 }
             }
+            else -> {}
         }
     }
 

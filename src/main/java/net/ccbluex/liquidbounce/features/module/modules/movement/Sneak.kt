@@ -60,6 +60,7 @@ object Sneak : Module("Sneak", MOVEMENT) {
                             C0BPacketEntityAction(mc.thePlayer, START_SNEAKING)
                         )
                     }
+                    else -> {}
                 }
             }
 
