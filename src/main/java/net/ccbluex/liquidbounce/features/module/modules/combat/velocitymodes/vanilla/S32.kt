@@ -15,12 +15,13 @@ import net.minecraft.network.play.server.S32PacketConfirmTransaction
  */
 object S32 : VelocityMode("S32") {
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is S32PacketConfirmTransaction)
+        if (event.packet is S32PacketConfirmTransaction) {
 
-        if (event.isCancelled)
-            return
+            if (event.isCancelled)
+                return
 
-        event.cancelEvent()
+            event.cancelEvent()
+        }
     }
     override fun onVelocityPacket(event: PacketEvent) = event.cancelEvent()
 }

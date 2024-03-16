@@ -15,13 +15,14 @@ import net.minecraft.network.play.client.C0FPacketConfirmTransaction
  */
 object Vulcan : VelocityMode("Vulcan") {
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is C0FPacketConfirmTransaction)
+        if (event.packet is C0FPacketConfirmTransaction) {
 
             // prevent for vulcan transaction timeout
             if (event.isCancelled)
                 return
 
             event.cancelEvent()
+        }
     }
 
     override fun onVelocityPacket(event: PacketEvent) = event.cancelEvent()
