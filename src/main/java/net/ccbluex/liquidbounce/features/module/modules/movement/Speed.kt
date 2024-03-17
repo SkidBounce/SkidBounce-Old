@@ -15,6 +15,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac.
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.matrix.MatrixSlow
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.ncp.UNCPYPort
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other.Strafe
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.vulcan.Vulcan
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.vulcan.Vulcan2
 import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
@@ -41,6 +42,10 @@ object Speed : Module("Speed", MOVEMENT) {
 
     private val normalMode by ListValue("NormalMode", moduleModes, "NCPBHop")
     private val jumpingMode by ListValue("JumpingMode", arrayOf("None") + moduleModes, "None")
+
+    val strafeAir by FloatValue("Strafe-InAir", 1f, 0f..1f) { Strafe in modes }
+    val strafeGround by FloatValue("Strafe-OnGround", 1f, 0f..1f) { Strafe in modes }
+    val strafeStop by BoolValue("Strafe-WhenNoInput", true) { Strafe in modes }
 
     val customSpeed by FloatValue("Custom-Speed", 1.6f, 0.2f..2f) { Custom in modes }
     val customY by FloatValue("Custom-Y", 0f, 0f..4f) { Custom in modes }
