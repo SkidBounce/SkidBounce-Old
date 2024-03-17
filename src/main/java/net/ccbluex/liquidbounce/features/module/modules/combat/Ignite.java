@@ -10,8 +10,6 @@ import net.ccbluex.liquidbounce.event.UpdateEvent;
 import net.ccbluex.liquidbounce.features.module.Module;
 import net.ccbluex.liquidbounce.utils.EntityUtils;
 import net.ccbluex.liquidbounce.utils.RotationUtils;
-import net.ccbluex.liquidbounce.utils.extensions.MathExtensionsKt;
-import net.ccbluex.liquidbounce.utils.extensions.PlayerExtensionKt;
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils;
 import net.ccbluex.liquidbounce.utils.timing.MSTimer;
 import net.ccbluex.liquidbounce.value.BoolValue;
@@ -31,7 +29,7 @@ import net.minecraft.util.Vec3;
 import static net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT;
 import static net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket;
 import static net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets;
-import static net.ccbluex.liquidbounce.utils.extensions.BlockExtensionKt.*;
+import static net.ccbluex.liquidbounce.utils.extensions.ExtensionsKt.*;
 import static net.minecraft.network.play.client.C03PacketPlayer.C05PacketPlayerLook;
 
 public class Ignite extends Module {
@@ -89,8 +87,8 @@ public class Ignite extends Module {
                                     thePlayer.getEyeHeight());
                     final double diffZ = blockPos.getZ() + 0.5 - thePlayer.posZ;
                     final double sqrt = Math.sqrt(diffX * diffX + diffZ * diffZ);
-                    final float yaw = MathExtensionsKt.toDegreesF(Math.atan2(diffZ, diffX)) - 90F;
-                    final float pitch = -MathExtensionsKt.toDegreesF(Math.atan2(diffY, sqrt));
+                    final float yaw = toDegreesF(Math.atan2(diffZ, diffX)) - 90F;
+                    final float pitch = -toDegreesF(Math.atan2(diffY, sqrt));
 
                     sendPacket(new C05PacketPlayerLook(
                             mc.thePlayer.rotationYaw +
@@ -99,7 +97,7 @@ public class Ignite extends Module {
                                     MathHelper.wrapAngleTo180_float(pitch - mc.thePlayer.rotationPitch),
                             mc.thePlayer.onGround));
 
-                    PlayerExtensionKt.sendUseItem(thePlayer, itemStack);
+                    sendUseItem(thePlayer, itemStack);
                 } else {
                     for (final EnumFacing side : EnumFacing.values()) {
                         final BlockPos neighbor = blockPos.offset(side);
@@ -112,8 +110,8 @@ public class Ignite extends Module {
                                         thePlayer.getEyeHeight());
                         final double diffZ = neighbor.getZ() + 0.5 - thePlayer.posZ;
                         final double sqrt = Math.sqrt(diffX * diffX + diffZ * diffZ);
-                        final float yaw = MathExtensionsKt.toDegreesF(Math.atan2(diffZ, diffX)) - 90F;
-                        final float pitch = -MathExtensionsKt.toDegreesF(Math.atan2(diffY, sqrt));
+                        final float yaw = toDegreesF(Math.atan2(diffZ, diffX)) - 90F;
+                        final float pitch = -toDegreesF(Math.atan2(diffY, sqrt));
 
                         sendPacket(new C05PacketPlayerLook(
                                 mc.thePlayer.rotationYaw +
@@ -122,7 +120,7 @@ public class Ignite extends Module {
                                         MathHelper.wrapAngleTo180_float(pitch - mc.thePlayer.rotationPitch),
                                 mc.thePlayer.onGround));
 
-                        if (PlayerExtensionKt.onPlayerRightClick(thePlayer, neighbor, side.getOpposite(),
+                        if (onPlayerRightClick(thePlayer, neighbor, side.getOpposite(),
                                 new Vec3(side.getDirectionVec()), itemStack)) {
                             thePlayer.swingItem();
                             break;

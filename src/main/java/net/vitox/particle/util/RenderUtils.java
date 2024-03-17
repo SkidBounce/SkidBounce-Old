@@ -1,6 +1,6 @@
 package net.vitox.particle.util;
 
-import net.ccbluex.liquidbounce.utils.extensions.MathExtensionsKt;
+import net.ccbluex.liquidbounce.utils.extensions.ExtensionsKt;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -40,7 +40,7 @@ public class RenderUtils {
         glBegin(GL_POLYGON);
 
         for (int i = 0; i <= 360; i++) {
-            double rad = MathExtensionsKt.toRadians(i);
+            double rad = ExtensionsKt.toRadians(i);
             glVertex2d(x + Math.sin(rad) * radius, y + Math.cos(rad) * radius);
         }
 

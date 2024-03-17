@@ -13,6 +13,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMod
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.MovementUtils
 import net.ccbluex.liquidbounce.utils.PacketUtils
+import net.ccbluex.liquidbounce.utils.extensions.isActuallyPressed
 import net.minecraft.client.settings.GameSettings
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C0BPacketEntityAction
@@ -60,23 +61,13 @@ object Vulcan : FlyMode("Vulcan") {
         mc.gameSettings.keyBindSneak.pressed = false
         when (stage) {
             FlyStage.FLYING, FlyStage.WAITING -> {
-                if (stage == FlyStage.FLYING) {
-                    mc.timer.timerSpeed = vulcanTimer
-                } else {
-                    mc.timer.timerSpeed = 1.0f
-                }
+                mc.timer.timerSpeed = if (stage == FlyStage.FLYING) vulcanTimer else 1.0f
                 if (vulcanNoClip) mc.thePlayer.noClip = true
-                if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && modifyTicks >= 6 && (mc.theWorld.getCollisionBoxes(
-                        mc.thePlayer.entityBoundingBox.offset(0.0, 0.5, 0.0)
-                    ).isEmpty() || vulcanNoClip)
-                ) {
+                if (ticks == 2 && mc.gameSettings.keyBindJump.isActuallyPressed && modifyTicks >= 6 && (mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, 0.5, 0.0)).isEmpty() || vulcanNoClip)) {
                     mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.5, mc.thePlayer.posZ)
                     modifyTicks = 0
                 }
-                if (!MovementUtils.isMoving && ticks == 1 && (GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) || GameSettings.isKeyDown(
-                        mc.gameSettings.keyBindJump
-                    )) && modifyTicks >= 5
-                ) {
+                if (!MovementUtils.isMoving && ticks == 1 && (mc.gameSettings.keyBindSneak.isActuallyPressed || mc.gameSettings.keyBindJump.isActuallyPressed) && modifyTicks >= 5) {
                     val playerYaw = mc.thePlayer.rotationYaw * Math.PI / 180
                     mc.thePlayer.setPosition(
                         mc.thePlayer.posX + 0.05 * -sin(playerYaw),
@@ -84,17 +75,15 @@ object Vulcan : FlyMode("Vulcan") {
                         mc.thePlayer.posZ + 0.05 * cos(playerYaw)
                     )
                 }
-                if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && modifyTicks >= 6 && (mc.theWorld.getCollisionBoxes(
+                if (ticks == 2 && mc.gameSettings.keyBindSneak.isActuallyPressed && modifyTicks >= 6 && (mc.theWorld.getCollisionBoxes(
                         mc.thePlayer.entityBoundingBox.offset(0.0, -0.5, 0.0)
                     ).isEmpty() || vulcanNoClip)
                 ) {
                     mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 0.5, mc.thePlayer.posZ)
                     modifyTicks = 0
-                } else if (ticks == 2 && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && !(GameSettings.isKeyDown(
-                        mc.gameSettings.keyBindForward
-                    ) || GameSettings.isKeyDown(mc.gameSettings.keyBindBack) || GameSettings.isKeyDown(mc.gameSettings.keyBindLeft) || GameSettings.isKeyDown(
-                        mc.gameSettings.keyBindRight
-                    )) && mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, -0.5, 0.0))
+                } else if (ticks == 2 && mc.gameSettings.keyBindSneak.isActuallyPressed && !(
+                        mc.gameSettings.keyBindForward.isActuallyPressed || mc.gameSettings.keyBindBack.isActuallyPressed || mc.gameSettings.keyBindLeft.isActuallyPressed || mc.gameSettings.keyBindRight.isActuallyPressed
+                    ) && mc.theWorld.getCollisionBoxes(mc.thePlayer.entityBoundingBox.offset(0.0, -0.5, 0.0))
                         .isNotEmpty()
                 ) {
                     PacketUtils.sendPacket(

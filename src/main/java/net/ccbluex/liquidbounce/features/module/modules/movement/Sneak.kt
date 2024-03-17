@@ -14,6 +14,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
+import net.ccbluex.liquidbounce.utils.extensions.isActuallyPressed
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.client.settings.GameSettings
@@ -83,9 +84,8 @@ object Sneak : Module("Sneak", MOVEMENT) {
 
         when (mode.lowercase()) {
             "legit" -> {
-                if (!GameSettings.isKeyDown(mc.gameSettings.keyBindSneak)) {
+                if (!mc.gameSettings.keyBindSneak.isActuallyPressed)
                     mc.gameSettings.keyBindSneak.pressed = false
-                }
             }
 
             "vanilla", "switch", "minesecure" -> sendPacket(C0BPacketEntityAction(player, STOP_SNEAKING))

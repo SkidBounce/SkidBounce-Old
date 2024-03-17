@@ -10,6 +10,8 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui
 import net.ccbluex.liquidbounce.ui.client.hud.designer.GuiHudDesigner
+import net.ccbluex.liquidbounce.utils.extensions.isActuallyPressed
+import net.ccbluex.liquidbounce.utils.extensions.update
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager.canClickInventory
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
@@ -18,7 +20,6 @@ import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.GuiIngameMenu
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.client.gui.inventory.GuiInventory
-import net.minecraft.client.settings.GameSettings
 
 object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) {
 
@@ -73,8 +74,9 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
             return
 
         for (affectedBinding in affectedBindings)
-            affectedBinding.pressed = GameSettings.isKeyDown(affectedBinding)
+            affectedBinding.pressed = affectedBinding.isActuallyPressed
                     || (affectedBinding == mc.gameSettings.keyBindSprint && Sprint.handleEvents() && (!Sprint.onlyOnSprintPress || mc.thePlayer.isSprinting))
+                    || (affectedBinding == mc.gameSettings.keyBindForward && AutoWalk.handleEvents())
     }
 
     @EventTarget
@@ -97,9 +99,6 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
 
     override fun onDisable() {
         for (affectedBinding in affectedBindings)
-            affectedBinding.pressed = GameSettings.isKeyDown(affectedBinding)
+            affectedBinding.update()
     }
-
-    override val tag
-        get() = if (aacAdditionPro) "AACAdditionPro" else null
 }

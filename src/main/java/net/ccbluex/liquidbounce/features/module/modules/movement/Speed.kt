@@ -22,10 +22,10 @@ import net.ccbluex.liquidbounce.utils.extensions.overlapsWith
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.inLiquid
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
+import net.ccbluex.liquidbounce.utils.extensions.update
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
-import net.minecraft.client.settings.GameSettings.isKeyDown
 
 object Speed : Module("Speed", MOVEMENT) {
     private val speedModes = this.javaClass.`package`.getAllObjects<SpeedMode>().sortedBy { it.modeName }
@@ -72,7 +72,7 @@ object Speed : Module("Speed", MOVEMENT) {
     fun onUpdate(event: UpdateEvent) {
         val thePlayer = mc.thePlayer ?: return
 
-        mc.gameSettings.keyBindJump.pressed = isKeyDown(mc.gameSettings.keyBindJump)
+        mc.gameSettings.keyBindJump.update()
 
         if (jumpingMode != "None") {
             val last = modeModule
@@ -89,7 +89,7 @@ object Speed : Module("Speed", MOVEMENT) {
         if (!shouldSpeed)
             return
 
-        if (isMoving && !alwaysSprint)
+        if (isMoving && alwaysSprint)
             thePlayer.isSprinting = true
 
         modeModule.onUpdate()
@@ -102,7 +102,7 @@ object Speed : Module("Speed", MOVEMENT) {
         if (!shouldSpeed || event.eventState != EventState.PRE)
             return
 
-        if (isMoving && !alwaysSprint)
+        if (isMoving && alwaysSprint)
             thePlayer.isSprinting = true
 
         modeModule.onMotion(event)

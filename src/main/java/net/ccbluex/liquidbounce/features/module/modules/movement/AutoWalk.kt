@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
-import net.minecraft.client.settings.GameSettings
+import net.ccbluex.liquidbounce.utils.extensions.update
 
 object AutoWalk : Module("AutoWalk", MOVEMENT, gameDetecting = false) {
 
@@ -19,7 +19,6 @@ object AutoWalk : Module("AutoWalk", MOVEMENT, gameDetecting = false) {
     }
 
     override fun onDisable() {
-        if (!GameSettings.isKeyDown(mc.gameSettings.keyBindForward))
-            mc.gameSettings.keyBindForward.pressed = false
+        mc.gameSettings.keyBindForward.update()
     }
 }

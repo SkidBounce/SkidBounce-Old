@@ -15,7 +15,7 @@ import net.ccbluex.liquidbounce.utils.ClientUtils;
 import net.ccbluex.liquidbounce.utils.PacketUtils;
 import net.ccbluex.liquidbounce.utils.Rotation;
 import net.ccbluex.liquidbounce.utils.RotationUtils;
-import net.ccbluex.liquidbounce.utils.extensions.PlayerExtensionKt;
+import net.ccbluex.liquidbounce.utils.extensions.ExtensionsKt;
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
@@ -123,7 +123,7 @@ public abstract class MixinNetHandlerPlayClient {
         NoRotate module = NoRotate.INSTANCE;
 
         // Save the server's requested rotation before it resets the rotations
-        module.setSavedRotation(PlayerExtensionKt.getRotation(Minecraft.getMinecraft().thePlayer));
+        module.setSavedRotation(ExtensionsKt.getRotation(Minecraft.getMinecraft().thePlayer));
     }
 
     @Redirect(method = "handlePlayerPosLook", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkManager;sendPacket(Lnet/minecraft/network/Packet;)V"))
@@ -146,7 +146,7 @@ public abstract class MixinNetHandlerPlayClient {
         Rotation currentRotation = RotationUtils.INSTANCE.getCurrentRotation();
 
         if (currentRotation != null && module.getAffectServerRotation()) {
-            RotationUtils.INSTANCE.setSetbackRotation(new MutableTriple<>(PlayerExtensionKt.getRotation(player), true, currentRotation));
+            RotationUtils.INSTANCE.setSetbackRotation(new MutableTriple<>(ExtensionsKt.getRotation(player), true, currentRotation));
         }
 
         // Slightly modify the client-side rotations, so they pass the rotation difference check in onUpdateWalkingPlayer, EntityPlayerSP.

@@ -18,7 +18,7 @@ import net.ccbluex.liquidbounce.utils.CooldownHelper;
 import net.ccbluex.liquidbounce.utils.MovementUtils;
 import net.ccbluex.liquidbounce.utils.Rotation;
 import net.ccbluex.liquidbounce.utils.RotationUtils;
-import net.ccbluex.liquidbounce.utils.extensions.MathExtensionsKt;
+import net.ccbluex.liquidbounce.utils.extensions.ExtensionsKt;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -322,8 +322,8 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
         }
 
         // Calculate and apply the movement input based on rotation
-        float moveForward = currentRotation != null ? Math.round(modifiedInput.moveForward * MathHelper.cos(MathExtensionsKt.toRadians(rotationYaw - currentRotation.getYaw())) + modifiedInput.moveStrafe * MathHelper.sin(MathExtensionsKt.toRadians(rotationYaw - currentRotation.getYaw()))) : movementInput.moveForward;
-        float moveStrafe = currentRotation != null ? Math.round(modifiedInput.moveStrafe * MathHelper.cos(MathExtensionsKt.toRadians(rotationYaw - currentRotation.getYaw())) - modifiedInput.moveForward * MathHelper.sin(MathExtensionsKt.toRadians(rotationYaw - currentRotation.getYaw()))) : movementInput.moveStrafe;
+        float moveForward = currentRotation != null ? Math.round(modifiedInput.moveForward * MathHelper.cos(ExtensionsKt.toRadians(rotationYaw - currentRotation.getYaw())) + modifiedInput.moveStrafe * MathHelper.sin(ExtensionsKt.toRadians(rotationYaw - currentRotation.getYaw()))) : movementInput.moveForward;
+        float moveStrafe = currentRotation != null ? Math.round(modifiedInput.moveStrafe * MathHelper.cos(ExtensionsKt.toRadians(rotationYaw - currentRotation.getYaw())) - modifiedInput.moveForward * MathHelper.sin(ExtensionsKt.toRadians(rotationYaw - currentRotation.getYaw()))) : movementInput.moveStrafe;
 
         modifiedInput.moveForward = moveForward;
         modifiedInput.moveStrafe = moveStrafe;
