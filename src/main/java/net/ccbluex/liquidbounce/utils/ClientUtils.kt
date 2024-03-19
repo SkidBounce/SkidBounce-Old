@@ -57,7 +57,7 @@ object ClientUtils : MinecraftInstance() {
         )
     }
 
-    fun displayChatMessage(message: Any) {
+    fun displayChatMessage(message: Any?) {
         val jsonObject = JsonObject()
         jsonObject.addProperty("text", message.toString())
         val chatComponent = IChatComponent.Serializer.jsonToComponent(jsonObject.toString())
@@ -67,7 +67,7 @@ object ClientUtils : MinecraftInstance() {
             LOGGER.error(e)
         }
     }
-    fun displayClientMessage(message: Any) = displayChatMessage("§8[§9$CLIENT_NAME§8] §r$message")
+    fun displayClientMessage(message: Any?) = displayChatMessage("§8[§9$CLIENT_NAME§8] §r$message")
 
     fun resource(directory: String) = ResourceLocation("${CLIENT_NAME.lowercase()}/$directory")
 }
