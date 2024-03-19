@@ -144,8 +144,6 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
     val slimeMultiplier by FloatValue("SlimeMultiplier", 1f, 0.4f..1f) { slime }
     private val slimeFriction by FloatValue("SlimeFriction", 0.6f, 0.6f..0.8f) { slime }
 
-    val liquidPush by BoolValue("LiquidPush", true)
-
     @EventTarget
     fun onMotion(event: MotionEvent) {
         if (serverUsing && !isUsingItem)

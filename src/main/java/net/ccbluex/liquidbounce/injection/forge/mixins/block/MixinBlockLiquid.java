@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.block;
 
-import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow;
+import net.ccbluex.liquidbounce.features.module.modules.movement.NoLiquidPush;
 import net.ccbluex.liquidbounce.features.module.modules.world.Liquids;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.Vec3;
@@ -28,9 +28,7 @@ public class MixinBlockLiquid {
 
     @Inject(method = "modifyAcceleration", at = @At("HEAD"), cancellable = true)
     private void onModifyAcceleration(CallbackInfoReturnable<Vec3> callbackInfoReturnable) {
-        final NoSlow noSlow = NoSlow.INSTANCE;
-
-        if (noSlow.handleEvents() && noSlow.getLiquidPush()) {
+        if (NoLiquidPush.INSTANCE.handleEvents()) {
             callbackInfoReturnable.setReturnValue(new Vec3(0, 0, 0));
         }
     }
