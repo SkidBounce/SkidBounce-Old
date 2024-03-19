@@ -244,7 +244,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
 
     private val noMoveCheck
         get() = noSlowItem.run {
-            if (usedMode.modeName in noNoMoveCheck || hasMotion)
+            if (usedMode.modeName in noNoMoveCheck || (mc.thePlayer.motionX != 0.0 && mc.thePlayer.motionZ != 0.0))
                 return@run false
 
             return@run when (this) {

@@ -489,19 +489,13 @@ object Backtrack : Module("Backtrack", COMBAT) {
     private fun removeBacktrackData(id: UUID) = backtrackedPlayer.remove(id)
 
     private fun isEnemy(entity: Entity?): Boolean {
-        if (entity is EntityLivingBase && entity != mc.thePlayer) {
-            if (entity is EntityPlayer) {
-                if (entity.isSpectator || isBot(entity)) return false
-
-                if (entity.isClientFriend() && !Friends.handleEvents()) return false
-
-                return !Teams.handleEvents() || !Teams.isInYourTeam(entity)
-            }
-
-            return true
+        return when {
+            entity !is EntityLivingBase || entity == mc.thePlayer -> false
+            entity !is EntityPlayer -> true
+            entity.isSpectator || isBot(entity) -> false
+            entity.isClientFriend() && !Friends.handleEvents() -> false
+            else -> !Teams.handleEvents() || !Teams.isInYourTeam(entity)
         }
-
-        return false
     }
 
     /**
