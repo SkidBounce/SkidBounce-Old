@@ -9,7 +9,6 @@
         "menu.mods": "Mods",
         "menu.serverStatus": "Status do Servidor",
         "menu.configuration": "Configuração",
-        "menu.contributors": "Contribuidores",
 
         "notification.moduleEnabled": "Ligaste %s",
         "notification.moduleDisabled": "Desligastes %s",
@@ -46,7 +45,7 @@
 
         "module.killAura.description": "Automaticamente ataca alvos á volta de ti.",
 
-        "module.noFriends.description": "Permite que tu ataques amigos.",
+        "module.friends.description": "Permite que tu ataques amigos.",
 
         "module.superKnockback.description": "UNTRANSLATED: Increases knockback dealt to other entities.",
 

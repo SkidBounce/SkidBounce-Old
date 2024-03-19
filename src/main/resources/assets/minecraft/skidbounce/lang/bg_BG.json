@@ -8,7 +8,6 @@
         "menu.mods": "Модове",
         "menu.serverStatus": "Статус на сървъра",
         "menu.configuration": "Конфигурация",
-        "menu.contributors": "Сътрудници",
 
         "notification.moduleEnabled": "%s се активира",
         "notification.moduleDisabled": "%s се деактивира",
@@ -45,7 +44,7 @@
 
         "module.killAura.description": "Автоматично атакува цели около вас.",
 
-        "module.noFriends.description": "Позволява ви да атакувате приятели.",
+        "module.friends.description": "Позволява ви да атакувате приятели.",
 
         "module.superKnockback.description": "Увеличава отхвърлянето, раздадено на други субекти.",
 

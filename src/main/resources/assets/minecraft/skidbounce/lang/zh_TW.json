@@ -8,7 +8,6 @@
         "menu.mods": "模組",
         "menu.serverStatus": "伺服器狀態",
         "menu.configuration": "配置",
-        "menu.contributors": "貢獻者",
         "notification.moduleEnabled": "已啟用 %s",
         "notification.moduleDisabled": "已停用 %s",
         "module.aimBot.description": "自動瞄準範圍內的目標。",

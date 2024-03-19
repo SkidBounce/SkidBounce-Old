@@ -10,7 +10,6 @@
         "menu.mods": "Mods",
         "menu.serverStatus": "Server Status",
         "menu.configuration": "Configuration",
-        "menu.contributors": "Contributors",
 
         "notification.moduleEnabled": "Enabled %s",
         "notification.moduleDisabled": "Disabled %s",
@@ -18,7 +17,7 @@
         "module.aimBot.description": "Automatically faces selected entities around you.",
 
         "module.autoArmor.description": "Automatically equips the best armor in your inventory.",
-
+        "module.noInvClose.description": "Prevents the server from closing your inventory.",
         "module.autoBow.description": "Automatically shoots an arrow whenever your bow is fully loaded.",
 
         "module.autoClicker.description": "Constantly clicks when holding down a mouse button.",
@@ -47,7 +46,7 @@
 
         "module.killAura.description": "Automatically attacks targets around you.",
 
-        "module.noFriends.description": "Allows you to attack friends.",
+        "module.friends.description": "Allows you to attack friends.",
 
         "module.superKnockback.description": "Increases knockback dealt to other entities.",
 

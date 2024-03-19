@@ -8,7 +8,6 @@
         "menu.mods": "Моды",
         "menu.serverStatus": "Статус сервера",
         "menu.configuration": "Конфигурация",
-        "menu.contributors": "Контрибьюторы",
 
         "notification.moduleEnabled": "Включен %s",
         "notification.moduleDisabled": "Выключен %s",
@@ -45,7 +44,7 @@
 
         "module.killAura.description": "Автоматически атакует врагов вокруг.",
 
-        "module.noFriends.description": "Позволяет атаковать друзей.",
+        "module.friends.description": "Позволяет атаковать друзей.",
 
         "module.superKnockback.description": "Увеличивает вашу отталкивающую силу(КБ) при ударе.",
 
