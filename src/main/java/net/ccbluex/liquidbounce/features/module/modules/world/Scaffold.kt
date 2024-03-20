@@ -255,6 +255,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val mark by BoolValue("Mark", false, subjective = true)
     private val trackCPS by BoolValue("TrackCPS", false, subjective = true)
     private val safetyLines by BoolValue("SafetyLines", false, subjective = true) { isGodBridgeEnabled }
+    private val itemSwapAnimation by BoolValue("ItemSwapAnimation", false, subjective = true)
 
     // Target placement
     private var placeRotation: PlaceRotation? = null
@@ -1242,11 +1243,11 @@ object Scaffold : Module("Scaffold", WORLD) {
                 thePlayer.inventory.mainInventory[serverSlot] = null
                 ForgeEventFactory.onPlayerDestroyItem(thePlayer, stack)
             } else if (stack.stackSize != prevSize || mc.playerController.isInCreativeMode)
-                mc.entityRenderer.itemRenderer.resetEquippedProgress()
+                if (itemSwapAnimation) mc.entityRenderer.itemRenderer.resetEquippedProgress()
 
         } else {
             if (thePlayer.sendUseItem(stack))
-                mc.entityRenderer.itemRenderer.resetEquippedProgress2()
+                if (itemSwapAnimation) mc.entityRenderer.itemRenderer.resetEquippedProgress2()
         }
 
         return clickedSuccessfully
