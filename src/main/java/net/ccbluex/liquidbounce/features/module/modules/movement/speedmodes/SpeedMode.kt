@@ -19,4 +19,5 @@ open class SpeedMode(val modeName: String, val allowsJumping: Boolean = false) :
     open fun onStrafe() {}
     open fun onEnable() {}
     open fun onDisable() {}
+    open fun onToggle(state: Boolean) {}
 }

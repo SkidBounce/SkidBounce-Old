@@ -19,11 +19,8 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.othe
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.vulcan.Vulcan
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.vulcan.Vulcan2
 import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
-import net.ccbluex.liquidbounce.utils.extensions.overlapsWith
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
-import net.ccbluex.liquidbounce.utils.extensions.inLiquid
-import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
-import net.ccbluex.liquidbounce.utils.extensions.update
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
@@ -77,19 +74,7 @@ object Speed : Module("Speed", MOVEMENT) {
     fun onUpdate(event: UpdateEvent) {
         val thePlayer = mc.thePlayer ?: return
 
-        mc.gameSettings.keyBindJump.update()
-
-        if (jumpingMode != "None") {
-            val last = modeModule
-            currentMode = if (mc.gameSettings.keyBindJump.pressed && !mc.thePlayer.inLiquid) jumpingMode else normalMode
-            if (currentMode != last.modeName) {
-                last.onDisable()
-                modeModule.onEnable()
-            }
-        } else currentMode = normalMode
-
-        if (!modeModule.allowsJumping && !mc.thePlayer.inLiquid)
-            mc.gameSettings.keyBindJump.pressed = false
+        updateJumping()
 
         if (!shouldSpeed)
             return
@@ -104,6 +89,8 @@ object Speed : Module("Speed", MOVEMENT) {
     fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer ?: return
 
+        updateJumping()
+
         if (!shouldSpeed || event.eventState != EventState.PRE)
             return
 
@@ -115,6 +102,8 @@ object Speed : Module("Speed", MOVEMENT) {
 
     @EventTarget
     fun onMove(event: MoveEvent) {
+        updateJumping()
+
         if (!shouldSpeed)
             return
 
@@ -123,6 +112,8 @@ object Speed : Module("Speed", MOVEMENT) {
 
     @EventTarget
     fun onTick(event: TickEvent) {
+        updateJumping()
+
         if (!shouldSpeed)
             return
 
@@ -131,33 +122,38 @@ object Speed : Module("Speed", MOVEMENT) {
 
     @EventTarget
     fun onPacket(event: PacketEvent) {
+        updateJumping()
+
         modeModule.onPacket(event)
     }
 
     @EventTarget
     fun onStrafe(event: StrafeEvent) {
+        updateJumping()
+
         if (!shouldSpeed)
             return
 
         modeModule.onStrafe()
     }
 
-    override fun onEnable() {
-        mc.thePlayer ?: return
-
-        mc.timer.resetSpeed()
-        mc.thePlayer.speedInAir = 0.02f
-
-        modeModule.onEnable()
-    }
-
-    override fun onDisable() {
+    override fun onToggle(state: Boolean) {
         mc.thePlayer ?: return
 
         mc.timer.resetSpeed()
         mc.thePlayer.speedInAir = 0.02f
         mc.thePlayer.jumpMovementFactor = 0.02f
 
+        modeModule.onToggle(state)
+    }
+
+    override fun onEnable() {
+        mc.thePlayer ?: return
+        modeModule.onEnable()
+    }
+
+    override fun onDisable() {
+        mc.thePlayer ?: return
         modeModule.onDisable()
     }
 
@@ -180,10 +176,25 @@ object Speed : Module("Speed", MOVEMENT) {
                     && mc.thePlayer != null
 
             if (shouldSpeed != wasSpeed) {
+                onToggle(shouldSpeed)
                 if (shouldSpeed) onEnable() else onDisable()
                 wasSpeed = shouldSpeed
             }
 
             return shouldSpeed
         }
+    private fun updateJumping() {
+        mc.gameSettings.keyBindJump.update()
+        if (jumpingMode != "None") {
+            val last = modeModule
+            currentMode = if (mc.gameSettings.keyBindJump.isActuallyPressed && !mc.thePlayer.inLiquid) jumpingMode else normalMode
+            if (currentMode != last.modeName) {
+                last.onDisable()
+                modeModule.onEnable()
+            }
+        } else currentMode = normalMode
+
+        if (!modeModule.allowsJumping && !mc.thePlayer.inLiquid)
+            mc.gameSettings.keyBindJump.pressed = false
+    }
 }
