@@ -24,19 +24,23 @@ object Criticals : Module("Criticals", COMBAT) {
     private val modeModule get() = criticalsModes.find { it.modeName == mode }!!
 
     private val mode by ListValue("Mode", criticalsModes.map { it.modeName }.toTypedArray(), "Packet")
-    private val delay by IntegerValue("Delay", 0, 0..5000) { mode != "NoGround" }
-    private val attacks by IntegerValue("Attacks", 0, 0..10) { mode != "NoGround" }
-    private val hurtTime by IntegerValue("HurtTime", 10, 0..10) { mode != "NoGround" }
-    private val onlyAura by BoolValue("OnlyAura", false) { mode != "NoGround" }
-    private val onlyGround by BoolValue("OnlyGround", false) { mode != "NoGround" }
-    private val noMotionUp by BoolValue("NoMotionUp", false) { mode != "NoGround" }
-    private val noMotionDown by BoolValue("NoMotionDown", false) { mode != "NoGround" }
-    private val noRiding by BoolValue("NoRiding", true) { mode != "NoGround" }
-    private val noWeb by BoolValue("NoWeb", false) { mode != "NoGround" }
-    private val noClimbing by BoolValue("NoClimbing", true) { mode != "NoGround" }
-    private val noWater by BoolValue("NoWater", true) { mode != "NoGround" }
-    private val noLava by BoolValue("NoLava", false) { mode != "NoGround" }
-    private val noFly by BoolValue("NoFly", false) { mode != "NoGround" }
+
+    // Ones that only use `onPacket`
+    val settings get() = mode !in arrayOf("NoGround", "Redesky")
+
+    private val delay by IntegerValue("Delay", 0, 0..5000) { settings }
+    private val attacks by IntegerValue("Attacks", 0, 0..10) { settings }
+    private val hurtTime by IntegerValue("HurtTime", 10, 0..10) { settings }
+    private val onlyAura by BoolValue("OnlyAura", false) { settings }
+    private val onlyGround by BoolValue("OnlyGround", false) { settings }
+    private val noMotionUp by BoolValue("NoMotionUp", false) { settings }
+    private val noMotionDown by BoolValue("NoMotionDown", false) { settings }
+    private val noRiding by BoolValue("NoRiding", true) { settings }
+    private val noWeb by BoolValue("NoWeb", false) { settings }
+    private val noClimbing by BoolValue("NoClimbing", true) { settings }
+    private val noWater by BoolValue("NoWater", true) { settings }
+    private val noLava by BoolValue("NoLava", false) { settings }
+    private val noFly by BoolValue("NoFly", false) { settings }
 
     val motionY by FloatValue("Motion-Y", 0.2f, 0.01f..0.42f) { mode == "Motion" }
     val motionBoost by BoolValue("Motion-Boost", true) { mode == "Motion" }
