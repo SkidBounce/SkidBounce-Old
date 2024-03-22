@@ -22,12 +22,12 @@ import net.minecraft.entity.EntityLivingBase
 object Criticals : Module("Criticals", COMBAT) {
     private val criticalsModes = this.javaClass.`package`.getAllObjects<CriticalsMode>().sortedBy { it.modeName }
     private val modeModule get() = criticalsModes.find { it.modeName == mode }!!
-    val noGround get() = mode == "NoGround"
 
     private val mode by ListValue("Mode", criticalsModes.map { it.modeName }.toTypedArray(), "Packet")
     private val delay by IntegerValue("Delay", 0, 0..5000) { mode != "NoGround" }
     private val attacks by IntegerValue("Attacks", 0, 0..10) { mode != "NoGround" }
     private val hurtTime by IntegerValue("HurtTime", 10, 0..10) { mode != "NoGround" }
+    private val onlyAura by BoolValue("OnlyAura", false) { mode != "NoGround" }
     private val onlyGround by BoolValue("OnlyGround", false) { mode != "NoGround" }
     private val noMotionUp by BoolValue("NoMotionUp", false) { mode != "NoGround" }
     private val noMotionDown by BoolValue("NoMotionDown", false) { mode != "NoGround" }
@@ -58,7 +58,8 @@ object Criticals : Module("Criticals", COMBAT) {
             (noWeb && mc.thePlayer.isInWeb) ||
             (noWater && mc.thePlayer.isInWater) ||
             (noRiding && mc.thePlayer.isRiding) ||
-            (noClimbing && mc.thePlayer.isOnLadder)
+            (noClimbing && mc.thePlayer.isOnLadder) ||
+            (onlyAura && !KillAura.handleEvents())
         ) return
 
         ++attackCounter
@@ -78,4 +79,6 @@ object Criticals : Module("Criticals", COMBAT) {
 
     override val tag
         get() = mode
+
+    val noGround get() = mode == "NoGround"
 }
