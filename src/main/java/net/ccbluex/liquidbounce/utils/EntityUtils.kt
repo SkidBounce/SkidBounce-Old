@@ -26,7 +26,7 @@ object EntityUtils : MinecraftInstance() {
                         if (isBot(entity))
                             return false
 
-                        if (entity.isClientFriend() && !Friends.handleEvents())
+                        if (entity.isClientFriend && !Friends.handleEvents())
                             return false
 
                         if (entity.isSpectator) return false
@@ -36,7 +36,7 @@ object EntityUtils : MinecraftInstance() {
                     return true
                 }
 
-                return Mobs.handleEvents() && entity.isMob() || Animals.handleEvents() && entity.isAnimal()
+                return Mobs.handleEvents() && entity.isMob || Animals.handleEvents() && entity.isAnimal
             }
         }
         return false

@@ -493,7 +493,7 @@ object Backtrack : Module("Backtrack", COMBAT) {
             entity !is EntityLivingBase || entity == mc.thePlayer -> false
             entity !is EntityPlayer -> true
             entity.isSpectator || isBot(entity) -> false
-            entity.isClientFriend() && !Friends.handleEvents() -> false
+            entity.isClientFriend && !Friends.handleEvents() -> false
             else -> !Teams.handleEvents() || !Teams.isInYourTeam(entity)
         }
     }

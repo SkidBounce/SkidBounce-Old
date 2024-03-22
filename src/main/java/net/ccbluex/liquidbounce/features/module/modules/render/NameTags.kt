@@ -14,7 +14,7 @@ import net.ccbluex.liquidbounce.ui.font.Fonts
 import net.ccbluex.liquidbounce.utils.EntityUtils.getHealth
 import net.ccbluex.liquidbounce.utils.EntityUtils.isLookingOnEntities
 import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
-import net.ccbluex.liquidbounce.utils.extensions.getPing
+import net.ccbluex.liquidbounce.utils.extensions.ping
 import net.ccbluex.liquidbounce.utils.render.ColorUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.disableGlCap
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawTexturedModalRect
@@ -159,7 +159,7 @@ object NameTags : Module("NameTags", RENDER, subjective = true) {
         // Modify tag
         val bot = isBot(entity)
         val nameColor = if (bot) "§3" else if (entity.isInvisible) "§6" else if (entity.isSneaking) "§4" else "§7"
-        val playerPing = if (entity is EntityPlayer) entity.getPing() else 0
+        val playerPing = if (entity is EntityPlayer) entity.ping else 0
         val playerDistance = thePlayer.getDistanceToEntity(entity)
 
         val distanceText = if (distance) "§7${playerDistance.roundToInt()} m " else ""

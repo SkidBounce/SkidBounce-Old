@@ -658,12 +658,12 @@ object KillAura : Module("KillAura", COMBAT) {
             if (Players.state && entity is EntityPlayer) {
                 if (entity.isSpectator || isBot(entity)) return false
 
-                if (entity.isClientFriend() && !Friends.handleEvents()) return false
+                if (entity.isClientFriend && !Friends.handleEvents()) return false
 
                 return !Teams.handleEvents() || !Teams.isInYourTeam(entity)
             }
 
-            return Mobs.state && entity.isMob() || Animals.state && entity.isAnimal()
+            return Mobs.state && entity.isMob || Animals.state && entity.isAnimal
         }
 
         return false
@@ -809,7 +809,7 @@ object KillAura : Module("KillAura", COMBAT) {
                 currentRotation.pitch
             ) { entity -> !livingRaycast || entity is EntityLivingBase && entity !is EntityArmorStand }
 
-            if (chosenEntity != null && chosenEntity is EntityLivingBase && (Friends.handleEvents() || !(chosenEntity is EntityPlayer && chosenEntity.isClientFriend()))) {
+            if (chosenEntity != null && chosenEntity is EntityLivingBase && (Friends.handleEvents() || !(chosenEntity is EntityPlayer && chosenEntity.isClientFriend))) {
                 if (raycastIgnored && target != chosenEntity) {
                     this.target = chosenEntity
                 }

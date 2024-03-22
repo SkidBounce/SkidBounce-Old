@@ -41,7 +41,7 @@ object HitBox : Module("HitBox", COMBAT) {
 
                 if (isBot(entity)) {
                     return botSize
-                } else if (entity.isClientFriend() && !Friends.handleEvents()) {
+                } else if (entity.isClientFriend && !Friends.handleEvents()) {
                     return friendSize
                 } else if (Teams.handleEvents() && Teams.isInYourTeam(entity)) {
                     return teamMateSize
@@ -51,11 +51,8 @@ object HitBox : Module("HitBox", COMBAT) {
             }
 
             else -> {
-                if (entity.isMob() && targetMobs) {
-                    return mobSize
-                } else if (entity.isAnimal() && targetAnimals) {
-                    return animalSize
-                }
+                if (entity.isMob && targetMobs) return mobSize
+                else if (entity.isAnimal && targetAnimals) return animalSize
 
                 0F
             }

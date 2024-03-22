@@ -6,18 +6,10 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.vulcan
 
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
-import net.ccbluex.liquidbounce.utils.MovementUtils
-import net.ccbluex.liquidbounce.utils.MovementUtils.direction
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
-import net.ccbluex.liquidbounce.utils.RotationUtils.getAngleDifference
 import net.ccbluex.liquidbounce.utils.extensions.*
-import net.minecraft.util.AxisAlignedBB
-import net.minecraft.util.BlockPos
-import javax.vecmath.AxisAngle4d
-import kotlin.math.absoluteValue
 
 /**
  * @author SkidderMC/FDPClient

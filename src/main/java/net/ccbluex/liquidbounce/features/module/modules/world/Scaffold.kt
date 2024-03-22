@@ -1121,7 +1121,7 @@ object Scaffold : Module("Scaffold", WORLD) {
                 45f
             ) || player.movementInput.moveForward == 0f || player.movementInput.moveStrafe != 0f
         ) {
-            val (posX, posY, posZ) = player.interpolatedPosition()
+            val (posX, posY, posZ) = player.interpolatedPosition
 
             glPushMatrix()
             glTranslated(-posX, -posY, -posZ)

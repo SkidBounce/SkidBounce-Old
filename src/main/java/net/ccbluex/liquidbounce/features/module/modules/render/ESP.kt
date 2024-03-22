@@ -259,7 +259,7 @@ object ESP : Module("ESP", RENDER, subjective = true) {
                 if (entity.hurtTime > 0)
                     return Color.RED
 
-                if (entity is EntityPlayer && entity.isClientFriend())
+                if (entity is EntityPlayer && entity.isClientFriend)
                     return Color.BLUE
 
                 if (colorTeam) {

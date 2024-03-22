@@ -18,7 +18,7 @@ import net.ccbluex.liquidbounce.ui.font.Fonts
 import net.ccbluex.liquidbounce.utils.CPSCounter
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.ServerUtils
-import net.ccbluex.liquidbounce.utils.extensions.getPing
+import net.ccbluex.liquidbounce.utils.extensions.ping
 import net.ccbluex.liquidbounce.utils.render.ColorUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRoundedRect2
 import net.ccbluex.liquidbounce.utils.render.shader.shaders.RainbowFontShader
@@ -117,7 +117,7 @@ class Text(x: Double = 10.0, y: Double = 10.0, scale: Float = 1F, side: Side = S
                 "ydp" -> return thePlayer.posY
                 "zdp" -> return thePlayer.posZ
                 "velocity" -> return DECIMAL_FORMAT.format(speed)
-                "ping" -> return thePlayer.getPing()
+                "ping" -> return thePlayer.ping
                 "health" -> return DECIMAL_FORMAT.format(thePlayer.health)
                 "maxhealth" -> return DECIMAL_FORMAT.format(thePlayer.maxHealth)
                 "yaw" -> return DECIMAL_FORMAT.format(thePlayer.rotationYaw)

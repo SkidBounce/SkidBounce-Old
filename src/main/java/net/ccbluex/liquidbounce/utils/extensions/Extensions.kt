@@ -6,16 +6,25 @@
 package net.ccbluex.liquidbounce.utils.extensions
 
 import net.ccbluex.liquidbounce.features.module.modules.render.Animations
-import net.ccbluex.liquidbounce.file.FileManager
-import net.ccbluex.liquidbounce.utils.*
+import net.ccbluex.liquidbounce.features.module.modules.render.Animations.swingSpeed
+import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
+import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
+import net.ccbluex.liquidbounce.utils.MovementUtils.JUMP_HEIGHT
+import net.ccbluex.liquidbounce.utils.MovementUtils.getJumpBoostModifier
+import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
+import net.ccbluex.liquidbounce.utils.PotionUtils.Potions
+import net.ccbluex.liquidbounce.utils.PotionUtils.Potions.*
+import net.ccbluex.liquidbounce.utils.Rotation
+import net.ccbluex.liquidbounce.utils.RotationUtils.getFixedSensitivityAngle
 import net.ccbluex.liquidbounce.utils.block.BlockUtils
-import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
-import net.ccbluex.liquidbounce.utils.render.ColorUtils
+import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
+import net.ccbluex.liquidbounce.utils.render.ColorUtils.stripColor
 import net.minecraft.block.Block
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.client.settings.GameSettings
+import net.minecraft.client.settings.GameSettings.isKeyDown
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.entity.Entity
 import net.minecraft.entity.boss.EntityDragon
@@ -33,9 +42,11 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.client.C0APacketAnimation
 import net.minecraft.potion.Potion
-import net.minecraft.stats.StatList
+import net.minecraft.potion.Potion.*
+import net.minecraft.potion.PotionEffect
+import net.minecraft.stats.StatList.jumpStat
 import net.minecraft.util.*
-import net.minecraftforge.event.ForgeEventFactory
+import net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem
 import kotlin.math.pow
 
 fun NetworkPlayerInfo.getFullName(): String {
@@ -191,35 +202,33 @@ fun getNearestPointBB(eye: Vec3, box: AxisAlignedBB): Vec3 {
     return Vec3(origin[0], origin[1], origin[2])
 }
 
-fun EntityPlayer.getPing() = MinecraftInstance.mc.netHandler.getPlayerInfo(uniqueID)?.responseTime ?: 0
+val EntityPlayer.ping get() = mc.netHandler.getPlayerInfo(uniqueID)?.responseTime ?: 0
 
-fun Entity.isAnimal() =
-    this is EntityAnimal
+val Entity.isAnimal
+    get() = this is EntityAnimal
             || this is EntitySquid
             || this is EntityGolem
             || this is EntityBat
 
-fun Entity.isMob() =
-    this is EntityMob
+val Entity.isMob
+    get() = this is EntityMob
             || this is EntityVillager
             || this is EntitySlime
             || this is EntityGhast
             || this is EntityDragon
 
-fun EntityPlayer.isClientFriend(): Boolean {
-    val entityName = name ?: return false
-
-    return FileManager.friendsConfig.isFriend(ColorUtils.stripColor(entityName))
-}
+val EntityPlayer.isClientFriend
+    get() = if (name != null) friendsConfig.isFriend(stripColor(name)) else false
 
 val Entity?.rotation
     get() = Rotation(this?.rotationYaw ?: 0f, this?.rotationPitch ?: 0f)
 
 val Entity.hitBox: AxisAlignedBB
-    get() {
-        val borderSize = collisionBorderSize.toDouble()
-        return entityBoundingBox.expand(borderSize, borderSize, borderSize)
-    }
+    get() = entityBoundingBox.expand(
+        collisionBorderSize.toDouble(),
+        collisionBorderSize.toDouble(),
+        collisionBorderSize.toDouble()
+    )
 
 val Entity.eyes: Vec3
     get() = getPositionEyes(1f)
@@ -239,20 +248,19 @@ fun Entity.setPosAndPrevPos(currPos: Vec3, prevPos: Vec3 = currPos) {
 
 fun EntityPlayerSP.setFixedSensitivityAngles(yaw: Float? = null, pitch: Float? = null) {
     if (yaw != null) fixedSensitivityYaw = yaw
-
     if (pitch != null) fixedSensitivityPitch = pitch
 }
 
 var EntityPlayerSP.fixedSensitivityYaw
-    get() = RotationUtils.getFixedSensitivityAngle(MinecraftInstance.mc.thePlayer.rotationYaw)
+    get() = getFixedSensitivityAngle(mc.thePlayer.rotationYaw)
     set(yaw) {
-        rotationYaw = RotationUtils.getFixedSensitivityAngle(yaw, rotationYaw)
+        rotationYaw = getFixedSensitivityAngle(yaw, rotationYaw)
     }
 
 var EntityPlayerSP.fixedSensitivityPitch
-    get() = RotationUtils.getFixedSensitivityAngle(rotationPitch)
+    get() = getFixedSensitivityAngle(rotationPitch)
     set(pitch) {
-        rotationPitch = RotationUtils.getFixedSensitivityAngle(pitch.coerceIn(-90f, 90f), rotationPitch)
+        rotationPitch = getFixedSensitivityAngle(pitch.coerceIn(-90f, 90f), rotationPitch)
     }
 
 // Makes fixedSensitivityYaw, ... += work
@@ -261,11 +269,12 @@ operator fun EntityPlayerSP.plusAssign(value: Float) {
     fixedSensitivityPitch += value
 }
 
-fun Entity.interpolatedPosition() = Vec3(
-    prevPosX + (posX - prevPosX) * MinecraftInstance.mc.timer.renderPartialTicks,
-    prevPosY + (posY - prevPosY) * MinecraftInstance.mc.timer.renderPartialTicks,
-    prevPosZ + (posZ - prevPosZ) * MinecraftInstance.mc.timer.renderPartialTicks
-)
+val Entity.interpolatedPosition
+    get() = Vec3(
+        prevPosX + (posX - prevPosX) * mc.timer.renderPartialTicks,
+        prevPosY + (posY - prevPosY) * mc.timer.renderPartialTicks,
+        prevPosZ + (posZ - prevPosZ) * mc.timer.renderPartialTicks
+    )
 
 fun EntityPlayerSP.stopXZ() {
     motionX = 0.0
@@ -280,7 +289,7 @@ fun EntityPlayerSP.stop() {
 // Modified mc.playerController.onPlayerRightClick() that sends correct stack in its C08
 fun EntityPlayerSP.onPlayerRightClick(
     clickPos: BlockPos, side: EnumFacing, clickVec: Vec3,
-    stack: ItemStack? = inventory.mainInventory[InventoryUtils.serverSlot],
+    stack: ItemStack? = inventory.mainInventory[serverSlot],
 ): Boolean {
     if (clickPos !in worldObj.worldBorder)
         return false
@@ -288,7 +297,7 @@ fun EntityPlayerSP.onPlayerRightClick(
     val (facingX, facingY, facingZ) = (clickVec - clickPos.toVec()).toFloatTriple()
 
     val sendClick = {
-        PacketUtils.sendPacket(
+        sendPacket(
             C08PacketPlayerBlockPlacement(
                 clickPos,
                 side.index,
@@ -302,7 +311,7 @@ fun EntityPlayerSP.onPlayerRightClick(
     }
 
     // If player is a spectator, send click and return true
-    if (MinecraftInstance.mc.playerController.isSpectator)
+    if (mc.playerController.isSpectator)
         return sendClick()
 
     val item = stack?.item
@@ -337,21 +346,21 @@ fun EntityPlayerSP.onPlayerRightClick(
     val prevSize = stack.stackSize
 
     return stack.onItemUse(this, worldObj, clickPos, side, facingX, facingY, facingZ).also {
-        if (MinecraftInstance.mc.playerController.isInCreativeMode) {
+        if (mc.playerController.isInCreativeMode) {
             stack.itemDamage = prevMetadata
             stack.stackSize = prevSize
         } else if (stack.stackSize <= 0) {
-            ForgeEventFactory.onPlayerDestroyItem(this, stack)
+            onPlayerDestroyItem(this, stack)
         }
     }
 }
 
 // Modified mc.playerController.sendUseItem() that sends correct stack in its C08
 fun EntityPlayerSP.sendUseItem(stack: ItemStack): Boolean {
-    if (MinecraftInstance.mc.playerController.isSpectator)
+    if (mc.playerController.isSpectator)
         return false
 
-    PacketUtils.sendPacket(C08PacketPlayerBlockPlacement(stack))
+    sendPacket(C08PacketPlayerBlockPlacement(stack))
 
     val prevSize = stack.stackSize
 
@@ -359,42 +368,43 @@ fun EntityPlayerSP.sendUseItem(stack: ItemStack): Boolean {
 
     return if (newStack != stack || newStack.stackSize != prevSize) {
         if (newStack.stackSize <= 0) {
-            MinecraftInstance.mc.thePlayer.inventory.mainInventory[InventoryUtils.serverSlot] = null
-            ForgeEventFactory.onPlayerDestroyItem(MinecraftInstance.mc.thePlayer, newStack)
+            mc.thePlayer.inventory.mainInventory[serverSlot] = null
+            onPlayerDestroyItem(mc.thePlayer, newStack)
         } else
-            MinecraftInstance.mc.thePlayer.inventory.mainInventory[InventoryUtils.serverSlot] = newStack
+            mc.thePlayer.inventory.mainInventory[serverSlot] = newStack
 
         true
     } else false
 }
 
 fun EntityPlayer.fakeJump() {
-    this.isAirBorne = true
-    this.triggerAchievement(StatList.jumpStat)
+    isAirBorne = true
+    triggerAchievement(jumpStat)
 }
 
 fun EntityPlayer.jmp(
-    motion: Number = 0.41999998688697815,
+    motion: Number = JUMP_HEIGHT,
     boost: Boolean = true,
     ignoreJumpBoost: Boolean = false,
     ignoreGround: Boolean = false,
-    whenJumping: Boolean = false
+    whenJumping: Boolean = false,
 ) = jump(motion, boost, ignoreJumpBoost, ignoreGround, whenJumping)
 
 fun EntityPlayer.jump(
-    motion: Number = 0.41999998688697815,
+    motion: Number = JUMP_HEIGHT,
     boost: Boolean = true,
     ignoreJumpBoost: Boolean = false,
     ignoreGround: Boolean = false,
     whenJumping: Boolean = false,
 ) {
     if (!ignoreGround && !onGround) return
-    if (!whenJumping && isJumping) return
+    if (!whenJumping && mc.gameSettings.keyBindJump.pressed) return
+
     val x = motionX
     val z = motionZ
 
     jump()
-    motionY = MovementUtils.getJumpBoostModifier(motion.toDouble(), !ignoreJumpBoost)
+    motionY = getJumpBoostModifier(motion.toDouble(), !ignoreJumpBoost)
 
     if (!boost) {
         motionX = x
@@ -402,16 +412,27 @@ fun EntityPlayer.jump(
     }
 }
 
+infix fun EntityPlayer.has(potion: Potions) = isPotionActive(potion.potion)
+infix fun EntityPlayer.has(potion: Potion) = isPotionActive(potion)
+fun EntityPlayer.get(potion: Potions): PotionEffect? = getActivePotionEffect(potion.potion)
+fun EntityPlayer.get(potion: Potion): PotionEffect? = getActivePotionEffect(potion)
+
+val Potion.potion
+    get() = Potions.entries.find { it.potion == this } ?: UNKNOWN
+
+val PotionEffect?.level
+    get() = this?.let { amplifier + 1 } ?: 0
+
 fun EntityPlayer.swing(type: String) {
     when (type) {
         "Normal" -> swingItem()
-        "Packet" -> PacketUtils.sendPacket(C0APacketAnimation())
+        "Packet" -> sendPacket(C0APacketAnimation())
         "Visual" -> {
             // TODO: npe when using access transformer?
-            val baseSwingSpeed = if (Animations.handleEvents()) 2 + (20 - Animations.swingSpeed) else 6
+            val baseSwingSpeed = if (Animations.handleEvents()) 2 + (20 - swingSpeed) else 6
             val swingSpeed = when {
-                isPotionActive(Potion.digSpeed) -> baseSwingSpeed - (1 + getActivePotionEffect(Potion.digSpeed).amplifier)
-                isPotionActive(Potion.digSlowdown) -> baseSwingSpeed + (1 + getActivePotionEffect(Potion.digSlowdown).amplifier) * 2
+                has(HASTE) -> baseSwingSpeed - get(HASTE).level
+                has(MINING_FATIGUE) -> baseSwingSpeed + get(MINING_FATIGUE).level * 2
                 else -> baseSwingSpeed
             }
             if (swingProgressInt < 0 || !isSwingInProgress || swingProgressInt >= swingSpeed * 0.5)
@@ -440,25 +461,8 @@ fun Double.toPlainString(): String {
     }
 }
 
-fun Timer.resetSpeed() {
-    timerSpeed = 1f
-}
-
-fun KeyBinding.update() {
-    pressed = isActuallyPressed
-}
-
-val KeyBinding.isActuallyPressed
-    get() = GameSettings.isKeyDown(this)
-
-fun GameSettings.updateKeys() {
-    keyBindings.forEach {
-        it.pressed = it.isActuallyPressed
-    }
-}
-
-fun GameSettings.updateKeys(vararg keys: KeyBinding) {
-    keys.forEach {
-        it.pressed = it.isActuallyPressed
-    }
-}
+fun Timer.resetSpeed() { timerSpeed = 1f }
+fun KeyBinding.update() { pressed = isActuallyPressed }
+val KeyBinding.isActuallyPressed get() = isKeyDown(this)
+fun GameSettings.updateKeys() = keyBindings.forEach { it.update() }
+fun GameSettings.updateKeys(vararg keys: KeyBinding) = keys.forEach { it.update() }
