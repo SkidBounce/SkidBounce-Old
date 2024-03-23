@@ -12,6 +12,7 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.*
 
 /**
+ * fixme: clips into blocks sometimes
  * @author SkidderMC/FDPClient
  */
 object VulcanLowHop : SpeedMode("VulcanLowHop") {
