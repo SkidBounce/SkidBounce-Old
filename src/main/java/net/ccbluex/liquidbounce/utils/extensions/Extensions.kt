@@ -20,6 +20,7 @@ import net.ccbluex.liquidbounce.utils.block.BlockUtils
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.stripColor
 import net.minecraft.block.Block
+import net.minecraft.block.material.Material
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.network.NetworkPlayerInfo
@@ -164,6 +165,13 @@ fun AxisAlignedBB.lerpWith(x: Double, y: Double, z: Double) =
 
 fun AxisAlignedBB.lerpWith(point: Vec3) = lerpWith(point.xCoord, point.yCoord, point.zCoord)
 fun AxisAlignedBB.lerpWith(value: Double) = lerpWith(value, value, value)
+
+operator fun AxisAlignedBB.component1() = maxX
+operator fun AxisAlignedBB.component2() = maxY
+operator fun AxisAlignedBB.component3() = maxZ
+operator fun AxisAlignedBB.component4() = minX
+operator fun AxisAlignedBB.component5() = minY
+operator fun AxisAlignedBB.component6() = minZ
 
 val AxisAlignedBB.center
     get() = lerpWith(0.5)
@@ -416,6 +424,8 @@ infix fun EntityPlayer.has(potion: Potions) = isPotionActive(potion.potion)
 infix fun EntityPlayer.has(potion: Potion) = isPotionActive(potion)
 fun EntityPlayer.get(potion: Potions): PotionEffect? = getActivePotionEffect(potion.potion)
 fun EntityPlayer.get(potion: Potion): PotionEffect? = getActivePotionEffect(potion)
+
+infix fun Entity.isInsideOf(material: Material) = isInsideOfMaterial(material)
 
 val Potion.potion
     get() = Potions.entries.find { it.potion == this } ?: UNKNOWN

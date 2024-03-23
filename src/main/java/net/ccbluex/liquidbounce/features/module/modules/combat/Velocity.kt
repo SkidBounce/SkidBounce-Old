@@ -19,7 +19,7 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.network.play.server.S27PacketExplosion
 
 object Velocity : Module("Velocity", COMBAT) {
-    private val velocityModes = this.javaClass.`package`.getAllObjects<VelocityMode>().sortedBy { it.modeName }
+    private val velocityModes = javaClass.`package`.getAllObjects<VelocityMode>().sortedBy { it.modeName }
 
     private val modeModule get() = velocityModes.find { it.modeName == mode }!!
     override val tag get() = mode

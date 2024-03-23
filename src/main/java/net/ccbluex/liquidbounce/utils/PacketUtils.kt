@@ -135,7 +135,7 @@ object PacketUtils : MinecraftInstance(), Listenable {
         runCatching { (packet as Packet<INetHandlerPlayClient>).processPacket(mc.netHandler) }
 
     val Packet<*>.type
-        get() = when (this.javaClass.simpleName[0]) {
+        get() = when (javaClass.simpleName[0]) {
             'C' -> PacketType.CLIENT
             'S' -> PacketType.SERVER
             else -> PacketType.UNKNOWN

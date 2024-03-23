@@ -20,7 +20,7 @@ import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.entity.EntityLivingBase
 
 object Criticals : Module("Criticals", COMBAT) {
-    private val criticalsModes = this.javaClass.`package`.getAllObjects<CriticalsMode>().sortedBy { it.modeName }
+    private val criticalsModes = javaClass.`package`.getAllObjects<CriticalsMode>().sortedBy { it.modeName }
     private val modeModule get() = criticalsModes.find { it.modeName == mode }!!
 
     private val mode by ListValue("Mode", criticalsModes.map { it.modeName }.toTypedArray(), "Packet")

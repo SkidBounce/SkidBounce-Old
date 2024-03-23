@@ -28,7 +28,7 @@ object CommandManager {
      */
     fun registerCommands() {
         commands.clear()
-        commands.addAll(this.javaClass.`package`.getAllObjects<Command>())
+        commands.addAll(javaClass.`package`.getAllObjects<Command>())
         LOGGER.info("Loaded ${commands.size} commands")
     }
 

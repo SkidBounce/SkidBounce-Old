@@ -35,7 +35,7 @@ import net.minecraft.util.AxisAlignedBB
 import java.awt.Color
 
 object Fly : Module("Fly", MOVEMENT) {
-    private val flyModes = this.javaClass.`package`.getAllObjects<FlyMode>().sortedBy { it.modeName }
+    private val flyModes = javaClass.`package`.getAllObjects<FlyMode>().sortedBy { it.modeName }
 
     private val modes = flyModes.map { it.modeName }.toTypedArray()
 

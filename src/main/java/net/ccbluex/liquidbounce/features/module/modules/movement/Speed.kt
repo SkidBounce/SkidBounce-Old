@@ -27,7 +27,7 @@ import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 
 object Speed : Module("Speed", MOVEMENT) {
-    private val speedModes = this.javaClass.`package`.getAllObjects<SpeedMode>().sortedBy { it.modeName }
+    private val speedModes = javaClass.`package`.getAllObjects<SpeedMode>().sortedBy { it.modeName }
 
     private val moduleModes = speedModes.map { it.modeName }.toTypedArray()
 

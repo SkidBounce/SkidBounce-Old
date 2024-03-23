@@ -18,7 +18,7 @@ import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 
 object NoWeb : Module("NoWeb", MOVEMENT) {
-    private val noWebModes = this.javaClass.`package`.getAllObjects<NoWebMode>().sortedBy { it.modeName }
+    private val noWebModes = javaClass.`package`.getAllObjects<NoWebMode>().sortedBy { it.modeName }
 
     private val modes = noWebModes.map { it.modeName }.toTypedArray()
 

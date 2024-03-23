@@ -22,7 +22,7 @@ import net.minecraft.block.BlockLiquid
 import net.minecraft.util.AxisAlignedBB.fromBounds
 
 object NoFall : Module("NoFall", PLAYER) {
-    private val noFallModes = this.javaClass.`package`.getAllObjects<NoFallMode>().sortedBy { it.modeName }
+    private val noFallModes = javaClass.`package`.getAllObjects<NoFallMode>().sortedBy { it.modeName }
 
     val mode by ListValue("Mode", noFallModes.map { it.modeName }.toTypedArray(), "SpoofGround")
 

@@ -31,7 +31,7 @@ object ModuleManager : Listenable {
      * Register all modules
      */
     fun registerModules() {
-        val classes = getAllClassesIn<Module>(this.javaClass.`package`.name).run {
+        val classes = getAllClassesIn<Module>(javaClass.`package`.name).run {
             // Register modules which need to be instanced (Java classes)
             this.filter { !it.isObject }.forEach { registerModule(it) }
             this
