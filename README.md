@@ -21,10 +21,10 @@ As Of Latest Commit:\
 |      NoWeb       | :green_circle:  |
 |      NoFall      | :green_circle:  |
 |      Spider      | :green_circle:  |
+|    Criticals     | :yellow_circle: |
 |      NoSlow      | :yellow_circle: |
 |      Speed       | :orange_circle: |
 |       Fly        | :orange_circle: |
-|    Criticals     | :orange_circle: |
 |     Disabler     | :orange_circle: |
 |     Velocity     | :orange_circle: |
 |       Hud        |  :red_circle:   |
