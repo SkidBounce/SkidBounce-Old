@@ -12,6 +12,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac.AACGround
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac.AACGround2
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.aac.AACPort
+import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.intave.Intave2
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.matrix.MatrixSlow
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.ncp.UNCPYPort
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other.*
@@ -66,6 +67,7 @@ object Speed : Module("Speed", MOVEMENT) {
     val matrixslowFast by BoolValue("MatrixSlow-Fast", true) { MatrixSlow in modes }
     val vulcanFast by BoolValue("Vulcan-Fast", true) { Vulcan in modes }
     val vulcan2Fast by BoolValue("Vulcan2-Fast", true) { Vulcan2 in modes }
+    val intave2GroundStrafe by BoolValue("Intave2-GroundStrafe", false) { Intave2 in modes }
 
     private var currentMode = normalMode
     private var wasSpeed = false
