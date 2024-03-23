@@ -1,6 +1,8 @@
 # SkidBounce
 A free hacked-client for Minecraft 1.8.9 Forge.
 
+Discord: https://discord.gg/hdbzjQdewu
+
 ## Completion
 
 skidding:
