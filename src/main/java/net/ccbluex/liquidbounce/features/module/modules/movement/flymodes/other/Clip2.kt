@@ -10,13 +10,16 @@ import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clip2Delay
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clip2GroundSpoof
+import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clip2GroundSpoofOnlyClip
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clip2Timer
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clip2H
+import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clip2Max
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clip2Y
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.minecraft.network.play.client.C03PacketPlayer
+import net.minecraft.util.Vec3
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -26,6 +29,7 @@ import kotlin.math.sin
  */
 object Clip2 : FlyMode("Clip2") {
     private val timer = MSTimer()
+    private var clip = false
 
     override fun onEnable() {
         timer.reset()
@@ -35,63 +39,74 @@ object Clip2 : FlyMode("Clip2") {
         if (event.eventState != EventState.POST)
             return
 
+        mc.thePlayer.jumpMovementFactor = 0f
         mc.timer.timerSpeed = clip2Timer
         mc.thePlayer.stop()
+        mc.thePlayer.isSneaking = false
 
-        if (timer.hasTimePassed(clip2Delay.toLong())) {
-            val (x1, y1, z1) = mc.thePlayer
-            val yaw = yaw
+        if (!timer.hasTimePassed(clip2Delay.toLong()))
+            return
 
-            val noMove = mc.thePlayer.rotationYaw.toRadians() == yaw
-                    && (!mc.gameSettings.keyBindForward.isActuallyPressed || (
-                    mc.gameSettings.keyBindForward.isActuallyPressed && mc.gameSettings.keyBindBack.isActuallyPressed
-                            ))
+        val (x1, y1, z1) = mc.thePlayer
+        val yaw = mc.thePlayer.rotationYaw
 
-            var vertical = 0f
-            if (mc.gameSettings.keyBindJump.isActuallyPressed) vertical += clip2Y
-            if (mc.gameSettings.keyBindSneak.isActuallyPressed) vertical -= clip2Y
+        // Input
+        val forwards = mc.gameSettings.keyBindForward.isActuallyPressed
+        val left = mc.gameSettings.keyBindLeft.isActuallyPressed
+        val backwards = mc.gameSettings.keyBindBack.isActuallyPressed
+        val right = mc.gameSettings.keyBindRight.isActuallyPressed
+        val up = mc.gameSettings.keyBindJump.isActuallyPressed
+        val down = mc.gameSettings.keyBindSneak.isActuallyPressed
 
-            mc.thePlayer.setPosition(
-                x1 - if (noMove) 0f else sin(yaw) * clip2H,
-                y1 + vertical,
-                z1 + if (noMove) 0f else cos(yaw) * clip2H
-            )
-
-            val (x2, y2, z2) = mc.thePlayer
-            if (x1 != x2 || y1 != y2 || z1 != z2)
-                timer.reset()
+        // moveYaw
+        var moveYaw = yaw
+        val direction = when {
+            backwards && !forwards -> {
+                moveYaw += 180f
+                -0.5f
+            }
+            !backwards && forwards -> 0.5f
+            else -> 1f
         }
-        mc.thePlayer.jumpMovementFactor = 0f
+
+        if (!left && right) moveYaw += 90f * direction
+        if (left && !right) moveYaw -= 90f * direction
+        moveYaw = moveYaw.toRadians()
+
+        // If we didn't do this you would move if no keys
+        // are pressed, or forwards and backwards are pressed
+        val shouldMoveHorizontally = yaw.toRadians() != moveYaw || forwards && !backwards
+
+        Vec3(
+            if (shouldMoveHorizontally) sin(moveYaw.toDouble()) * clip2H else 0.0,
+            when {
+                up && !down -> clip2Y.toDouble()
+                !up && down -> -clip2Y.toDouble()
+                else -> 0.0
+            },
+            if (shouldMoveHorizontally) cos(moveYaw.toDouble()) * clip2H else 0.0
+        ).run {
+            (normalize() * lengthVector().coerceAtMost(clip2Max.toDouble())).apply {
+                mc.thePlayer.setPosition(
+                    x1 - xCoord,
+                    y1 + yCoord,
+                    z1 + zCoord,
+                )
+            }
+        }
+
+        val (x2, y2, z2) = mc.thePlayer
+
+        if (x1 != x2 || y1 != y2 || z1 != z2)
+            clip = true
+
+        timer.reset()
     }
 
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is C03PacketPlayer && clip2GroundSpoof)
+        if (event.packet is C03PacketPlayer && clip2GroundSpoof && (!clip2GroundSpoofOnlyClip || clip)) {
             event.packet.onGround = true
-    }
-
-    val yaw: Float
-        get() {
-            val left = mc.gameSettings.keyBindLeft.isActuallyPressed
-            val right = mc.gameSettings.keyBindRight.isActuallyPressed
-            val back = mc.gameSettings.keyBindBack.isActuallyPressed
-            val forward = mc.gameSettings.keyBindForward.isActuallyPressed
-
-            var yaw = mc.thePlayer.rotationYaw
-
-            val f = when {
-                back && !forward -> {
-                    yaw += 180f
-                    -0.5f
-                }
-                !back && forward -> 0.5f
-                else -> 1f
-            }
-
-            if (!(right && left)) {
-                if (right) yaw += 90f * f
-                if (left) yaw -= 90f * f
-            }
-
-            return yaw.toRadians()
+            clip = false
         }
+    }
 }
