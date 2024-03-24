@@ -12,6 +12,8 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.render.FreeCam
 import net.ccbluex.liquidbounce.features.module.modules.targets.*
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
+import net.ccbluex.liquidbounce.features.module.modules.world.Scaffold
+import net.ccbluex.liquidbounce.features.module.modules.world.Tower
 import net.ccbluex.liquidbounce.utils.CPSCounter
 import net.ccbluex.liquidbounce.utils.ClientUtils.runTimeTicks
 import net.ccbluex.liquidbounce.utils.CooldownHelper.getAttackCooldownProgress
@@ -136,6 +138,9 @@ object KillAura : Module("KillAura", COMBAT) {
     // Bypass
     private val swing by SwingValue()
 
+    // Settings
+    private val onScaffold by BoolValue("OnScaffold", false)
+
     // AutoBlock
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Packet", "Fake"), "Packet")
     private val releaseAutoBlock by BoolValue("ReleaseAutoBlock", true)
@@ -202,14 +207,10 @@ object KillAura : Module("KillAura", COMBAT) {
     private val livingRaycast by BoolValue("LivingRayCast", true) { raycastValue.isActive() }
 
     // Bypass
-    //    // AAC value also modifies target selection a bit, not just rotations, but it is minor
-    //    private val aacValue = BoolValue("AAC", false)
-    //    private val aac by aacValue
     private val useHitDelay by BoolValue("UseHitDelay", false)
     private val hitDelayTicks by IntegerValue("HitDelayTicks", 1, 1..5) { useHitDelay }
 
     private val keepRotationTicks by object : IntegerValue("KeepRotationTicks", 5, 1..20) {
-        //        override fun isSupported() = !aacValue.isActive()
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minimum)
     }
     private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f)
@@ -550,6 +551,9 @@ object KillAura : Module("KillAura", COMBAT) {
      * Update current target
      */
     private fun updateTarget() {
+        if (!onScaffold && (Scaffold.state || Tower.state))
+            return
+
         // Reset fixed target to null
         target = null
 
@@ -676,6 +680,9 @@ object KillAura : Module("KillAura", COMBAT) {
         // Stop blocking
         val thePlayer = mc.thePlayer
 
+        if (!onScaffold && (Scaffold.state || Tower.state))
+            return
+
         if ((thePlayer.isBlocking || renderBlocking) && (autoBlock == "Off" && blockStatus || autoBlock == "Packet" && releaseAutoBlock)) {
             stopBlocking()
 
@@ -719,6 +726,9 @@ object KillAura : Module("KillAura", COMBAT) {
      */
     private fun updateRotations(entity: Entity): Boolean {
         val player = mc.thePlayer ?: return false
+
+        if (!onScaffold && (Scaffold.state || Tower.state))
+            return false
 
         val (predictX, predictY, predictZ) = entity.currPos.subtract(entity.prevPos)
             .times(2 + predictEnemyPosition.toDouble())
@@ -799,6 +809,9 @@ object KillAura : Module("KillAura", COMBAT) {
 
         val currentRotation = currentRotation ?: mc.thePlayer.rotation
         val target = this.target ?: return
+
+        if (!onScaffold && (Scaffold.state || Tower.state))
+            return
 
         var chosenEntity: Entity? = null
 
@@ -882,6 +895,9 @@ object KillAura : Module("KillAura", COMBAT) {
      */
     private fun startBlocking(interactEntity: Entity, interact: Boolean, fake: Boolean = false) {
         if (blockStatus && !uncpAutoBlock)
+            return
+
+        if (!onScaffold && (Scaffold.state || Tower.state))
             return
 
         if (mc.thePlayer.isBlocking) {
