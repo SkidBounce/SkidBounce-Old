@@ -48,8 +48,8 @@ object Clip : FlyMode("Clip") {
             val yaw = Math.toRadians(mc.thePlayer.rotationYaw.toDouble())
             val pitch = Math.toRadians(mc.thePlayer.rotationPitch.toDouble())
             mc.thePlayer.setPosition(
-                mc.thePlayer.posX + -sin(yaw) * clipX,
-                mc.thePlayer.posY + pitch * clipY,
+                mc.thePlayer.posX - sin(yaw) * clipX,
+                mc.thePlayer.posY - pitch * clipY,
                 mc.thePlayer.posZ + cos(yaw) * clipZ
             )
             timer.reset()
