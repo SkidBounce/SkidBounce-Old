@@ -90,6 +90,13 @@ object Fly : Module("Fly", MOVEMENT) {
     val clipGroundSpoof by BoolValue("Clip-GroundSpoof", false) { mode == "Clip" }
     val clipGround by BoolValue("Clip-GroundWhenClip", false) { mode == "Clip" }
 
+    // Clip2
+    val clip2H by FloatValue("Clip2-Horizontal", 2f, -5f..5f) { mode == "Clip2" }
+    val clip2Y by FloatValue("Clip2-Vertical", 2f, -5f..5f) { mode == "Clip2" }
+    val clip2Delay by IntegerValue("Clip2-Delay", 500, 0..3000) { mode == "Clip2" }
+    val clip2Timer by FloatValue("Clip2-Timer", 1f, 0.01f..3f) { mode == "Clip2" }
+    val clip2GroundSpoof by BoolValue("Clip2-GroundSpoof", false) { mode == "Clip2" }
+
     // Verus
     val damage by BoolValue("Damage", false) { mode == "Verus" }
     val timerSlow by BoolValue("TimerSlow", true) { mode == "Verus" }
