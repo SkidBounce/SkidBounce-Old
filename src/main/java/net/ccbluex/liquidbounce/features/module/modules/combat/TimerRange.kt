@@ -11,6 +11,7 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.player.Blink
 import net.ccbluex.liquidbounce.features.module.modules.player.Reach
+import net.ccbluex.liquidbounce.features.module.modules.targets.Dead
 import net.ccbluex.liquidbounce.script.api.global.Chat
 import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notification
 import net.ccbluex.liquidbounce.utils.EntityUtils
@@ -442,6 +443,8 @@ object TimerRange : Module("TimerRange", COMBAT) {
      * Separate condition to make it cleaner
      */
     private fun shouldResetTimer(): Boolean {
+        val nearestEntity = getNearestEntityInRange()
+
         if (mc.thePlayer != null && (mc.thePlayer.isSpectator || mc.thePlayer.isDead
                 || mc.thePlayer.isInWater || mc.thePlayer.isInLava
                 || mc.thePlayer.isInWeb || mc.thePlayer.isOnLadder
@@ -449,7 +452,8 @@ object TimerRange : Module("TimerRange", COMBAT) {
             return true
         }
 
-        return getNearestEntityInRange() != null && (mc.timer.timerSpeed < 1.0 || mc.timer.timerSpeed > 1.0)
+        return nearestEntity != null && (mc.timer.timerSpeed < 1.0 || mc.timer.timerSpeed > 1.0)
+                && (!nearestEntity.isDead || Dead.state)
     }
 
     /**
@@ -486,7 +490,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
             if (resetOnlagBack && packet is S08PacketPlayerPosLook) {
                 timerReset()
 
-                if (blink)
+                if (blinked)
                     unblink()
 
                 if (chatDebug) {
@@ -501,7 +505,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
             if (resetOnKnockback && packet is S12PacketEntityVelocity && mc.thePlayer.entityId == packet.entityID) {
                 timerReset()
 
-                if (blink)
+                if (blinked)
                     unblink()
 
                 if (chatDebug) {
@@ -515,7 +519,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
     }
 
     private fun blink(event: PacketEvent) {
-        if (event.eventType == EventState.RECEIVE && mc.thePlayer.ticksExisted > 10) {
+        if (event.eventType == EventState.RECEIVE && mc.thePlayer.ticksExisted > ticksValue) {
             event.cancelEvent()
             synchronized(packetsReceived) {
                 packetsReceived += event.packet
