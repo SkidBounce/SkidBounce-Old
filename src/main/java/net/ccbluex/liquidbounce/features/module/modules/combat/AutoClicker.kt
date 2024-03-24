@@ -13,15 +13,19 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.utils.extensions.fixedSensitivityPitch
 import net.ccbluex.liquidbounce.utils.extensions.fixedSensitivityYaw
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
+import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextInt
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.IntegerValue
-import net.minecraft.client.settings.KeyBinding
+import net.minecraft.client.settings.KeyBinding.onTick
 import net.minecraft.item.EnumAction
-import net.minecraft.util.MovingObjectPosition
+import net.minecraft.util.MovingObjectPosition.MovingObjectType.BLOCK
 import kotlin.random.Random.Default.nextBoolean
 
 object AutoClicker : Module("AutoClicker", COMBAT) {
+
+    private val simulateDoubleClicking by BoolValue("SimulateDoubleClicking", false)
+
     private val maxCPSValue: IntegerValue = object : IntegerValue("MaxCPS", 8, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minCPS)
     }
@@ -36,7 +40,7 @@ object AutoClicker : Module("AutoClicker", COMBAT) {
     private val right by BoolValue("Right", true)
     private val left by BoolValue("Left", true)
     private val jitter by BoolValue("Jitter", false)
-    private val block by BoolValue("AutoBlock", false)
+    private val block by BoolValue("AutoBlock", false) { left }
 
     private var rightDelay = randomClickDelay(minCPS, maxCPS)
     private var rightLastSwing = 0L
@@ -44,12 +48,14 @@ object AutoClicker : Module("AutoClicker", COMBAT) {
     private var leftLastSwing = 0L
 
     private val shouldAutoClick
-        get() = mc.thePlayer.capabilities.isCreativeMode || mc.objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK
+        get() = mc.thePlayer.capabilities.isCreativeMode || mc.objectMouseOver.typeOfHit != BLOCK
 
     private var shouldJitter = false
 
     @EventTarget
     fun onRender3D(event: Render3DEvent) {
+        val doubleClick = if (simulateDoubleClicking) nextInt(-1, 1) else 0
+
         val time = System.currentTimeMillis()
 
         if (block && mc.gameSettings.keyBindAttack.isKeyDown && !mc.gameSettings.keyBindUseItem.isKeyDown) {
@@ -57,23 +63,27 @@ object AutoClicker : Module("AutoClicker", COMBAT) {
         }
 
         if (left && mc.gameSettings.keyBindAttack.isKeyDown && shouldAutoClick && time - leftLastSwing >= leftDelay) {
-            KeyBinding.onTick(mc.gameSettings.keyBindAttack.keyCode)
+            repeat(1 + doubleClick) {
+                onTick(mc.gameSettings.keyBindAttack.keyCode)
 
-            leftLastSwing = time
-            leftDelay = randomClickDelay(minCPS, maxCPS)
+                leftLastSwing = time
+                leftDelay = randomClickDelay(minCPS, maxCPS)
+            }
         } else if (block && mc.gameSettings.keyBindAttack.isKeyDown && !mc.gameSettings.keyBindUseItem.isKeyDown && shouldAutoClick && shouldAutoRightClick() && mc.gameSettings.keyBindAttack.pressTime != 0) {
-            KeyBinding.onTick(mc.gameSettings.keyBindUseItem.keyCode)
+            onTick(mc.gameSettings.keyBindUseItem.keyCode)
         }
 
         if (right && mc.gameSettings.keyBindUseItem.isKeyDown && time - rightLastSwing >= rightDelay) {
-            KeyBinding.onTick(mc.gameSettings.keyBindUseItem.keyCode)
+            repeat(1 + doubleClick) {
+                onTick(mc.gameSettings.keyBindUseItem.keyCode)
 
-            rightLastSwing = time
-            rightDelay = randomClickDelay(minCPS, maxCPS)
+                rightLastSwing = time
+                rightDelay = randomClickDelay(minCPS, maxCPS)
+            }
         }
 
         shouldJitter =
-            !(mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && mc.gameSettings.keyBindAttack.pressTime != 0)
+            !(mc.objectMouseOver.typeOfHit == BLOCK && mc.gameSettings.keyBindAttack.pressTime != 0)
     }
 
     @EventTarget
