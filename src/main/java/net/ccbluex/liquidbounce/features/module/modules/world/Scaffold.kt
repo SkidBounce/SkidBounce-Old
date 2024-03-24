@@ -618,6 +618,9 @@ object Scaffold : Module("Scaffold", WORLD) {
     private fun move() {
         val thePlayer = mc.thePlayer ?: return
 
+        if (blocksAmount <= 0)
+            return
+
         when (towerMode.lowercase()) {
             "jump" -> if (thePlayer.onGround && tickTimer.hasTimePassed(jumpDelay)) {
                 thePlayer.fakeJump()
@@ -790,7 +793,7 @@ object Scaffold : Module("Scaffold", WORLD) {
         //    setTargetRotation(fixedSensitivityRotation)
         //    lockRotation = fixedSensitivityRotation
         //}
-        //placeInfo = placeRotation.placeInfo
+        placeInfo = placeRotation.placeInfo
         return true
     }
 
