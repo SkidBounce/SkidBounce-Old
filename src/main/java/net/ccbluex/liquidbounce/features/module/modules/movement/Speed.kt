@@ -37,6 +37,7 @@ object Speed : Module("Speed", MOVEMENT) {
     private val inWeb by BoolValue("InWeb", false)
     private val onLadder by BoolValue("OnLadder", false)
     private val whenRiding by BoolValue("WhenRiding", false)
+    private val onFly by BoolValue("onFly", false)
 
     private val normalMode by ListValue("NormalMode", moduleModes, "NCPBHop")
     private val jumpingMode by ListValue("JumpingMode", arrayOf("None") + moduleModes, "None")
@@ -176,6 +177,7 @@ object Speed : Module("Speed", MOVEMENT) {
                     && (onLadder || !mc.thePlayer.isOnLadder)
                     && (whenRiding || !mc.thePlayer.isRiding)
                     && mc.thePlayer != null
+                    && (onFly || !Fly.handleEvents())
 
             if (shouldSpeed != wasSpeed) {
                 onToggle(shouldSpeed)
