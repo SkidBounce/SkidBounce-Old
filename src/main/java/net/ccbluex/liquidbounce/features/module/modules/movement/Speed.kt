@@ -187,6 +187,7 @@ object Speed : Module("Speed", MOVEMENT) {
 
             return shouldSpeed
         }
+
     private fun updateJumping() {
         mc.gameSettings.keyBindJump.update()
         if (jumpingMode != "None") {
