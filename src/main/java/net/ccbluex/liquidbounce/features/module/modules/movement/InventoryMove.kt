@@ -10,8 +10,7 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui
 import net.ccbluex.liquidbounce.ui.client.hud.designer.GuiHudDesigner
-import net.ccbluex.liquidbounce.utils.extensions.isActuallyPressed
-import net.ccbluex.liquidbounce.utils.extensions.update
+import net.ccbluex.liquidbounce.utils.extensions.updateKeys
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager.canClickInventory
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
@@ -51,7 +50,7 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
         mc.gameSettings.keyBindSprint
     )
 
-    @EventTarget
+    @EventTarget(priority = 999)
     fun onUpdate(event: UpdateEvent) {
         val screen = mc.currentScreen
 
@@ -70,20 +69,13 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
                 serverOpenInventory = true
         }
 
-        if (Fly.handleEvents() && Fly.mode == "Vulcan")
-            return
-
-        for (affectedBinding in affectedBindings)
-            affectedBinding.pressed = affectedBinding.isActuallyPressed
-                    || (affectedBinding == mc.gameSettings.keyBindSprint && Sprint.handleEvents() && (!Sprint.onlyOnSprintPress || mc.thePlayer.isSprinting))
-                    || (affectedBinding == mc.gameSettings.keyBindForward && AutoWalk.handleEvents())
+        mc.gameSettings.updateKeys(*affectedBindings)
     }
 
     @EventTarget
     fun onStrafe(event: StrafeEvent) {
-        if (isIntave) {
+        if (isIntave)
             mc.gameSettings.keyBindSneak.pressed = true
-        }
     }
 
     @EventTarget
@@ -98,7 +90,6 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
     }
 
     override fun onDisable() {
-        for (affectedBinding in affectedBindings)
-            affectedBinding.update()
+        mc.gameSettings.updateKeys(*affectedBindings)
     }
 }
