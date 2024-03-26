@@ -513,8 +513,8 @@ object PacketDebugger : Module("PacketDebugger", MISC, gameDetecting = false) {
         if (event.isCancelled || !state) return
         val packet = event.packet
 
-        val value = settings.filterIsInstance<BoolValue>().find { it.name == packet.javaClass.simpleName } ?: return
-        if (!value.get())
+        val enabled = settings.filterIsInstance<BoolValue>().find { it.name == packet.javaClass.simpleName } ?: return
+        if (!enabled.get())
             return
 
         val javaClass = packet.javaClass
@@ -528,7 +528,7 @@ object PacketDebugger : Module("PacketDebugger", MISC, gameDetecting = false) {
                 field.isAccessible = true
 
                 val name = fieldMap[field.name] ?: field.name
-                @Suppress("NAME_SHADOWING") var value: Any? = null
+                var value: Any? = null
 
                 when (field.name) {
                     "field_179726_a" -> continue

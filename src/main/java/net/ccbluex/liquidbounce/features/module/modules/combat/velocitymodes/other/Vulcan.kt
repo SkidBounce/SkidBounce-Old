@@ -10,19 +10,12 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.Vel
 import net.minecraft.network.play.client.C0FPacketConfirmTransaction
 
 /**
- * @author EclipsesDev
- * @author CCBlueX/LiquidBounce
+ * @author SkidderMC/FDPClient
  */
 object Vulcan : VelocityMode("Vulcan") {
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is C0FPacketConfirmTransaction) {
-
-            // prevent for vulcan transaction timeout
-            if (event.isCancelled)
-                return
-
+        if (event.packet is C0FPacketConfirmTransaction && event.packet.uid <= -30769 && event.packet.uid >= -31767)
             event.cancelEvent()
-        }
     }
 
     override fun onVelocityPacket(event: PacketEvent) = event.cancelEvent()

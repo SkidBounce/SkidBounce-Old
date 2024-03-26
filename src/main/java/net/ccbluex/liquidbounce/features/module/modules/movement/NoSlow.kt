@@ -47,7 +47,6 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         Slot,
         WatchDog,
         WatchDog2,
-        Horizon,
         Medusa,
     ).sortedBy { it.modeName }
     private val consumeModes = arrayOf(
@@ -59,7 +58,6 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         Place,
         EmptyPlace,
         Slot,
-        Horizon,
         Medusa,
     ).sortedBy { it.modeName }
     private val bowModes = arrayOf(
@@ -71,13 +69,11 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         Place,
         EmptyPlace,
         Slot,
-        Horizon,
         Medusa,
     ).sortedBy { it.modeName }
 
     private val noNoMoveCheck = arrayOf(
         "Vanilla",
-        "Horizon"
     )
 
     var shouldSwap = false
