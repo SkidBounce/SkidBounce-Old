@@ -12,7 +12,7 @@ import net.minecraft.network.play.client.C0FPacketConfirmTransaction
 /**
  * @author SkidderMC/FDPClient
  */
-object Vulcan : VelocityMode("Vulcan") {
+object OldVulcan : VelocityMode("OldVulcan") {
     override fun onPacket(event: PacketEvent) {
         if (event.packet is C0FPacketConfirmTransaction && event.packet.uid <= -30769 && event.packet.uid >= -31767)
             event.cancelEvent()
