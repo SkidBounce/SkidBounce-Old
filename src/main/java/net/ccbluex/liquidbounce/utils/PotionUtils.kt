@@ -32,7 +32,6 @@ object PotionUtils {
         WITHER(wither),
         HEALTH_BOOST(healthBoost),
         ABSORPTION(absorption),
-        SATURATION(saturation),
-        UNKNOWN(field_180153_z);
+        SATURATION(saturation);
     }
 }

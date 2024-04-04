@@ -5,8 +5,6 @@
  */
 package net.ccbluex.liquidbounce.utils.extensions
 
-import net.ccbluex.liquidbounce.features.module.modules.render.Animations
-import net.ccbluex.liquidbounce.features.module.modules.render.Animations.swingSpeed
 import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
 import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
 import net.ccbluex.liquidbounce.utils.MovementUtils.JUMP_HEIGHT
@@ -428,7 +426,7 @@ fun EntityPlayer.get(potion: Potion): PotionEffect? = getActivePotionEffect(poti
 infix fun Entity.isInsideOf(material: Material) = isInsideOfMaterial(material)
 
 val Potion.potion
-    get() = Potions.entries.find { it.potion == this } ?: UNKNOWN
+    get() = Potions.entries.find { it.potion == this }
 
 val PotionEffect?.level
     get() = this?.let { amplifier + 1 } ?: 0
@@ -438,14 +436,7 @@ fun EntityPlayer.swing(type: String) {
         "Normal" -> swingItem()
         "Packet" -> sendPacket(C0APacketAnimation())
         "Visual" -> {
-            // TODO: npe when using access transformer?
-            val baseSwingSpeed = if (Animations.handleEvents()) 2 + (20 - swingSpeed) else 6
-            val swingSpeed = when {
-                has(HASTE) -> baseSwingSpeed - get(HASTE).level
-                has(MINING_FATIGUE) -> baseSwingSpeed + get(MINING_FATIGUE).level * 2
-                else -> baseSwingSpeed
-            }
-            if (swingProgressInt < 0 || !isSwingInProgress || swingProgressInt >= swingSpeed * 0.5)
+            if (swingProgressInt < 0 || !isSwingInProgress || swingProgressInt >= armSwingAnimationEnd * 0.5)
                 swingProgressInt = -1
             isSwingInProgress = true
         }
