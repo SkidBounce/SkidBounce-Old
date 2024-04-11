@@ -52,14 +52,13 @@ If you notice any bugs or missing features, you can let us know by opening an is
 ## Contributing
 
 We appreciate contributions. So if you want to support us, feel free to make changes to SkidBounce's source code and submit a pull request. Currently, our main goals are the following:
-1. Improve SkidBounce's performance.
-2. Re-work most of the render code.
-
-If you have experience in one or more of these fields, we would highly appreciate your support.
+- Performance
+- Bypasses
+- Visuals
 
 ### Setting up a Workspace
 
-SkidBounce is using Gradle, so make sure that it is installed properly. Instructions can be found on [Gradle's website](https://gradle.org/install/).
+SkidBounce uses Gradle, so make sure that it is installed properly. Instructions can be found on [Gradle's website](https://gradle.org/install/).
 1. Clone the repository using `git clone https://github.com/ManInMyVan/SkidBounce/`. 
 2. CD into the local repository folder.
 3. Depending on which IDE you are using execute either of the following commands:
