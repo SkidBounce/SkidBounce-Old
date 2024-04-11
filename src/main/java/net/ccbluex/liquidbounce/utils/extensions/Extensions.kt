@@ -467,3 +467,4 @@ fun KeyBinding.update() { pressed = isActuallyPressed }
 val KeyBinding.isActuallyPressed get() = isKeyDown(this)
 fun GameSettings.updateKeys() = keyBindings.forEach { it.update() }
 fun GameSettings.updateKeys(vararg keys: KeyBinding) = keys.forEach { it.update() }
+val C08PacketPlayerBlockPlacement.isUse get() = placedBlockDirection == 255
