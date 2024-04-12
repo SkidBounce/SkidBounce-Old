@@ -1,9 +1,9 @@
-# Project LiquidBounce Coding Standards
-Everyone is invited to participate in the development of LiquidBounce with pull requests and to open issues on our [separate repository](https://github.com/CCBlueX/LiquidBounce1.8-Issues). However, we have to enforce certain standards to keep our code readable, consistent and easier to maintain.
+# Project SkidBounce Coding Standards
+Everyone is invited to participate in the development of SkidBounce with pull requests. However, we have to enforce certain standards to keep our code readable, consistent and easier to maintain.
 
-We kindly ask you to use [Kotlin](https://kotlinlang.org/) instead of Java for new code, if possible. In the long term, it is our goal to largely migrate LiquidBounce to Kotlin.
+We kindly ask you to use [Kotlin](https://kotlinlang.org/) instead of Java for new code, if possible.
 
-Contributors: https://github.com/CCBlueX/LiquidBounce/graphs/contributors
+Contributors: https://github.com/ManInMyVan/SkidBounce/graphs/contributors
 
 ## General
 This section lists the official conventions of the languages Kotlin and Java. This project tries to follow them as closely as possible and we expect outside developers to do the same when working on the client.
@@ -19,10 +19,10 @@ This section lists the official conventions of the languages Kotlin and Java. Th
 * Read the Wikipedia article on [Java's Syntax](https://en.wikipedia.org/wiki/Java_syntax).
 * Look at Oracle's [Java Tutorial](https://docs.oracle.com/javase/tutorial/java/).
 
-# Rewriting
+## Rewriting
 If parts of the codebase that are currently still written in Java can be ported to Kotlin without changing its behaviour, you are welcome to do so. However, please do not simply rely on IntelliJ's auto-conversion feature, but improve the generated code if necessary.
 
-# Files
+## Files
 ### Generation
 
 To document the ownership of a file, we include the following text in all code files *(.kt and .java)* at the beginning of the file:
@@ -33,13 +33,8 @@ To document the ownership of a file, we include the following text in all code f
  * https://github.com/ManInMyVan/SkidBounce/
  */
 ```
- 
-### Tags
-`@author <author-name>` tags are allowed, but minimize its usage as much as possible.
 
-No other tags are allowed.
-
-# Packages
+## Packages
 ### Naming
 Our naming of packages follows the following format:
 * `country.company-name.product-name`
@@ -47,11 +42,10 @@ Our naming of packages follows the following format:
 *Example:* 
 * `net.ccbluex.liquidbounce`
 
-If your code is self-contained and not designed exclusively for LiquidBounce, we may allow you to include it in a separate package outside `net.ccbluex.liquidbounce`. Please note that we have to decide on a case by case basis.
-  
+If your code is self-contained and not designed exclusively for SkidBounce, we may allow you to include it in a separate package outside `net.ccbluex.liquidbounce`. Please note that we have to decide on a case by case basis.
+
 *Example:*
 `net.vitox` instead of `net.ccbluex`
 
 Links:
-
 * [Java Package](https://en.wikipedia.org/wiki/Java_package "Wikipedia article").
