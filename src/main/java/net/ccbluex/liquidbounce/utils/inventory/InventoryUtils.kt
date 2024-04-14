@@ -164,10 +164,8 @@ object InventoryUtils : MinecraftInstance(), Listenable {
                 CLICK_TIMER.reset()
 
                 // check if the item was used
-                if (packet.placedBlockDirection == 255)
-                    // check if the item is usable
-                    if (packet.stack.item.run { this is ItemSword || this is ItemFood || this is ItemBow || this is ItemPotion || this is ItemBucketMilk })
-                        _serverUsing = true
+                if (packet.placedBlockDirection == 255 && packet.stack.item.canUse)
+                    _serverUsing = true
             }
 
             is C0EPacketClickWindow -> {

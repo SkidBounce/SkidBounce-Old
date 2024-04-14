@@ -7,7 +7,9 @@ package net.ccbluex.liquidbounce.utils.inventory
 
 import net.ccbluex.liquidbounce.injection.implementations.IMixinItemStack
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
+import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
 import net.minecraft.enchantment.Enchantment
+import net.minecraft.init.Items.arrow
 import net.minecraft.item.*
 import net.minecraft.nbt.JsonToNBT
 import net.minecraft.util.ResourceLocation
@@ -144,3 +146,11 @@ val ItemStack.attackDamage
             1.25 * getEnchantmentLevel(Enchantment.sharpness)
 
 fun ItemStack.isSplashPotion() = item is ItemPotion && ItemPotion.isSplash(metadata)
+
+val Item.canUse get() = when (this) {
+    is ItemSword, is ItemPotion, is ItemBucketMilk -> true
+    is ItemBow -> mc.playerController.isInCreativeMode || mc.thePlayer.inventory.hasItem(arrow)
+    is ItemAppleGold -> mc.playerController.isNotCreative
+    is ItemFood -> mc.playerController.isNotCreative && mc.thePlayer.foodStats.foodLevel < 20
+    else -> false
+}
