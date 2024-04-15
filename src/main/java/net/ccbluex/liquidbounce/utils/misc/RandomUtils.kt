@@ -3051,15 +3051,6 @@ object RandomUtils {
         "z" to "2"
     )
 
-    fun chanceOf(chance: Double, block: () -> Any? = {}): Boolean {
-        if (Random.nextDouble() > chance) {
-            return false
-        } else {
-            block()
-            return true
-        }
-    }
-
     fun chanceOf(chance: Double, block: () -> Unit = {}): Boolean {
         if (Random.nextDouble() > chance) {
             return false
@@ -3069,9 +3060,5 @@ object RandomUtils {
         }
     }
 
-    fun chanceOf(chance: Double) = chanceOf(chance) {}
-
-    fun chanceOf(chance: Float, block: () -> Any? = {}) = chanceOf(chance.toDouble(), block)
     fun chanceOf(chance: Float, block: () -> Unit = {}) = chanceOf(chance.toDouble(), block)
-    fun chanceOf(chance: Float) = chanceOf(chance.toDouble())
 }
