@@ -42,7 +42,7 @@ object Velocity : Module("Velocity", COMBAT) {
     val cancelVertical by BoolValue("CancelVertical", true) { mode == "Custom" }
     val horizontalMultiplier by FloatValue("HorizontalMultiplier", 0f, 0f..1f) { mode == "Custom" && !cancelHorizontal }
     val verticalMultiplier by FloatValue("VerticalMultiplier", 0f, 0f..1f) { mode == "Custom" && !cancelVertical }
-    val chance by IntegerValue("Chance", 100, 0..100) { mode == "Custom" }
+    val chance by FloatValue("Chance", 100f, 0f..100f) { mode == "Custom" }
     val attackReduce by BoolValue("AttackReduce", false) { mode == "Custom" }
     val attackReduceMultiplier by FloatValue(
         "AttackReduce-Multiplier",
@@ -51,7 +51,7 @@ object Velocity : Module("Velocity", COMBAT) {
     ) { mode == "Custom" && attackReduce }
     val jump by BoolValue("Jump", false) { mode == "Custom" }
     val jumpMotion by FloatValue("Jump-Motion", 0.42f, 0f..0.42f) { mode == "Custom" && jump }
-    val jumpFailRate by IntegerValue("Jump-FailRate", 0, 0..100) { mode == "Custom" && jump }
+    val jumpFailRate by FloatValue("Jump-FailRate", 0f, 0f..100f) { mode == "Custom" && jump }
     val tickreduce by BoolValue("TickReduce", false) { mode == "Custom" }
     val tickreduceTicks by IntegerValue("TickReduce-Ticks", 1, 1..10) { mode == "Custom" && tickreduce }
     val tickreduceMultiplier by FloatValue("TickReduce-Multiplier", 0f, 0f..1f) { mode == "Custom" && tickreduce }

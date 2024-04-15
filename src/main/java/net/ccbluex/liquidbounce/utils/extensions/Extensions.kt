@@ -190,7 +190,6 @@ fun Number.round(digits: Number = 0, base: Number = 10): Double {
 
 infix fun <T> Collection<T?>.overlapsWith(other: Collection<T?>) = this.any { it in other }
 
-
 /**
  * Allows to get the distance between the current entity and [entity] from the nearest corner of the bounding box
  */

@@ -13,7 +13,7 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity
  * @author EclipsesDev
  * @author CCBlueX/LiquidBounce
  */
-object Matrix : VelocityMode("Matrix") {
+object MatrixReduce : VelocityMode("MatrixReduce") {
     override fun onVelocityPacket(event: PacketEvent) {
         val packet = event.packet
         if (packet is S12PacketEntityVelocity) {
