@@ -43,7 +43,7 @@
         "module.hitBox.description": "Makes hitboxes of targets bigger.",
 
         "module.ignite.description": "Automatically sets targets around you on fire.",
-
+        "module.flagCheck.description": "Detects if you get flagged by an AntiCheat.",
         "module.killAura.description": "Automatically attacks targets around you.",
 
         "module.friends.description": "Allows you to attack friends.",
