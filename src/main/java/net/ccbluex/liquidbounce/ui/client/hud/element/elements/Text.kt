@@ -127,7 +127,7 @@ class Text(x: Double = 10.0, y: Double = 10.0, scale: Float = 1F, side: Side = S
                 "pitchint" -> return DECIMAL_FORMAT.format(thePlayer.rotationPitch).toInt()
                 "food" -> return thePlayer.foodStats.foodLevel
                 "onground" -> return thePlayer.onGround
-                "tbalance", "timerbalance" -> return "${TimerBalanceUtils.getBalance()}ms"
+                "tbalance", "timerbalance" -> return "${TimerBalanceUtils.balance}ms"
             }
         }
 
