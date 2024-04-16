@@ -66,7 +66,7 @@ object Velocity : Module("Velocity", COMBAT) {
     val grimOnlyAir by BoolValue("Grim-OnlyBreakAir", true) { mode == "Grim" }
     val grimWorld by BoolValue("Grim-BreakOnWorld", false) { mode == "Grim" }
     val grimFlagPause by IntegerValue("Grim-FlagPauseTime", 10, 0..1000) { mode == "Grim" }
-    val grimPacket by ListValue("Grim-Packet", arrayOf("Flying", "Position", "Rotation", "Full", "None"), "Position") { mode == "Grim" }
+    val grimPacket by ListValue("Grim-Packet", arrayOf("Flying", "Position", "Rotation", "Full", "Tick", "None"), "Position") { mode == "Grim" }
     val grimTimerMode by ListValue("Grim-TimerMode", arrayOf("New", "Old", "Off"), "New") { mode == "Grim" && grimPacket != "None" }
     val grimTimerTicks by IntegerValue("Grim-TimerTicks", 20, 1..100) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }
     val grimTimerSpeed by FloatValue("Grim-TimerSpeed", 0.8f, 0f..1f) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }

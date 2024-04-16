@@ -63,10 +63,10 @@ object Grim : VelocityMode("Grim") {
 
     override fun onTick(event: TickEvent) {
         if (timerTicks > 0 && mc.timer.timerSpeed <= 1) {
-
-            mc.timer.timerSpeed = if (grimTimerMode == "Old")
+            val speed = if (grimTimerMode == "Old")
                 grimTimerSpeed else
                 grimTimerSpeed + ((1 - grimTimerSpeed) * (grimTimerTicks - timerTicks) / grimTimerTicks)
+            mc.timer.timerSpeed = speed.coerceIn(0.001f..1f)
 
             --timerTicks
         } else if (mc.timer.timerSpeed <= 1) mc.timer.resetSpeed()
@@ -88,36 +88,37 @@ object Grim : VelocityMode("Grim") {
     }
 
     private fun checkBlock(pos: BlockPos): Boolean {
-        if (!grimOnlyAir || mc.theWorld.isAirBlock(pos)) {
-            if (grimPacket != "None") {
-                timerTicks = grimTimerTicks
+        if (grimOnlyAir && !mc.theWorld.isAirBlock(pos))
+            return false
 
-                val (x, y, z) = mc.thePlayer.positionVector
-                val yaw = mc.thePlayer.rotationYaw
-                val pitch = mc.thePlayer.rotationPitch
-                val ground = mc.thePlayer.onGround
+        if (grimPacket != "None") {
+            timerTicks = grimTimerTicks
 
-                when (grimPacket) {
-                    "Flying" -> sendPacket(C03PacketPlayer(ground))
-                    "Position" -> sendPacket(C04PacketPlayerPosition(x, y, z, ground))
-                    "Rotation" -> sendPacket(C05PacketPlayerLook(yaw, pitch, ground))
-                    "Full" -> sendPacket(C06PacketPlayerPosLook(x, y, z, yaw, pitch, ground))
-                }
+            val (x, y, z) = mc.thePlayer.positionVector
+            val yaw = mc.thePlayer.rotationYaw
+            val pitch = mc.thePlayer.rotationPitch
+            val ground = mc.thePlayer.onGround
+
+            when (grimPacket) {
+                "Flying" -> sendPacket(C03PacketPlayer(ground))
+                "Position" -> sendPacket(C04PacketPlayerPosition(x, y, z, ground))
+                "Rotation" -> sendPacket(C05PacketPlayerLook(yaw, pitch, ground))
+                "Full" -> sendPacket(C06PacketPlayerPosLook(x, y, z, yaw, pitch, ground))
+                "Tick" -> mc.runGameLoop()
             }
-
-            sendPacket(
-                C07PacketPlayerDigging(
-                    STOP_DESTROY_BLOCK,
-                    pos,
-                    DOWN
-                )
-            )
-
-            if (grimWorld)
-                mc.theWorld.setBlockToAir(pos)
-
-            return true
         }
-        return false
+
+        sendPacket(
+            C07PacketPlayerDigging(
+                STOP_DESTROY_BLOCK,
+                pos,
+                DOWN
+            )
+        )
+
+        if (grimWorld)
+            mc.theWorld.setBlockToAir(pos)
+
+        return true
     }
 }
