@@ -5,10 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes
 
-import net.ccbluex.liquidbounce.event.BlockBBEvent
-import net.ccbluex.liquidbounce.event.JumpEvent
-import net.ccbluex.liquidbounce.event.PacketEvent
-import net.ccbluex.liquidbounce.event.TickEvent
+import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 
 open class VelocityMode(val modeName: String) : MinecraftInstance() {
@@ -19,5 +16,8 @@ open class VelocityMode(val modeName: String) : MinecraftInstance() {
     open fun onPacket(event: PacketEvent) {}
     open fun onBlockBB(event: BlockBBEvent) {}
     open fun onVelocityPacket(event: PacketEvent) {}
+    open fun onWorld(event: WorldEvent) {}
+    open fun onGameLoop(event: GameLoopEvent) {}
     open fun onEnable() {}
+    open fun onDisable() {}
 }

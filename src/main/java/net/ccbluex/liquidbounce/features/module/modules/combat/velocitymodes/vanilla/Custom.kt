@@ -32,6 +32,8 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.velocity
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.verticalMultiplier
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.ccbluex.liquidbounce.utils.*
+import net.ccbluex.liquidbounce.utils.EntityUtils.isLookingOnEntities
+import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.extensions.getDistanceToEntityBox
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.chanceOf
@@ -73,7 +75,7 @@ object Custom : VelocityMode("Custom") {
             run {
                 val nearbyEntity = getNearestEntityInRange() ?: return@run
 
-                if (onLook && !EntityUtils.isLookingOnEntities(
+                if (onLook && !isLookingOnEntities(
                         nearbyEntity,
                         maxAngleDifference.toDouble()
                     )
@@ -87,7 +89,7 @@ object Custom : VelocityMode("Custom") {
                     if (reverseSmooth)
                         mc.thePlayer.speedInAir = reverseStrength
                     else
-                        MovementUtils.speed *= reverseStrength
+                        speed *= reverseStrength
                 else if (reverseSmooth)
                     mc.thePlayer.speedInAir = 0.02f
             }

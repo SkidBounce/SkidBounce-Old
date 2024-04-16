@@ -96,6 +96,14 @@ object Fly : Module("Fly", MOVEMENT) {
     val boostMotion by FloatValue("BoostMotion", 6.5f, 1f..9.85f) { mode == "Verus" }
     val yBoost by FloatValue("YBoost", 0.42f, 0f..10f) { mode == "Verus" }
 
+    // BlocksMC
+    val timerSlowed by BoolValue("TimerSlowed", true) { mode == "BlocksMC" }
+    val boostSpeed by FloatValue("BoostSpeed", 8f, 1f..15f) { mode == "BlocksMC" }
+    val extraBoost by FloatValue("ExtraSpeed", 0.25f, 0.0F..2f) { mode == "BlocksMC" }
+    val stopOnLanding by BoolValue("StopOnLanding", true) { mode == "BlocksMC" }
+    val stopOnNoMove by BoolValue("StopOnNoMove", true) { mode == "BlocksMC" }
+    val debugFly by BoolValue("Debug", false) { mode == "BlocksMC" }
+
     private val mark by BoolValue("Mark", true, subjective = true)
 
     var jumpY = 0.0

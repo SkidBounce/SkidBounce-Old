@@ -31,8 +31,6 @@ object Velocity : Module("Velocity", COMBAT) {
      *   Delayed setting in Custom
      */
 
-    //  Settings
-
     private val mode by ListValue("Mode", velocityModes.map { it.modeName }.toTypedArray(), "Vanilla")
     private val noFire by BoolValue("NoFire", true) { mode !in arrayOf("AACv4", "AACPush") }
     private val onlyGround by BoolValue("OnlyGround", false) { mode !in arrayOf("AACv4", "AACPush") }
@@ -44,11 +42,7 @@ object Velocity : Module("Velocity", COMBAT) {
     val verticalMultiplier by FloatValue("VerticalMultiplier", 0f, 0f..1f) { mode == "Custom" && !cancelVertical }
     val chance by FloatValue("Chance", 100f, 0f..100f) { mode == "Custom" }
     val attackReduce by BoolValue("AttackReduce", false) { mode == "Custom" }
-    val attackReduceMultiplier by FloatValue(
-        "AttackReduce-Multiplier",
-        0.8f,
-        0f..1f
-    ) { mode == "Custom" && attackReduce }
+    val attackReduceMultiplier by FloatValue("AttackReduce-Multiplier", 0.8f, 0f..1f) { mode == "Custom" && attackReduce }
     val jump by BoolValue("Jump", false) { mode == "Custom" }
     val jumpMotion by FloatValue("Jump-Motion", 0.42f, 0f..0.42f) { mode == "Custom" && jump }
     val jumpFailRate by FloatValue("Jump-FailRate", 0f, 0f..100f) { mode == "Custom" && jump }
@@ -65,6 +59,8 @@ object Velocity : Module("Velocity", COMBAT) {
     val reverseNoGround by BoolValue("Reverse-NoGround", true) { mode == "Custom" && reverse }
     val reverseTicks by IntegerValue("Reverse-StrafeTicks", 1, 1..20) { mode == "Custom" && reverse }
     val reverseStrength by FloatValue("Reverse-Strength", 1f, 0.02f..1f) { mode == "Custom" && reverse }
+
+    val spoofDelay by IntegerValue("SpoofDelay", 500, 0..5000) { mode == "Delayed" }
 
     val grimAlways by BoolValue("Grim-Always", false) { mode == "Grim" }
     val grimOnlyAir by BoolValue("Grim-OnlyBreakAir", true) { mode == "Grim" }
@@ -112,9 +108,12 @@ object Velocity : Module("Velocity", COMBAT) {
     var velocityTick = 0
     val velocityTimer = MSTimer()
 
+    val delayMode get() = mode == "Delayed"
+
     override fun onDisable() {
         mc.thePlayer.speedInAir = 0.02f
         mc.timer.timerSpeed = 1f
+        modeModule.onDisable()
     }
 
     override fun onEnable() {
@@ -165,5 +164,15 @@ object Velocity : Module("Velocity", COMBAT) {
     fun onBlockBB(event: BlockBBEvent) {
         mc.thePlayer ?: return
         modeModule.onBlockBB(event)
+    }
+
+    @EventTarget
+    fun onWorld(event: WorldEvent) {
+        modeModule.onWorld(event)
+    }
+
+    @EventTarget
+    fun onGameLoop(event: GameLoopEvent) {
+        modeModule.onGameLoop(event)
     }
 }
