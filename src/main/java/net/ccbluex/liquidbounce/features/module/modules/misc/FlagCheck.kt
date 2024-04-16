@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module.modules.misc
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
-import net.ccbluex.liquidbounce.script.api.global.Chat
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.extensions.onPlayerRightClick
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.IntegerValue
@@ -63,7 +63,7 @@ object FlagCheck : Module("FlagCheck", MISC, gameDetecting = true) {
             if (deltaYaw > 90 || deltaPitch > 90) {
                 forceRotateDetected = true
                 flagCount++
-                Chat.print("§7(§9FlagCheck§7) §dDetected §3Force-Rotate §e(${deltaYaw.roundToLong()}° | ${deltaPitch.roundToLong()}°) §b(§c${flagCount}x§b)")
+                displayClientMessage("§dDetected §3Force-Rotate §e(${deltaYaw.roundToLong()}° | ${deltaPitch.roundToLong()}°) §b(§c${flagCount}x§b)")
             } else {
                 forceRotateDetected = false
             }
@@ -71,7 +71,7 @@ object FlagCheck : Module("FlagCheck", MISC, gameDetecting = true) {
             if (player.onGround && player.onPlayerRightClick(BlockPos.ORIGIN, EnumFacing.DOWN, Vec3(packet.x, packet.y, packet.z))) {
                 ghostBlockDetected = true
                 flagCount++
-                Chat.print("§7(§9FlagCheck§7) §dDetected §3GhostBlock §b(§c${flagCount}x§b)")
+                displayClientMessage("§dDetected §3GhostBlock §b(§c${flagCount}x§b)")
             } else {
                 ghostBlockDetected = false
             }
@@ -79,7 +79,7 @@ object FlagCheck : Module("FlagCheck", MISC, gameDetecting = true) {
             if (!forceRotateDetected && !ghostBlockDetected) {
                 lagbackDetected = true
                 flagCount++
-                Chat.print("§7(§9FlagCheck§7) §dDetected §3Lagback §b(§c${flagCount}x§b)")
+                displayClientMessage("§dDetected §3Lagback §b(§c${flagCount}x§b)")
             }
 
             if (mc.thePlayer.ticksExisted % 3 == 0) {
@@ -136,7 +136,7 @@ object FlagCheck : Module("FlagCheck", MISC, gameDetecting = true) {
         if (rubberbandReason.isNotEmpty()) {
             flagCount++
             val reasonString = rubberbandReason.joinToString(" §8|§e ")
-            Chat.print("§7(§9FlagCheck§7) §dDetected §3Rubberband §8(§e$reasonString§8) §b(§c${flagCount}x§b)")
+            displayClientMessage("§dDetected §3Rubberband §8(§e$reasonString§8) §b(§c${flagCount}x§b)")
         }
 
         // Update last position and motion

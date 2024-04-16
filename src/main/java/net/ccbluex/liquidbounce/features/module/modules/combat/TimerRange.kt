@@ -12,8 +12,8 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.player.Blink
 import net.ccbluex.liquidbounce.features.module.modules.player.Reach
 import net.ccbluex.liquidbounce.features.module.modules.targets.Dead
-import net.ccbluex.liquidbounce.script.api.global.Chat
 import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notification
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.EntityUtils
 import net.ccbluex.liquidbounce.utils.EntityUtils.isLookingOnEntities
 import net.ccbluex.liquidbounce.utils.PacketUtils.queuedPackets
@@ -510,7 +510,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
                 timerReset()
 
                 if (chatDebug) {
-                    Chat.print("Lagback Received | Timer Reset")
+                    displayClientMessage("Lagback Received | Timer Reset")
                 }
                 if (notificationDebug) {
                     hud.addNotification(Notification("Lagback Received | Timer Reset", 1000F))
@@ -522,7 +522,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
                 timerReset()
 
                 if (chatDebug) {
-                    Chat.print("Knockback Received | Timer Reset")
+                    displayClientMessage("Knockback Received | Timer Reset")
                 }
                 if (notificationDebug) {
                     hud.addNotification(Notification("Knockback Received | Timer Reset", 1000F))

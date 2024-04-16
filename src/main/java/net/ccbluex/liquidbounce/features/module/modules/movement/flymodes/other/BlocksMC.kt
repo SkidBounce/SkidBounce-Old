@@ -15,7 +15,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.stopOnLandi
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.stopOnNoMove
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.timerSlowed
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
-import net.ccbluex.liquidbounce.script.api.global.Chat
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
@@ -55,13 +55,13 @@ object BlocksMC : FlyMode("BlocksMC") {
         if (isFlying) {
             if (player.onGround && stopOnLanding) {
                 if (debugFly)
-                    Chat.print("Ground Detected.. Stopping Fly")
+                    displayClientMessage("Ground Detected.. Stopping Fly")
                 Fly.state = false
             }
 
             if (!isMoving && stopOnNoMove) {
                 if (debugFly)
-                    Chat.print("No Movement Detected.. Stopping Fly. (Could be flagged)")
+                    displayClientMessage("No Movement Detected.. Stopping Fly. (Could be flagged)")
                 Fly.state = false
             }
         }
@@ -74,7 +74,7 @@ object BlocksMC : FlyMode("BlocksMC") {
                 handlePlayerFlying(player)
             } else {
                 if (debugFly)
-                    Chat.print("Waiting to be Teleported.. Please ensure you're below a block.")
+                    displayClientMessage("Waiting to be Teleported.. Please ensure you're below a block.")
             }
         } else {
             handleTeleport(player)
@@ -155,7 +155,7 @@ object BlocksMC : FlyMode("BlocksMC") {
 
             isTeleported = true
             if (debugFly)
-                Chat.print("Teleported.. Fly Now!")
+                displayClientMessage("Teleported.. Fly Now!")
         }
     }
 }

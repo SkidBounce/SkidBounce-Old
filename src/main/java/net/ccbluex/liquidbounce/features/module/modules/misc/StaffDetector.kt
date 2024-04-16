@@ -11,8 +11,9 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
-import net.ccbluex.liquidbounce.script.api.global.Chat
 import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notification
+import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.misc.HttpUtils
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.ccbluex.liquidbounce.value.ListValue
@@ -97,11 +98,11 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
                         val isStaff = player in blocksMCStaff
 
                         if (isStaff && spectator) {
-                            Chat.print("§c[STAFF] §d${player} §3is using the spectator menu §e(compass/left)")
+                            displayClientMessage("§d$player §3is using the spectator menu §e(compass/left)")
                         }
 
                         if (!isStaff && otherSpectator) {
-                            Chat.print("§d${player} §3is using the spectator menu §e(compass/left)")
+                            displayClientMessage("§d$player §3is using the spectator menu §e(compass/left)")
                         }
                         checkedSpectator.remove(player)
                     }
@@ -126,17 +127,17 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
 
         if (isStaff && spectator) {
             if (warn == "Chat") {
-                Chat.print("§c[STAFF] §d${player} §3is a spectators")
+                displayClientMessage("§d$player §3is a spectators")
             } else {
-                hud.addNotification(Notification("§c[STAFF] §d${player} §3is a spectators", 3000F))
+                hud.addNotification(Notification("§d$player §3is a spectators", 3000F))
             }
         }
 
         if (!isStaff && otherSpectator) {
             if (warn == "Chat") {
-                Chat.print("§d${player} §3is a spectators")
+                displayClientMessage("§d$player §3is a spectators")
             } else {
-                hud.addNotification(Notification("§d${player} §3is a spectators", 3000F))
+                hud.addNotification(Notification("§d$player §3is a spectators", 3000F))
             }
         }
 
@@ -166,11 +167,11 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
                 else -> "§c(Ping error)"
             }
 
-            val warnings = "§c[STAFF] §d${player} §3is a staff $condition"
+            val warnings = "§d$player §3is a staff $condition"
 
             if (isStaff && player !in checkedStaff) {
                 if (warn == "Chat") {
-                    Chat.print(warnings)
+                    displayClientMessage(warnings)
                 } else {
                     hud.addNotification(Notification(warnings, 3000F))
                 }
@@ -237,13 +238,11 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
             if (code == 200) {
                 val staffList = response.split("\n").filter { it.isNotBlank() && it.isNotEmpty() }.toSet()
 
-                Chat.print("§aSuccessfully loaded §9${staffList.size} §astaff names.")
+                displayClientMessage("§aSuccessfully loaded §9${staffList.size} §astaff names.")
                 return mapOf(url to staffList)
-            } else {
-                Chat.print("§cFailed to load staff list. §9(ERROR CODE: $code)")
-            }
+            } else displayClientMessage("§cFailed to load staff list. §9(ERROR CODE: $code)")
         } catch (e: Exception) {
-            Chat.print("§cFailed to load staff list. §9(${e.message})")
+            LOGGER.error("§cFailed to load staff list. §9(${e.message})")
         }
         return emptyMap()
     }
