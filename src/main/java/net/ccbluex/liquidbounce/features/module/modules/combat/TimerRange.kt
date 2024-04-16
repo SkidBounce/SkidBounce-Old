@@ -503,7 +503,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
             }
         }
 
-        if (isPlayerMoving() && shouldResetTimer() && playerTicks > 0) {
+        if (shouldResetTimer()) {
 
             // Check for lagback
             if (resetOnlagBack && packet is S08PacketPlayerPosLook) {

@@ -11,6 +11,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
+import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
 import net.ccbluex.liquidbounce.value.BoolValue
@@ -26,11 +27,7 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
     private val delay by IntegerValue("Delay", 0, 0, 500)
     private val hurtTime by IntegerValue("HurtTime", 10, 0, 10)
 
-    private val mode by ListValue(
-        "Mode",
-        arrayOf("SprintTap", "WTap", "STap", "Old", "Silent", "Packet", "SneakPacket").sortedArray(),
-        "Old"
-    )
+    private val mode by ListValue("Mode", arrayOf("SprintTap", "SprintTap2", "WTap", "Old", "Silent", "Packet", "SneakPacket").sortedArray(), "Old")
     private val maxTicksUntilBlock: IntegerValue = object : IntegerValue("MaxTicksUntilBlock", 2, 0..5) {
         override fun isSupported() = mode == "WTap"
 
@@ -53,15 +50,15 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(reSprintMaxTicks.get())
     }
 
-    private val pressBackTicks: IntegerValue = object : IntegerValue("PressBackTicks", 1, 1..5) {
-        override fun isSupported() = mode == "STap"
+    private val stopTicks: IntegerValue = object : IntegerValue("PressBackTicks", 1, 1..5) {
+        override fun isSupported() = mode == "SprintTap2"
 
-        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(releaseBackTicks.get())
+        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(unSprintTicks.get())
     }
-    private val releaseBackTicks: IntegerValue = object : IntegerValue("ReleaseBackTicks", 2, 1..5) {
-        override fun isSupported() = mode == "STap"
+    private val unSprintTicks: IntegerValue = object : IntegerValue("ReleaseBackTicks", 2, 1..5) {
+        override fun isSupported() = mode == "SprintTap2"
 
-        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(pressBackTicks.get())
+        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(stopTicks.get())
     }
 
     private val onlyGround by BoolValue("OnlyGround", false)
@@ -80,8 +77,8 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
     private var allowInputTicks = randomDelay(reSprintMinTicks.get(), reSprintMaxTicks.get())
     private var ticksElapsed = 0
 
-    // STap
-    private var pressTicks = 0
+    // SprintTap2
+    private var sprintTicks = 0
 
     override fun onToggle(state: Boolean) {
         // Make sure the user won't have their input forever blocked
@@ -89,7 +86,7 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
         startWaiting = false
         blockTicksElapsed = 0
         ticksElapsed = 0
-        pressTicks = 0
+        sprintTicks = 0
     }
 
     @EventTarget
@@ -152,24 +149,25 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
                 }
             }
 
-            "STap" -> {
-                if (++pressTicks == pressBackTicks.get()) {
-                    if (player.isSprinting && player.serverSprintState) {
-                        C0BPacketEntityAction(player, C0BPacketEntityAction.Action.STOP_SPRINTING)
+            "SprintTap2" -> {
+                if (++sprintTicks == stopTicks.get()) {
+
+                    if (mc.thePlayer.isSprinting && mc.thePlayer.serverSprintState) {
+                        mc.thePlayer.isSprinting = false
+                        mc.thePlayer.serverSprintState = false
+                    } else {
+                        mc.thePlayer.isSprinting = true
+                        mc.thePlayer.serverSprintState = true
                     }
 
-                    if (!mc.gameSettings.keyBindBack.isKeyDown) {
-                        mc.gameSettings.keyBindForward.pressed = false
-                        mc.gameSettings.keyBindBack.pressed = true
-                    }
+                    mc.thePlayer.stopXZ()
 
-                } else if (pressTicks >= releaseBackTicks.get()) {
+                } else if (sprintTicks >= unSprintTicks.get()) {
 
-                    mc.gameSettings.keyBindBack.pressed = false
-                    player.isSprinting = true
-                    player.serverSprintState = true
+                    mc.thePlayer.isSprinting = false
+                    mc.thePlayer.serverSprintState = false
 
-                    pressTicks = 0
+                    sprintTicks = 0
                 }
             }
         }

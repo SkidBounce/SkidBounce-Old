@@ -94,9 +94,13 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
                     }
 
                     miscSpectatorList.forEach { player ->
-                        if (player in blocksMCStaff) {
+                        val isStaff = player in blocksMCStaff
+
+                        if (isStaff && spectator) {
                             Chat.print("§c[STAFF] §d${player} §3is using the spectator menu §e(compass/left)")
-                        } else {
+                        }
+
+                        if (!isStaff && otherSpectator) {
                             Chat.print("§d${player} §3is using the spectator menu §e(compass/left)")
                         }
                         checkedSpectator.remove(player)

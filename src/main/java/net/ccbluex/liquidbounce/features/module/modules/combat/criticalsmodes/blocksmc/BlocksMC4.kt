@@ -9,13 +9,14 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.Cr
 import net.minecraft.entity.Entity
 
 /**
- * @author SkidderMC/FDPClient
+ * @author CCBlueX/LiquidBounce
+ * @author EclipsesDev
  */
-object BlocksMC3 : CriticalsMode("BlocksMC3") {
+object BlocksMC4 : CriticalsMode("BlocksMC4") {
     override fun onAttack(entity: Entity) {
-        sendPacket(0.0825080378093, true)
-        sendPacket(0.0215634532004, false)
-        sendPacket(0.1040220332227, false)
+        sendPacket(0.001, false)
+        sendPacket(0.0010353, false)
+        sendPacket(0.0, false)
         crit(entity)
     }
 }

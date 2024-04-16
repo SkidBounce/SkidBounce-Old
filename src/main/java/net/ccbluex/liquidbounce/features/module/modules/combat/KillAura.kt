@@ -139,6 +139,7 @@ object KillAura : Module("KillAura", COMBAT) {
 
     // Settings
     private val onScaffold by BoolValue("OnScaffold", false)
+    private val onDestroyBlock by BoolValue("OnDestroyBlock", false)
 
     // AutoBlock
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Packet", "Fake"), "Packet")
@@ -553,6 +554,9 @@ object KillAura : Module("KillAura", COMBAT) {
         if (!onScaffold && Scaffold.state)
             return
 
+        if (!onDestroyBlock && mc.playerController.isHittingBlock)
+            return
+
         // Reset fixed target to null
         target = null
 
@@ -729,6 +733,9 @@ object KillAura : Module("KillAura", COMBAT) {
         if (!onScaffold && Scaffold.state)
             return false
 
+        if (!onDestroyBlock && mc.playerController.isHittingBlock)
+            return false
+
         val (predictX, predictY, predictZ) = entity.currPos.subtract(entity.prevPos)
             .times(2 + predictEnemyPosition.toDouble())
 
@@ -810,6 +817,9 @@ object KillAura : Module("KillAura", COMBAT) {
         val target = this.target ?: return
 
         if (!onScaffold && Scaffold.state)
+            return
+
+        if (!onDestroyBlock && mc.playerController.isHittingBlock)
             return
 
         var chosenEntity: Entity? = null
@@ -897,6 +907,9 @@ object KillAura : Module("KillAura", COMBAT) {
             return
 
         if (!onScaffold && Scaffold.state)
+            return
+
+        if (!onDestroyBlock && mc.playerController.isHittingBlock)
             return
 
         if (mc.thePlayer.isBlocking) {

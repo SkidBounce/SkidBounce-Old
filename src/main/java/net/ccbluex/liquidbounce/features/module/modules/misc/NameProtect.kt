@@ -52,6 +52,10 @@ object NameProtect : Module("NameProtect", MISC, subjective = true, gameDetectin
     private var savedMaxName = -1
 
     override fun onEnable() {
+        if (!allPlayers) {
+            return
+        }
+
         generateRandomNames()
 
         // Saving other player changed name length
@@ -95,10 +99,6 @@ object NameProtect : Module("NameProtect", MISC, subjective = true, gameDetectin
     private fun generateRandomNames() {
         playerRandomNames.clear()
 
-        if (!allPlayers) {
-            return
-        }
-
         if (randomNames) {
             for (playerInfo in mc.netHandler.playerInfoMap) {
                 val playerUUID = playerInfo.gameProfile.id
@@ -129,7 +129,7 @@ object NameProtect : Module("NameProtect", MISC, subjective = true, gameDetectin
         val p = mc.thePlayer ?: return text
 
         // If the message includes the client name, don't change it
-        if ("§8[§9§l$CLIENT_NAME§8] §3" in text) {
+        if ("§8[§9$CLIENT_NAME§8] §r" in text) {
             return text
         }
 
@@ -152,26 +152,27 @@ object NameProtect : Module("NameProtect", MISC, subjective = true, gameDetectin
         for (playerInfo in mc.netHandler.playerInfoMap) {
             val playerUUID = playerInfo.gameProfile.id
 
-            if (allPlayers && randomNames) {
-                val (protectedUsername, _) = playerRandomNames.getOrPut(playerUUID) {
-                    val randomizeName = (1..nameLength).joinToString("") { characters.random().toString() }
-                    randomizeName to nameLength
+            if (allPlayers) {
+                if (randomNames) {
+                    val (protectedUsername, _) = playerRandomNames.getOrPut(playerUUID) {
+                        val randomizeName = (1..nameLength).joinToString("") { characters.random().toString() }
+                        randomizeName to nameLength
+                    }
+
+                    val escapedName = Regex.escape(playerInfo.gameProfile.name)
+                    newText = newText.replace(Regex(escapedName), protectedUsername)
+
+                    // Update all other player names when nameLength & min/maxNameLength value are changed
+                    if (savedName != nameLength || savedMinName != minNameLength.get() || savedMaxName != maxNameLength.get()) {
+                        generateRandomNames()
+                        savedName = nameLength
+                        savedMinName = minNameLength.get()
+                        savedMaxName = maxNameLength.get()
+                    }
+                } else {
+                    // Default
+                    newText = newText.replace(playerInfo.gameProfile.name, "Protected User")
                 }
-
-                val escapedName = Regex.escape(playerInfo.gameProfile.name)
-                newText = newText.replace(Regex(escapedName), protectedUsername)
-
-                // Update all other player names when nameLength & min/maxNameLength value are changed
-                if (savedName != nameLength || savedMinName != minNameLength.get() || savedMaxName != maxNameLength.get()) {
-                    generateRandomNames()
-                    savedName = nameLength
-                    savedMinName = minNameLength.get()
-                    savedMaxName = maxNameLength.get()
-                }
-
-            } else {
-                // Default
-                newText = newText.replace(playerInfo.gameProfile.name, "Protected User")
             }
         }
 
