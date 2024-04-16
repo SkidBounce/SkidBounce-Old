@@ -16,7 +16,9 @@ import net.minecraft.network.login.server.S00PacketDisconnect
 import net.minecraft.network.play.server.S01PacketJoinGame
 import net.minecraft.network.play.server.S08PacketPlayerPosLook
 import net.minecraft.util.BlockPos
+import net.minecraft.util.BlockPos.ORIGIN
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.EnumFacing.DOWN
 import net.minecraft.util.Vec3
 import kotlin.math.abs
 import kotlin.math.roundToLong
@@ -68,10 +70,13 @@ object FlagCheck : Module("FlagCheck", MISC, gameDetecting = true) {
                 forceRotateDetected = false
             }
 
-            if (player.onGround && player.onPlayerRightClick(BlockPos.ORIGIN, EnumFacing.DOWN, Vec3(packet.x, packet.y, packet.z))) {
+            // Idk still testing :/
+            // TODO: Make better check for ghostblock
+            if (player.onGround && player.onPlayerRightClick(ORIGIN, DOWN, Vec3(packet.x, packet.y, packet.z))
+                && player.lookVec.rotatePitch(-90f) != null) {
                 ghostBlockDetected = true
                 flagCount++
-                displayClientMessage("§dDetected §3GhostBlock §b(§c${flagCount}x§b)")
+                displayClientMessage("§dDetected §3GhostBlock §b(§eS08Packet§b) §b(§c${flagCount}x§b)")
             } else {
                 ghostBlockDetected = false
             }

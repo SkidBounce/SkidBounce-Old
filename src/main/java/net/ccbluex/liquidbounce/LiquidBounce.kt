@@ -95,6 +95,7 @@ object LiquidBounce {
         registerListener(TickedActions)
         registerListener(MovementUtils)
         registerListener(PacketUtils)
+        registerListener(TimerBalanceUtils)
 
         // Load client fonts
         loadFonts()
