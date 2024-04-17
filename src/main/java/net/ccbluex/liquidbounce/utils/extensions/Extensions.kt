@@ -11,7 +11,6 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.JUMP_HEIGHT
 import net.ccbluex.liquidbounce.utils.MovementUtils.getJumpBoostModifier
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PotionUtils.Potions
-import net.ccbluex.liquidbounce.utils.PotionUtils.Potions.*
 import net.ccbluex.liquidbounce.utils.Rotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.getFixedSensitivityAngle
 import net.ccbluex.liquidbounce.utils.block.BlockUtils
@@ -41,12 +40,13 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.client.C0APacketAnimation
 import net.minecraft.potion.Potion
-import net.minecraft.potion.Potion.*
 import net.minecraft.potion.PotionEffect
 import net.minecraft.stats.StatList.jumpStat
 import net.minecraft.util.*
 import net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem
 import kotlin.math.pow
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 fun NetworkPlayerInfo.getFullName(): String {
     if (displayName != null)
@@ -179,6 +179,8 @@ fun Block.lerpWith(x: Double, y: Double, z: Double) = Vec3(
     blockBoundsMinY + (blockBoundsMaxY - blockBoundsMinY) * y,
     blockBoundsMinZ + (blockBoundsMaxZ - blockBoundsMinZ) * z
 )
+
+fun Random.Default.nextShort(range: IntRange) = nextInt(range).toShort()
 
 /**
  * @see kotlin.math.round

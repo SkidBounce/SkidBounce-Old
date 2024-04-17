@@ -14,7 +14,9 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.Packet
 import net.minecraft.network.play.INetHandlerPlayClient
+import net.minecraft.network.play.client.C0CPacketInput
 import net.minecraft.network.play.server.*
+import net.minecraft.util.MovementInput
 import kotlin.math.roundToInt
 
 // TODO: Remove annotations once all modules are converted to kotlin.
@@ -122,6 +124,14 @@ object PacketUtils : MinecraftInstance(), Listenable {
             }
         }
     }
+
+    @JvmStatic
+    fun C0CPacketInput(input: MovementInput): C0CPacketInput = C0CPacketInput(
+        input.moveStrafe,
+        input.moveForward,
+        input.jump,
+        input.sneak
+    )
 
     @JvmStatic
     @JvmOverloads
