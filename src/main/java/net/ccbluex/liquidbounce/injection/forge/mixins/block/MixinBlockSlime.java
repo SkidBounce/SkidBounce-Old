@@ -22,11 +22,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinBlockSlime {
     @ModifyConstant(method = "onEntityCollidedWithBlock", constant = @Constant(doubleValue = 0.4D))
     private double onEntityCollidedWithBlock(double constant) {
-        return (NoSlow.INSTANCE.getState() && NoSlow.INSTANCE.getSlime()) ? NoSlow.INSTANCE.getSlimeMultiplier() : 0.4D;
+        return (NoSlow.INSTANCE.getState() && NoSlow.getSlime()) ? NoSlow.getSlimeMultiplier() : 0.4D;
     }
     @ModifyConstant(method = "onEntityCollidedWithBlock", constant = @Constant(doubleValue = 0.2D))
     private double onEntityCollidedWithBlockY(double constant) {
-        return (NoSlow.INSTANCE.getState() && NoSlow.INSTANCE.getSlime()) ? NoSlow.INSTANCE.getSlimeYMultiplier() : 0.2D;
+        return (NoSlow.INSTANCE.getState() && NoSlow.getSlime()) ? NoSlow.getSlimeYMultiplier() : 0.2D;
     }
 
     @Inject(method = "onLanded", at = @At("HEAD"), cancellable = true)

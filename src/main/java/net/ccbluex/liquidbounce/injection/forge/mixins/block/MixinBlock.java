@@ -7,11 +7,10 @@ package net.ccbluex.liquidbounce.injection.forge.mixins.block;
 
 import net.ccbluex.liquidbounce.event.BlockBBEvent;
 import net.ccbluex.liquidbounce.event.EventManager;
-import net.ccbluex.liquidbounce.features.module.modules.combat.Criticals;
 import net.ccbluex.liquidbounce.features.module.modules.exploit.GhostHand;
-import net.ccbluex.liquidbounce.features.module.modules.player.NoFall;
 import net.ccbluex.liquidbounce.features.module.modules.render.XRay;
 import net.ccbluex.liquidbounce.features.module.modules.world.NoSlowBreak;
+import net.ccbluex.liquidbounce.utils.MovementUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
@@ -99,22 +98,16 @@ public abstract class MixinBlock {
         float f = callbackInfo.getReturnValue();
 
         // NoSlowBreak
-        final NoSlowBreak noSlowBreak = NoSlowBreak.INSTANCE;
-        if (noSlowBreak.handleEvents()) {
-            if (noSlowBreak.getWater() && playerIn.isInsideOfMaterial(Material.water) && !EnchantmentHelper.getAquaAffinityModifier(playerIn)) {
+        if (NoSlowBreak.INSTANCE.handleEvents()) {
+            if (NoSlowBreak.getWater() && playerIn.isInsideOfMaterial(Material.water) && !EnchantmentHelper.getAquaAffinityModifier(playerIn)) {
                 f *= 5f;
             }
 
-            if (noSlowBreak.getAir() && !playerIn.onGround) {
+            if (NoSlowBreak.getAir() && !playerIn.onGround) {
                 f *= 5f;
             }
-        } else if (playerIn.onGround) { // NoGround
-            final NoFall noFall = NoFall.INSTANCE;
-            final Criticals criticals = Criticals.INSTANCE;
-
-            if (noFall.handleEvents() && noFall.getMode().equals("NoGround") || criticals.handleEvents() && criticals.getNoGround()) {
-                f /= 5F;
-            }
+        } else if (playerIn.onGround && !MovementUtils.getServerOnGround()) { // NoGround
+            f /= 5F;
         }
 
         callbackInfo.setReturnValue(f);

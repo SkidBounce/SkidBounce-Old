@@ -39,10 +39,10 @@ public class MixinMovementInputFromOptions extends MixinMovementInput {
 
     @ModifyConstant(method = "updatePlayerMoveState", constant = @Constant(doubleValue = 0.3D, ordinal = 0))
     public double noSlowSneakStrafe(double constant) {
-        return (NoSlow.INSTANCE.getState() && NoSlow.INSTANCE.getSneaking()) ? NoSlow.INSTANCE.getSneakStrafeMultiplier() : 0.3D;
+        return (NoSlow.INSTANCE.getState() && NoSlow.getSneaking()) ? NoSlow.getSneakStrafeMultiplier() : 0.3D;
     }
     @ModifyConstant(method = "updatePlayerMoveState", constant = @Constant(doubleValue = 0.3D, ordinal = 1))
     public double noSlowSneakForward(double constant) {
-        return (NoSlow.INSTANCE.getState() && NoSlow.INSTANCE.getSneaking()) ? NoSlow.INSTANCE.getSneakForwardMultiplier() : 0.3D;
+        return (NoSlow.INSTANCE.getState() && NoSlow.getSneaking()) ? NoSlow.getSneakForwardMultiplier() : 0.3D;
     }
 }

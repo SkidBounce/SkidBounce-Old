@@ -5,26 +5,26 @@
  */
 package net.ccbluex.liquidbounce.utils.timing
 
-import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.CLICK_TIMER
-import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
 import net.ccbluex.liquidbounce.value.IntegerValue
 
-open class DelayTimer(
+open class TickDelayTimer(
     private val minDelayValue: IntegerValue, private val maxDelayValue: IntegerValue = minDelayValue,
-    private val baseTimer: MSTimer = CLICK_TIMER
+    private val baseTimer: TickTimer = TickTimer()
 ) {
-    private var delay = 0
+    private var ticks = 0
 
-    open fun hasTimePassed() = baseTimer.hasTimePassed(delay)
+    open fun hasTimePassed() = baseTimer.hasTimePassed(ticks)
 
-    fun resetDelay() {
-        delay = randomDelay(minDelayValue.get(), maxDelayValue.get())
+    fun resetTicks() {
+        ticks = TimeUtils.randomDelay(minDelayValue.get(), maxDelayValue.get())
     }
 
     fun resetTimer() = baseTimer.reset()
 
+    fun update() = baseTimer.update()
+
     fun reset() {
         resetTimer()
-        resetDelay()
+        resetTicks()
     }
 }

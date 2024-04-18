@@ -42,7 +42,7 @@ object FastUse : Module("FastUse", PLAYER) {
             usedTimer = false
         }
 
-        if (!isConsumingItem()) {
+        if (!isConsumingItem) {
             msTimer.reset()
             return
         }
@@ -89,7 +89,7 @@ object FastUse : Module("FastUse", PLAYER) {
     fun onMove(event: MoveEvent) {
         val thePlayer = mc.thePlayer ?: return
 
-        if (!isConsumingItem() || !noMove)
+        if (!isConsumingItem || !noMove)
             return
 
         event.zero()

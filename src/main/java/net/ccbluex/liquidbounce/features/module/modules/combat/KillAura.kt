@@ -440,7 +440,7 @@ object KillAura : Module("KillAura", COMBAT) {
         val thePlayer = mc.thePlayer ?: return
         val theWorld = mc.theWorld ?: return
 
-        if (noConsumeAttack == "NoHits" && isConsumingItem()) {
+        if (noConsumeAttack == "NoHits" && isConsumingItem) {
             return
         }
 
@@ -988,7 +988,7 @@ object KillAura : Module("KillAura", COMBAT) {
      * Check if run should be cancelled
      */
     private val cancelRun
-        inline get() = mc.thePlayer.isSpectator || !isAlive(mc.thePlayer) || FreeCam.handleEvents() || (noConsumeAttack == "NoRotation" && isConsumingItem())
+        inline get() = mc.thePlayer.isSpectator || !isAlive(mc.thePlayer) || FreeCam.handleEvents() || (noConsumeAttack == "NoRotation" && isConsumingItem)
 
     /**
      * Check if [entity] is alive

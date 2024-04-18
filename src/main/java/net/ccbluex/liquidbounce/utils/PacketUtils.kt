@@ -10,14 +10,18 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity
 import net.ccbluex.liquidbounce.features.module.modules.misc.PacketDebugger
 import net.ccbluex.liquidbounce.features.module.modules.player.FakeLag
 import net.ccbluex.liquidbounce.injection.implementations.IMixinEntity
+import net.ccbluex.liquidbounce.utils.PacketType.*
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.Packet
 import net.minecraft.network.play.INetHandlerPlayClient
 import net.minecraft.network.play.client.C0CPacketInput
-import net.minecraft.network.play.server.*
+import net.minecraft.network.play.server.S0CPacketSpawnPlayer
+import net.minecraft.network.play.server.S0FPacketSpawnMob
+import net.minecraft.network.play.server.S14PacketEntity
+import net.minecraft.network.play.server.S18PacketEntityTeleport
 import net.minecraft.util.MovementInput
-import kotlin.math.roundToInt
 
 // TODO: Remove annotations once all modules are converted to kotlin.
 object PacketUtils : MinecraftInstance(), Listenable {
@@ -145,71 +149,6 @@ object PacketUtils : MinecraftInstance(), Listenable {
         runCatching { (packet as Packet<INetHandlerPlayClient>).processPacket(mc.netHandler) }
 
     val Packet<*>.type
-        get() = when (javaClass.simpleName[0]) {
-            'C' -> PacketType.CLIENT
-            'S' -> PacketType.SERVER
-            else -> PacketType.UNKNOWN
-        }
-
-    enum class PacketType { CLIENT, SERVER, UNKNOWN }
+        get() = if (javaClass.simpleName[0] == 'C')
+            CLIENT else SERVER
 }
-
-var S12PacketEntityVelocity.realMotionX
-    get() = motionX / 8000.0
-    set(value) {
-        motionX = (value * 8000.0).roundToInt()
-    }
-var S12PacketEntityVelocity.realMotionY
-    get() = motionY / 8000.0
-    set(value) {
-        motionX = (value * 8000.0).roundToInt()
-    }
-var S12PacketEntityVelocity.realMotionZ
-    get() = motionZ / 8000.0
-    set(value) {
-        motionX = (value * 8000.0).roundToInt()
-    }
-
-val S14PacketEntity.realMotionX
-    get() = func_149062_c() / 32.0
-val S14PacketEntity.realMotionY
-    get() = func_149061_d() / 32.0
-val S14PacketEntity.realMotionZ
-    get() = func_149064_e() / 32.0
-
-var S0EPacketSpawnObject.realX
-    get() = x / 32.0
-    set(value) {
-        x = (value * 32.0).roundToInt()
-    }
-var S0EPacketSpawnObject.realY
-    get() = y / 32.0
-    set(value) {
-        y = (value * 32.0).roundToInt()
-    }
-var S0EPacketSpawnObject.realZ
-    get() = z / 32.0
-    set(value) {
-        z = (value * 32.0).roundToInt()
-    }
-
-val S0CPacketSpawnPlayer.realX
-    get() = x / 32.0
-val S0CPacketSpawnPlayer.realY
-    get() = y / 32.0
-val S0CPacketSpawnPlayer.realZ
-    get() = z / 32.0
-
-val S0FPacketSpawnMob.realX
-    get() = x / 32.0
-val S0FPacketSpawnMob.realY
-    get() = y / 32.0
-val S0FPacketSpawnMob.realZ
-    get() = z / 32.0
-
-val S18PacketEntityTeleport.realX
-    get() = x / 32.0
-val S18PacketEntityTeleport.realY
-    get() = y / 32.0
-val S18PacketEntityTeleport.realZ
-    get() = z / 32.0

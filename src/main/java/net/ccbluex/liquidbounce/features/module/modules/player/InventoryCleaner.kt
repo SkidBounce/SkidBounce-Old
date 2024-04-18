@@ -12,7 +12,7 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.AutoArmor
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
 import net.ccbluex.liquidbounce.utils.CoroutineUtils.waitUntil
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.isFullBlock
-import net.ccbluex.liquidbounce.utils.extensions.shuffled
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.inventory.*
 import net.ccbluex.liquidbounce.utils.inventory.ArmorComparator.getBestArmorSet
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager.canClickInventory
@@ -518,7 +518,7 @@ object InventoryCleaner : Module("InventoryCleaner", PLAYER) {
 
         if (item !is ItemPotion) return false
 
-        val isSplash = stack.isSplashPotion()
+        val isSplash = stack.isSplashPotion
         val isHarmful = item.getEffects(stack)?.any { it.potionID in NEGATIVE_EFFECT_IDS } ?: return false
 
         // Only keep helpful potions and, if 'onlyGoodPotions' is disabled, also splash harmful potions

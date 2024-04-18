@@ -34,8 +34,7 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.Vel
 import net.ccbluex.liquidbounce.utils.*
 import net.ccbluex.liquidbounce.utils.EntityUtils.isLookingOnEntities
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
-import net.ccbluex.liquidbounce.utils.extensions.getDistanceToEntityBox
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.chanceOf
 import net.minecraft.entity.Entity
 import net.minecraft.network.play.server.S12PacketEntityVelocity

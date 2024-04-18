@@ -55,12 +55,12 @@ object MovementUtils : MinecraftInstance(), Listenable {
         return baseSpeed
     }
     fun getJumpBoostModifier(baseJumpHeight: Double, potionJump: Boolean = true): Double {
-        @Suppress("NAME_SHADOWING") var baseJumpHeight = baseJumpHeight
+        var height = baseJumpHeight
         if (mc.thePlayer.isPotionActive(jump) && potionJump) {
             val amplifier = mc.thePlayer.getActivePotionEffect(jump).amplifier
-            baseJumpHeight += (amplifier + 1f * 0.1f).toDouble()
+            height += (amplifier + 1f * 0.1f).toDouble()
         }
-        return baseJumpHeight
+        return height
     }
     val isMoving
         get() = mc.thePlayer?.movementInput?.run { moveForward != 0f || moveStrafe != 0f } ?: false
@@ -119,13 +119,15 @@ object MovementUtils : MinecraftInstance(), Listenable {
         mc.theWorld != null && mc.thePlayer != null &&
         mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.entityBoundingBox.offset(0.0, -height, 0.0)).isNotEmpty()
 
+    @JvmStatic
     var serverOnGround = false
+        private set
 
     var serverX = .0
     var serverY = .0
     var serverZ = .0
 
-    @EventTarget
+    @EventTarget(priority = Int.MIN_VALUE)
     fun onPacket(event: PacketEvent) {
         if (event.isCancelled)
             return

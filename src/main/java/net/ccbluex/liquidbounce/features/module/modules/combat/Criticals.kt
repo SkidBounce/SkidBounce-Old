@@ -83,6 +83,4 @@ object Criticals : Module("Criticals", COMBAT) {
 
     override val tag
         get() = mode
-
-    val noGround get() = mode == "NoGround"
 }

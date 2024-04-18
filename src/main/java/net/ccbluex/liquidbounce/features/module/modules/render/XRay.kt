@@ -11,6 +11,7 @@ import net.minecraft.init.Blocks.*
 
 object XRay : Module("XRay", RENDER, gameDetecting = false, subjective = true) {
 
+    @JvmStatic
     val xrayBlocks = mutableListOf(
         coal_ore,
         iron_ore,

@@ -9,10 +9,8 @@ import net.ccbluex.liquidbounce.event.StrafeEvent
 import net.ccbluex.liquidbounce.utils.RotationUtils.getFixedAngleDelta
 import net.ccbluex.liquidbounce.utils.RotationUtils.getFixedSensitivityAngle
 import net.ccbluex.liquidbounce.utils.RotationUtils.serverRotation
-import net.ccbluex.liquidbounce.utils.block.PlaceInfo
 import net.ccbluex.liquidbounce.utils.extensions.toRadians
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.Vec3
 import kotlin.math.*
 
 /**
@@ -105,13 +103,3 @@ data class Rotation(var yaw: Float, var pitch: Float) : MinecraftInstance() {
         }
     }
 }
-
-/**
- * Rotation with vector
- */
-data class VecRotation(val vec: Vec3, val rotation: Rotation)
-
-/**
- * Rotation with place info
- */
-data class PlaceRotation(val placeInfo: PlaceInfo, val rotation: Rotation)

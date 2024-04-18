@@ -16,10 +16,10 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.Rotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.serverRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
+import net.ccbluex.liquidbounce.utils.extensions.isSplashPotion
 import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
-import net.ccbluex.liquidbounce.utils.inventory.isSplashPotion
 import net.ccbluex.liquidbounce.utils.misc.FallingPlayer
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
@@ -128,7 +128,7 @@ object AutoPot : Module("AutoPot", COMBAT) {
         for (i in startSlot until endSlot) {
             val stack = thePlayer.inventoryContainer.getSlot(i).stack
 
-            if (stack == null || stack.item !is ItemPotion || !stack.isSplashPotion())
+            if (stack == null || stack.item !is ItemPotion || !stack.isSplashPotion)
                 continue
 
             val itemPotion = stack.item as ItemPotion

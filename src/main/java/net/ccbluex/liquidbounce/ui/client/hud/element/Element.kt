@@ -6,7 +6,6 @@
 package net.ccbluex.liquidbounce.ui.client.hud.element
 
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
-import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBorderedRect
 import net.ccbluex.liquidbounce.value.Value
 import net.minecraft.client.gui.ScaledResolution
 import kotlin.math.max
@@ -15,8 +14,7 @@ import kotlin.math.min
 /**
  * CustomHUD element
  */
-abstract class Element(var x: Double = 2.0, var y: Double = 2.0, scale: Float = 1F,
-                       var side: Side = Side.default()) : MinecraftInstance() {
+abstract class Element(var x: Double = 2.0, var y: Double = 2.0, scale: Float = 1F, var side: Side = Side.default()) : MinecraftInstance() {
     val info = javaClass.getAnnotation(ElementInfo::class.java)
             ?: throw IllegalArgumentException("Passed element with missing element info")
 
@@ -129,69 +127,4 @@ abstract class Element(var x: Double = 2.0, var y: Double = 2.0, scale: Float = 
      * Called when key pressed
      */
     open fun handleKey(c: Char, keyCode: Int) {}
-
-}
-
-/**
- * Element info
- */
-annotation class ElementInfo(val name: String, val single: Boolean = false, val force: Boolean = false, val disableScale: Boolean = false, val priority: Int = 0)
-
-/**
- * CustomHUD Side
- *
- * Allows to change default x and y position by side
- */
-class Side(var horizontal: Horizontal, var vertical: Vertical) {
-
-    companion object {
-
-        /**
-         * Default element side
-         */
-        fun default() = Side(Horizontal.LEFT, Vertical.UP)
-
-    }
-
-    /**
-     * Horizontal side
-     */
-    enum class Horizontal(val sideName: String) {
-
-        LEFT("Left"),
-        MIDDLE("Middle"),
-        RIGHT("Right");
-
-        companion object {
-            fun getByName(name: String) = values().find { it.sideName == name }
-
-        }
-
-    }
-
-    /**
-     * Vertical side
-     */
-    enum class Vertical(val sideName: String) {
-
-        UP("Up"),
-        MIDDLE("Middle"),
-        DOWN("Down");
-
-        companion object {
-            fun getByName(name: String) = values().find { it.sideName == name }
-
-        }
-
-    }
-
-}
-
-/**
- * Border of element
- */
-data class Border(val x: Float, val y: Float, val x2: Float, val y2: Float) {
-
-    fun draw() = drawBorderedRect(x, y, x2, y2, 3F, Int.MIN_VALUE, 0)
-
 }

@@ -18,6 +18,6 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public class MixinBlockSoulSand {
     @ModifyConstant(method = "onEntityCollidedWithBlock", constant = @Constant(doubleValue = 0.4D, ordinal = -1))
     private double onEntityCollidedWithBlock(double constant) {
-        return (NoSlow.INSTANCE.getState() && NoSlow.INSTANCE.getSoulsand()) ? NoSlow.INSTANCE.getSoulsandMultiplier() : 0.4D;
+        return (NoSlow.INSTANCE.getState() && NoSlow.getSoulsand()) ? NoSlow.getSoulsandMultiplier() : 0.4D;
     }
 }

@@ -6,6 +6,7 @@
 package net.ccbluex.liquidbounce.utils.extensions
 
 import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
+import net.ccbluex.liquidbounce.injection.implementations.IMixinItemStack
 import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
 import net.ccbluex.liquidbounce.utils.MovementUtils.JUMP_HEIGHT
 import net.ccbluex.liquidbounce.utils.MovementUtils.getJumpBoostModifier
@@ -24,6 +25,7 @@ import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.client.settings.GameSettings
 import net.minecraft.client.settings.GameSettings.isKeyDown
 import net.minecraft.client.settings.KeyBinding
+import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
 import net.minecraft.entity.boss.EntityDragon
 import net.minecraft.entity.monster.EntityGhast
@@ -35,16 +37,20 @@ import net.minecraft.entity.passive.EntityBat
 import net.minecraft.entity.passive.EntitySquid
 import net.minecraft.entity.passive.EntityVillager
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemBlock
-import net.minecraft.item.ItemStack
+import net.minecraft.init.Items.arrow
+import net.minecraft.item.*
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.client.C0APacketAnimation
+import net.minecraft.network.play.server.*
 import net.minecraft.potion.Potion
 import net.minecraft.potion.PotionEffect
 import net.minecraft.stats.StatList.jumpStat
 import net.minecraft.util.*
 import net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -330,14 +336,15 @@ fun EntityPlayerSP.onPlayerRightClick(
 
     // If click had activated a block, send click and return true
     if ((!isSneaking || item == null || item.doesSneakBypassUse(worldObj, clickPos, this))
-        && blockState?.block?.onBlockActivated(worldObj,
-                                               clickPos,
-                                               blockState,
-                                               this,
-                                               side,
-                                               facingX,
-                                               facingY,
-                                               facingZ
+        && blockState?.block?.onBlockActivated(
+            worldObj,
+            clickPos,
+            blockState,
+            this,
+            side,
+            facingX,
+            facingY,
+            facingZ
         ) == true)
         return sendClick()
 
@@ -444,7 +451,8 @@ fun EntityPlayer.swing(type: String) {
     }
 }
 
-val Entity.inLiquid get() = isInWater || isInLava
+val Entity.inLiquid
+    get() = isInWater || isInLava
 
 fun String.toLowerCamelCase() = this.replaceFirst(this.toCharArray()[0], this.toCharArray()[0].lowercaseChar())
 
@@ -463,9 +471,15 @@ fun Double.toPlainString(): String {
     }
 }
 
+/**
+ * Sets [Timer.timerSpeed] to 1f
+ */
 fun Timer.resetSpeed() { timerSpeed = 1f }
+
 fun KeyBinding.update() { pressed = isActuallyPressed }
+/**
+ * @see isKeyDown
+ */
 val KeyBinding.isActuallyPressed get() = isKeyDown(this)
 fun GameSettings.updateKeys() = keyBindings.forEach { it.update() }
 fun GameSettings.updateKeys(vararg keys: KeyBinding) = keys.forEach { it.update() }
-val C08PacketPlayerBlockPlacement.isUse get() = placedBlockDirection == 255
