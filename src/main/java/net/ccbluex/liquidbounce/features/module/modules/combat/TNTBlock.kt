@@ -10,17 +10,16 @@ import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.utils.extensions.isActuallyPressed
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
-import net.minecraft.client.settings.GameSettings
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.entity.item.EntityTNTPrimed
 import net.minecraft.item.ItemSword
 
 object TNTBlock : Module("TNTBlock", COMBAT, spacedName = "TNT Block") {
-    private val fuse by IntegerValue("Fuse", 10, 0..80)
+    private val fuse by IntValue("Fuse", 10, 0..80)
     private val range by FloatValue("Range", 9F, 1F..20F)
-    private val autoSword by BoolValue("AutoSword", true)
+    private val autoSword by BooleanValue("AutoSword", true)
     private var blocked = false
 
     @EventTarget

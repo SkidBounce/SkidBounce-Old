@@ -13,9 +13,9 @@ import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import java.awt.Color
 
@@ -27,8 +27,8 @@ object Glide : Module("Glide", MOVEMENT) {
     val mode by ListValue("Mode", modes, "Vulcan")
 
     val ncpMotion by FloatValue("NCP-Motion", 0f, 0f..1f) { mode == "NCP" }
-    val neruxVaceTicks by IntegerValue("NeruxVace-Ticks", 6, 2..20) { mode == "NeruxVace" }
-    private val mark by BoolValue("Mark", true, subjective = true)
+    val neruxVaceTicks by IntValue("NeruxVace-Ticks", 6, 2..20) { mode == "NeruxVace" }
+    private val mark by BooleanValue("Mark", true, subjective = true)
 
     private var startY = 0.0
 

@@ -46,8 +46,8 @@ import kotlin.math.sqrt
 
 object ChestAura : Module("ChestAura", WORLD) {
 
-    private val chest by BoolValue("Chest", true)
-    private val enderChest by BoolValue("EnderChest", false)
+    private val chest by BooleanValue("Chest", true)
+    private val enderChest by BooleanValue("EnderChest", false)
 
     private val range: Float by object : FloatValue("Range", 5F, 1F..5F) {
         override fun onUpdate(value: Float) {
@@ -55,9 +55,9 @@ object ChestAura : Module("ChestAura", WORLD) {
             searchRadiusSq = (value + 1).pow(2)
         }
     }
-    private val delay by IntegerValue("Delay", 200, 50..500)
+    private val delay by IntValue("Delay", 200, 50..500)
 
-    private val throughWalls by BoolValue("ThroughWalls", true)
+    private val throughWalls by BooleanValue("ThroughWalls", true)
     private val wallsRange: Float by object : FloatValue("ThroughWallsRange", 3F, 1F..5F) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(this@ChestAura.range)
 
@@ -76,11 +76,11 @@ object ChestAura : Module("ChestAura", WORLD) {
 
     private val swing by SwingValue()
 
-    private val ignoreLooted by BoolValue("IgnoreLootedChests", true)
-    private val detectRefill by BoolValue("DetectChestRefill", true)
+    private val ignoreLooted by BooleanValue("IgnoreLootedChests", true)
+    private val detectRefill by BooleanValue("DetectChestRefill", true)
 
-    private val rotations by BoolValue("Rotations", true)
-    private val silentRotation by BoolValue("SilentRotation", true) { rotations }
+    private val rotations by BooleanValue("Rotations", true)
+    private val silentRotation by BooleanValue("SilentRotation", true) { rotations }
     private val maxTurnSpeedValue: FloatValue = object : FloatValue("MaxTurnSpeed", 120f, 0f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtLeast(minTurnSpeed)
         override fun isSupported() = rotations
@@ -89,12 +89,12 @@ object ChestAura : Module("ChestAura", WORLD) {
 
     private val minTurnSpeed by object : FloatValue("MinTurnSpeed", 80f, 0f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxTurnSpeed)
-        override fun isSupported() = !maxTurnSpeedValue.isMinimal() && rotations
+        override fun isSupported() = !maxTurnSpeedValue.isMinimal && rotations
     }
     private val strafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off") { silentRotation && rotations }
     private val smootherMode by ListValue("SmootherMode", arrayOf("Linear", "Relative"), "Relative") { rotations }
 
-    private val keepRotation by IntegerValue("KeepRotationTicks", 5, 1..20) { silentRotation && rotations }
+    private val keepRotation by IntValue("KeepRotationTicks", 5, 1..20) { silentRotation && rotations }
 
     private val angleThresholdUntilReset by FloatValue(
         "AngleThresholdUntilReset",

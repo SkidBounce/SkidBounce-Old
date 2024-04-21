@@ -13,23 +13,23 @@ import net.ccbluex.liquidbounce.features.module.modules.targets.Teams
 import net.ccbluex.liquidbounce.utils.extensions.isAnimal
 import net.ccbluex.liquidbounce.utils.extensions.isClientFriend
 import net.ccbluex.liquidbounce.utils.extensions.isMob
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 
 object HitBox : Module("HitBox", COMBAT) {
 
-    private val targetPlayers by BoolValue("TargetPlayers", true)
+    private val targetPlayers by BooleanValue("TargetPlayers", true)
     private val playerSize by FloatValue("PlayerSize", 0.4F, 0F..1F) { targetPlayers }
     private val friendSize by FloatValue("FriendSize", 0.4F, 0F..1F) { targetPlayers }
     private val teamMateSize by FloatValue("TeamMateSize", 0.4F, 0F..1F) { targetPlayers }
     private val botSize by FloatValue("BotSize", 0.4F, 0F..1F) { targetPlayers }
 
-    private val targetMobs by BoolValue("TargetMobs", false)
+    private val targetMobs by BooleanValue("TargetMobs", false)
     private val mobSize by FloatValue("MobSize", 0.4F, 0F..1F) { targetMobs }
 
-    private val targetAnimals by BoolValue("TargetAnimals", false)
+    private val targetAnimals by BooleanValue("TargetAnimals", false)
     private val animalSize by FloatValue("AnimalSize", 0.4F, 0F..1F) { targetAnimals }
 
     fun determineSize(entity: Entity): Float {

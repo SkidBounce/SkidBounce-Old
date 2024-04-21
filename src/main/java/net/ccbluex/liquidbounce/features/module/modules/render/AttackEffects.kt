@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.Block
 import net.minecraft.entity.EntityLivingBase
@@ -26,7 +26,7 @@ object AttackEffects : Module("AttackEffects", RENDER, subjective = true) {
         arrayOf("None", "Blood", "Lighting", "Fire", "Heart", "Water", "Smoke", "Magic", "Crits"), "Blood"
     )
 
-    private val amount by IntegerValue("ParticleAmount", 5, 1..20) { particle != "None" }
+    private val amount by IntValue("ParticleAmount", 5, 1..20) { particle != "None" }
 
     private val sound by ListValue("Sound", arrayOf("None", "Hit", "Orb", "Pop", "Splash", "Lightning"), "BowHit")
 

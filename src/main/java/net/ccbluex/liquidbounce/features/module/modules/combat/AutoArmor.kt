@@ -21,8 +21,8 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInvento
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.toHotbarIndex
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.entity.EntityLiving.getArmorPosition
 import net.minecraft.item.ItemStack
@@ -30,15 +30,19 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.client.C09PacketHeldItemChange
 
 object AutoArmor : Module("AutoArmor", COMBAT) {
-    private val maxDelay: Int by object : IntegerValue("MaxDelay", 50, 0..500) {
+    private val maxDelay: Int by object : NumberValue<Int>(
+        "MaxDelay",
+        50,
+        0..500
+    ) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
     }
-    private val minDelay by object : IntegerValue("MinDelay", 50, 0..500) {
+    private val minDelay by object : NumberValue<Int>("MinDelay", 50, 0..500) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxDelay)
 
         override fun isSupported() = maxDelay > 0
     }
-    private val minItemAge by IntegerValue("MinItemAge", 0, 0..2000)
+    private val minItemAge by NumberValue<Int>("MinItemAge", 0, 0..2000)
 
     private val invOpen by InventoryManager.invOpenValue
     private val simulateInventory by InventoryManager.simulateInventoryValue
@@ -49,19 +53,19 @@ object AutoArmor : Module("AutoArmor", COMBAT) {
 
     // When swapping armor pieces, it grabs the better one, drags and swaps it with equipped one and drops the equipped one (no time of having no armor piece equipped)
     // Has to make more clicks, works slower
-    val smartSwap by BoolValue("SmartSwap", true)
+    val smartSwap by BooleanValue("SmartSwap", true)
 
     private val noMove by InventoryManager.noMoveValue
     private val noMoveAir by InventoryManager.noMoveAirValue
     private val noMoveGround by InventoryManager.noMoveGroundValue
 
-    private val hotbar by BoolValue("Hotbar", true)
+    private val hotbar by BooleanValue("Hotbar", true)
 
     // Sacrifices 1 tick speed for complete undetectability, needed to bypass Vulcan
-    private val delayedSlotSwitch by BoolValue("DelayedSlotSwitch", true) { hotbar }
+    private val delayedSlotSwitch by BooleanValue("DelayedSlotSwitch", true) { hotbar }
 
     // Prevents AutoArmor from hotbar equipping while any screen is open
-    private val notInContainers by BoolValue("NotInContainers", false) { hotbar }
+    private val notInContainers by BooleanValue("NotInContainers", false) { hotbar }
 
     suspend fun equipFromHotbar() {
         if (!shouldOperate(onlyHotbar = true))

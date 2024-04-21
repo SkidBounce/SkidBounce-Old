@@ -14,9 +14,9 @@ import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.MovementUtils.aboveVoid
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlock
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.BlockLiquid
 import net.minecraft.util.AxisAlignedBB.fromBounds
@@ -26,20 +26,20 @@ object NoFall : Module("NoFall", PLAYER) {
 
     val mode by ListValue("Mode", noFallModes.map { it.modeName }.toTypedArray(), "SpoofGround")
 
-    private val noVoid by BoolValue("NoVoid", false)
+    private val noVoid by BooleanValue("NoVoid", false)
     val mlgMinFallDistance by FloatValue("MLG-MinHeight", 5f, 2f..50f) { mode == "MLG" }
-    val spoofgroundAlways by BoolValue("SpoofGround-Always", true) { mode == "SpoofGround" }
+    val spoofgroundAlways by BooleanValue("SpoofGround-Always", true) { mode == "SpoofGround" }
     val spoofgroundMinFallDistance by FloatValue(
         "SpoofGround-MinFallDistance",
         0f,
         0f..3f
     ) { mode == "SpoofGround" && !spoofgroundAlways }
     val motionMotion by FloatValue("Motion-Motion", -0.01f, -5f..5f) { mode == "Motion" }
-    val phaseOffset by IntegerValue("Phase-Offset", 1, 0..5) { mode == "Phase" }
+    val phaseOffset by IntValue("Phase-Offset", 1, 0..5) { mode == "Phase" }
     val verusMulti by FloatValue("Verus-XZMulti", 0.6f, 0f..1f) { mode == "Verus" }
     val vulcan2Motion by FloatValue("Vulcan2-Motion", 0.35f, 0f..10f) { mode == "Vulcan2" }
-    val aac5014NightX by BoolValue("AAC5.0.14-NightX", false) { mode == "AAC5.0.14" }
-    val matrix6632Safe by BoolValue("Matrix6.6.3-2-Safe", false) { mode == "Matrix6.6.3-2" }
+    val aac5014NightX by BooleanValue("AAC5.0.14-NightX", false) { mode == "AAC5.0.14" }
+    val matrix6632Safe by BooleanValue("Matrix6.6.3-2-Safe", false) { mode == "Matrix6.6.3-2" }
 
     override fun onEnable() {
         mc.timer.resetSpeed()

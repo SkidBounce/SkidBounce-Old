@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.utils.extensions.component1
 import net.ccbluex.liquidbounce.utils.extensions.component2
 import net.ccbluex.liquidbounce.utils.extensions.component3
 import net.ccbluex.liquidbounce.utils.extensions.isInsideOf
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.BlockLiquid
@@ -31,7 +31,7 @@ object Jesus : Module("Jesus", MOVEMENT) {
 
     val aacFly by FloatValue("AACFlyMotion", 0.5f, 0.1f..1f) { mode == "AACFly" }
 
-    private val noJump by BoolValue("NoJump", false)
+    private val noJump by BooleanValue("NoJump", false)
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {

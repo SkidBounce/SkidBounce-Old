@@ -16,8 +16,8 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.serverRotation
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.client.entity.EntityOtherPlayerMP
 import net.minecraft.network.Packet
@@ -35,10 +35,10 @@ object Blink : Module("Blink", PLAYER, gameDetecting = false) {
 
     private val mode by ListValue("Mode", arrayOf("Sent", "Received", "Both"), "Sent")
 
-    private val pulse by BoolValue("Pulse", false)
-    private val pulseDelay by IntegerValue("PulseDelay", 1000, 500..5000) { pulse }
+    private val pulse by BooleanValue("Pulse", false)
+    private val pulseDelay by IntValue("PulseDelay", 1000, 500..5000) { pulse }
 
-    private val fakePlayerMenu by BoolValue("FakePlayer", true)
+    private val fakePlayerMenu by BooleanValue("FakePlayer", true)
 
     private val pulseTimer = MSTimer()
     private val packets = mutableListOf<Packet<*>>()

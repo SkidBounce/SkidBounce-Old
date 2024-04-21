@@ -22,7 +22,7 @@ import net.ccbluex.liquidbounce.utils.extensions.getDistanceToEntityBox
 import net.ccbluex.liquidbounce.utils.extensions.rotation
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.entity.Entity
@@ -35,10 +35,10 @@ import java.awt.Color
 
 object BowAimBot : Module("BowAimBot", COMBAT) {
 
-    private val bow by BoolValue("Bow", true, subjective = true)
-    private val egg by BoolValue("Egg", true, subjective = true)
-    private val snowball by BoolValue("Snowball", true, subjective = true)
-    private val pearl by BoolValue("EnderPearl", false, subjective = true)
+    private val bow by BooleanValue("Bow", true, subjective = true)
+    private val egg by BooleanValue("Egg", true, subjective = true)
+    private val snowball by BooleanValue("Snowball", true, subjective = true)
+    private val pearl by BooleanValue("EnderPearl", false, subjective = true)
 
     private val priority by ListValue(
         "Priority",
@@ -47,13 +47,13 @@ object BowAimBot : Module("BowAimBot", COMBAT) {
         subjective = true
     )
 
-    private val predict by BoolValue("Predict", true)
+    private val predict by BooleanValue("Predict", true)
     private val predictSize by FloatValue("PredictSize", 2F, 0.1F..5F) { predict }
 
-    private val throughWalls by BoolValue("ThroughWalls", false)
-    private val mark by BoolValue("Mark", true, subjective = true)
+    private val throughWalls by BooleanValue("ThroughWalls", false)
+    private val mark by BooleanValue("Mark", true, subjective = true)
 
-    private val silent by BoolValue("Silent", true)
+    private val silent by BooleanValue("Silent", true)
     private val strafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off") { silent }
     private val smootherMode by ListValue("SmootherMode", arrayOf("Linear", "Relative"), "Relative")
     private val maxTurnSpeedValue: FloatValue = object : FloatValue("MaxTurnSpeed", 120f, 0f..180f) {
@@ -66,7 +66,7 @@ object BowAimBot : Module("BowAimBot", COMBAT) {
     private val minTurnSpeed by object : FloatValue("MinTurnSpeed", 80f, 0f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxTurnSpeed)
 
-        override fun isSupported() = !maxTurnSpeedValue.isMinimal() && silent
+        override fun isSupported() = !maxTurnSpeedValue.isMinimal && silent
     }
 
     private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f) { silent }

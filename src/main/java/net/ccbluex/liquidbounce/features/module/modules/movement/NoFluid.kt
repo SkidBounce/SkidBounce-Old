@@ -17,8 +17,8 @@ import net.minecraft.util.*
 
 object NoFluid : Module("NoFluid", MOVEMENT) {
 
-    val Water by BoolValue("Water", true)
-    val Lava by BoolValue("Lava", true)
+    val Water by BooleanValue("Water", true)
+    val Lava by BooleanValue("Lava", true)
     private val mode by ListValue("Mode", arrayOf("Grim", "Vanilla"), "Vanilla")
     private val grimExpand by FloatValue("GrimExpand", 0.25F, 0F..1F) { mode == "Grim" }
 

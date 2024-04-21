@@ -24,10 +24,10 @@ import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawEntityBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.network.Packet
@@ -59,7 +59,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
 
     private val timerBoostMode by ListValue("TimerMode", arrayOf("Normal", "Smart", "Modern"), "Modern")
 
-    private val ticksValue by IntegerValue("Ticks", 10, 1..20)
+    private val ticksValue by NumberValue<Int>("Ticks", 10, 1..20)
 
     // Min & Max Boost Delay Settings
     private val timerBoostValue by FloatValue("TimerBoost", 1.5f, 0.01f..35f)
@@ -85,7 +85,11 @@ object TimerRange : Module("TimerRange", COMBAT) {
 
     // Normal Mode Settings
     private val rangeValue by FloatValue("Range", 3.5f, 1f..5f) { timerBoostMode == "Normal" }
-    private val cooldownTickValue by IntegerValue("CooldownTick", 10, 1..50) { timerBoostMode == "Normal" }
+    private val cooldownTickValue by NumberValue<Int>(
+        "CooldownTick",
+        10,
+        1..50
+    ) { timerBoostMode == "Normal" }
 
     // Smart & Modern Mode Range
     private val minRange: FloatValue = object : FloatValue("MinRange", 1f, 0.5f..8f) {
@@ -99,17 +103,19 @@ object TimerRange : Module("TimerRange", COMBAT) {
     }
 
     // Min & Max Tick Delay
-    private val minTickDelay: IntegerValue = object : IntegerValue("MinTickDelay", 50, 1..500) {
-        override fun isSupported() = timerBoostMode != "Normal"
-        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxTickDelay.get())
-    }
-    private val maxTickDelay: IntegerValue = object : IntegerValue("MaxTickDelay", 100, 1..500) {
-        override fun isSupported() = timerBoostMode != "Normal"
-        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minTickDelay.get())
-    }
+    private val minTickDelay: NumberValue<Int> =
+        object : NumberValue<Int>("MinTickDelay", 50, 1..500) {
+            override fun isSupported() = timerBoostMode != "Normal"
+            override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxTickDelay.get())
+        }
+    private val maxTickDelay: NumberValue<Int> =
+        object : NumberValue<Int>("MaxTickDelay", 100, 1..500) {
+            override fun isSupported() = timerBoostMode != "Normal"
+            override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minTickDelay.get())
+        }
 
     // Min & Max Stop Settings
-    private val stopRange by BoolValue("StopRange", false)
+    private val stopRange by BooleanValue("StopRange", false)
     private val minStopRange: FloatValue = object : FloatValue("MinStopRange", 2f, 0.1f..4f) {
         override fun isSupported() = stopRange
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxStopRange.get())
@@ -120,23 +126,27 @@ object TimerRange : Module("TimerRange", COMBAT) {
     }
 
     // Blink Option
-    private val blink by BoolValue("Blink", false)
+    private val blink by BooleanValue("Blink", false)
 
     // Prediction Settings
-    private val predictClientMovement by IntegerValue("PredictClientMovement", 2, 0..5)
+    private val predictClientMovement by NumberValue<Int>(
+        "PredictClientMovement",
+        2,
+        0..5
+    )
     private val predictEnemyPosition by FloatValue("PredictEnemyPosition", 1.5f, -1f..2f)
 
     private val maxAngleDifference by FloatValue("MaxAngleDifference", 5f, 5f..90f) { timerBoostMode == "Modern" }
 
     // Mark Option
     private val markMode by ListValue("Mark", arrayOf("Off", "Box", "Platform"), "Off") { timerBoostMode == "Modern" }
-    private val outline by BoolValue("Outline", false) { timerBoostMode == "Modern" && markMode == "Box" }
+    private val outline by BooleanValue("Outline", false) { timerBoostMode == "Modern" && markMode == "Box" }
 
     // Optional
-    private val resetOnlagBack by BoolValue("ResetOnLagback", false)
-    private val resetOnKnockback by BoolValue("ResetOnKnockback", false)
-    private val chatDebug by BoolValue("ChatDebug", true) { resetOnlagBack || resetOnKnockback }
-    private val notificationDebug by BoolValue("NotificationDebug", false) { resetOnlagBack || resetOnKnockback }
+    private val resetOnlagBack by BooleanValue("ResetOnLagback", false)
+    private val resetOnKnockback by BooleanValue("ResetOnKnockback", false)
+    private val chatDebug by BooleanValue("ChatDebug", true) { resetOnlagBack || resetOnKnockback }
+    private val notificationDebug by BooleanValue("NotificationDebug", false) { resetOnlagBack || resetOnKnockback }
 
     private fun timerReset() {
         if (shouldResetTimer())
@@ -277,7 +287,8 @@ object TimerRange : Module("TimerRange", COMBAT) {
 
         player.setPosAndPrevPos(simPlayer.pos)
 
-        val distance = searchCenter(boundingBox,
+        val distance = searchCenter(
+            boundingBox,
             outborder = false,
             random = false,
             gaussianOffset = false,
@@ -444,9 +455,10 @@ object TimerRange : Module("TimerRange", COMBAT) {
         val nearestEntity = getNearestEntityInRange()
 
         if (mc.thePlayer != null && (mc.thePlayer.isSpectator || mc.thePlayer.isDead
-                || mc.thePlayer.isInWater || mc.thePlayer.isInLava
-                || mc.thePlayer.isInWeb || mc.thePlayer.isOnLadder
-                || mc.thePlayer.isRiding)) {
+                    || mc.thePlayer.isInWater || mc.thePlayer.isInLava
+                    || mc.thePlayer.isInWeb || mc.thePlayer.isOnLadder
+                    || mc.thePlayer.isRiding)
+        ) {
             return true
         }
 

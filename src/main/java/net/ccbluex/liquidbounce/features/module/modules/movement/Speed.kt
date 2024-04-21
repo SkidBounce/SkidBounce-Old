@@ -22,7 +22,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.vulc
 import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.extensions.*
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 
@@ -31,27 +31,27 @@ object Speed : Module("Speed", MOVEMENT) {
 
     private val moduleModes = speedModes.map { it.modeName }.toTypedArray()
 
-    private val alwaysSprint by BoolValue("AlwaysSprint", false)
-    private val whenSneaking by BoolValue("WhenSneaking", false)
-    private val inLiquid by BoolValue("InLiquid", false)
-    private val inWeb by BoolValue("InWeb", false)
-    private val onLadder by BoolValue("OnLadder", false)
-    private val whenRiding by BoolValue("WhenRiding", false)
-    private val onFly by BoolValue("onFly", false)
+    private val alwaysSprint by BooleanValue("AlwaysSprint", false)
+    private val whenSneaking by BooleanValue("WhenSneaking", false)
+    private val inLiquid by BooleanValue("InLiquid", false)
+    private val inWeb by BooleanValue("InWeb", false)
+    private val onLadder by BooleanValue("OnLadder", false)
+    private val whenRiding by BooleanValue("WhenRiding", false)
+    private val onFly by BooleanValue("onFly", false)
 
     private val normalMode by ListValue("NormalMode", moduleModes, "NCPBHop")
     private val jumpingMode by ListValue("JumpingMode", arrayOf("None") + moduleModes, "None")
 
     val strafeAir by FloatValue("Strafe-InAir", 1f, 0f..1f) { Strafe in modes }
     val strafeGround by FloatValue("Strafe-OnGround", 1f, 0f..1f) { Strafe in modes }
-    val strafeStop by BoolValue("Strafe-WhenNoInput", true) { Strafe in modes }
+    val strafeStop by BooleanValue("Strafe-WhenNoInput", true) { Strafe in modes }
 
     val customSpeed by FloatValue("Custom-Speed", 1.6f, 0.2f..2f) { Custom in modes }
     val customY by FloatValue("Custom-Y", 0f, 0f..4f) { Custom in modes }
     val customTimer by FloatValue("Custom-Timer", 1f, 0.1f..2f) { Custom in modes }
-    val customStrafe by BoolValue("Custom-Strafe", true) { Custom in modes }
-    val resetXZ by BoolValue("Custom-ResetXZ", false) { Custom in modes }
-    val resetY by BoolValue("Custom-ResetY", false) { Custom in modes }
+    val customStrafe by BooleanValue("Custom-Strafe", true) { Custom in modes }
+    val resetXZ by BooleanValue("Custom-ResetXZ", false) { Custom in modes }
+    val resetY by BooleanValue("Custom-ResetY", false) { Custom in modes }
 
     val aacPortLength by FloatValue("AACPort-PortLength", 1f, 1f..20f) { AACPort in modes }
     val aacGroundTimer by FloatValue("AACGround-Timer", 3f, 1.1f..10f) { listOf(AACGround, AACGround2) overlapsWith modes }
@@ -61,14 +61,14 @@ object Speed : Module("Speed", MOVEMENT) {
     val cardinalStrafeStrength by FloatValue("Cardinal-StrafeStrength", 0.1f, 0f..0.5f) { Cardinal in modes }
     val cardinalAboveWaterMultiplier by FloatValue("Cardinal-AboveWaterMultiplier", 0.87f, 0.4f..1f) { Cardinal in modes }
     val cardinalSlimeMultiplier by FloatValue("Cardinal-SlimeMultiplier", 0.7f, 0.4f..1f) { Cardinal in modes }
-    val cardinalJumpWhenIceSpeed by BoolValue("Cardinal-JumpWhenIceSpeed", true) { Cardinal in modes }
-    val uncpyportDamageBoost by BoolValue("UNCPYPort-DamageBoost", true) { UNCPYPort in modes }
+    val cardinalJumpWhenIceSpeed by BooleanValue("Cardinal-JumpWhenIceSpeed", true) { Cardinal in modes }
+    val uncpyportDamageBoost by BooleanValue("UNCPYPort-DamageBoost", true) { UNCPYPort in modes }
     val wavelowhopTimer by FloatValue("WaveLowHop-Timer", 1.25f, 1f..2f) { WaveLowHop in modes }
-    val matrixslowSprintBypass by BoolValue("MatrixSlow-SprintBypass", false) { MatrixSlow in modes }
-    val matrixslowFast by BoolValue("MatrixSlow-Fast", true) { MatrixSlow in modes }
-    val vulcanFast by BoolValue("Vulcan-Fast", true) { Vulcan in modes }
-    val vulcan2Fast by BoolValue("Vulcan2-Fast", true) { Vulcan2 in modes }
-    val intave2GroundStrafe by BoolValue("Intave2-GroundStrafe", false) { Intave2 in modes }
+    val matrixslowSprintBypass by BooleanValue("MatrixSlow-SprintBypass", false) { MatrixSlow in modes }
+    val matrixslowFast by BooleanValue("MatrixSlow-Fast", true) { MatrixSlow in modes }
+    val vulcanFast by BooleanValue("Vulcan-Fast", true) { Vulcan in modes }
+    val vulcan2Fast by BooleanValue("Vulcan2-Fast", true) { Vulcan2 in modes }
+    val intave2GroundStrafe by BooleanValue("Intave2-GroundStrafe", false) { Intave2 in modes }
 
     private var currentMode = normalMode
     private var wasSpeed = false

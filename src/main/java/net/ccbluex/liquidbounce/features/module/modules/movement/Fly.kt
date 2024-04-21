@@ -16,9 +16,9 @@ import net.ccbluex.liquidbounce.utils.extensions.stop
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import net.minecraft.util.AxisAlignedBB
@@ -33,7 +33,7 @@ object Fly : Module("Fly", MOVEMENT) {
 
     val vanillaSpeed by FloatValue("Vanilla-Speed", 2f, 0f..10f)
     { mode in arrayOf("Vanilla", "KeepAlive", "MineSecure", "BugSpartan") }
-    private val vanillaKickBypass by BoolValue("Vanilla-KickBypass", false)
+    private val vanillaKickBypass by BooleanValue("Vanilla-KickBypass", false)
     { mode in arrayOf("Vanilla", "SmoothVanilla") }
 
     // Spartan532
@@ -42,20 +42,20 @@ object Fly : Module("Fly", MOVEMENT) {
 
     // AAC
     val aacSpeed by FloatValue("AAC1.9.10-Speed", 0.3f, 0f..1f) { mode == "AAC1.9.10" }
-    val aacFast by BoolValue("AAC3.0.5-Fast", true) { mode == "AAC3.0.5" }
+    val aacFast by BooleanValue("AAC3.0.5-Fast", true) { mode == "AAC3.0.5" }
     val aacMotion by FloatValue("AAC3.3.12-Motion", 10f, 0.1f..10f) { mode == "AAC3.3.12" }
     val aacMotion2 by FloatValue("AAC3.3.13-Motion", 10f, 0.1f..10f) { mode == "AAC3.3.13" }
 
     // Hypixel
-    val hypixelBoost by BoolValue("Hypixel-Boost", true) { mode == "Hypixel" }
-    val hypixelBoostDelay by IntegerValue("Hypixel-BoostDelay", 1200, 50..2000)
+    val hypixelBoost by BooleanValue("Hypixel-Boost", true) { mode == "Hypixel" }
+    val hypixelBoostDelay by IntValue("Hypixel-BoostDelay", 1200, 50..2000)
     { mode == "Hypixel" && hypixelBoost }
     val hypixelBoostTimer by FloatValue("Hypixel-BoostTimer", 1f, 0.1f..5f)
     { mode == "Hypixel" && hypixelBoost }
 
     // Vulcan
     val vulcanTimer by FloatValue("Vulcan-Timer", 2f, 1f..3f) { mode == "Vulcan" }
-    val vulcanNoClip by BoolValue("Vulcan-NoClip", true) { mode == "Vulcan" }
+    val vulcanNoClip by BooleanValue("Vulcan-NoClip", true) { mode == "Vulcan" }
 
     // Mineplex
     val mineplexSpeed by FloatValue("Mineplex-Speed", 1f, 0.5f..10f) { mode == "Mineplex" }
@@ -72,39 +72,39 @@ object Fly : Module("Fly", MOVEMENT) {
     val clipX by FloatValue("Clip-X", 2f, -5f..5f) { mode == "Clip" }
     val clipY by FloatValue("Clip-Y", 2f, -5f..5f) { mode == "Clip" }
     val clipZ by FloatValue("Clip-Z", 2f, -5f..5f) { mode == "Clip" }
-    val clipDelay by IntegerValue("Clip-Delay", 500, 0..3000) { mode == "Clip" }
+    val clipDelay by IntValue("Clip-Delay", 500, 0..3000) { mode == "Clip" }
     val clipTimer by FloatValue("Clip-Timer", 1f, 0.01f..3f) { mode == "Clip" }
     val clipMotionX by FloatValue("Clip-MotionX", 0f, -1f..1f) { mode == "Clip" }
     val clipMotionY by FloatValue("Clip-MotionY", 0f, -1f..1f) { mode == "Clip" }
     val clipMotionZ by FloatValue("Clip-MotionZ", 0f, -1f..1f) { mode == "Clip" }
-    val clipGroundSpoof by BoolValue("Clip-GroundSpoof", false) { mode == "Clip" }
-    val clipGround by BoolValue("Clip-GroundWhenClip", false) { mode == "Clip" }
+    val clipGroundSpoof by BooleanValue("Clip-GroundSpoof", false) { mode == "Clip" }
+    val clipGround by BooleanValue("Clip-GroundWhenClip", false) { mode == "Clip" }
 
     // Clip2
     val clip2H by FloatValue("Clip2-Horizontal", 2f, 0f..10f) { mode == "Clip2" }
     val clip2Y by FloatValue("Clip2-Vertical", 2f, 0f..10f) { mode == "Clip2" }
     val clip2Max by FloatValue("Clip2-MaxDistance", 10f, 0f..20f) { mode == "Clip2" }
-    val clip2Delay by IntegerValue("Clip2-Delay", 500, 0..3000) { mode == "Clip2" }
+    val clip2Delay by IntValue("Clip2-Delay", 500, 0..3000) { mode == "Clip2" }
     val clip2Timer by FloatValue("Clip2-Timer", 1f, 0.1f..10f) { mode == "Clip2" }
-    val clip2GroundSpoof by BoolValue("Clip2-GroundSpoof", false) { mode == "Clip2" }
-    val clip2GroundSpoofOnlyClip by BoolValue("Clip2-GroundSpoof-OnlyOnClip", false) { mode == "Clip2" && clip2GroundSpoof }
+    val clip2GroundSpoof by BooleanValue("Clip2-GroundSpoof", false) { mode == "Clip2" }
+    val clip2GroundSpoofOnlyClip by BooleanValue("Clip2-GroundSpoof-OnlyOnClip", false) { mode == "Clip2" && clip2GroundSpoof }
 
     // Verus
-    val damage by BoolValue("Damage", false) { mode == "Verus" }
-    val timerSlow by BoolValue("TimerSlow", true) { mode == "Verus" }
-    val boostTicksValue by IntegerValue("BoostTicks", 20, 1..30) { mode == "Verus" }
+    val damage by BooleanValue("Damage", false) { mode == "Verus" }
+    val timerSlow by BooleanValue("TimerSlow", true) { mode == "Verus" }
+    val boostTicksValue by IntValue("BoostTicks", 20, 1..30) { mode == "Verus" }
     val boostMotion by FloatValue("BoostMotion", 6.5f, 1f..9.85f) { mode == "Verus" }
     val yBoost by FloatValue("YBoost", 0.42f, 0f..10f) { mode == "Verus" }
 
     // BlocksMC
-    val timerSlowed by BoolValue("TimerSlowed", true) { mode == "BlocksMC" }
+    val timerSlowed by BooleanValue("TimerSlowed", true) { mode == "BlocksMC" }
     val boostSpeed by FloatValue("BoostSpeed", 8f, 1f..15f) { mode == "BlocksMC" }
     val extraBoost by FloatValue("ExtraSpeed", 0.25f, 0.0F..2f) { mode == "BlocksMC" }
-    val stopOnLanding by BoolValue("StopOnLanding", true) { mode == "BlocksMC" }
-    val stopOnNoMove by BoolValue("StopOnNoMove", true) { mode == "BlocksMC" }
-    val debugFly by BoolValue("Debug", false) { mode == "BlocksMC" }
+    val stopOnLanding by BooleanValue("StopOnLanding", true) { mode == "BlocksMC" }
+    val stopOnNoMove by BooleanValue("StopOnNoMove", true) { mode == "BlocksMC" }
+    val debugFly by BooleanValue("Debug", false) { mode == "BlocksMC" }
 
-    private val mark by BoolValue("Mark", true, subjective = true)
+    private val mark by BooleanValue("Mark", true, subjective = true)
 
     var jumpY = 0.0
 

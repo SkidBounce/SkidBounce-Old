@@ -12,8 +12,8 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.translateAlternateColorCodes
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.ccbluex.liquidbounce.value.TextValue
 import net.minecraft.network.play.server.S01PacketJoinGame
 import net.minecraft.network.play.server.S40PacketDisconnect
@@ -22,27 +22,29 @@ import kotlin.random.Random
 
 object NameProtect : Module("NameProtect", MISC, subjective = true, gameDetecting = false) {
 
-    val allPlayers by BoolValue("AllPlayers", false)
+    val allPlayers by BooleanValue("AllPlayers", false)
 
-    val skinProtect by BoolValue("SkinProtect", true)
+    val skinProtect by BooleanValue("SkinProtect", true)
     private val fakeName by TextValue("FakeName", "&cMe")
 
-    private val randomNames by BoolValue("RandomNames", false) { allPlayers }
-    private val randomNameLength by BoolValue("RandomNameLength", false) { randomNames }
+    private val randomNames by BooleanValue("RandomNames", false) { allPlayers }
+    private val randomNameLength by BooleanValue("RandomNameLength", false) { randomNames }
 
-    private var nameLength by IntegerValue("NameLength", 6, 6..16) {
+    private var nameLength by NumberValue<Int>("NameLength", 6, 6..16) {
         randomNames && allPlayers && !randomNameLength
     }
 
-    private val minNameLength: IntegerValue = object : IntegerValue("MinNameLength", 6, 6..16) {
-        override fun isSupported() = randomNames && randomNameLength
-        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxNameLength.get())
-    }
+    private val minNameLength: NumberValue<Int> =
+        object : NumberValue<Int>("MinNameLength", 6, 6..16) {
+            override fun isSupported() = randomNames && randomNameLength
+            override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxNameLength.get())
+        }
 
-    private val maxNameLength: IntegerValue = object : IntegerValue("MaxNameLength", 14, 6..16) {
-        override fun isSupported() = randomNames && randomNameLength
-        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minNameLength.get())
-    }
+    private val maxNameLength: NumberValue<Int> =
+        object : NumberValue<Int>("MaxNameLength", 14, 6..16) {
+            override fun isSupported() = randomNames && randomNameLength
+            override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minNameLength.get())
+        }
 
     private val playerRandomNames = mutableMapOf<UUID, Pair<String, Int>>()
     private val characters = ('a'..'z') + ('0'..'9') + ('A'..'Z') + "_"

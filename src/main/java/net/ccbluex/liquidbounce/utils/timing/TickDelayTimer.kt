@@ -5,10 +5,10 @@
  */
 package net.ccbluex.liquidbounce.utils.timing
 
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 
 open class TickDelayTimer(
-    private val minDelayValue: IntegerValue, private val maxDelayValue: IntegerValue = minDelayValue,
+    private val minDelayValue: IntValue, private val maxDelayValue: IntValue = minDelayValue,
     private val baseTimer: TickTimer = TickTimer()
 ) {
     private var ticks = 0

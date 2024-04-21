@@ -21,7 +21,7 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.disableGlCap
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.enableGlCap
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.resetCaps
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.Tessellator
@@ -42,9 +42,9 @@ import kotlin.math.sqrt
 
 object Projectiles : Module("Projectiles", RENDER, gameDetecting = false, subjective = true) {
     private val colorMode by ListValue("Color", arrayOf("Custom", "BowPower", "Rainbow"), "Custom")
-    private val colorRed by IntegerValue("R", 0, 0..255) { colorMode == "Custom" }
-    private val colorGreen by IntegerValue("G", 160, 0..255) { colorMode == "Custom" }
-    private val colorBlue by IntegerValue("B", 255, 0..255) { colorMode == "Custom" }
+    private val colorRed by IntValue("R", 0, 0..255) { colorMode == "Custom" }
+    private val colorGreen by IntValue("G", 160, 0..255) { colorMode == "Custom" }
+    private val colorBlue by IntValue("B", 255, 0..255) { colorMode == "Custom" }
 
     @EventTarget
     fun onRender3D(event: Render3DEvent) {

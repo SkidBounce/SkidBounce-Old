@@ -19,7 +19,7 @@ import net.ccbluex.liquidbounce.utils.extensions.rotation
 import net.ccbluex.liquidbounce.utils.extensions.swing
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.ccbluex.liquidbounce.value.SwingValue
@@ -36,7 +36,7 @@ object CivBreak : Module("CivBreak", WORLD) {
     private val range by FloatValue("Range", 5F, 1F..6F)
     private val swing by SwingValue()
 
-    private val rotations by BoolValue("Rotations", true)
+    private val rotations by BooleanValue("Rotations", true)
     private val strafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off") { rotations }
     private val smootherMode by ListValue("SmootherMode", arrayOf("Linear", "Relative"), "Relative") { rotations }
 
@@ -50,11 +50,11 @@ object CivBreak : Module("CivBreak", WORLD) {
     private val minTurnSpeed by object : FloatValue("MinTurnSpeed", 80f, 0f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxTurnSpeed)
 
-        override fun isSupported() = !maxTurnSpeedValue.isMinimal() && rotations
+        override fun isSupported() = !maxTurnSpeedValue.isMinimal && rotations
     }
 
     private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f) { rotations }
-    private val grim by BoolValue("Grim", false)
+    private val grim by BooleanValue("Grim", false)
 
     private var blockPos: BlockPos? = null
     private var enumFacing: EnumFacing? = null

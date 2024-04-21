@@ -63,21 +63,21 @@ class Text(x: Double = 10.0, y: Double = 10.0, scale: Float = 1F, side: Side = S
     private var displayString by TextValue("DisplayText", "")
     private val roundedRectRadius by FloatValue("Rounded-Radius", 3F, 0F..5F)
 
-    private val rainbow by BoolValue("Rainbow", false)
+    private val rainbow by BooleanValue("Rainbow", false)
         private val rainbowX by FloatValue("Rainbow-X", -1000F, -2000F..2000F) { rainbow }
         private val rainbowY by FloatValue("Rainbow-Y", -1000F, -2000F..2000F) { rainbow }
 
-        private var alpha by IntegerValue("Alpha", 255, 0..255) { !rainbow }
-            private var red by IntegerValue("Red", 255, 0..255) { !rainbow && alpha > 0 }
-            private var green by IntegerValue("Green", 255, 0..255) { !rainbow && alpha > 0 }
-            private var blue by IntegerValue("Blue", 255, 0..255) { !rainbow && alpha > 0 }
+        private var alpha by IntValue("Alpha", 255, 0..255) { !rainbow }
+            private var red by IntValue("Red", 255, 0..255) { !rainbow && alpha > 0 }
+            private var green by IntValue("Green", 255, 0..255) { !rainbow && alpha > 0 }
+            private var blue by IntValue("Blue", 255, 0..255) { !rainbow && alpha > 0 }
 
-    private val backgroundAlpha by IntegerValue("BackgroundAlpha", 0, 0..255)
-        private val backgroundRed by IntegerValue("BackgroundRed", 0, 0..255) { backgroundAlpha > 0 }
-        private val backgroundGreen by IntegerValue("BackgroundGreen", 0, 0..255) { backgroundAlpha > 0 }
-        private val backgroundBlue by IntegerValue("BackgroundBlue", 0, 0..255) { backgroundAlpha > 0 }
+    private val backgroundAlpha by IntValue("BackgroundAlpha", 0, 0..255)
+        private val backgroundRed by IntValue("BackgroundRed", 0, 0..255) { backgroundAlpha > 0 }
+        private val backgroundGreen by IntValue("BackgroundGreen", 0, 0..255) { backgroundAlpha > 0 }
+        private val backgroundBlue by IntValue("BackgroundBlue", 0, 0..255) { backgroundAlpha > 0 }
 
-    private var shadow by BoolValue("Shadow", true)
+    private var shadow by BooleanValue("Shadow", true)
     private val font by FontValue("Font", Fonts.font40)
 
     private var editMode = false

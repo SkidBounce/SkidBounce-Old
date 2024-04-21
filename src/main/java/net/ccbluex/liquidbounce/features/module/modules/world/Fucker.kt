@@ -42,7 +42,7 @@ object Fucker : Module("Fucker", WORLD) {
      * SETTINGS
      */
 
-    private val hypixel by BoolValue("Hypixel", false)
+    private val hypixel by BooleanValue("Hypixel", false)
 
     private val block by BlockValue("Block", 26)
     private val throughWalls by ListValue(
@@ -53,14 +53,14 @@ object Fucker : Module("Fucker", WORLD) {
     private val range by FloatValue("Range", 5F, 1F..7F)
 
     private val action by ListValue("Action", arrayOf("Destroy", "Use"), "Destroy")
-    private val surroundings by BoolValue("Surroundings", true) { !hypixel }
-    private val instant by BoolValue("Instant", false) { (action == "Destroy" || surroundings) && !hypixel }
+    private val surroundings by BooleanValue("Surroundings", true) { !hypixel }
+    private val instant by BooleanValue("Instant", false) { (action == "Destroy" || surroundings) && !hypixel }
 
-    private val switch by IntegerValue("SwitchDelay", 250, 0..1000)
+    private val switch by IntValue("SwitchDelay", 250, 0..1000)
     private val swing by SwingValue()
-    private val noHit by BoolValue("NoHit", false)
+    private val noHit by BooleanValue("NoHit", false)
 
-    private val rotations by BoolValue("Rotations", true)
+    private val rotations by BooleanValue("Rotations", true)
     private val strafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off") { rotations }
     private val smootherMode by ListValue("SmootherMode", arrayOf("Linear", "Relative"), "Relative") { rotations }
     private val maxTurnSpeedValue: FloatValue = object : FloatValue("MaxTurnSpeed", 120f, 0f..180f) {
@@ -72,7 +72,7 @@ object Fucker : Module("Fucker", WORLD) {
 
     private val minTurnSpeed by object : FloatValue("MinTurnSpeed", 80f, 0f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxTurnSpeed)
-        override fun isSupported() = !maxTurnSpeedValue.isMinimal() && rotations
+        override fun isSupported() = !maxTurnSpeedValue.isMinimal && rotations
     }
 
     private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f) { rotations }

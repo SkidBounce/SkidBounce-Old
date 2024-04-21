@@ -13,9 +13,9 @@ import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
 import net.ccbluex.liquidbounce.utils.RaycastUtils.raycastEntity
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Items.egg
 import net.minecraft.init.Items.snowball
@@ -25,23 +25,23 @@ import net.minecraft.init.Items.snowball
  * @author CCBlueX/LiquidBounce
  */
 object AutoProjectile : Module("AutoProjectile", COMBAT) {
-    private val facingEnemy by BoolValue("FacingEnemy", true)
+    private val facingEnemy by BooleanValue("FacingEnemy", true)
 
     private val mode by ListValue("Mode", arrayOf("Normal", "Smart"), "Normal")
     private val range by FloatValue("Range", 8F, 1F..20F)
-    private val throwDelay by IntegerValue("ThrowDelay", 1000, 50..2000) { mode != "Smart" }
+    private val throwDelay by IntValue("ThrowDelay", 1000, 50..2000) { mode != "Smart" }
 
-    private val minThrowDelay: IntegerValue = object : IntegerValue("MinThrowDelay", 1000, 50..2000) {
+    private val minThrowDelay: IntValue = object : IntValue("MinThrowDelay", 1000, 50..2000) {
         override fun isSupported() = mode == "Smart"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxThrowDelay.get())
     }
 
-    private val maxThrowDelay: IntegerValue = object : IntegerValue("MaxThrowDelay", 1500, 50..2000) {
+    private val maxThrowDelay: IntValue = object : IntValue("MaxThrowDelay", 1500, 50..2000) {
         override fun isSupported() = mode == "Smart"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minThrowDelay.get())
     }
 
-    private val switchBackDelay by IntegerValue("SwitchBackDelay", 500, 50..2000)
+    private val switchBackDelay by IntValue("SwitchBackDelay", 500, 50..2000)
 
     private val throwTimer = MSTimer()
     private val projectilePullTimer = MSTimer()

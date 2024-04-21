@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
@@ -23,7 +23,7 @@ object AutoPlay : Module("AutoPlay", PLAYER, gameDetecting = false) {
         mode == "HypixelSkywars"
     }
 
-    private val delay by IntegerValue("Delay", 50, 0..200)
+    private val delay by IntValue("Delay", 50, 0..200)
 
     private var delayTick = 0
 

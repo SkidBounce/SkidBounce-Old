@@ -18,7 +18,7 @@ import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.network.Packet
 import net.minecraft.network.handshake.client.C00Handshake
@@ -35,8 +35,8 @@ import java.awt.Color
 
 object FakeLag : Module("FakeLag", PLAYER, gameDetecting = false) {
 
-    private val delay by IntegerValue("Delay", 550, 0..1000)
-    private val recoilTime by IntegerValue("RecoilTime", 750, 0..2000)
+    private val delay by NumberValue<Int>("Delay", 550, 0..1000)
+    private val recoilTime by NumberValue<Int>("RecoilTime", 750, 0..2000)
     private val distanceToPlayers by FloatValue("AllowedDistanceToPlayers", 3.5f, 0.0f..6.0f)
 
     private val packetQueue = LinkedHashMap<Packet<*>, Long>()

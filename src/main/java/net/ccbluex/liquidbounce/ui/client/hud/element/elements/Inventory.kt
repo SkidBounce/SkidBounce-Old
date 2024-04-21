@@ -26,20 +26,20 @@ class Inventory : Element(300.0, 50.0) {
 
     private val font by FontValue("Font", Fonts.font35)
     private val title by ListValue("Title", arrayOf("Center", "Left", "Right", "None"), "Left")
-    private val titleRainbow by BoolValue("TitleRainbow", false) { title != "None" }
-        private val titleRed by IntegerValue("TitleRed", 255, 0..255) { title != "None" && !titleRainbow }
-        private val titleGreen by IntegerValue("TitleGreen", 255, 0..255) { title != "None" && !titleRainbow }
-        private val titleBlue by IntegerValue("TitleBlue", 255, 0..255) { title != "None" && !titleRainbow }
+    private val titleRainbow by BooleanValue("TitleRainbow", false) { title != "None" }
+        private val titleRed by IntValue("TitleRed", 255, 0..255) { title != "None" && !titleRainbow }
+        private val titleGreen by IntValue("TitleGreen", 255, 0..255) { title != "None" && !titleRainbow }
+        private val titleBlue by IntValue("TitleBlue", 255, 0..255) { title != "None" && !titleRainbow }
 
     private val roundedRectRadius by FloatValue("Rounded-Radius", 3F, 0F..5F)
 
-    private val borderValue by BoolValue("Border", true)
-    private val borderRainbow by BoolValue("BorderRainbow", false) { borderValue }
-        private val borderRed by IntegerValue("Border-R", 255, 0..255) { borderValue && !borderRainbow }
-        private val borderGreen by IntegerValue("Border-G", 255, 0..255) { borderValue && !borderRainbow }
-        private val borderBlue by IntegerValue("Border-B", 255, 0..255) { borderValue && !borderRainbow }
+    private val borderValue by BooleanValue("Border", true)
+    private val borderRainbow by BooleanValue("BorderRainbow", false) { borderValue }
+        private val borderRed by IntValue("Border-R", 255, 0..255) { borderValue && !borderRainbow }
+        private val borderGreen by IntValue("Border-G", 255, 0..255) { borderValue && !borderRainbow }
+        private val borderBlue by IntValue("Border-B", 255, 0..255) { borderValue && !borderRainbow }
 
-    private val backgroundAlpha by IntegerValue("Background-Alpha", 150, 0..255)
+    private val backgroundAlpha by IntValue("Background-Alpha", 150, 0..255)
 
     private val width = 174F
     private val height = 66F

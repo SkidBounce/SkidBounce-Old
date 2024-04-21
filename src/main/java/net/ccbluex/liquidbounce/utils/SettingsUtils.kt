@@ -6,13 +6,10 @@
 package net.ccbluex.liquidbounce.utils
 
 import net.ccbluex.liquidbounce.LiquidBounce.moduleManager
-import net.ccbluex.liquidbounce.api.ClientApi
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.file.FileManager
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
-import net.ccbluex.liquidbounce.utils.misc.HttpUtils
 import net.ccbluex.liquidbounce.utils.misc.StringUtils
-import net.ccbluex.liquidbounce.utils.render.ColorUtils.translateAlternateColorCodes
 import net.ccbluex.liquidbounce.value.*
 import org.lwjgl.input.Keyboard
 
@@ -80,9 +77,9 @@ object SettingsUtils {
 
         try {
             when (moduleValue) {
-                is BoolValue -> moduleValue.changeValue(value.toBoolean())
+                is BooleanValue -> moduleValue.changeValue(value.toBoolean())
                 is FloatValue -> moduleValue.changeValue(value.toFloat())
-                is IntegerValue -> moduleValue.changeValue(value.toInt())
+                is IntValue -> moduleValue.changeValue(value.toInt())
                 is TextValue -> moduleValue.changeValue(StringUtils.toCompleteString(args, 2))
                 is ListValue -> moduleValue.changeValue(value)
             }

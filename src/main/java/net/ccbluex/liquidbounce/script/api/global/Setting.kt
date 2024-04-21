@@ -20,10 +20,10 @@ object Setting {
     /**
      * Creates a boolean value.
      * @param settingInfo JavaScript object containing information about the value.
-     * @return An instance of [BoolValue]
+     * @return An instance of [BooleanValue]
      */
     @JvmStatic
-    fun boolean(settingInfo: JSObject): BoolValue {
+    fun boolean(settingInfo: JSObject): BooleanValue {
         val name = settingInfo["name"] as String
         val default = settingInfo["default"] as Boolean
 
@@ -31,7 +31,7 @@ object Setting {
         val onChangeCallback = settingInfo["onChange"] as? ScriptObjectMirror
         val onChangedCallback = settingInfo["onChanged"] as? ScriptObjectMirror
 
-        return object : BoolValue(name, default) {
+        return object : BooleanValue(name, default) {
             override fun isSupported() = isSupportedCallback?.call(null) as? Boolean ?: true
 
             override fun onChange(oldValue: Boolean, newValue: Boolean) =
@@ -46,10 +46,10 @@ object Setting {
     /**
      * Creates an integer value.
      * @param settingInfo JavaScript object containing information about the value.
-     * @return An instance of [IntegerValue]
+     * @return An instance of [IntValue]
      */
     @JvmStatic
-    fun integer(settingInfo: JSObject): IntegerValue {
+    fun integer(settingInfo: JSObject): IntValue {
         val name = settingInfo["name"] as String
         val default = settingInfo["default"]!!.toInt()
         val min = settingInfo["min"]!!.toInt()
@@ -59,7 +59,7 @@ object Setting {
         val onChangeCallback = settingInfo["onChange"] as? ScriptObjectMirror
         val onChangedCallback = settingInfo["onChanged"] as? ScriptObjectMirror
 
-        return object : IntegerValue(name, default, min..max) {
+        return object : IntValue(name, default, min..max) {
             override fun isSupported() = isSupportedCallback?.call(null) as? Boolean ?: true
 
             override fun onChange(oldValue: Int, newValue: Int) =

@@ -21,9 +21,9 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.isFirstInventoryC
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.toHotbarIndex
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.BlockFalling
 import net.minecraft.block.BlockWorkbench
@@ -36,28 +36,44 @@ import net.minecraft.item.*
 import net.minecraft.potion.Potion
 
 object InventoryCleaner : Module("InventoryCleaner", PLAYER) {
-    private val drop by BoolValue("Drop", true)
-    val sort by BoolValue("Sort", true)
+    private val drop by BooleanValue("Drop", true)
+    val sort by BooleanValue("Sort", true)
 
-    private val maxDelay: Int by object : IntegerValue("MaxDelay", 50, 0..500) {
+    private val maxDelay: Int by object : NumberValue<Int>(
+        "MaxDelay",
+        50,
+        0..500
+    ) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
     }
-    private val minDelay by object : IntegerValue("MinDelay", 50, 0..500) {
+    private val minDelay by object : NumberValue<Int>("MinDelay", 50, 0..500) {
         override fun isSupported() = maxDelay > 0
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxDelay)
     }
-    private val minItemAge by IntegerValue("MinItemAge", 0, 0..2000)
+    private val minItemAge by NumberValue<Int>("MinItemAge", 0, 0..2000)
 
-    private val limitStackCounts by BoolValue("LimitStackCounts", true)
-    private val maxBlockStacks by IntegerValue("MaxBlockStacks", 5, 0..36) { limitStackCounts }
-    private val maxFoodStacks by IntegerValue("MaxFoodStacks", 5, 0..36) { limitStackCounts }
-    private val maxThrowableStacks by IntegerValue("MaxThrowableStacks", 5, 0..36) { limitStackCounts }
+    private val limitStackCounts by BooleanValue("LimitStackCounts", true)
+    private val maxBlockStacks by NumberValue<Int>(
+        "MaxBlockStacks",
+        5,
+        0..36
+    ) { limitStackCounts }
+    private val maxFoodStacks by NumberValue<Int>(
+        "MaxFoodStacks",
+        5,
+        0..36
+    ) { limitStackCounts }
+    private val maxThrowableStacks by NumberValue<Int>(
+        "MaxThrowableStacks",
+        5,
+        0..36
+    ) { limitStackCounts }
     // TODO: max potion, vehicle, ..., stacks?
 
-    private val mergeStacks by BoolValue("MergeStacks", true)
+    private val mergeStacks by BooleanValue("MergeStacks", true)
 
-    private val repairEquipment by BoolValue("RepairEquipment", true)
+    private val repairEquipment by BooleanValue("RepairEquipment", true)
 
     private val invOpen by InventoryManager.invOpenValue
     private val simulateInventory by InventoryManager.simulateInventoryValue
@@ -70,12 +86,12 @@ object InventoryCleaner : Module("InventoryCleaner", PLAYER) {
     private val noMoveAir by InventoryManager.noMoveAirValue
     private val noMoveGround by InventoryManager.noMoveGroundValue
 
-    private val randomSlot by BoolValue("RandomSlot", false)
-    private val ignoreVehicles by BoolValue("IgnoreVehicles", false)
+    private val randomSlot by BooleanValue("RandomSlot", false)
+    private val ignoreVehicles by BooleanValue("IgnoreVehicles", false)
 
-    private val onlyGoodPotions by BoolValue("OnlyGoodPotions", false)
+    private val onlyGoodPotions by BooleanValue("OnlyGoodPotions", false)
 
-    val highlightUseful by BoolValue("HighlightUseful", true, subjective = true)
+    val highlightUseful by BooleanValue("HighlightUseful", true, subjective = true)
 
     private val slot1Value = SortValue("Slot1", "Sword")
     private val slot2Value = SortValue("Slot2", "Bow")

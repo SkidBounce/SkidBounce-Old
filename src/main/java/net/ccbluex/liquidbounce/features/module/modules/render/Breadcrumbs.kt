@@ -12,17 +12,17 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import java.util.*
 
 object Breadcrumbs : Module("Breadcrumbs", RENDER, subjective = true) {
-    val colorRainbow by BoolValue("Rainbow", false)
-    val colorRed by IntegerValue("R", 255, 0..255) { !colorRainbow }
-    val colorGreen by IntegerValue("G", 179, 0..255) { !colorRainbow }
-    val colorBlue by IntegerValue("B", 72, 0..255) { !colorRainbow }
+    val colorRainbow by BooleanValue("Rainbow", false)
+    val colorRed by IntValue("R", 255, 0..255) { !colorRainbow }
+    val colorGreen by IntValue("G", 179, 0..255) { !colorRainbow }
+    val colorBlue by IntValue("B", 72, 0..255) { !colorRainbow }
 
     private val positions = LinkedList<DoubleArray>()
 

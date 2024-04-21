@@ -18,9 +18,9 @@ import net.ccbluex.liquidbounce.utils.misc.FallingPlayer
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawFilledBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.renderNameTag
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.BlockAir
 import net.minecraft.client.renderer.GlStateManager.resetColor
@@ -41,9 +41,9 @@ object BugUp : Module("BugUp", MOVEMENT) {
         arrayOf("TeleportBack", "FlyFlag", "OnGroundSpoof", "MotionTeleport-Flag", "GhostBlock").sortedArray(),
         "FlyFlag"
     )
-    private val maxFallDistance by IntegerValue("MaxFallDistance", 10, 2..255)
+    private val maxFallDistance by IntValue("MaxFallDistance", 10, 2..255)
     private val maxDistanceWithoutGround by FloatValue("MaxDistanceToSetback", 2.5f, 1f..30f)
-    private val indicator by BoolValue("Indicator", true, subjective = true)
+    private val indicator by BooleanValue("Indicator", true, subjective = true)
 
     private var detectedLocation: BlockPos? = null
     private var lastFound = 0F

@@ -38,47 +38,47 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 
 object NameTags : Module("NameTags", RENDER, subjective = true) {
-    private val health by BoolValue("Health", true)
-    private val healthFromScoreboard by BoolValue("HealthFromScoreboard", false) { health }
-    private val absorption by BoolValue("Absorption", false) { health || healthBar }
-    private val roundedHealth by BoolValue("RoundedHealth", true) { health }
+    private val health by BooleanValue("Health", true)
+    private val healthFromScoreboard by BooleanValue("HealthFromScoreboard", false) { health }
+    private val absorption by BooleanValue("Absorption", false) { health || healthBar }
+    private val roundedHealth by BooleanValue("RoundedHealth", true) { health }
 
-    private val healthPrefix by BoolValue("HealthPrefix", false) { health }
+    private val healthPrefix by BooleanValue("HealthPrefix", false) { health }
     private val healthPrefixText by TextValue("HealthPrefixText", "") { health && healthPrefix }
 
-    private val healthSuffix by BoolValue("HealthSuffix", true) { health }
+    private val healthSuffix by BooleanValue("HealthSuffix", true) { health }
     private val healthSuffixText by TextValue("HealthSuffixText", " HP") { health && healthSuffix }
 
-    private val ping by BoolValue("Ping", false)
-    private val healthBar by BoolValue("Bar", true)
-    private val distance by BoolValue("Distance", false)
-    private val armor by BoolValue("Armor", true)
-    private val bot by BoolValue("Bots", true)
-    private val potion by BoolValue("Potions", true)
-    private val clearNames by BoolValue("ClearNames", false)
+    private val ping by BooleanValue("Ping", false)
+    private val healthBar by BooleanValue("Bar", true)
+    private val distance by BooleanValue("Distance", false)
+    private val armor by BooleanValue("Armor", true)
+    private val bot by BooleanValue("Bots", true)
+    private val potion by BooleanValue("Potions", true)
+    private val clearNames by BooleanValue("ClearNames", false)
     private val font by FontValue("Font", Fonts.font40)
     private val scale by FloatValue("Scale", 1F, 1F..4F)
-    private val fontShadow by BoolValue("Shadow", true)
+    private val fontShadow by BooleanValue("Shadow", true)
 
-    private val background by BoolValue("Background", true)
-    private val backgroundColorRed by IntegerValue("Background-R", 0, 0..255) { background }
-    private val backgroundColorGreen by IntegerValue("Background-G", 0, 0..255) { background }
-    private val backgroundColorBlue by IntegerValue("Background-B", 0, 0..255) { background }
-    private val backgroundColorAlpha by IntegerValue("Background-Alpha", 70, 0..255) { background }
+    private val background by BooleanValue("Background", true)
+    private val backgroundColorRed by IntValue("Background-R", 0, 0..255) { background }
+    private val backgroundColorGreen by IntValue("Background-G", 0, 0..255) { background }
+    private val backgroundColorBlue by IntValue("Background-B", 0, 0..255) { background }
+    private val backgroundColorAlpha by IntValue("Background-Alpha", 70, 0..255) { background }
 
-    private val border by BoolValue("Border", true)
-    private val borderColorRed by IntegerValue("Border-R", 0, 0..255) { border }
-    private val borderColorGreen by IntegerValue("Border-G", 0, 0..255) { border }
-    private val borderColorBlue by IntegerValue("Border-B", 0, 0..255) { border }
-    private val borderColorAlpha by IntegerValue("Border-Alpha", 100, 0..255) { border }
+    private val border by BooleanValue("Border", true)
+    private val borderColorRed by IntValue("Border-R", 0, 0..255) { border }
+    private val borderColorGreen by IntValue("Border-G", 0, 0..255) { border }
+    private val borderColorBlue by IntValue("Border-B", 0, 0..255) { border }
+    private val borderColorAlpha by IntValue("Border-Alpha", 100, 0..255) { border }
 
-    private val maxRenderDistance by object : IntegerValue("MaxRenderDistance", 100, 1..200) {
+    private val maxRenderDistance by object : IntValue("MaxRenderDistance", 100, 1..200) {
         override fun onUpdate(value: Int) {
             maxRenderDistanceSq = value.toDouble().pow(2.0)
         }
     }
 
-    private val onLook by BoolValue("OnLook", false)
+    private val onLook by BooleanValue("OnLook", false)
     private val maxAngleDifference by FloatValue("MaxAngleDifference", 5.0f, 5.0f..90f) { onLook }
 
     private var maxRenderDistanceSq = 0.0

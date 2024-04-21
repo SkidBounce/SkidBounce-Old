@@ -12,31 +12,33 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextInt
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.client.settings.KeyBinding
 
 object TriggerBot : Module("TriggerBot", COMBAT) {
 
-    private val simulateDoubleClicking by BoolValue("SimulateDoubleClicking", false)
+    private val simulateDoubleClicking by BooleanValue("SimulateDoubleClicking", false)
 
-    private val maxCPSValue: IntegerValue = object : IntegerValue("MaxCPS", 8, 1..20) {
-        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minCPS)
+    private val maxCPSValue: NumberValue<Int> =
+        object : NumberValue<Int>("MaxCPS", 8, 1..20) {
+            override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minCPS)
 
-        override fun onChanged(oldValue: Int, newValue: Int) {
-            delay = randomClickDelay(minCPS, get())
+            override fun onChanged(oldValue: Int, newValue: Int) {
+                delay = randomClickDelay(minCPS, get())
+            }
         }
-    }
     private val maxCPS by maxCPSValue
 
-    private val minCPS: Int by object : IntegerValue("MinCPS", 5, 1..20) {
+    private val minCPS: Int by object : IntValue("MinCPS", 5, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxCPS)
 
         override fun onChanged(oldValue: Int, newValue: Int) {
             delay = randomClickDelay(get(), maxCPS)
         }
 
-        override fun isSupported() = !maxCPSValue.isMinimal()
+        override fun isSupported() = !maxCPSValue.isMinimal
     }
 
     private var delay = randomClickDelay(minCPS, maxCPS)

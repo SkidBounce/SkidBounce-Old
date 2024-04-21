@@ -6,7 +6,6 @@
 package net.ccbluex.liquidbounce.utils.extensions
 
 import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
-import net.ccbluex.liquidbounce.injection.implementations.IMixinItemStack
 import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
 import net.ccbluex.liquidbounce.utils.MovementUtils.JUMP_HEIGHT
 import net.ccbluex.liquidbounce.utils.MovementUtils.getJumpBoostModifier
@@ -25,7 +24,6 @@ import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.client.settings.GameSettings
 import net.minecraft.client.settings.GameSettings.isKeyDown
 import net.minecraft.client.settings.KeyBinding
-import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.Entity
 import net.minecraft.entity.boss.EntityDragon
 import net.minecraft.entity.monster.EntityGhast
@@ -37,20 +35,15 @@ import net.minecraft.entity.passive.EntityBat
 import net.minecraft.entity.passive.EntitySquid
 import net.minecraft.entity.passive.EntityVillager
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Items.arrow
 import net.minecraft.item.*
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.client.C0APacketAnimation
-import net.minecraft.network.play.server.*
 import net.minecraft.potion.Potion
 import net.minecraft.potion.PotionEffect
 import net.minecraft.stats.StatList.jumpStat
 import net.minecraft.util.*
 import net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 import kotlin.math.pow
-import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.random.nextInt
 

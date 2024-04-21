@@ -33,10 +33,10 @@ abstract class Style : MinecraftInstance() {
 
     fun showSettingsSound() = mc.soundHandler.playSound(PositionedSoundRecord.create(ResourceLocation("random.bow"), 1f))
 
-    protected fun round(v: Float): Float {
+    protected fun round(v: Number): Double {
         var bigDecimal = BigDecimal(v.toString())
         bigDecimal = bigDecimal.setScale(2, 4)
-        return bigDecimal.toFloat()
+        return bigDecimal.toDouble()
     }
 
     protected fun getHoverColor(color: Color, hover: Int, inactiveModule: Boolean = false): Int {

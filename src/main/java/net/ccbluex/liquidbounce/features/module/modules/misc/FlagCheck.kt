@@ -11,13 +11,11 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.extensions.onPlayerRightClick
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.network.login.server.S00PacketDisconnect
 import net.minecraft.network.play.server.S01PacketJoinGame
 import net.minecraft.network.play.server.S08PacketPlayerPosLook
-import net.minecraft.util.BlockPos
 import net.minecraft.util.BlockPos.ORIGIN
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumFacing.DOWN
 import net.minecraft.util.Vec3
 import kotlin.math.abs
@@ -26,7 +24,7 @@ import kotlin.math.sqrt
 
 object FlagCheck : Module("FlagCheck", MISC, gameDetecting = true) {
 
-    private val resetFlagCounterTicks by IntegerValue("ResetCounterTicks", 600, 100..1000)
+    private val resetFlagCounterTicks by IntValue("ResetCounterTicks", 600, 100..1000)
     private val rubberbandThreshold by FloatValue("RubberBandThreshold", 5.0f, 0.05f..10.0f)
 
     private var flagCount = 0

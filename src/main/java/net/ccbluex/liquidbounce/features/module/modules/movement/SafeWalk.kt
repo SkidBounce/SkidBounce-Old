@@ -11,15 +11,15 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.misc.FallingPlayer
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.block.BlockAir
 import net.minecraft.util.BlockPos
 
 object SafeWalk : Module("SafeWalk", MOVEMENT) {
 
-    private val airSafe by BoolValue("AirSafe", false)
-    private val maxFallDistanceValue = IntegerValue("MaxFallDistance", 5, 0..100)
+    private val airSafe by BooleanValue("AirSafe", false)
+    private val maxFallDistanceValue = IntValue("MaxFallDistance", 5, 0..100)
 
     private var lastGroundY: Double? = null
     private var lastCollisionY: Int? = null
@@ -31,13 +31,13 @@ object SafeWalk : Module("SafeWalk", MOVEMENT) {
             || !mc.playerController.gameIsSurvivalOrAdventure()
         ) return
 
-        if (!maxFallDistanceValue.isMinimal() && player.onGround && getBlock(BlockPos(player).down()) !is BlockAir) {
+        if (!maxFallDistanceValue.isMinimal && player.onGround && getBlock(BlockPos(player).down()) !is BlockAir) {
             lastGroundY = player.posY
             lastCollisionY = FallingPlayer(player, true).findCollision(60)?.pos?.y
         }
 
         if (airSafe || player.onGround) {
-            event.isSafeWalk = maxFallDistanceValue.isMinimal()
+            event.isSafeWalk = maxFallDistanceValue.isMinimal
                     || (lastGroundY != null && lastCollisionY != null
                     && lastGroundY!! - lastCollisionY!! > maxFallDistanceValue.get() + 1)
         }

@@ -18,7 +18,7 @@ import net.ccbluex.liquidbounce.utils.extensions.fakeJump
 import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
@@ -52,7 +52,7 @@ object Step : Module("Step", MOVEMENT, gameDetecting = false) {
     private val jumpHeight by FloatValue("JumpHeight", 0.42F, 0.37F..0.42F)
     { mode == "Jump" }
 
-    private val delay by IntegerValue("Delay", 0, 0..500)
+    private val delay by IntValue("Delay", 0, 0..500)
 
     /**
      * VALUES

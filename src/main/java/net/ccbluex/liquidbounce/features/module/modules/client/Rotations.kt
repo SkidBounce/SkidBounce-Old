@@ -12,12 +12,12 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.features.module.modules.misc.Derp
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.serverRotation
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 
 object Rotations : Module("Rotations", CLIENT, gameDetecting = false, defaultInArray = false, subjective = true) {
 
-    private val realistic by BoolValue("Realistic", true)
-    private val body by BoolValue("Body", true) { !realistic }
+    private val realistic by BooleanValue("Realistic", true)
+    private val body by BooleanValue("Body", true) { !realistic }
 
     var prevHeadPitch = 0f
     var headPitch = 0f

@@ -15,9 +15,8 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.extensions.isActuallyPressed
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.ListValue
-import net.minecraft.client.settings.GameSettings
 import net.minecraft.network.play.client.C0BPacketEntityAction
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action.START_SNEAKING
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action.STOP_SNEAKING
@@ -25,7 +24,7 @@ import net.minecraft.network.play.client.C0BPacketEntityAction.Action.STOP_SNEAK
 object Sneak : Module("Sneak", MOVEMENT) {
 
     val mode by ListValue("Mode", arrayOf("Legit", "Vanilla", "Switch", "MineSecure").sortedArray(), "MineSecure")
-    val stopMove by BoolValue("StopMove", false)
+    val stopMove by BooleanValue("StopMove", false)
 
     private var sneaking = false
 

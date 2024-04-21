@@ -15,7 +15,7 @@ import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notifications.Not
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.misc.HttpUtils
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Items
 import net.minecraft.network.Packet
@@ -28,10 +28,10 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
 
     private val autoLeave by ListValue("AutoLeave", arrayOf("Off", "Leave", "Lobby", "Quit"), "Off")
 
-    private val spectator by BoolValue("StaffSpectator", false) { staffmode == "BlocksMC" }
-    private val otherSpectator by BoolValue("OtherSpectator", false) { staffmode == "BlocksMC" }
+    private val spectator by BooleanValue("StaffSpectator", false) { staffmode == "BlocksMC" }
+    private val otherSpectator by BooleanValue("OtherSpectator", false) { staffmode == "BlocksMC" }
 
-    private val inGame by BoolValue("InGame", true) { autoLeave != "Off" && staffmode == "BlocksMC" }
+    private val inGame by BooleanValue("InGame", true) { autoLeave != "Off" && staffmode == "BlocksMC" }
     private val warn by ListValue("Warn", arrayOf("Chat", "Notification"), "Chat")
 
     private val checkedStaff = mutableSetOf<String>()

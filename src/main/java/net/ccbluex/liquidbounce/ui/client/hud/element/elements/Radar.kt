@@ -18,9 +18,9 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.makeScissorBox
 import net.ccbluex.liquidbounce.utils.render.SafeVertexBuffer
 import net.ccbluex.liquidbounce.utils.render.shader.shaders.RainbowShader
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.client.renderer.GlStateManager.bindTexture
 import net.minecraft.client.renderer.Tessellator
@@ -43,27 +43,27 @@ class Radar(x: Double = 5.0, y: Double = 130.0) : Element(x, y) {
 
     private val playerShape by ListValue("Player Shape", arrayOf("Triangle", "Rectangle", "Circle"), "Triangle")
     private val playerSize by FloatValue("Player Size", 2f, 0.5f..20F)
-    private val useESPColors by BoolValue("Use ESP Colors", true)
+    private val useESPColors by BooleanValue("Use ESP Colors", true)
     private val fovSize by FloatValue("FOV Size", 10F, 0F..50F)
     private val fovAngle by FloatValue("FOV Angle", 70F, 30F..160F)
 
-    private val minimap by BoolValue("Minimap", true)
+    private val minimap by BooleanValue("Minimap", true)
 
-    private val backgroundRed by IntegerValue("Background Red", 0, 0..255)
-    private val backgroundGreen by IntegerValue("Background Green", 0, 0..255)
-    private val backgroundBlue by IntegerValue("Background Blue", 0, 0..255)
-    private val backgroundAlpha by IntegerValue("Background Alpha", 50, 0..255)
+    private val backgroundRed by IntValue("Background Red", 0, 0..255)
+    private val backgroundGreen by IntValue("Background Green", 0, 0..255)
+    private val backgroundBlue by IntValue("Background Blue", 0, 0..255)
+    private val backgroundAlpha by IntValue("Background Alpha", 50, 0..255)
 
     private val borderStrength by FloatValue("Border Strength", 2F, 1F..5F)
 
-    private val borderRainbow by BoolValue("Border Rainbow", false)
+    private val borderRainbow by BooleanValue("Border Rainbow", false)
         private val rainbowX by FloatValue("Rainbow-X", -1000F, -2000F..2000F) { borderRainbow }
         private val rainbowY by FloatValue("Rainbow-Y", -1000F, -2000F..2000F) { borderRainbow }
 
-        private val borderRed by IntegerValue("Border Red", 0, 0..255) { !borderRainbow }
-        private val borderGreen by IntegerValue("Border Green", 0, 0..255) { !borderRainbow }
-        private val borderBlue by IntegerValue("Border Blue", 0, 0..255) { !borderRainbow }
-        private val borderAlpha by IntegerValue("Border Alpha", 150, 0..255) { !borderRainbow }
+        private val borderRed by IntValue("Border Red", 0, 0..255) { !borderRainbow }
+        private val borderGreen by IntValue("Border Green", 0, 0..255) { !borderRainbow }
+        private val borderBlue by IntValue("Border Blue", 0, 0..255) { !borderRainbow }
+        private val borderAlpha by IntValue("Border Alpha", 150, 0..255) { !borderRainbow }
 
     private var fovMarkerVertexBuffer: VertexBuffer? = null
     private var lastFov = 0f

@@ -18,7 +18,7 @@ import net.ccbluex.liquidbounce.utils.MinecraftInstance
 import net.ccbluex.liquidbounce.utils.extensions.toLowerCamelCase
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.timing.TickedActions.TickScheduler
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.Value
 import net.minecraft.client.audio.PositionedSoundRecord
 import net.minecraft.util.ResourceLocation
@@ -39,7 +39,7 @@ open class Module @JvmOverloads constructor(
 ) : MinecraftInstance(), Listenable {
 
     // Value that determines whether the module should depend on GameDetector
-    private val onlyInGameValue = BoolValue("OnlyInGame", true, subjective = true) { GameDetector.state }
+    private val onlyInGameValue = BooleanValue("OnlyInGame", true, subjective = true) { GameDetector.state }
 
     protected val TickScheduler = TickScheduler(this)
 

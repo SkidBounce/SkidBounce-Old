@@ -19,10 +19,10 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawEntityBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.utils.render.shader.shaders.GlowShader
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher
 import net.minecraft.entity.item.EntityMinecartChest
 import net.minecraft.tileentity.*
@@ -35,11 +35,23 @@ object StorageESP : Module("StorageESP", RENDER, subjective = true) {
     ListValue("Mode", arrayOf("Box", "OtherBox", "Outline", "Glow", "2D", "WireFrame"), "Outline")
 
     private val glowRenderScale by FloatValue("Glow-Renderscale", 1f, 0.5f..2f) { mode == "Glow" }
-    private val glowRadius by IntegerValue("Glow-Radius", 4, 1..5) { mode == "Glow" }
-    private val glowFade by IntegerValue("Glow-Fade", 10, 0..30) { mode == "Glow" }
+    private val glowRadius by NumberValue<Int>(
+        "Glow-Radius",
+        4,
+        1..5
+    ) { mode == "Glow" }
+    private val glowFade by NumberValue<Int>(
+        "Glow-Fade",
+        10,
+        0..30
+    ) { mode == "Glow" }
     private val glowTargetAlpha by FloatValue("Glow-Target-Alpha", 0f, 0f..1f) { mode == "Glow" }
 
-    private val maxRenderDistance by object : IntegerValue("MaxRenderDistance", 100, 1..500) {
+    private val maxRenderDistance by object : NumberValue<Int>(
+        "MaxRenderDistance",
+        100,
+        1..500
+    ) {
         override fun onUpdate(value: Int) {
             maxRenderDistanceSq = value.toDouble().pow(2.0)
         }
@@ -47,14 +59,14 @@ object StorageESP : Module("StorageESP", RENDER, subjective = true) {
 
     private var maxRenderDistanceSq = 0.0
 
-    private val chest by BoolValue("Chest", true)
-    private val enderChest by BoolValue("EnderChest", true)
-    private val furnace by BoolValue("Furnace", true)
-    private val dispenser by BoolValue("Dispenser", true)
-    private val hopper by BoolValue("Hopper", true)
-    private val enchantmentTable by BoolValue("EnchantmentTable", false)
-    private val brewingStand by BoolValue("BrewingStand", false)
-    private val sign by BoolValue("Sign", false)
+    private val chest by BooleanValue("Chest", true)
+    private val enderChest by BooleanValue("EnderChest", true)
+    private val furnace by BooleanValue("Furnace", true)
+    private val dispenser by BooleanValue("Dispenser", true)
+    private val hopper by BooleanValue("Hopper", true)
+    private val enchantmentTable by BooleanValue("EnchantmentTable", false)
+    private val brewingStand by BooleanValue("BrewingStand", false)
+    private val sign by BooleanValue("Sign", false)
 
     private fun getColor(tileEntity: TileEntity): Color? {
         return when {

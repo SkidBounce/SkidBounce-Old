@@ -15,10 +15,10 @@ import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawEntityBox
 import net.ccbluex.liquidbounce.utils.render.shader.shaders.GlowShader
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.entity.item.EntityItem
 import java.awt.Color
 
@@ -26,14 +26,22 @@ object ItemESP : Module("ItemESP", RENDER, subjective = true) {
     private val mode by ListValue("Mode", arrayOf("Box", "OtherBox", "Glow"), "Box")
 
     private val glowRenderScale by FloatValue("Glow-Renderscale", 1f, 0.5f..2f) { mode == "Glow" }
-    private val glowRadius by IntegerValue("Glow-Radius", 4, 1..5) { mode == "Glow" }
-    private val glowFade by IntegerValue("Glow-Fade", 10, 0..30) { mode == "Glow" }
+    private val glowRadius by NumberValue<Int>(
+        "Glow-Radius",
+        4,
+        1..5
+    ) { mode == "Glow" }
+    private val glowFade by NumberValue<Int>(
+        "Glow-Fade",
+        10,
+        0..30
+    ) { mode == "Glow" }
     private val glowTargetAlpha by FloatValue("Glow-Target-Alpha", 0f, 0f..1f) { mode == "Glow" }
 
-    private val colorRainbow by BoolValue("Rainbow", true)
-    private val colorRed by IntegerValue("R", 0, 0..255) { !colorRainbow }
-    private val colorGreen by IntegerValue("G", 255, 0..255) { !colorRainbow }
-    private val colorBlue by IntegerValue("B", 0, 0..255) { !colorRainbow }
+    private val colorRainbow by BooleanValue("Rainbow", true)
+    private val colorRed by NumberValue<Int>("R", 0, 0..255) { !colorRainbow }
+    private val colorGreen by NumberValue<Int>("G", 255, 0..255) { !colorRainbow }
+    private val colorBlue by NumberValue<Int>("B", 0, 0..255) { !colorRainbow }
 
     val color
         get() = if (colorRainbow) rainbow() else Color(colorRed, colorGreen, colorBlue)

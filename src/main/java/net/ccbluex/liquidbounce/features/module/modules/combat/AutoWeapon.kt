@@ -14,8 +14,8 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.extensions.attackDamage
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.item.ItemSword
 import net.minecraft.item.ItemTool
 import net.minecraft.network.play.client.C02PacketUseEntity
@@ -23,8 +23,8 @@ import net.minecraft.network.play.client.C02PacketUseEntity.Action.ATTACK
 
 object AutoWeapon : Module("AutoWeapon", COMBAT) {
 
-    private val spoof by BoolValue("SpoofItem", false)
-    private val spoofTicks by IntegerValue("SpoofTicks", 10, 1..20) { spoof }
+    private val spoof by BooleanValue("SpoofItem", false)
+    private val spoofTicks by IntValue("SpoofTicks", 10, 1..20) { spoof }
 
     private var attackEnemy = false
 

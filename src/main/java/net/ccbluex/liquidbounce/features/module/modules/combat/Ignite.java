@@ -12,7 +12,7 @@ import net.ccbluex.liquidbounce.utils.EntityUtils;
 import net.ccbluex.liquidbounce.utils.RotationUtils;
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils;
 import net.ccbluex.liquidbounce.utils.timing.MSTimer;
-import net.ccbluex.liquidbounce.value.BoolValue;
+import net.ccbluex.liquidbounce.value.BooleanValue;
 import net.minecraft.block.BlockAir;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -37,8 +37,8 @@ public class Ignite extends Module {
         super("Ignite", COMBAT);
     }
 
-    private final BoolValue lighterValue = new BoolValue("Lighter", true);
-    private final BoolValue lavaBucketValue = new BoolValue("Lava", true);
+    private final BooleanValue lighterValue = new BooleanValue("Lighter", true);
+    private final BooleanValue lavaBucketValue = new BooleanValue("Lava", true);
 
     private final MSTimer msTimer = new MSTimer();
 

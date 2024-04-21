@@ -13,9 +13,9 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.TARGETS
 import net.ccbluex.liquidbounce.utils.extensions.getFullName
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.stripColor
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
@@ -26,30 +26,30 @@ import net.minecraft.network.play.server.S20PacketEntityProperties
 
 object AntiBot : Module("AntiBot", TARGETS) {
 
-    private val tab by BoolValue("Tab", true)
+    private val tab by BooleanValue("Tab", true)
     private val tabMode by ListValue("TabMode", arrayOf("Equals", "Contains"), "Contains") { tab }
 
-    private val entityID by BoolValue("EntityID", true)
-    private val color by BoolValue("Color", false)
+    private val entityID by BooleanValue("EntityID", true)
+    private val color by BooleanValue("Color", false)
 
-    private val livingTime by BoolValue("LivingTime", false)
-    private val livingTimeTicks by IntegerValue("LivingTimeTicks", 40, 1..200) { livingTime }
+    private val livingTime by BooleanValue("LivingTime", false)
+    private val livingTimeTicks by IntValue("LivingTimeTicks", 40, 1..200) { livingTime }
 
-    private val ground by BoolValue("Ground", true)
-    private val air by BoolValue("Air", false)
-    private val invalidGround by BoolValue("InvalidGround", true)
-    private val swing by BoolValue("Swing", false)
-    private val health by BoolValue("Health", false)
-    private val derp by BoolValue("Derp", true)
-    private val wasInvisible by BoolValue("WasInvisible", false)
-    private val armor by BoolValue("Armor", false)
-    private val ping by BoolValue("Ping", false)
-    private val needHit by BoolValue("NeedHit", false)
-    private val duplicateInWorld by BoolValue("DuplicateInWorld", false)
-    private val duplicateInTab by BoolValue("DuplicateInTab", false)
-    private val properties by BoolValue("Properties", false)
+    private val ground by BooleanValue("Ground", true)
+    private val air by BooleanValue("Air", false)
+    private val invalidGround by BooleanValue("InvalidGround", true)
+    private val swing by BooleanValue("Swing", false)
+    private val health by BooleanValue("Health", false)
+    private val derp by BooleanValue("Derp", true)
+    private val wasInvisible by BooleanValue("WasInvisible", false)
+    private val armor by BooleanValue("Armor", false)
+    private val ping by BooleanValue("Ping", false)
+    private val needHit by BooleanValue("NeedHit", false)
+    private val duplicateInWorld by BooleanValue("DuplicateInWorld", false)
+    private val duplicateInTab by BooleanValue("DuplicateInTab", false)
+    private val properties by BooleanValue("Properties", false)
 
-    private val alwaysInRadius by BoolValue("AlwaysInRadius", false)
+    private val alwaysInRadius by BooleanValue("AlwaysInRadius", false)
     private val alwaysRadius by FloatValue("AlwaysInRadiusBlocks", 20f, 5f..30f) { alwaysInRadius }
 
     private val groundList = mutableListOf<Int>()

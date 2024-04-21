@@ -14,33 +14,48 @@ import net.ccbluex.liquidbounce.utils.EntityUtils.isSelected
 import net.ccbluex.liquidbounce.utils.RaycastUtils
 import net.ccbluex.liquidbounce.utils.extensions.getDistanceToEntityBox
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.init.Items
 
 object AutoRod : Module("AutoRod", COMBAT) {
 
-    private val facingEnemy by BoolValue("FacingEnemy", true)
+    private val facingEnemy by BooleanValue("FacingEnemy", true)
 
-    private val ignoreOnEnemyLowHealth by BoolValue("IgnoreOnEnemyLowHealth", true) { facingEnemy }
-    private val healthFromScoreboard by BoolValue("HealthFromScoreboard", false) { facingEnemy && ignoreOnEnemyLowHealth }
-    private val absorption by BoolValue("Absorption", false) { facingEnemy && ignoreOnEnemyLowHealth }
+    private val ignoreOnEnemyLowHealth by BooleanValue("IgnoreOnEnemyLowHealth", true) { facingEnemy }
+    private val healthFromScoreboard by BooleanValue(
+        "HealthFromScoreboard",
+        false
+    ) { facingEnemy && ignoreOnEnemyLowHealth }
+    private val absorption by BooleanValue("Absorption", false) { facingEnemy && ignoreOnEnemyLowHealth }
 
     private val activationDistance by FloatValue("ActivationDistance", 8f, 1f..20f)
-    private val enemiesNearby by IntegerValue("EnemiesNearby", 1, 1..5)
+    private val enemiesNearby by NumberValue<Int>("EnemiesNearby", 1, 1..5)
 
     // Improve health check customization
-    private val playerHealthThreshold by IntegerValue("PlayerHealthThreshold", 5, 1..20)
-    private val enemyHealthThreshold by IntegerValue("EnemyHealthThreshold", 5, 1..20) { facingEnemy && ignoreOnEnemyLowHealth }
-    private val escapeHealthThreshold by IntegerValue("EscapeHealthThreshold", 10, 1..20)
+    private val playerHealthThreshold by NumberValue<Int>(
+        "PlayerHealthThreshold",
+        5,
+        1..20
+    )
+    private val enemyHealthThreshold by NumberValue<Int>(
+        "EnemyHealthThreshold",
+        5,
+        1..20
+    ) { facingEnemy && ignoreOnEnemyLowHealth }
+    private val escapeHealthThreshold by NumberValue<Int>(
+        "EscapeHealthThreshold",
+        10,
+        1..20
+    )
 
-    private val pushDelay by IntegerValue("PushDelay", 100, 50..1000)
-    private val pullbackDelay by IntegerValue("PullbackDelay", 500, 50..1000)
+    private val pushDelay by NumberValue<Int>("PushDelay", 100, 50..1000)
+    private val pullbackDelay by NumberValue<Int>("PullbackDelay", 500, 50..1000)
 
-    private val onUsingItem by BoolValue("OnUsingItem", false)
+    private val onUsingItem by BooleanValue("OnUsingItem", false)
 
     private val pushTimer = MSTimer()
     private val rodPullTimer = MSTimer()
@@ -98,7 +113,12 @@ object AutoRod : Module("AutoRod", COMBAT) {
 
                         // Check if the enemy's health is below the threshold.
                         if (ignoreOnEnemyLowHealth) {
-                            if (getHealth(facingEntity as EntityLivingBase, healthFromScoreboard, absorption) >= enemyHealthThreshold) {
+                            if (getHealth(
+                                    facingEntity as EntityLivingBase,
+                                    healthFromScoreboard,
+                                    absorption
+                                ) >= enemyHealthThreshold
+                            ) {
                                 rod = true
                             }
                         } else {

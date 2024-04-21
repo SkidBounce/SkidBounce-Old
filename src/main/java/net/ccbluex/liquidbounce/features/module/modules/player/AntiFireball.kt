@@ -19,7 +19,7 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.toRotation
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.entity.Entity
@@ -32,9 +32,9 @@ object AntiFireball : Module("AntiFireball", PLAYER) {
     private val range by FloatValue("Range", 4.5f, 3f..8f)
     private val swing by ListValue("Swing", arrayOf("Normal", "Packet", "None"), "Normal")
 
-    private val rotations by BoolValue("Rotations", true)
+    private val rotations by BooleanValue("Rotations", true)
     private val smootherMode by ListValue("SmootherMode", arrayOf("Linear", "Relative"), "Relative") { rotations }
-    private val strafe by BoolValue("Strafe", false) { rotations }
+    private val strafe by BooleanValue("Strafe", false) { rotations }
 
     private val maxTurnSpeedValue: FloatValue = object : FloatValue("MaxTurnSpeed", 120f, 0f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtLeast(minTurnSpeed)
@@ -43,7 +43,7 @@ object AntiFireball : Module("AntiFireball", PLAYER) {
 
     private val minTurnSpeed by object : FloatValue("MinTurnSpeed", 80f, 0f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxTurnSpeed)
-        override fun isSupported() = !maxTurnSpeedValue.isMinimal()
+        override fun isSupported() = !maxTurnSpeedValue.isMinimal
     }
 
     private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f) { rotations }

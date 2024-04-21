@@ -42,7 +42,7 @@ class ModuleCommand(val module: Module, val values: List<Value<*>> = module.valu
         when (val value = module[args[1]]) {
             null -> chatSyntax("$moduleName <$valueNames>")
 
-            is BoolValue -> {
+            is BooleanValue -> {
                 if (args.size != 2) {
                     chatSyntax("$moduleName ${args[1].lowercase()}")
                     return
@@ -61,7 +61,7 @@ class ModuleCommand(val module: Module, val values: List<Value<*>> = module.valu
                     else args.size != 3
                 ) {
                     when (value) {
-                        is IntegerValue, is FloatValue, is TextValue ->
+                        is NumberValue, is FloatValue, is TextValue ->
                             chatSyntax("$moduleName ${args[1].lowercase()} <value>")
 
                         is ListValue ->
@@ -103,8 +103,13 @@ class ModuleCommand(val module: Module, val values: List<Value<*>> = module.valu
                             return
                         }
 
-                        is IntegerValue -> value.set(args[2].toInt()) to args[2]
+                        is ByteValue -> value.set(args[2].toByte()) to args[2]
+                        is ShortValue -> value.set(args[2].toShort()) to args[2]
+                        is IntValue -> value.set(args[2].toInt()) to args[2]
+                        is LongValue -> value.set(args[2].toLong()) to args[2]
                         is FloatValue -> value.set(args[2].toFloat()) to args[2]
+                        is DoubleValue -> value.set(args[2].toDouble()) to args[2]
+
                         is ListValue -> {
                             if (args[2] !in value) {
                                 chatSyntax(

@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.utils.extensions.toDegreesF
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import kotlin.math.cos
 import kotlin.math.sin
@@ -24,9 +24,9 @@ import kotlin.math.sin
 object Strafe : Module("Strafe", MOVEMENT, gameDetecting = false) {
 
     private val strength by FloatValue("Strength", 0.5F, 0F..1F)
-    private val noMoveStop by BoolValue("NoMoveStop", false)
-    private val onGroundStrafe by BoolValue("OnGroundStrafe", false)
-    private val allDirectionsJump by BoolValue("AllDirectionsJump", false)
+    private val noMoveStop by BooleanValue("NoMoveStop", false)
+    private val onGroundStrafe by BooleanValue("OnGroundStrafe", false)
+    private val allDirectionsJump by BooleanValue("AllDirectionsJump", false)
 
     private var wasDown = false
     private var jump = false

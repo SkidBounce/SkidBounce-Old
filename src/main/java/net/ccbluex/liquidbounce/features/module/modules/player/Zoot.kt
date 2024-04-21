@@ -11,14 +11,14 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
 import net.ccbluex.liquidbounce.utils.MovementUtils.serverOnGround
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.minecraft.network.play.client.C03PacketPlayer
 
 object Zoot : Module("Zoot", PLAYER) {
 
-    private val badEffects by BoolValue("BadEffects", true)
-    private val fire by BoolValue("Fire", true)
-    private val noAir by BoolValue("NoAir", false)
+    private val badEffects by BooleanValue("BadEffects", true)
+    private val fire by BooleanValue("Fire", true)
+    private val noAir by BooleanValue("NoAir", false)
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {

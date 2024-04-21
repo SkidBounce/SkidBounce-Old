@@ -15,7 +15,7 @@ import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Blocks.air
@@ -40,13 +40,13 @@ object Spider : Module("Spider", MOVEMENT) {
         ).sortedArray(),
         "Vanilla"
     )
-    private val collideGlitch by BoolValue("Collide-Glitch", true) { mode == "Collide" }
+    private val collideGlitch by BooleanValue("Collide-Glitch", true) { mode == "Collide" }
     private val collideJumpMotion by FloatValue("Collide-JumpMotion", 0.42f, 0.1f..1f) { mode == "Collide" }
-    private val collideFast by BoolValue("Collide-Fast", true) { mode == "Collide" }
+    private val collideFast by BooleanValue("Collide-Fast", true) { mode == "Collide" }
     private val collideFastSpeed by FloatValue("Collide-FastSpeed", 0.3f, 0f..1f) { mode == "Collide" && collideFast }
     private val checkerMode by ListValue("Checker-Mode", arrayOf("New", "Old"), "New") { mode == "Checker" }
     private var checkerMotion by FloatValue("Checker-Motion", 0f, 0f..1f) { mode == "Checker" }
-    private val vanillaFastStop by BoolValue("Vanilla-FastStop", true) { mode == "Vanilla" }
+    private val vanillaFastStop by BooleanValue("Vanilla-FastStop", true) { mode == "Vanilla" }
     private val vanillaMotion by FloatValue("Vanilla-Motion", 0.42f, 0.1f..1f) { mode == "Vanilla" }
     private val verusMotion by FloatValue("Verus-Motion", 0.42f, 0.1f..1f) { mode == "Verus" }
 

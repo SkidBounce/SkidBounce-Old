@@ -13,7 +13,7 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.minecraft.client.entity.EntityOtherPlayerMP
 import net.minecraft.network.play.client.C03PacketPlayer
@@ -23,10 +23,10 @@ import net.minecraft.network.play.server.S08PacketPlayerPosLook
 object FreeCam : Module("FreeCam", RENDER, gameDetecting = false, subjective = true) {
 
     private val speed by FloatValue("Speed", 0.8f, 0.1f..2f)
-    private val fly by BoolValue("Fly", true)
-    private val noClip by BoolValue("NoClip", true)
-    private val motion by BoolValue("RecordMotion", true)
-    private val c03Spoof by BoolValue("C03Spoof", false)
+    private val fly by BooleanValue("Fly", true)
+    private val noClip by BooleanValue("NoClip", true)
+    private val motion by BooleanValue("RecordMotion", true)
+    private val c03Spoof by BooleanValue("C03Spoof", false)
 
     private lateinit var fakePlayer: EntityOtherPlayerMP
     private var motionX = 0.0

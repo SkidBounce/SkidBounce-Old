@@ -14,7 +14,7 @@ import net.ccbluex.liquidbounce.utils.extensions.updateKeys
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager.canClickInventory
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.GuiIngameMenu
 import net.minecraft.client.gui.inventory.GuiChest
@@ -22,9 +22,9 @@ import net.minecraft.client.gui.inventory.GuiInventory
 
 object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) {
 
-    private val notInChests by BoolValue("NotInChests", false)
-    val aacAdditionPro by BoolValue("AACAdditionPro", false)
-    private val intave by BoolValue("Intave", false)
+    private val notInChests by BooleanValue("NotInChests", false)
+    val aacAdditionPro by BooleanValue("AACAdditionPro", false)
+    private val intave by BooleanValue("Intave", false)
 
     private val isIntave = (mc.currentScreen is GuiInventory || mc.currentScreen is GuiChest) && intave
 
@@ -34,11 +34,11 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
     private val undetectable by InventoryManager.undetectableValue
 
     // If player violates nomove check and inventory is open, close inventory and reopen it when still
-    private val silentlyCloseAndReopen by BoolValue("SilentlyCloseAndReopen", false)
+    private val silentlyCloseAndReopen by BooleanValue("SilentlyCloseAndReopen", false)
     { noMove && (noMoveAir || noMoveGround) }
 
     // Reopen closed inventory just before a click (could flag for clicking too fast after opening inventory)
-    private val reopenOnClick by BoolValue("ReopenOnClick", false)
+    private val reopenOnClick by BooleanValue("ReopenOnClick", false)
     { silentlyCloseAndReopen && noMove && (noMoveAir || noMoveGround) }
 
     private val affectedBindings = arrayOf(

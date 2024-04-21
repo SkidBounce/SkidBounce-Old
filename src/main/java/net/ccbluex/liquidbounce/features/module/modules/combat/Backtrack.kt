@@ -20,9 +20,9 @@ import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBacktrackBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
@@ -37,7 +37,7 @@ import java.util.*
 import java.util.concurrent.*
 
 object Backtrack : Module("Backtrack", COMBAT) {
-    private val delay by object : IntegerValue("Delay", 80, 0..700) {
+    private val delay by object : IntValue("Delay", 80, 0..700) {
         override fun onChange(oldValue: Int, newValue: Int): Int {
             if (mode == "Modern")
                 clearPackets()
@@ -72,14 +72,14 @@ object Backtrack : Module("Backtrack", COMBAT) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceIn(minimum, maxDistance)
         override fun isSupported() = mode == "Modern"
     }
-    private val smart by BoolValue("Smart", true) { mode == "Modern" }
+    private val smart by BooleanValue("Smart", true) { mode == "Modern" }
 
     // ESP
-    private val esp by BoolValue("ESP", true, subjective = true) { mode == "Modern" }
-    private val rainbow by BoolValue("Rainbow", true, subjective = true) { mode == "Modern" && esp }
-    private val red by IntegerValue("R", 0, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
-    private val green by IntegerValue("G", 255, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
-    private val blue by IntegerValue("B", 0, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
+    private val esp by BooleanValue("ESP", true, subjective = true) { mode == "Modern" }
+    private val rainbow by BooleanValue("Rainbow", true, subjective = true) { mode == "Modern" && esp }
+    private val red by IntValue("R", 0, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
+    private val green by IntValue("G", 255, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
+    private val blue by IntValue("B", 0, 0..255, subjective = true) { !rainbow && mode == "Modern" && esp }
 
     private val packetQueue = LinkedHashMap<Packet<*>, Long>()
     private val positions = mutableListOf<Pair<Vec3, Long>>()
@@ -93,7 +93,7 @@ object Backtrack : Module("Backtrack", COMBAT) {
     private var ignoreWholeTick = false
 
     // Legacy
-    private val maximumCachedPositions by IntegerValue("MaxCachedPositions", 10, 1..20) { mode == "Legacy" }
+    private val maximumCachedPositions by IntValue("MaxCachedPositions", 10, 1..20) { mode == "Legacy" }
 
     private val backtrackedPlayer = ConcurrentHashMap<UUID, MutableList<BacktrackData>>()
 

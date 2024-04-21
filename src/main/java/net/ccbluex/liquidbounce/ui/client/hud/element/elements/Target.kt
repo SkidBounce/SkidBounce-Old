@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.deltaTime
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRoundedBorderRect
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRectNew
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawScaledCustomSizeModalRect
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -38,8 +38,8 @@ class Target : Element() {
     private val roundedRectRadius by FloatValue("Rounded-Radius", 3F, 0F..5F)
 
     private val fadeSpeed by FloatValue("FadeSpeed", 2F, 1F..9F)
-    private val absorption by BoolValue("Absorption", true)
-    private val healthFromScoreboard by BoolValue("HealthFromScoreboard", true)
+    private val absorption by BooleanValue("Absorption", true)
+    private val healthFromScoreboard by BooleanValue("HealthFromScoreboard", true)
 
     private val decimalFormat = DecimalFormat("##0.00", DecimalFormatSymbols(Locale.ENGLISH))
     private var easingHealth = 0F

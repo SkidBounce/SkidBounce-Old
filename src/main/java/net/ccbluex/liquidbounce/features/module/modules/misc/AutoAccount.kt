@@ -16,8 +16,8 @@ import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notifications.Not
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
 import net.ccbluex.liquidbounce.utils.ServerUtils
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.randomAccount
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.ccbluex.liquidbounce.value.TextValue
 import net.minecraft.network.play.server.S02PacketChat
@@ -30,8 +30,8 @@ import kotlin.concurrent.schedule
 
 object AutoAccount : Module("AutoAccount", MISC, gameDetecting = false) {
 
-    private val register by BoolValue("AutoRegister", true)
-    private val login by BoolValue("AutoLogin", true)
+    private val register by BooleanValue("AutoRegister", true)
+    private val login by BooleanValue("AutoLogin", true)
 
     // Gamster requires 8 chars+
     private val passwordValue = object : TextValue("Password", "axolotlaxolotl") {
@@ -60,14 +60,14 @@ object AutoAccount : Module("AutoAccount", MISC, gameDetecting = false) {
     private val password by passwordValue
 
     // Needed for Gamster
-    private val sendDelay by IntegerValue("SendDelay", 250, 0..500) { passwordValue.isSupported() }
+    private val sendDelay by IntValue("SendDelay", 250, 0..500) { passwordValue.isSupported() }
 
-    private val autoSession by BoolValue("AutoSession", false)
-    private val startupValue = BoolValue("RandomAccountOnStart", false) { autoSession }
-    private val relogInvalidValue = BoolValue("RelogWhenPasswordInvalid", true) { autoSession }
-    private val relogKickedValue = BoolValue("RelogWhenKicked", false) { autoSession }
+    private val autoSession by BooleanValue("AutoSession", false)
+    private val startupValue = BooleanValue("RandomAccountOnStart", false) { autoSession }
+    private val relogInvalidValue = BooleanValue("RelogWhenPasswordInvalid", true) { autoSession }
+    private val relogKickedValue = BooleanValue("RelogWhenKicked", false) { autoSession }
 
-    private val reconnectDelayValue = IntegerValue("ReconnectDelay", 1000, 0..2500)
+    private val reconnectDelayValue = IntValue("ReconnectDelay", 1000, 0..2500)
     { relogInvalidValue.isActive() || relogKickedValue.isActive() }
     private val reconnectDelay by reconnectDelayValue
 
@@ -85,7 +85,7 @@ object AutoAccount : Module("AutoAccount", MISC, gameDetecting = false) {
     }
     private val accountMode by accountModeValue
 
-    private val saveValue = BoolValue("SaveToAlts", false) {
+    private val saveValue = BooleanValue("SaveToAlts", false) {
         accountModeValue.isSupported() && accountMode != "RandomAlt"
     }
 
@@ -102,7 +102,7 @@ object AutoAccount : Module("AutoAccount", MISC, gameDetecting = false) {
         changeAccount()
 
         // Reconnect normally with OpenGL context
-        if (reconnectDelayValue.isMinimal()) return ServerUtils.connectToLastServer()
+        if (reconnectDelayValue.isMinimal) return ServerUtils.connectToLastServer()
 
         // Delay the reconnect, connectToLastServer gets called from a TimerThread with no OpenGL context
         Timer().schedule(reconnectDelay.toLong()) {

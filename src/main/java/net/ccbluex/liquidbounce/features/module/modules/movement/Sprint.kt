@@ -13,44 +13,44 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.strict
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.minecraft.potion.Potion
 import net.minecraft.util.MovementInput
 import kotlin.math.abs
 
 object Sprint : Module("Sprint", MOVEMENT, gameDetecting = false) {
-    val onlyOnSprintPress by BoolValue("OnlyOnSprintPress", false)
-    private val alwaysCorrect by BoolValue("AlwaysCorrectSprint", false)
-    val jumpDirections by BoolValue("JumpDirections", false)
+    val onlyOnSprintPress by BooleanValue("OnlyOnSprintPress", false)
+    private val alwaysCorrect by BooleanValue("AlwaysCorrectSprint", false)
+    val jumpDirections by BooleanValue("JumpDirections", false)
 
-    private val sideways by BoolValue("Sideways", false)
-    private val sidewaysGround by BoolValue("Sideways-Ground", true) { sideways }
-    private val sidewaysAir by BoolValue("Sideways-Air", true) { sideways }
-    private val backwards by BoolValue("Backwards", false)
-    private val backwardsGround by BoolValue("Backwards-Ground", true) { backwards }
-    private val backwardsAir by BoolValue("Backwards-Air", true) { backwards }
+    private val sideways by BooleanValue("Sideways", false)
+    private val sidewaysGround by BooleanValue("Sideways-Ground", true) { sideways }
+    private val sidewaysAir by BooleanValue("Sideways-Air", true) { sideways }
+    private val backwards by BooleanValue("Backwards", false)
+    private val backwardsGround by BooleanValue("Backwards-Ground", true) { backwards }
+    private val backwardsAir by BooleanValue("Backwards-Air", true) { backwards }
 
-    private val limitSpeed by BoolValue("LimitSpeed", false)
-    private val limitSpeedSideways by BoolValue("LimitSpeed-Sideways", true) { limitSpeed && sideways }
-    private val limitSpeedBackwards by BoolValue("LimitSpeed-Backwards", true) { limitSpeed && backwards }
-    private val limitSpeedForwards by BoolValue("LimitSpeed-Forwards", false) { limitSpeed }
+    private val limitSpeed by BooleanValue("LimitSpeed", false)
+    private val limitSpeedSideways by BooleanValue("LimitSpeed-Sideways", true) { limitSpeed && sideways }
+    private val limitSpeedBackwards by BooleanValue("LimitSpeed-Backwards", true) { limitSpeed && backwards }
+    private val limitSpeedForwards by BooleanValue("LimitSpeed-Forwards", false) { limitSpeed }
     private val limitSpeedMulti by FloatValue("LimitSpeed-Multi", 1f, 0.75f..1f) { limitSpeed }
-    private val limitSpeedGround by BoolValue("LimitSpeed-Ground", true) { limitSpeed }
-    private val limitSpeedAir by BoolValue("LimitSpeed-Air", true) { limitSpeed }
+    private val limitSpeedGround by BooleanValue("LimitSpeed-Ground", true) { limitSpeed }
+    private val limitSpeedAir by BooleanValue("LimitSpeed-Air", true) { limitSpeed }
 
-    private val still by BoolValue("Still", false)
-    private val collide by BoolValue("Collide", true)
-    private val blindness by BoolValue("Blindness", true)
-    private val sneaking by BoolValue("Sneaking", true)
-    private val usingItem by BoolValue("UsingItem", true)
-    private val inventory by BoolValue("Inventory", true)
-    private val hunger by BoolValue("Hunger", false)
+    private val still by BooleanValue("Still", false)
+    private val collide by BooleanValue("Collide", true)
+    private val blindness by BooleanValue("Blindness", true)
+    private val sneaking by BooleanValue("Sneaking", true)
+    private val usingItem by BooleanValue("UsingItem", true)
+    private val inventory by BooleanValue("Inventory", true)
+    private val hunger by BooleanValue("Hunger", false)
 
-    private val checkServerSide by BoolValue("CheckServerSide", false)
-    private val checkServerSideGround by BoolValue("CheckServerSide-Ground", true) { checkServerSide }
-    private val checkServerSideAir by BoolValue("CheckServerSide-Air", true) { checkServerSide }
-    val silent by BoolValue("Silent", false)
+    private val checkServerSide by BooleanValue("CheckServerSide", false)
+    private val checkServerSideGround by BooleanValue("CheckServerSide-Ground", true) { checkServerSide }
+    private val checkServerSideAir by BooleanValue("CheckServerSide-Air", true) { checkServerSide }
+    val silent by BooleanValue("Silent", false)
 
     private var isSprinting = false
     private val isBackwards

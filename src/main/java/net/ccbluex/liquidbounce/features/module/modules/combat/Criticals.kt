@@ -13,9 +13,9 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
 import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.entity.EntityLivingBase
 
@@ -28,22 +28,22 @@ object Criticals : Module("Criticals", COMBAT) {
     // Ones that only use `onPacket`
     val settings get() = mode !in arrayOf("NoGround", "Redesky")
 
-    private val delay by IntegerValue("Delay", 0, 0..5000) { settings }
-    private val attacks by IntegerValue("Attacks", 0, 0..10) { settings }
-    private val hurtTime by IntegerValue("HurtTime", 10, 0..10) { settings }
-    private val onlyAura by BoolValue("OnlyAura", false) { settings }
-    private val onlyGround by BoolValue("OnlyGround", false) { settings }
-    private val noMotionUp by BoolValue("NoMotionUp", false) { settings }
-    private val noMotionDown by BoolValue("NoMotionDown", false) { settings }
-    private val noRiding by BoolValue("NoRiding", true) { settings }
-    private val noWeb by BoolValue("NoWeb", false) { settings }
-    private val noClimbing by BoolValue("NoClimbing", true) { settings }
-    private val noWater by BoolValue("NoWater", true) { settings }
-    private val noLava by BoolValue("NoLava", false) { settings }
-    private val noFly by BoolValue("NoFly", false) { settings }
+    private val delay by IntValue("Delay", 0, 0..5000) { settings }
+    private val attacks by IntValue("Attacks", 0, 0..10) { settings }
+    private val hurtTime by IntValue("HurtTime", 10, 0..10) { settings }
+    private val onlyAura by BooleanValue("OnlyAura", false) { settings }
+    private val onlyGround by BooleanValue("OnlyGround", false) { settings }
+    private val noMotionUp by BooleanValue("NoMotionUp", false) { settings }
+    private val noMotionDown by BooleanValue("NoMotionDown", false) { settings }
+    private val noRiding by BooleanValue("NoRiding", true) { settings }
+    private val noWeb by BooleanValue("NoWeb", false) { settings }
+    private val noClimbing by BooleanValue("NoClimbing", true) { settings }
+    private val noWater by BooleanValue("NoWater", true) { settings }
+    private val noLava by BooleanValue("NoLava", false) { settings }
+    private val noFly by BooleanValue("NoFly", false) { settings }
 
     val motionY by FloatValue("Motion-Y", 0.2f, 0.01f..0.42f) { mode == "Motion" }
-    val motionBoost by BoolValue("Motion-Boost", true) { mode == "Motion" }
+    val motionBoost by BooleanValue("Motion-Boost", true) { mode == "Motion" }
 
     private val delayTimer = MSTimer()
     private var attackCounter = 0

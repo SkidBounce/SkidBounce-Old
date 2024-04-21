@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 import java.awt.Color
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 @SideOnly(Side.CLIENT)
 object SlowlyStyle : Style() {
@@ -103,7 +104,7 @@ object SlowlyStyle : Style() {
                     assumeNonVolatile = value.get() is Number
 
                     when (value) {
-                        is BoolValue -> {
+                        is BooleanValue -> {
                             val text = value.name
 
                             moduleElement.settingsWidth = font35.getStringWidth(text) + 8
@@ -169,8 +170,11 @@ object SlowlyStyle : Style() {
                                 yPos += 1
                             }
                         }
-                        is FloatValue -> {
-                            val text = value.name + "§f: " + round(value.get())
+                        is FloatValue, is DoubleValue -> {
+                            if (value !is NumberValue || value.maximum !is Number || value.minimum !is Number)
+                                throw AssertionError()
+
+                            val text = value.name + "§f: " + round(value.get() as Number)
 
                             moduleElement.settingsWidth = font35.getStringWidth(text) + 8
 
@@ -179,15 +183,15 @@ object SlowlyStyle : Style() {
                             val width = moduleElement.settingsWidth - 12
                             val color = Color(7, 152, 252)
 
-                            val displayValue = value.get().coerceIn(value.range)
-                            val sliderValue = (x + width * (displayValue - value.minimum) / (value.maximum - value.minimum)).roundToInt()
+                            val displayValue = (value.get() as Number).toDouble().coerceIn(value.range as ClosedRange<Double>)
+                            val sliderValue = (x + width * (displayValue - value.minimum.toDouble()) / (value.maximum.toDouble() - value.minimum.toDouble())).roundToInt()
 
                             if ((mouseButton == 0 || sliderValueHeld == value)
                                 && mouseX in x..x + width
                                 && mouseY in y - 2..y + 5
                             ) {
                                 val percentage = (mouseX - x) / width.toFloat()
-                                value.set(round(value.minimum + (value.maximum - value.minimum) * percentage).coerceIn(value.range))
+                                value.set(round(value.minimum.toDouble() + (value.maximum.toDouble() - value.minimum.toDouble()) * percentage).coerceIn(value.range as ClosedFloatingPointRange<Double>))
 
                                 // Keep changing this slider until mouse is unpressed.
                                 sliderValueHeld = value
@@ -204,7 +208,10 @@ object SlowlyStyle : Style() {
 
                             yPos += 19
                         }
-                        is IntegerValue -> {
+                        is IntValue, is ShortValue, is ByteValue, is LongValue -> {
+                            if (value !is NumberValue || value.maximum !is Number || value.minimum !is Number)
+                                throw AssertionError()
+
                             val text = value.name + "§f: " + if (value is BlockValue) getBlockName(value.get()) + " (" + value.get() + ")" else value.get()
 
                             moduleElement.settingsWidth = font35.getStringWidth(text) + 8
@@ -214,15 +221,16 @@ object SlowlyStyle : Style() {
                             val width = moduleElement.settingsWidth - 12
                             val color = Color(7, 152, 252)
 
-                            val displayValue = value.get().coerceIn(value.range)
-                            val sliderValue = x + width * (displayValue - value.minimum) / (value.maximum - value.minimum)
+
+                            val displayValue = (value.get() as Number).toLong().coerceIn(value.range as ClosedRange<Long>)
+                            val sliderValue = (x + width * (displayValue - value.minimum.toLong()) / (value.maximum.toLong() - value.minimum.toLong())).toInt()
 
                             if ((mouseButton == 0 || sliderValueHeld == value)
                                 && mouseX in x..x + width
                                 && mouseY in y - 2..y + 5
                             ) {
                                 val percentage = (mouseX - x) / width.toFloat()
-                                value.set((value.minimum + (value.maximum - value.minimum) * percentage).roundToInt().coerceIn(value.range))
+                                value.set((value.minimum.toLong() + (value.maximum.toLong() - value.minimum.toLong()) * percentage).roundToLong().coerceIn(value.range).toInt())
 
                                 // Keep changing this slider until mouse is unpressed.
                                 sliderValueHeld = value

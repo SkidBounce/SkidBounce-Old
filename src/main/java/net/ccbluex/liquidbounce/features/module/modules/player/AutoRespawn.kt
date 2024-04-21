@@ -10,12 +10,12 @@ import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
 import net.ccbluex.liquidbounce.features.module.modules.exploit.Ghost
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.minecraft.client.gui.GuiGameOver
 
 object AutoRespawn : Module("AutoRespawn", PLAYER, gameDetecting = false) {
 
-    private val instant by BoolValue("Instant", true)
+    private val instant by BooleanValue("Instant", true)
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {

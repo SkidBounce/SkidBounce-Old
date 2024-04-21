@@ -100,10 +100,10 @@ object Scaffold : Module("Scaffold", WORLD) {
         "None"
     )
 
-    private val stopWhenBlockAbove by BoolValue("StopWhenBlockAbove", false) { towerMode != "None" }
+    private val stopWhenBlockAbove by BooleanValue("StopWhenBlockAbove", false) { towerMode != "None" }
 
-    private val onJump by BoolValue("TowerOnJump", true) { towerMode != "None" }
-    private val matrix by BoolValue("TowerMatrix", false) { towerMode != "None" }
+    private val onJump by BooleanValue("TowerOnJump", true) { towerMode != "None" }
+    private val matrix by BooleanValue("TowerMatrix", false) { towerMode != "None" }
     private val placeMode by ListValue(
         "TowerPlaceTiming",
         arrayOf("Pre", "Post"),
@@ -112,7 +112,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     // Jump mode
     private val jumpMotion by FloatValue("JumpMotion", 0.42f, 0.3681289f..0.79f) { towerMode == "MotionJump" }
-    private val jumpDelay by IntegerValue("JumpDelay", 0, 0..20) { towerMode == "MotionJump" || towerMode == "Jump" }
+    private val jumpDelay by IntValue("JumpDelay", 0, 0..20) { towerMode == "MotionJump" || towerMode == "Jump" }
 
     // ConstantMotion
     private val constantMotion by FloatValue("ConstantMotion", 0.42f, 0.1f..1f) { towerMode == "ConstantMotion" }
@@ -121,13 +121,13 @@ object Scaffold : Module("Scaffold", WORLD) {
         0.79f,
         0.76f..1f
     ) { towerMode == "ConstantMotion" }
-    private val constantMotionJumpPacket by BoolValue("JumpPacket", true) { towerMode == "ConstantMotion" }
+    private val constantMotionJumpPacket by BooleanValue("JumpPacket", true) { towerMode == "ConstantMotion" }
 
     // Teleport
     private val teleportHeight by FloatValue("TeleportHeight", 1.15f, 0.1f..5f) { towerMode == "Teleport" }
-    private val teleportDelay by IntegerValue("TeleportDelay", 0, 0..20) { towerMode == "Teleport" }
-    private val teleportGround by BoolValue("TeleportGround", true) { towerMode == "Teleport" }
-    private val teleportNoMotion by BoolValue("TeleportNoMotion", false) { towerMode == "Teleport" }
+    private val teleportDelay by IntValue("TeleportDelay", 0, 0..20) { towerMode == "Teleport" }
+    private val teleportGround by BooleanValue("TeleportGround", true) { towerMode == "Teleport" }
+    private val teleportNoMotion by BooleanValue("TeleportNoMotion", false) { towerMode == "Teleport" }
 
     // <--
 
@@ -144,35 +144,35 @@ object Scaffold : Module("Scaffold", WORLD) {
     )
 
     // Expand
-    private val omniDirectionalExpand by BoolValue("OmniDirectionalExpand", false) { scaffoldMode == "Expand" }
-    private val expandLength by IntegerValue("ExpandLength", 1, 1..6) { scaffoldMode == "Expand" }
+    private val omniDirectionalExpand by BooleanValue("OmniDirectionalExpand", false) { scaffoldMode == "Expand" }
+    private val expandLength by IntValue("ExpandLength", 1, 1..6) { scaffoldMode == "Expand" }
 
     // Placeable delay
-    private val placeDelayValue = BoolValue("PlaceDelay", true) { scaffoldMode != "GodBridge" }
-    private val maxDelayValue: IntegerValue = object : IntegerValue("MaxDelay", 0, 0..1000) {
+    private val placeDelayValue = BooleanValue("PlaceDelay", true) { scaffoldMode != "GodBridge" }
+    private val maxDelayValue: IntValue = object : IntValue("MaxDelay", 0, 0..1000) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
         override fun isSupported() = placeDelayValue.isActive()
     }
     private val maxDelay by maxDelayValue
 
-    private val minDelayValue = object : IntegerValue("MinDelay", 0, 0..1000) {
+    private val minDelayValue = object : IntValue("MinDelay", 0, 0..1000) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxDelay)
-        override fun isSupported() = placeDelayValue.isActive() && !maxDelayValue.isMinimal()
+        override fun isSupported() = placeDelayValue.isActive() && !maxDelayValue.isMinimal
     }
     private val minDelay by minDelayValue
 
     // Extra clicks
-    private val extraClicks by BoolValue("DoExtraClicks", false)
-    private val simulateDoubleClicking by BoolValue("SimulateDoubleClicking", false) { extraClicks }
-    private val extraClickMaxCPSValue: IntegerValue = object : IntegerValue("ExtraClickMaxCPS", 7, 0..50) {
+    private val extraClicks by BooleanValue("DoExtraClicks", false)
+    private val simulateDoubleClicking by BooleanValue("SimulateDoubleClicking", false) { extraClicks }
+    private val extraClickMaxCPSValue: IntValue = object : IntValue("ExtraClickMaxCPS", 7, 0..50) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(extraClickMinCPS)
         override fun isSupported() = extraClicks
     }
     private val extraClickMaxCPS by extraClickMaxCPSValue
 
-    private val extraClickMinCPS by object : IntegerValue("ExtraClickMinCPS", 3, 0..50) {
+    private val extraClickMinCPS by object : IntValue("ExtraClickMinCPS", 3, 0..50) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(extraClickMaxCPS)
-        override fun isSupported() = extraClicks && !extraClickMaxCPSValue.isMinimal()
+        override fun isSupported() = extraClicks && !extraClickMaxCPSValue.isMinimal
     }
 
     private val placementAttempt by ListValue(
@@ -183,69 +183,69 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     // Autoblock
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Pick", "Spoof", "Switch"), "Spoof")
-    private val sortByHighestAmount by BoolValue("SortByHighestAmount", false) { autoBlock != "Off" }
+    private val sortByHighestAmount by BooleanValue("SortByHighestAmount", false) { autoBlock != "Off" }
 
     // Basic stuff
-    val sprint by BoolValue("Sprint", false)
+    val sprint by BooleanValue("Sprint", false)
     private val swing by SwingValue()
-    private val down by BoolValue("Down", true) { scaffoldMode !in arrayOf("GodBridge", "Telly") }
+    private val down by BooleanValue("Down", true) { scaffoldMode !in arrayOf("GodBridge", "Telly") }
 
-    private val ticksUntilRotation: IntegerValue = object : IntegerValue("TicksUntilRotation", 3, 1..5) {
+    private val ticksUntilRotation: IntValue = object : IntValue("TicksUntilRotation", 3, 1..5) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceIn(minimum, maximum)
     }
 
     // GodBridge mode subvalues
-    private val useStaticRotation by BoolValue("UseStaticRotation", false) { scaffoldMode == "GodBridge" }
-    private val autoJump by BoolValue("AutoJump", true) { scaffoldMode == "GodBridge" }
-    private val jumpAutomatically by BoolValue("JumpAutomatically", true) { scaffoldMode == "GodBridge" && autoJump }
-    private val maxBlocksToJump: IntegerValue = object : IntegerValue("MaxBlocksToJump", 4, 1..8) {
+    private val useStaticRotation by BooleanValue("UseStaticRotation", false) { scaffoldMode == "GodBridge" }
+    private val autoJump by BooleanValue("AutoJump", true) { scaffoldMode == "GodBridge" }
+    private val jumpAutomatically by BooleanValue("JumpAutomatically", true) { scaffoldMode == "GodBridge" && autoJump }
+    private val maxBlocksToJump: IntValue = object : IntValue("MaxBlocksToJump", 4, 1..8) {
         override fun isSupported() = scaffoldMode == "GodBridge" && !jumpAutomatically && autoJump
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minBlocksToJump.get())
     }
 
-    private val minBlocksToJump: IntegerValue = object : IntegerValue("MinBlocksToJump", 4, 1..8) {
+    private val minBlocksToJump: IntValue = object : IntValue("MinBlocksToJump", 4, 1..8) {
         override fun isSupported() =
-            scaffoldMode == "GodBridge" && !jumpAutomatically && !maxBlocksToJump.isMinimal() && autoJump
+            scaffoldMode == "GodBridge" && !jumpAutomatically && !maxBlocksToJump.isMinimal && autoJump
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxBlocksToJump.get())
     }
 
     // Telly mode subvalues
-    private val startHorizontally by BoolValue("StartHorizontally", true) { scaffoldMode == "Telly" }
-    private val maxHorizontalPlacements: IntegerValue = object : IntegerValue("MaxHorizontalPlacements", 1, 1..10) {
+    private val startHorizontally by BooleanValue("StartHorizontally", true) { scaffoldMode == "Telly" }
+    private val maxHorizontalPlacements: IntValue = object : IntValue("MaxHorizontalPlacements", 1, 1..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minHorizontalPlacements.get())
     }
-    private val minHorizontalPlacements: IntegerValue = object : IntegerValue("MinHorizontalPlacements", 1, 1..10) {
+    private val minHorizontalPlacements: IntValue = object : IntValue("MinHorizontalPlacements", 1, 1..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxHorizontalPlacements.get())
     }
-    private val maxVerticalPlacements: IntegerValue = object : IntegerValue("MaxVerticalPlacements", 1, 1..10) {
+    private val maxVerticalPlacements: IntValue = object : IntValue("MaxVerticalPlacements", 1, 1..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minVerticalPlacements.get())
     }
 
-    private val minVerticalPlacements: IntegerValue = object : IntegerValue("MinVerticalPlacements", 1, 1..10) {
+    private val minVerticalPlacements: IntValue = object : IntValue("MinVerticalPlacements", 1, 1..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxVerticalPlacements.get())
     }
 
-    private val maxJumpTicks: IntegerValue = object : IntegerValue("MaxJumpTicks", 0, 0..10) {
+    private val maxJumpTicks: IntValue = object : IntValue("MaxJumpTicks", 0, 0..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minJumpTicks.get())
     }
-    private val minJumpTicks: IntegerValue = object : IntegerValue("MinJumpTicks", 0, 0..10) {
+    private val minJumpTicks: IntValue = object : IntValue("MinJumpTicks", 0, 0..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxJumpTicks.get())
     }
 
-    private val allowClutching by BoolValue("AllowClutching", true) { scaffoldMode !in arrayOf("Telly", "Expand") }
-    private val horizontalClutchBlocks: IntegerValue = object : IntegerValue("HorizontalClutchBlocks", 3, 1..5) {
+    private val allowClutching by BooleanValue("AllowClutching", true) { scaffoldMode !in arrayOf("Telly", "Expand") }
+    private val horizontalClutchBlocks: IntValue = object : IntValue("HorizontalClutchBlocks", 3, 1..5) {
         override fun isSupported() = allowClutching && scaffoldMode !in arrayOf("Telly", "Expand")
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceIn(minimum, maximum)
     }
-    private val verticalClutchBlocks: IntegerValue = object : IntegerValue("VerticalClutchBlocks", 2, 1..3) {
+    private val verticalClutchBlocks: IntValue = object : IntValue("VerticalClutchBlocks", 2, 1..3) {
         override fun isSupported() = allowClutching && scaffoldMode !in arrayOf("Telly", "Expand")
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceIn(minimum, maximum)
     }
@@ -254,10 +254,10 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val eagleValue =
         ListValue("Eagle", arrayOf("Normal", "Silent", "Off"), "Normal") { scaffoldMode != "GodBridge" }
     val eagle by eagleValue
-    private val adjustedSneakSpeed by BoolValue("AdjustedSneakSpeed", true) { eagle == "Silent" }
+    private val adjustedSneakSpeed by BooleanValue("AdjustedSneakSpeed", true) { eagle == "Silent" }
     private val eagleSpeed by FloatValue("EagleSpeed", 0.3f, 0.3f..1.0f) { eagleValue.isSupported() && eagle != "Off" }
-    val eagleSprint by BoolValue("EagleSprint", false) { eagleValue.isSupported() && eagle == "Normal" }
-    private val blocksToEagle by IntegerValue("BlocksToEagle", 0, 0..10) { eagleValue.isSupported() && eagle != "Off" }
+    val eagleSprint by BooleanValue("EagleSprint", false) { eagleValue.isSupported() && eagle == "Normal" }
+    private val blocksToEagle by IntValue("BlocksToEagle", 0, 0..10) { eagleValue.isSupported() && eagle != "Off" }
     private val edgeDistance by FloatValue(
         "EagleEdgeDistance",
         0f,
@@ -271,10 +271,10 @@ object Scaffold : Module("Scaffold", WORLD) {
         arrayOf("Linear", "Relative"),
         "Relative"
     ) { rotationMode != "Off" }
-    private val silentRotation by BoolValue("SilentRotation", true) { rotationMode != "Off" }
-    private val strafe by BoolValue("Strafe", false) { rotationMode != "Off" && silentRotation }
-    private val keepRotation by BoolValue("KeepRotation", true) { rotationMode != "Off" && silentRotation }
-    private val keepTicks by object : IntegerValue("KeepTicks", 1, 1..20) {
+    private val silentRotation by BooleanValue("SilentRotation", true) { rotationMode != "Off" }
+    private val strafe by BooleanValue("Strafe", false) { rotationMode != "Off" && silentRotation }
+    private val keepRotation by BooleanValue("KeepRotation", true) { rotationMode != "Off" && silentRotation }
+    private val keepTicks by object : IntValue("KeepTicks", 1, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minimum)
         override fun isSupported() = rotationMode != "Off" && scaffoldMode != "Telly" && silentRotation
     }
@@ -291,7 +291,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val maxTurnSpeed by maxTurnSpeedValue
     private val minTurnSpeed by object : FloatValue("MinTurnSpeed", 180f, 1f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceIn(minimum, maxTurnSpeed)
-        override fun isSupported() = !maxTurnSpeedValue.isMinimal() && rotationMode != "Off"
+        override fun isSupported() = !maxTurnSpeedValue.isMinimal && rotationMode != "Off"
     }
 
     private val angleThresholdUntilReset by FloatValue(
@@ -305,40 +305,40 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val zitterSpeed by FloatValue("ZitterSpeed", 0.13f, 0.1f..0.3f) { zitterMode == "Teleport" }
     private val zitterStrength by FloatValue("ZitterStrength", 0.05f, 0f..0.2f) { zitterMode == "Teleport" }
 
-    private val maxZitterTicksValue: IntegerValue = object : IntegerValue("MaxZitterTicks", 3, 0..6) {
+    private val maxZitterTicksValue: IntValue = object : IntValue("MaxZitterTicks", 3, 0..6) {
         override fun isSupported() = zitterMode == "Smooth"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minZitterTicks)
     }
     private val maxZitterTicks by maxZitterTicksValue
 
-    private val minZitterTicksValue: IntegerValue = object : IntegerValue("MinZitterTicks", 2, 0..6) {
-        override fun isSupported() = zitterMode == "Smooth" && !maxZitterTicksValue.isMinimal()
+    private val minZitterTicksValue: IntValue = object : IntValue("MinZitterTicks", 2, 0..6) {
+        override fun isSupported() = zitterMode == "Smooth" && !maxZitterTicksValue.isMinimal
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxZitterTicks)
     }
     private val minZitterTicks by minZitterTicksValue
 
-    private val useSneakMidAir by BoolValue("UseSneakMidAir", false) { zitterMode == "Smooth" }
+    private val useSneakMidAir by BooleanValue("UseSneakMidAir", false) { zitterMode == "Smooth" }
 
     // Game
     private val timer by FloatValue("Timer", 1f, 0.1f..10f)
     private val speedModifier by FloatValue("SpeedModifier", 1f, 0f..2f)
-    private val speedLimiter by BoolValue("SpeedLimiter", false) { !slow }
+    private val speedLimiter by BooleanValue("SpeedLimiter", false) { !slow }
     private val speedLimit by FloatValue("SpeedLimit", 0.11f, 0.01f..0.12f) { !slow && speedLimiter }
-    private val slow by BoolValue("Slow", false)
-    private val slowGround by BoolValue("SlowOnlyGround", false) { slow }
+    private val slow by BooleanValue("Slow", false)
+    private val slowGround by BooleanValue("SlowOnlyGround", false) { slow }
     private val slowSpeed by FloatValue("SlowSpeed", 0.6f, 0.2f..0.8f) { slow }
 
     // Safety
-    private val sameY by BoolValue("SameY", false) { scaffoldMode != "GodBridge" }
-    private val safeWalkValue = BoolValue("SafeWalk", true) { scaffoldMode != "GodBridge" }
-    private val airSafe by BoolValue("AirSafe", false) { safeWalkValue.isActive() }
+    private val sameY by BooleanValue("SameY", false) { scaffoldMode != "GodBridge" }
+    private val safeWalkValue = BooleanValue("SafeWalk", true) { scaffoldMode != "GodBridge" }
+    private val airSafe by BooleanValue("AirSafe", false) { safeWalkValue.isActive() }
 
     // Visuals
-    private val counterDisplay by BoolValue("Counter", true, subjective = true)
-    private val mark by BoolValue("Mark", false, subjective = true)
-    private val trackCPS by BoolValue("TrackCPS", false, subjective = true)
-    private val safetyLines by BoolValue("SafetyLines", false, subjective = true) { isGodBridgeEnabled }
-    private val itemSwapAnimation by BoolValue("ItemSwapAnimation", false, subjective = true)
+    private val counterDisplay by BooleanValue("Counter", true, subjective = true)
+    private val mark by BooleanValue("Mark", false, subjective = true)
+    private val trackCPS by BooleanValue("TrackCPS", false, subjective = true)
+    private val safetyLines by BooleanValue("SafetyLines", false, subjective = true) { isGodBridgeEnabled }
+    private val itemSwapAnimation by BooleanValue("ItemSwapAnimation", false, subjective = true)
 
     // Target placement
     private var placeRotation: PlaceRotation? = null

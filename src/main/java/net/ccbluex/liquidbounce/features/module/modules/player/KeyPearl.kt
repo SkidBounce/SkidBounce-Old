@@ -12,7 +12,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.ccbluex.liquidbounce.value.TextValue
 import net.minecraft.init.Items
@@ -24,8 +24,8 @@ import org.lwjgl.input.Mouse
 
 object KeyPearl : Module("KeyPearl", PLAYER, gameDetecting = false) {
 
-    private val delayedSlotSwitch by BoolValue("DelayedSlotSwitch", true)
-    private val mouse by BoolValue("Mouse", false, subjective = true)
+    private val delayedSlotSwitch by BooleanValue("DelayedSlotSwitch", true)
+    private val mouse by BooleanValue("Mouse", false, subjective = true)
     private val mouseButtonValue = ListValue(
         "MouseButton",
         arrayOf("Left", "Right", "Middle", "MouseButton4", "MouseButton5"), "Middle", subjective = true
@@ -33,7 +33,7 @@ object KeyPearl : Module("KeyPearl", PLAYER, gameDetecting = false) {
 
     private val keyName by TextValue("KeyName", "X", subjective = true) { !mouse }
 
-    private val noEnderPearlsMessage by BoolValue("NoEnderPearlsMessage", true, subjective = true)
+    private val noEnderPearlsMessage by BooleanValue("NoEnderPearlsMessage", true, subjective = true)
 
     private var wasMouseDown = false
     private var wasKeyDown = false

@@ -72,11 +72,11 @@ object KillAura : Module("KillAura", COMBAT) {
      * OPTIONS
      */
 
-    private val simulateCooldown by BoolValue("SimulateCooldown", false)
-    private val simulateDoubleClicking by BoolValue("SimulateDoubleClicking", false) { !simulateCooldown }
+    private val simulateCooldown by BooleanValue("SimulateCooldown", false)
+    private val simulateDoubleClicking by BooleanValue("SimulateDoubleClicking", false) { !simulateCooldown }
 
     // CPS - Attack speed
-    private val maxCPSValue = object : IntegerValue("MaxCPS", 8, 1..20) {
+    private val maxCPSValue = object : IntValue("MaxCPS", 8, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minCPS)
 
         override fun onChanged(oldValue: Int, newValue: Int) {
@@ -88,19 +88,19 @@ object KillAura : Module("KillAura", COMBAT) {
 
     private val maxCPS by maxCPSValue
 
-    private val minCPS: Int by object : IntegerValue("MinCPS", 5, 1..20) {
+    private val minCPS: Int by object : IntValue("MinCPS", 5, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxCPS)
 
         override fun onChanged(oldValue: Int, newValue: Int) {
             attackDelay = randomClickDelay(newValue, maxCPS)
         }
 
-        override fun isSupported() = !maxCPSValue.isMinimal() && !simulateCooldown
+        override fun isSupported() = !maxCPSValue.isMinimal && !simulateCooldown
     }
 
-    private val hurtTime by IntegerValue("HurtTime", 10, 0..10) { !simulateCooldown }
+    private val hurtTime by IntValue("HurtTime", 10, 0..10) { !simulateCooldown }
 
-    private val clickOnly by BoolValue("ClickOnly", false)
+    private val clickOnly by BooleanValue("ClickOnly", false)
 
     // Range
     // TODO: Make block range independent from attack range
@@ -128,46 +128,46 @@ object KillAura : Module("KillAura", COMBAT) {
         ), "Distance"
     )
     private val targetMode by ListValue("TargetMode", arrayOf("Single", "Switch", "Multi"), "Switch")
-    private val limitedMultiTargets by IntegerValue("LimitedMultiTargets", 0, 0..50) { targetMode == "Multi" }
+    private val limitedMultiTargets by IntValue("LimitedMultiTargets", 0, 0..50) { targetMode == "Multi" }
     private val maxSwitchFOV by FloatValue("MaxSwitchFOV", 90f, 30f..180f) { targetMode == "Switch" }
 
     // Delay
-    private val switchDelay by IntegerValue("SwitchDelay", 15, 1..1000) { targetMode == "Switch" }
+    private val switchDelay by IntValue("SwitchDelay", 15, 1..1000) { targetMode == "Switch" }
 
     // Bypass
     private val swing by SwingValue()
 
     // Settings
-    private val onScaffold by BoolValue("OnScaffold", false)
-    private val onDestroyBlock by BoolValue("OnDestroyBlock", false)
+    private val onScaffold by BooleanValue("OnScaffold", false)
+    private val onDestroyBlock by BooleanValue("OnDestroyBlock", false)
 
     // AutoBlock
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Packet", "Fake"), "Packet")
-    private val releaseAutoBlock by BoolValue("ReleaseAutoBlock", true)
+    private val releaseAutoBlock by BooleanValue("ReleaseAutoBlock", true)
     { autoBlock !in arrayOf("Off", "Fake") }
-    private val ignoreTickRule by BoolValue("IgnoreTickRule", false)
+    private val ignoreTickRule by BooleanValue("IgnoreTickRule", false)
     { autoBlock !in arrayOf("Off", "Fake") && releaseAutoBlock }
-    private val blockRate by IntegerValue("BlockRate", 100, 1..100)
+    private val blockRate by IntValue("BlockRate", 100, 1..100)
     { autoBlock !in arrayOf("Off", "Fake") && releaseAutoBlock }
 
-    private val uncpAutoBlock by BoolValue("UpdatedNCPAutoBlock", false)
+    private val uncpAutoBlock by BooleanValue("UpdatedNCPAutoBlock", false)
     { autoBlock !in arrayOf("Off", "Fake") && !releaseAutoBlock }
 
-    private val switchStartBlock by BoolValue("SwitchStartBlock", false)
+    private val switchStartBlock by BooleanValue("SwitchStartBlock", false)
     { autoBlock !in arrayOf("Off", "Fake") }
 
-    private val interactAutoBlock by BoolValue("InteractAutoBlock", true)
+    private val interactAutoBlock by BooleanValue("InteractAutoBlock", true)
     { autoBlock !in arrayOf("Off", "Fake") }
 
     // AutoBlock conditions
-    private val smartAutoBlock by BoolValue("SmartAutoBlock", false) { autoBlock != "Off" }
+    private val smartAutoBlock by BooleanValue("SmartAutoBlock", false) { autoBlock != "Off" }
 
     // Ignore all blocking conditions, except for block rate, when standing still
-    private val forceBlock by BoolValue("ForceBlockWhenStill", true)
+    private val forceBlock by BooleanValue("ForceBlockWhenStill", true)
     { autoBlock != "Off" && smartAutoBlock }
 
     // Don't block if target isn't holding a sword or an axe
-    private val checkWeapon by BoolValue("CheckEnemyWeapon", true)
+    private val checkWeapon by BooleanValue("CheckEnemyWeapon", true)
     { autoBlock != "Off" && smartAutoBlock }
 
     // TODO: Make block range independent from attack range
@@ -178,7 +178,7 @@ object KillAura : Module("KillAura", COMBAT) {
     }
 
     // Don't block when you can't get damaged
-    private val maxOwnHurtTime by IntegerValue("MaxOwnHurtTime", 3, 0..10)
+    private val maxOwnHurtTime by IntValue("MaxOwnHurtTime", 3, 0..10)
     { autoBlock != "Off" && smartAutoBlock }
 
     // Don't block if target isn't looking at you
@@ -186,7 +186,7 @@ object KillAura : Module("KillAura", COMBAT) {
     { autoBlock != "Off" && smartAutoBlock }
 
     // Don't block if target is swinging an item and therefore cannot attack
-    private val maxSwingProgress by IntegerValue("MaxOpponentSwingProgress", 1, 0..5)
+    private val maxSwingProgress by IntValue("MaxOpponentSwingProgress", 1, 0..5)
     { autoBlock != "Off" && smartAutoBlock }
 
     // Turn Speed
@@ -197,29 +197,29 @@ object KillAura : Module("KillAura", COMBAT) {
 
     private val minTurnSpeed: Float by object : FloatValue("MinTurnSpeed", 180f, 1f..180f) {
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxTurnSpeed)
-        override fun isSupported() = !maxTurnSpeedValue.isMinimal()
+        override fun isSupported() = !maxTurnSpeedValue.isMinimal
     }
 
     // Raycast
-    private val raycastValue = BoolValue("RayCast", true)
+    private val raycastValue = BooleanValue("RayCast", true)
     private val raycast by raycastValue
-    private val raycastIgnored by BoolValue("RayCastIgnored", false) { raycastValue.isActive() }
-    private val livingRaycast by BoolValue("LivingRayCast", true) { raycastValue.isActive() }
+    private val raycastIgnored by BooleanValue("RayCastIgnored", false) { raycastValue.isActive() }
+    private val livingRaycast by BooleanValue("LivingRayCast", true) { raycastValue.isActive() }
 
     // Bypass
-    private val useHitDelay by BoolValue("UseHitDelay", false)
-    private val hitDelayTicks by IntegerValue("HitDelayTicks", 1, 1..5) { useHitDelay }
+    private val useHitDelay by BooleanValue("UseHitDelay", false)
+    private val hitDelayTicks by IntValue("HitDelayTicks", 1, 1..5) { useHitDelay }
 
-    private val keepRotationTicks by object : IntegerValue("KeepRotationTicks", 5, 1..20) {
+    private val keepRotationTicks by object : IntValue("KeepRotationTicks", 5, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minimum)
     }
     private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f)
-    private val micronizedValue = BoolValue("Micronized", true)
+    private val micronizedValue = BooleanValue("Micronized", true)
     private val micronized by micronizedValue
     private val micronizedStrength by FloatValue("MicronizedStrength", 0.8f, 0.2f..2f) { micronizedValue.isActive() }
 
     // Rotations
-    private val silentRotationValue = BoolValue("SilentRotation", true)
+    private val silentRotationValue = BooleanValue("SilentRotation", true)
     private val silentRotation by silentRotationValue
     private val rotationStrafe by ListValue(
         "Strafe",
@@ -228,30 +228,30 @@ object KillAura : Module("KillAura", COMBAT) {
     ) { silentRotationValue.isActive() }
     private val smootherMode by ListValue("SmootherMode", arrayOf("Linear", "Relative"), "Relative")
 
-    private val randomCenter by BoolValue("RandomCenter", true)
-    private val gaussianOffset by BoolValue("GaussianOffset", false) { randomCenter }
-    private val outborder by BoolValue("Outborder", false)
+    private val randomCenter by BooleanValue("RandomCenter", true)
+    private val gaussianOffset by BooleanValue("GaussianOffset", false) { randomCenter }
+    private val outborder by BooleanValue("Outborder", false)
     private val fov by FloatValue("FOV", 180f, 0f..180f)
 
     // Prediction
-    private val predictClientMovement by IntegerValue("PredictClientMovement", 2, 0..5)
+    private val predictClientMovement by IntValue("PredictClientMovement", 2, 0..5)
     private val predictEnemyPosition by FloatValue("PredictEnemyPosition", 1.5f, -1f..2f)
 
     // Extra swing
-    private val failSwing by BoolValue("FailSwing", true) { swing != "Off" }
-    private val swingOnlyInAir by BoolValue("SwingOnlyInAir", true) { swing != "Off" && failSwing }
+    private val failSwing by BooleanValue("FailSwing", true) { swing != "Off" }
+    private val swingOnlyInAir by BooleanValue("SwingOnlyInAir", true) { swing != "Off" && failSwing }
     private val maxRotationDifferenceToSwing by FloatValue("MaxRotationDifferenceToSwing", 180f, 0f..180f)
     { swing != "Off" && failSwing }
-    private val swingWhenTicksLate = object : BoolValue("SwingWhenTicksLate", false) {
+    private val swingWhenTicksLate = object : BooleanValue("SwingWhenTicksLate", false) {
         override fun isSupported() = swing != "Off" && failSwing && maxRotationDifferenceToSwing != 180f
     }
-    private val ticksLateToSwing by IntegerValue("TicksLateToSwing", 4, 0..20)
+    private val ticksLateToSwing by IntValue("TicksLateToSwing", 4, 0..20)
     { swing != "Off" && failSwing && swingWhenTicksLate.isActive() }
 
     // Inventory
-    private val simulateClosingInventory by BoolValue("SimulateClosingInventory", false) { !noInventoryAttack }
-    private val noInventoryAttack by BoolValue("NoInvAttack", false)
-    private val noInventoryDelay by IntegerValue("NoInvDelay", 200, 0..500) { noInventoryAttack }
+    private val simulateClosingInventory by BooleanValue("SimulateClosingInventory", false) { !noInventoryAttack }
+    private val noInventoryAttack by BooleanValue("NoInvAttack", false)
+    private val noInventoryDelay by IntValue("NoInvDelay", 200, 0..500) { noInventoryAttack }
     private val noConsumeAttack by ListValue(
         "NoConsumeAttack",
         arrayOf("Off", "NoHits", "NoRotation"),
@@ -259,8 +259,8 @@ object KillAura : Module("KillAura", COMBAT) {
     )
 
     // Visuals
-    private val mark by BoolValue("Mark", true, subjective = true)
-    private val fakeSharp by BoolValue("FakeSharp", true, subjective = true)
+    private val mark by BooleanValue("Mark", true, subjective = true)
+    private val fakeSharp by BooleanValue("FakeSharp", true, subjective = true)
 
     /**
      * MODULE

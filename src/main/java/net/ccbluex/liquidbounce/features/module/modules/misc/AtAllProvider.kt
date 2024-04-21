@@ -12,25 +12,25 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.network.play.client.C01PacketChatMessage
 import java.util.concurrent.*
 
 object AtAllProvider : Module("AtAllProvider", MISC, subjective = true, gameDetecting = false) {
 
-    private val maxDelayValue: IntegerValue = object : IntegerValue("MaxDelay", 1000, 0..20000) {
+    private val maxDelayValue: IntValue = object : IntValue("MaxDelay", 1000, 0..20000) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
     }
     private val maxDelay by maxDelayValue
 
-    private val minDelay by object : IntegerValue("MinDelay", 500, 0..20000) {
+    private val minDelay by object : IntValue("MinDelay", 500, 0..20000) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxDelay)
 
-        override fun isSupported() = !maxDelayValue.isMinimal()
+        override fun isSupported() = !maxDelayValue.isMinimal
     }
 
-    private val retry by BoolValue("Retry", false)
+    private val retry by BooleanValue("Retry", false)
     private val sendQueue = LinkedBlockingQueue<String>()
     private val retryQueue = mutableListOf<String>()
     private val msTimer = MSTimer()

@@ -23,9 +23,9 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.draw2D
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawEntityBox
 import net.ccbluex.liquidbounce.utils.render.WorldToScreen
 import net.ccbluex.liquidbounce.utils.render.shader.shaders.GlowShader
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.client.renderer.GlStateManager.enableTexture2D
 import net.minecraft.entity.Entity
@@ -52,28 +52,28 @@ object ESP : Module("ESP", RENDER, subjective = true) {
     val wireframeWidth by FloatValue("WireFrame-Width", 2f, 0.5f..5f) { mode == "WireFrame" }
 
     private val glowRenderScale by FloatValue("Glow-Renderscale", 1f, 0.5f..2f) { mode == "Glow" }
-    private val glowRadius by IntegerValue("Glow-Radius", 4, 1..5) { mode == "Glow" }
-    private val glowFade by IntegerValue("Glow-Fade", 10, 0..30) { mode == "Glow" }
+    private val glowRadius by IntValue("Glow-Radius", 4, 1..5) { mode == "Glow" }
+    private val glowFade by IntValue("Glow-Fade", 10, 0..30) { mode == "Glow" }
     private val glowTargetAlpha by FloatValue("Glow-Target-Alpha", 0f, 0f..1f) { mode == "Glow" }
 
-    private val colorRainbow by BoolValue("Rainbow", false)
-    private val colorRed by IntegerValue("R", 255, 0..255) { !colorRainbow }
-    private val colorGreen by IntegerValue("G", 255, 0..255) { !colorRainbow }
-    private val colorBlue by IntegerValue("B", 255, 0..255) { !colorRainbow }
+    private val colorRainbow by BooleanValue("Rainbow", false)
+    private val colorRed by IntValue("R", 255, 0..255) { !colorRainbow }
+    private val colorGreen by IntValue("G", 255, 0..255) { !colorRainbow }
+    private val colorBlue by IntValue("B", 255, 0..255) { !colorRainbow }
 
-    private val maxRenderDistance by object : IntegerValue("MaxRenderDistance", 100, 1..200) {
+    private val maxRenderDistance by object : IntValue("MaxRenderDistance", 100, 1..200) {
         override fun onUpdate(value: Int) {
             maxRenderDistanceSq = value.toDouble().pow(2.0)
         }
     }
 
-    private val onLook by BoolValue("OnLook", false)
+    private val onLook by BooleanValue("OnLook", false)
     private val maxAngleDifference by FloatValue("MaxAngleDifference", 5.0f, 5.0f..90f) { onLook }
 
     private var maxRenderDistanceSq = 0.0
 
-    private val colorTeam by BoolValue("Team", false)
-    private val bot by BoolValue("Bots", true)
+    private val colorTeam by BooleanValue("Team", false)
+    private val bot by BooleanValue("Bots", true)
 
     var renderNameTags = true
 

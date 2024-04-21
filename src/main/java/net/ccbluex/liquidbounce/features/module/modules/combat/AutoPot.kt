@@ -23,9 +23,9 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInvento
 import net.ccbluex.liquidbounce.utils.misc.FallingPlayer
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.item.ItemPotion
@@ -36,10 +36,10 @@ import net.minecraft.potion.Potion
 object AutoPot : Module("AutoPot", COMBAT) {
 
     private val health by FloatValue("Health", 15F, 1F..20F)
-    private val delay by IntegerValue("Delay", 500, 500..1000)
+    private val delay by IntValue("Delay", 500, 500..1000)
 
-    private val openInventory by BoolValue("OpenInv", false)
-    private val simulateInventory by BoolValue("SimulateInventory", true) { !openInventory }
+    private val openInventory by BooleanValue("OpenInv", false)
+    private val simulateInventory by BooleanValue("SimulateInventory", true) { !openInventory }
 
     private val groundDistance by FloatValue("GroundDistance", 2F, 0F..5F)
     private val mode by ListValue("Mode", arrayOf("Normal", "Jump", "Port"), "Normal")

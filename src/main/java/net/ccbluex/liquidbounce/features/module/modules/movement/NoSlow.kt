@@ -22,7 +22,7 @@ import net.ccbluex.liquidbounce.utils.NoSlowItem.*
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverUsing
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Blocks
@@ -84,30 +84,30 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         Blocks.slime_block.slipperiness = 0.8f
     }
 
-    private val blocking by BoolValue("Blocking", true)
+    private val blocking by BooleanValue("Blocking", true)
     private val blockingMode by ListValue(
         "BlockingMode",
         swordModes.map { it.modeName }.toTypedArray(),
         "Vanilla"
     ) { blocking }
-    private val onlyMoveBlocking by BoolValue("OnlyMoveBlocking", true) { blocking && blockingMode !in noNoMoveCheck }
+    private val onlyMoveBlocking by BooleanValue("OnlyMoveBlocking", true) { blocking && blockingMode !in noNoMoveCheck }
     private val blockingPacketTiming by ListValue(
         "BlockingPacketTiming",
         arrayOf("Pre", "Post", "Any"),
         "Pre"
     ) { blocking && blockingMode in arrayOf("Slot", "Place", "EmptyPlace") }
-    val ncpFunnyUsePacket by BoolValue("NCP-FunnyUsePacket", false) { blocking && blockingMode == "NCP" }
-    val ncpFunnyReleasePacket by BoolValue("NCP-FunnyReleasePacket", false) { blocking && blockingMode == "NCP" }
+    val ncpFunnyUsePacket by BooleanValue("NCP-FunnyUsePacket", false) { blocking && blockingMode == "NCP" }
+    val ncpFunnyReleasePacket by BooleanValue("NCP-FunnyReleasePacket", false) { blocking && blockingMode == "NCP" }
     private val blockForwardMultiplier by FloatValue("BlockForwardMultiplier", 1f, 0.2f..1f) { blocking }
     private val blockStrafeMultiplier by FloatValue("BlockStrafeMultiplier", 1f, 0.2f..1f) { blocking }
 
-    private val consuming by BoolValue("Consuming", true)
+    private val consuming by BooleanValue("Consuming", true)
     private val consumeMode by ListValue(
         "ConsumeMode",
         consumeModes.map { it.modeName }.toTypedArray(),
         "Vanilla"
     ) { consuming }
-    private val onlyMoveConsume by BoolValue("OnlyMoveConsume", true) { consuming && consumeMode !in noNoMoveCheck }
+    private val onlyMoveConsume by BooleanValue("OnlyMoveConsume", true) { consuming && consumeMode !in noNoMoveCheck }
     private val consumePacketTiming by ListValue(
         "ConsumePacketTiming",
         arrayOf("Pre", "Post", "Any"),
@@ -116,9 +116,9 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
     private val consumeForwardMultiplier by FloatValue("ConsumeForwardMultiplier", 1f, 0.2f..1f) { consuming }
     private val consumeStrafeMultiplier by FloatValue("ConsumeStrafeMultiplier", 1f, 0.2f..1f) { consuming }
 
-    private val bows by BoolValue("Bows", true)
+    private val bows by BooleanValue("Bows", true)
     private val bowMode by ListValue("BowMode", bowModes.map { it.modeName }.toTypedArray(), "Vanilla") { bows }
-    private val onlyMoveBow by BoolValue("OnlyMoveBow", true) { bows && bowMode !in noNoMoveCheck }
+    private val onlyMoveBow by BooleanValue("OnlyMoveBow", true) { bows && bowMode !in noNoMoveCheck }
     private val bowPacketTiming by ListValue(
         "BowPacketTiming",
         arrayOf("Pre", "Post", "Any"),
@@ -127,16 +127,16 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
     private val bowForwardMultiplier by FloatValue("BowForwardMultiplier", 1f, 0.2f..1f) { bows }
     private val bowStrafeMultiplier by FloatValue("BowStrafeMultiplier", 1f, 0.2f..1f) { bows }
 
-    @JvmStatic val sneaking by BoolValue("Sneaking", true)
+    @JvmStatic val sneaking by BooleanValue("Sneaking", true)
     private val sneakMode by ListValue("SneakMode", arrayOf("Vanilla", "Switch", "MineSecure"), "Vanilla") { sneaking }
-    private val onlyMoveSneak by BoolValue("OnlyMoveSneak", true) { sneaking && sneakMode != "Vanilla" }
+    private val onlyMoveSneak by BooleanValue("OnlyMoveSneak", true) { sneaking && sneakMode != "Vanilla" }
     @JvmStatic val sneakForwardMultiplier by FloatValue("SneakForwardMultiplier", 0.3f, 0.3f..1.0F) { sneaking }
     @JvmStatic val sneakStrafeMultiplier by FloatValue("SneakStrafeMultiplier", 0.3f, 0.3f..1f) { sneaking }
 
-    @JvmStatic val soulsand by BoolValue("SoulSand", true)
+    @JvmStatic val soulsand by BooleanValue("SoulSand", true)
     @JvmStatic val soulsandMultiplier by FloatValue("SoulSandMultiplier", 1f, 0.4f..1f) { soulsand }
 
-    @JvmStatic val slime by BoolValue("Slime", true)
+    @JvmStatic val slime by BooleanValue("Slime", true)
     @JvmStatic val slimeYMultiplier by FloatValue("SlimeYMultiplier", 1f, 0.2f..1f) { slime }
     @JvmStatic val slimeMultiplier by FloatValue("SlimeMultiplier", 1f, 0.4f..1f) { slime }
     private val slimeFriction by FloatValue("SlimeFriction", 0.6f, 0.6f..0.8f) { slime }

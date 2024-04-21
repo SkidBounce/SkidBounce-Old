@@ -45,18 +45,18 @@ object Nuker : Module("Nuker", WORLD, gameDetecting = false) {
      */
 
     private val radius by FloatValue("Radius", 5.2F, 1F..6F)
-    private val throughWalls by BoolValue("ThroughWalls", false)
+    private val throughWalls by BooleanValue("ThroughWalls", false)
     private val priority by ListValue("Priority", arrayOf("Distance", "Hardness"), "Distance")
 
     private val swing by SwingValue()
 
-    private val rotations by BoolValue("Rotations", true)
+    private val rotations by BooleanValue("Rotations", true)
     private val strafe by ListValue("Strafe", arrayOf("Off", "Strict", "Silent"), "Off") { rotations }
 
-    private val layer by BoolValue("Layer", false)
-    private val hitDelay by IntegerValue("HitDelay", 4, 0..20)
-    private val nuke by IntegerValue("Nuke", 1, 1..20)
-    private val nukeDelay by IntegerValue("NukeDelay", 1, 1..20)
+    private val layer by BooleanValue("Layer", false)
+    private val hitDelay by IntValue("HitDelay", 4, 0..20)
+    private val nuke by IntValue("Nuke", 1, 1..20)
+    private val nukeDelay by IntValue("NukeDelay", 1, 1..20)
 
     /**
      * VALUES

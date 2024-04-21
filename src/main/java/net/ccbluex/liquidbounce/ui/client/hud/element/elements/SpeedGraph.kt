@@ -11,7 +11,7 @@ import net.ccbluex.liquidbounce.ui.client.hud.element.ElementInfo
 import net.ccbluex.liquidbounce.ui.client.hud.element.Side
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.client.renderer.GlStateManager.resetColor
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
@@ -27,12 +27,12 @@ class SpeedGraph(x: Double = 75.0, y: Double = 110.0, scale: Float = 1F,
                  side: Side = Side(Side.Horizontal.MIDDLE, Side.Vertical.DOWN)) : Element(x, y, scale, side) {
 
     private val yMultiplier by FloatValue("yMultiplier", 7F, 1F..20F)
-    private val height by IntegerValue("Height", 50, 30..150)
-    private val width by IntegerValue("Width", 150, 100..300)
+    private val height by IntValue("Height", 50, 30..150)
+    private val width by IntValue("Width", 150, 100..300)
     private val thickness by FloatValue("Thickness", 2F, 1F..3F)
-    private val colorRed by IntegerValue("R", 0, 0..255)
-    private val colorGreen by IntegerValue("G", 111, 0..255)
-    private val colorBlue by IntegerValue("B", 255, 0..255)
+    private val colorRed by IntValue("R", 0, 0..255)
+    private val colorGreen by IntValue("G", 111, 0..255)
+    private val colorBlue by IntValue("B", 255, 0..255)
 
     private val speedList = mutableListOf<Double>()
     private var lastTick = -1

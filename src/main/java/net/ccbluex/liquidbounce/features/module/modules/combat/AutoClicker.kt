@@ -15,8 +15,9 @@ import net.ccbluex.liquidbounce.utils.extensions.fixedSensitivityYaw
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextInt
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.client.settings.KeyBinding.onTick
 import net.minecraft.item.EnumAction
 import net.minecraft.util.MovingObjectPosition.MovingObjectType.BLOCK
@@ -24,23 +25,23 @@ import kotlin.random.Random.Default.nextBoolean
 
 object AutoClicker : Module("AutoClicker", COMBAT) {
 
-    private val simulateDoubleClicking by BoolValue("SimulateDoubleClicking", false)
+    private val simulateDoubleClicking by BooleanValue("SimulateDoubleClicking", false)
 
-    private val maxCPSValue: IntegerValue = object : IntegerValue("MaxCPS", 8, 1..20) {
+    private val maxCPSValue: NumberValue<Int> = object : IntValue("MaxCPS", 8, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minCPS)
     }
     private val maxCPS by maxCPSValue
 
-    private val minCPS by object : IntegerValue("MinCPS", 5, 1..20) {
+    private val minCPS by object : IntValue("MinCPS", 5, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxCPS)
 
-        override fun isSupported() = !maxCPSValue.isMinimal()
+        override fun isSupported() = !maxCPSValue.isMinimal
     }
 
-    private val right by BoolValue("Right", true)
-    private val left by BoolValue("Left", true)
-    private val jitter by BoolValue("Jitter", false)
-    private val block by BoolValue("AutoBlock", false) { left }
+    private val right by BooleanValue("Right", true)
+    private val left by BooleanValue("Left", true)
+    private val jitter by BooleanValue("Jitter", false)
+    private val block by BooleanValue("AutoBlock", false) { left }
 
     private var rightDelay = randomClickDelay(minCPS, maxCPS)
     private var rightLastSwing = 0L

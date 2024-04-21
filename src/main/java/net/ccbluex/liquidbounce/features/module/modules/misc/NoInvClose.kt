@@ -10,12 +10,12 @@ import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.network.play.server.S2EPacketCloseWindow
 
 object NoInvClose : Module("NoInvClose", MISC, gameDetecting = false) {
-    private val notify by BoolValue("Notify", true) // TODO: translations
+    private val notify by BooleanValue("Notify", true) // TODO: translations
     @EventTarget
     fun onPacket(event: PacketEvent) {
         if (event.packet is S2EPacketCloseWindow && mc.currentScreen is GuiInventory) {

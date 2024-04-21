@@ -17,8 +17,8 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.draw2D
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.BlockValue
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.Block
 import net.minecraft.init.Blocks.air
@@ -28,13 +28,13 @@ import java.awt.Color
 object BlockESP : Module("BlockESP", RENDER, subjective = true) {
     private val mode by ListValue("Mode", arrayOf("Box", "2D"), "Box")
     private val block by BlockValue("Block", 168)
-    private val radius by IntegerValue("Radius", 40, 5..120)
-    private val blockLimit by IntegerValue("BlockLimit", 256, 0..2056)
+    private val radius by IntValue("Radius", 40, 5..120)
+    private val blockLimit by IntValue("BlockLimit", 256, 0..2056)
 
-    private val colorRainbow by BoolValue("Rainbow", false)
-    private val colorRed by IntegerValue("R", 255, 0..255) { !colorRainbow }
-    private val colorGreen by IntegerValue("G", 179, 0..255) { !colorRainbow }
-    private val colorBlue by IntegerValue("B", 72, 0..255) { !colorRainbow }
+    private val colorRainbow by BooleanValue("Rainbow", false)
+    private val colorRed by IntValue("R", 255, 0..255) { !colorRainbow }
+    private val colorGreen by IntValue("G", 179, 0..255) { !colorRainbow }
+    private val colorBlue by IntValue("B", 72, 0..255) { !colorRainbow }
 
     private val searchTimer = MSTimer()
     private val posList = mutableListOf<BlockPos>()

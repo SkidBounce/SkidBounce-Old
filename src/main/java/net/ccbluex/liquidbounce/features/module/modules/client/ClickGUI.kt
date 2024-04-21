@@ -16,9 +16,9 @@ import net.ccbluex.liquidbounce.ui.client.clickgui.style.styles.LiquidBounceStyl
 import net.ccbluex.liquidbounce.ui.client.clickgui.style.styles.NullStyle
 import net.ccbluex.liquidbounce.ui.client.clickgui.style.styles.SlowlyStyle
 import net.ccbluex.liquidbounce.utils.render.ColorUtils
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.network.play.server.S2EPacketCloseWindow
 import org.lwjgl.input.Keyboard
@@ -30,20 +30,20 @@ object ClickGUI : Module("ClickGUI", CLIENT, Keyboard.KEY_RSHIFT, canBeEnabled =
         override fun onChanged(oldValue: String, newValue: String) = updateStyle()
     }
     var scale by FloatValue("Scale", 0.8f, 0.5f..1.5f)
-    val maxElements by IntegerValue("MaxElements", 15, 1..30)
+    val maxElements by IntValue("MaxElements", 15, 1..30)
     val fadeSpeed by FloatValue("FadeSpeed", 1f, 0.5f..4f)
-    val scrolls by BoolValue("Scrolls", false)
-    val spacedModules by BoolValue("SpacedModules", false)
-    val panelsForcedInBoundaries by BoolValue("PanelsForcedInBoundaries", true)
+    val scrolls by BooleanValue("Scrolls", false)
+    val spacedModules by BooleanValue("SpacedModules", false)
+    val panelsForcedInBoundaries by BooleanValue("PanelsForcedInBoundaries", true)
 
-    private val colorRainbowValue = BoolValue("Rainbow", false) { style !in arrayOf("Slowly", "Black") }
-    private val colorRed by IntegerValue("R", 0, 0..255) { colorRainbowValue.isSupported() && !colorRainbowValue.get() }
-    private val colorGreen by IntegerValue(
+    private val colorRainbowValue = BooleanValue("Rainbow", false) { style !in arrayOf("Slowly", "Black") }
+    private val colorRed by IntValue("R", 0, 0..255) { colorRainbowValue.isSupported() && !colorRainbowValue.get() }
+    private val colorGreen by IntValue(
         "G",
         160,
         0..255
     ) { colorRainbowValue.isSupported() && !colorRainbowValue.get() }
-    private val colorBlue by IntegerValue(
+    private val colorBlue by IntValue(
         "B",
         255,
         0..255

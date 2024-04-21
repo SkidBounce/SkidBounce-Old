@@ -11,7 +11,7 @@ import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.network.play.server.S03PacketTimeUpdate
 import net.minecraft.network.play.server.S2BPacketChangeGameState
@@ -19,8 +19,8 @@ import net.minecraft.network.play.server.S2BPacketChangeGameState
 object Ambience : Module("Ambience", RENDER, gameDetecting = false, subjective = true) {
 
     private val timeMode by ListValue("Mode", arrayOf("None", "Normal", "Custom"), "Custom")
-    private val customWorldTime by IntegerValue("Time", 19000, 0..24000) { timeMode == "Custom" }
-    private val changeWorldTimeSpeed by IntegerValue("TimeSpeed", 150, 10..500) { timeMode == "Normal" }
+    private val customWorldTime by IntValue("Time", 19000, 0..24000) { timeMode == "Custom" }
+    private val changeWorldTimeSpeed by IntValue("TimeSpeed", 150, 10..500) { timeMode == "Normal" }
 
     private val weatherMode by ListValue("WeatherMode", arrayOf("None", "Sun", "Rain", "Thunder"), "None")
     private val weatherStrength by FloatValue("WeatherStrength", 1f, 0f..1f)

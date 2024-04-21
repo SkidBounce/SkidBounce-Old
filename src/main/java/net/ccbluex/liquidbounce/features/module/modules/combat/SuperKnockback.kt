@@ -14,8 +14,8 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.network.play.client.C03PacketPlayer
@@ -24,46 +24,46 @@ import net.minecraft.network.play.client.C0BPacketEntityAction.Action.*
 
 object SuperKnockback : Module("SuperKnockback", COMBAT) {
 
-    private val delay by IntegerValue("Delay", 0, 0, 500)
-    private val hurtTime by IntegerValue("HurtTime", 10, 0, 10)
+    private val delay by IntValue("Delay", 0, 0..500)
+    private val hurtTime by IntValue("HurtTime", 10, 0..10)
 
     private val mode by ListValue("Mode", arrayOf("SprintTap", "SprintTap2", "WTap", "Old", "Silent", "Packet", "SneakPacket").sortedArray(), "Old")
-    private val maxTicksUntilBlock: IntegerValue = object : IntegerValue("MaxTicksUntilBlock", 2, 0..5) {
+    private val maxTicksUntilBlock: IntValue = object : IntValue("MaxTicksUntilBlock", 2, 0..5) {
         override fun isSupported() = mode == "WTap"
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minTicksUntilBlock.get())
     }
-    private val minTicksUntilBlock: IntegerValue = object : IntegerValue("MinTicksUntilBlock", 0, 0..5) {
+    private val minTicksUntilBlock: IntValue = object : IntValue("MinTicksUntilBlock", 0, 0..5) {
         override fun isSupported() = mode == "WTap"
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxTicksUntilBlock.get())
     }
 
-    private val reSprintMaxTicks: IntegerValue = object : IntegerValue("ReSprintMaxTicks", 2, 1..5) {
+    private val reSprintMaxTicks: IntValue = object : IntValue("ReSprintMaxTicks", 2, 1..5) {
         override fun isSupported() = mode == "WTap"
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(reSprintMinTicks.get())
     }
-    private val reSprintMinTicks: IntegerValue = object : IntegerValue("ReSprintMinTicks", 1, 1..5) {
+    private val reSprintMinTicks: IntValue = object : IntValue("ReSprintMinTicks", 1, 1..5) {
         override fun isSupported() = mode == "WTap"
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(reSprintMaxTicks.get())
     }
 
-    private val stopTicks: IntegerValue = object : IntegerValue("PressBackTicks", 1, 1..5) {
+    private val stopTicks: IntValue = object : IntValue("PressBackTicks", 1, 1..5) {
         override fun isSupported() = mode == "SprintTap2"
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(unSprintTicks.get())
     }
-    private val unSprintTicks: IntegerValue = object : IntegerValue("ReleaseBackTicks", 2, 1..5) {
+    private val unSprintTicks: IntValue = object : IntValue("ReleaseBackTicks", 2, 1..5) {
         override fun isSupported() = mode == "SprintTap2"
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(stopTicks.get())
     }
 
-    private val onlyGround by BoolValue("OnlyGround", false)
-    val onlyMove by BoolValue("OnlyMove", true)
-    val onlyMoveForward by BoolValue("OnlyMoveForward", true) { onlyMove }
+    private val onlyGround by BooleanValue("OnlyGround", false)
+    val onlyMove by BooleanValue("OnlyMove", true)
+    val onlyMoveForward by BooleanValue("OnlyMoveForward", true) { onlyMove }
 
     private var ticks = 0
     private var forceSprintState = 0

@@ -26,8 +26,8 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.hasSpaceInInvento
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRect
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.entity.EntityLiving.getArmorPosition
@@ -42,27 +42,27 @@ import java.awt.Color
 
 object ChestStealer : Module("ChestStealer", WORLD) {
 
-    private val maxDelay: Int by object : IntegerValue("MaxDelay", 50, 0..500) {
+    private val maxDelay: Int by object : IntValue("MaxDelay", 50, 0..500) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
     }
-    private val minDelay by object : IntegerValue("MinDelay", 50, 0..500) {
+    private val minDelay by object : IntValue("MinDelay", 50, 0..500) {
         override fun isSupported() = maxDelay > 0
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxDelay)
     }
 
-    private val startDelay by IntegerValue("StartDelay", 50, 0..500)
-    private val closeDelay by IntegerValue("CloseDelay", 50, 0..500)
+    private val startDelay by IntValue("StartDelay", 50, 0..500)
+    private val closeDelay by IntValue("CloseDelay", 50, 0..500)
 
     private val noMove by InventoryManager.noMoveValue
     private val noMoveAir by InventoryManager.noMoveAirValue
     private val noMoveGround by InventoryManager.noMoveGroundValue
 
-    private val chestTitle by BoolValue("ChestTitle", true)
+    private val chestTitle by BooleanValue("ChestTitle", true)
 
-    private val randomSlot by BoolValue("RandomSlot", true)
+    private val randomSlot by BooleanValue("RandomSlot", true)
 
-    private val progressBar by BoolValue("ProgressBar", true, subjective = true)
+    private val progressBar by BooleanValue("ProgressBar", true, subjective = true)
 
     private var progress: Float? = null
         set(value) {

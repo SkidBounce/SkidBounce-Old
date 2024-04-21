@@ -14,7 +14,7 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlockIntersects
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.BlockLadder
 import net.minecraft.block.BlockVine
@@ -32,7 +32,7 @@ object FastClimb : Module("FastClimb", MOVEMENT) {
 
     // Delay mode | Separated Vanilla & Delay speed value
     private val climbSpeed by FloatValue("ClimbSpeed", 1F, 0.01F..5F) { mode == "Delay" }
-    private val tickDelay by IntegerValue("TickDelay", 10, 1..20) { mode == "Delay" }
+    private val tickDelay by IntValue("TickDelay", 10, 1..20) { mode == "Delay" }
 
     private val climbDelay = tickDelay
     private var climbCount = 0

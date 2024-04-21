@@ -12,7 +12,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.extensions.jmp
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.BlockStairs
 import net.minecraft.util.BlockPos
@@ -24,7 +24,7 @@ object FastStairs : Module("FastStairs", MOVEMENT) {
         arrayOf("Step", "NCP", "AAC3.1.0", "AAC3.3.6", "AAC3.3.13").sortedArray(),
         "NCP"
     )
-    private val longJump by BoolValue("LongJump", false) { mode.startsWith("AAC") }
+    private val longJump by BooleanValue("LongJump", false) { mode.startsWith("AAC") }
 
     private var canJump = false
 

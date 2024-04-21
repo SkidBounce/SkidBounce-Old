@@ -16,10 +16,10 @@ import net.ccbluex.liquidbounce.utils.extensions.isClientFriend
 import net.ccbluex.liquidbounce.utils.extensions.toRadians
 import net.ccbluex.liquidbounce.utils.render.ColorUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
@@ -30,14 +30,26 @@ import java.awt.Color
 object Tracers : Module("Tracers", RENDER, subjective = true) {
 
     private val colorMode by ListValue("Color", arrayOf("Custom", "DistanceColor", "Rainbow"), "Custom")
-    private val colorRed by IntegerValue("R", 0, 0..255) { colorMode == "Custom" }
-    private val colorGreen by IntegerValue("G", 160, 0..255) { colorMode == "Custom" }
-    private val colorBlue by IntegerValue("B", 255, 0..255) { colorMode == "Custom" }
+    private val colorRed by NumberValue<Int>(
+        "R",
+        0,
+        0..255
+    ) { colorMode == "Custom" }
+    private val colorGreen by NumberValue<Int>(
+        "G",
+        160,
+        0..255
+    ) { colorMode == "Custom" }
+    private val colorBlue by NumberValue<Int>(
+        "B",
+        255,
+        0..255
+    ) { colorMode == "Custom" }
 
     private val thickness by FloatValue("Thickness", 2F, 1F..5F)
 
-    private val bot by BoolValue("Bots", true)
-    private val teams by BoolValue("Teams", false)
+    private val bot by BooleanValue("Bots", true)
+    private val teams by BooleanValue("Teams", false)
 
     @EventTarget
     fun onRender3D(event: Render3DEvent) {

@@ -33,9 +33,9 @@ class Arraylist(
 ) : Element(x, y, scale, side) {
 
     private val textColorMode by ListValue("Text-Color", arrayOf("Custom", "Random", "Rainbow"), "Rainbow")
-    private val textRed by IntegerValue("Text-R", 0, 0..255) { textColorMode == "Custom" }
-    private val textGreen by IntegerValue("Text-G", 111, 0..255) { textColorMode == "Custom" }
-    private val textBlue by IntegerValue("Text-B", 255, 0..255) { textColorMode == "Custom" }
+    private val textRed by IntValue("Text-R", 0, 0..255) { textColorMode == "Custom" }
+    private val textGreen by IntValue("Text-G", 111, 0..255) { textColorMode == "Custom" }
+    private val textBlue by IntValue("Text-B", 255, 0..255) { textColorMode == "Custom" }
 
     private val rectMode by ListValue("Rect", arrayOf("None", "Left", "Right"), "None")
     private val rectColorMode by ListValue(
@@ -44,16 +44,16 @@ class Arraylist(
         "Rainbow"
     ) { rectMode != "None" }
     private val isCustomRectSupported = { rectMode != "None" && rectColorMode == "Custom" }
-    private val rectRed by IntegerValue("Rect-R", 255, 0..255, isSupported = isCustomRectSupported)
-    private val rectGreen by IntegerValue("Rect-G", 255, 0..255, isSupported = isCustomRectSupported)
-    private val rectBlue by IntegerValue("Rect-B", 255, 0..255, isSupported = isCustomRectSupported)
-    private val rectAlpha by IntegerValue("Rect-Alpha", 255, 0..255, isSupported = isCustomRectSupported)
+    private val rectRed by IntValue("Rect-R", 255, 0..255, isSupported = isCustomRectSupported)
+    private val rectGreen by IntValue("Rect-G", 255, 0..255, isSupported = isCustomRectSupported)
+    private val rectBlue by IntValue("Rect-B", 255, 0..255, isSupported = isCustomRectSupported)
+    private val rectAlpha by IntValue("Rect-Alpha", 255, 0..255, isSupported = isCustomRectSupported)
 
     private val backgroundMode by ListValue("Background-Color", arrayOf("Custom", "Random", "Rainbow"), "Custom")
-    private val backgroundRed by IntegerValue("Background-R", 0, 0..255) { backgroundMode == "Custom" }
-    private val backgroundGreen by IntegerValue("Background-G", 0, 0..255) { backgroundMode == "Custom" }
-    private val backgroundBlue by IntegerValue("Background-B", 0, 0..255) { backgroundMode == "Custom" }
-    private val backgroundAlpha by IntegerValue("Background-Alpha", 127, 0..255) { backgroundMode == "Custom" }
+    private val backgroundRed by IntValue("Background-R", 0, 0..255) { backgroundMode == "Custom" }
+    private val backgroundGreen by IntValue("Background-G", 0, 0..255) { backgroundMode == "Custom" }
+    private val backgroundBlue by IntValue("Background-B", 0, 0..255) { backgroundMode == "Custom" }
+    private val backgroundAlpha by IntValue("Background-Alpha", 127, 0..255) { backgroundMode == "Custom" }
 
     private fun isColorModeUsed(value: String) = textColorMode == value || rectMode == value || backgroundMode == value
 
@@ -62,7 +62,7 @@ class Arraylist(
     private val rainbowX by FloatValue("Rainbow-X", -1000F, -2000F..2000F) { isColorModeUsed("Rainbow") }
     private val rainbowY by FloatValue("Rainbow-Y", -1000F, -2000F..2000F) { isColorModeUsed("Rainbow") }
 
-    private val tags by BoolValue("Tags", true)
+    private val tags by BooleanValue("Tags", true)
     private val tagsStyle by object : ListValue("TagsStyle", arrayOf("[]", "()", "<>", "-", "|", "Space"), "Space") {
         override fun isSupported() = tags
 
@@ -70,13 +70,13 @@ class Arraylist(
         override fun onUpdate(value: String) = updateTagDetails()
     }
     private val tagsCase by ListValue("TagsCase", arrayOf("Normal", "Uppercase", "Lowercase"), "Normal") { tags }
-    private val tagsArrayColor by object : BoolValue("TagsArrayColor", false) {
+    private val tagsArrayColor by object : BooleanValue("TagsArrayColor", false) {
         override fun isSupported() = tags
         override fun onUpdate(value: Boolean) = updateTagDetails()
     }
 
     private val font by FontValue("Font", Fonts.minecraftFont)
-    private val textShadow by BoolValue("ShadowText", true)
+    private val textShadow by BooleanValue("ShadowText", true)
     private val moduleCase by ListValue("ModuleCase", arrayOf("Normal", "Uppercase", "Lowercase"), "Normal")
     private val space by FloatValue("Space", 0F, 0F..5F)
     private val textHeight by FloatValue("TextHeight", 11F, 1F..20F)
@@ -86,7 +86,7 @@ class Arraylist(
     private val animationSpeed by FloatValue("AnimationSpeed", 0.2F, 0.01F..1F) { animation == "Smooth" }
 
     companion object {
-        val spacedModules by BoolValue("SpacedModules", false)
+        val spacedModules by BooleanValue("SpacedModules", false)
         val inactiveStyle by ListValue("InactiveModulesStyle", arrayOf("Normal", "Color", "Hide"), "Color")
         { GameDetector.state }
     }

@@ -15,8 +15,8 @@ import net.ccbluex.liquidbounce.utils.block.BlockUtils.searchBlocks
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.rainbow
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.block.Block
 import net.minecraft.block.Block.getIdFromBlock
@@ -28,16 +28,16 @@ import java.util.*
 object BedProtectionESP : Module("BedProtectionESP", RENDER, subjective = true) {
     private val targetBlock by ListValue("TargetBlock", arrayOf("Bed", "DragonEgg"), "Bed")
     private val renderMode by ListValue("LayerRenderMode", arrayOf("Current", "All"), "Current")
-    private val radius by IntegerValue("Radius", 8, 0..32)
-    private val maxLayers by IntegerValue("MaxProtectionLayers", 2, 1..6)
-    private val blockLimit by IntegerValue("BlockLimit", 256, 0..1024)
-    private val down by BoolValue("BlocksUnderTarget", false)
-    private val renderTargetBlocks by BoolValue("RenderTargetBlocks", true)
+    private val radius by IntValue("Radius", 8, 0..32)
+    private val maxLayers by IntValue("MaxProtectionLayers", 2, 1..6)
+    private val blockLimit by IntValue("BlockLimit", 256, 0..1024)
+    private val down by BooleanValue("BlocksUnderTarget", false)
+    private val renderTargetBlocks by BooleanValue("RenderTargetBlocks", true)
 
-    private val colorRainbow by BoolValue("Rainbow", false)
-    private val colorRed by IntegerValue("R", 96, 0..255) { !colorRainbow }
-    private val colorGreen by IntegerValue("G", 96, 0..255) { !colorRainbow }
-    private val colorBlue by IntegerValue("B", 96, 0..255) { !colorRainbow }
+    private val colorRainbow by BooleanValue("Rainbow", false)
+    private val colorRed by IntValue("R", 96, 0..255) { !colorRainbow }
+    private val colorGreen by IntValue("G", 96, 0..255) { !colorRainbow }
+    private val colorBlue by IntValue("B", 96, 0..255) { !colorRainbow }
 
     private val searchTimer = MSTimer()
     private val targetBlockList = mutableListOf<BlockPos>()

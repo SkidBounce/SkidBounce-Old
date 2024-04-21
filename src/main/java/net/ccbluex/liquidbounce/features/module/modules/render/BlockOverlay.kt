@@ -20,8 +20,8 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBorderedRect
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawFilledBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawSelectionBoundingBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
-import net.ccbluex.liquidbounce.value.BoolValue
-import net.ccbluex.liquidbounce.value.IntegerValue
+import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.block.Block
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager.*
@@ -30,12 +30,12 @@ import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 
 object BlockOverlay : Module("BlockOverlay", RENDER, gameDetecting = false, subjective = true) {
-    val info by BoolValue("Info", false)
+    val info by BooleanValue("Info", false)
 
-    private val colorRainbow by BoolValue("Rainbow", false)
-    private val colorRed by IntegerValue("R", 68, 0..255) { !colorRainbow }
-    private val colorGreen by IntegerValue("G", 117, 0..255) { !colorRainbow }
-    private val colorBlue by IntegerValue("B", 255, 0..255) { !colorRainbow }
+    private val colorRainbow by BooleanValue("Rainbow", false)
+    private val colorRed by IntValue("R", 68, 0..255) { !colorRainbow }
+    private val colorGreen by IntValue("G", 117, 0..255) { !colorRainbow }
+    private val colorBlue by IntValue("B", 255, 0..255) { !colorRainbow }
 
     val currentBlock: BlockPos?
         get() {

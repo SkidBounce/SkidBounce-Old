@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.utils.ClientUtils
-import net.ccbluex.liquidbounce.value.BoolValue
+import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.Value
 import net.minecraft.network.handshake.client.C00Handshake
 import net.minecraft.network.login.client.C00PacketLoginStart
@@ -31,7 +31,7 @@ import net.minecraft.util.BlockPos
 import net.minecraft.util.Vec3
 
 object PacketDebugger : Module("PacketDebugger", MISC, gameDetecting = false) {
-    private val fieldsValue = BoolValue("ShowFields", true)
+    private val fieldsValue = BooleanValue("ShowFields", true)
     private val fields by fieldsValue
     private val fieldMap = hashMapOf(
         "field_149600_a" to "Version",
@@ -504,7 +504,7 @@ object PacketDebugger : Module("PacketDebugger", MISC, gameDetecting = false) {
             S48PacketResourcePackSend::class.java,
             S49PacketUpdateEntityNBT::class.java
         ).forEach {
-            settings += BoolValue(it.simpleName, false)
+            settings += BooleanValue(it.simpleName, false)
         }
     }
 
@@ -513,7 +513,7 @@ object PacketDebugger : Module("PacketDebugger", MISC, gameDetecting = false) {
         if (event.isCancelled || !state) return
         val packet = event.packet
 
-        val enabled = settings.filterIsInstance<BoolValue>().find { it.name == packet.javaClass.simpleName } ?: return
+        val enabled = settings.filterIsInstance<BooleanValue>().find { it.name == packet.javaClass.simpleName } ?: return
         if (!enabled.get())
             return
 
