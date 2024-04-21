@@ -6,6 +6,8 @@
 package net.ccbluex.liquidbounce.utils.inventory
 
 import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.events.PacketEvent
+import net.ccbluex.liquidbounce.event.events.WorldEvent
 import net.ccbluex.liquidbounce.features.module.modules.misc.NoSlotSet
 import net.ccbluex.liquidbounce.features.module.modules.world.ChestAura
 import net.ccbluex.liquidbounce.utils.MinecraftInstance

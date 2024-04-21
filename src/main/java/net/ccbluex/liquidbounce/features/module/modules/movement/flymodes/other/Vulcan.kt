@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
 
-import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.state
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vulcanNoClip
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vulcanTimer

@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.ncp
 
-import net.ccbluex.liquidbounce.event.MoveEvent
+import net.ccbluex.liquidbounce.event.events.MoveEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.canBoost
 import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.jumped
 import net.ccbluex.liquidbounce.features.module.modules.movement.LongJump.ncpBoost

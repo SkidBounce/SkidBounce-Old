@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vanilla
 
-import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.spoofgroundAlways
 import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.spoofgroundMinFallDistance
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode

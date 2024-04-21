@@ -5,7 +5,6 @@
  */
 package net.ccbluex.liquidbounce.api
 
-import com.google.gson.annotations.SerializedName
 import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.file.FileManager.PRETTY_GSON
 import net.ccbluex.liquidbounce.utils.misc.HttpUtils.post
@@ -13,8 +12,6 @@ import net.ccbluex.liquidbounce.utils.misc.HttpUtils.post
 import net.ccbluex.liquidbounce.utils.misc.HttpUtils.request
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
 import org.apache.http.HttpEntity
-import org.apache.http.entity.ContentType
-import org.apache.http.entity.mime.MultipartEntityBuilder
 
 /**
  * LiquidBounce Client API
@@ -83,20 +80,3 @@ object ClientApi {
         entity = entity
     )
 }
-
-/**
- * Data classes for the API
- */
-data class Build(@SerializedName("build_id")
-                 val buildId: Int,
-                 @SerializedName("commit_id")
-                 val commitId: String,
-                 val branch: String,
-                 @SerializedName("lb_version")
-                 val lbVersion: String,
-                 @SerializedName("mc_version")
-                 val mcVersion: String,
-                 val release: Boolean,
-                 val date: String,
-                 val message: String,
-                 val url: String)

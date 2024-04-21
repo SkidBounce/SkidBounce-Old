@@ -5,7 +5,9 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.hypixel
 
-import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.EventState.POST
+import net.ccbluex.liquidbounce.event.EventState.PRE
+import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.ccbluex.liquidbounce.utils.ClientUtils
@@ -74,7 +76,7 @@ object BoostHypixel : FlyMode("BoostHypixel") {
 
     override fun onMotion(event: MotionEvent) {
         when (event.eventState) {
-            EventState.PRE -> {
+            PRE -> {
                 tickTimer.update()
 
                 if (tickTimer.hasTimePassed(2)) {
@@ -86,7 +88,7 @@ object BoostHypixel : FlyMode("BoostHypixel") {
                 mc.thePlayer.motionY = 0.0
             }
 
-            EventState.POST -> {
+            POST -> {
                 val xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX
                 val zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ
                 lastDistance = sqrt(xDist * xDist + zDist * zDist)

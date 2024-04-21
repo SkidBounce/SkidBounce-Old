@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vanilla
 
-import net.ccbluex.liquidbounce.event.MoveEvent
+import net.ccbluex.liquidbounce.event.events.MoveEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.handleVanillaKickBypass
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.vanillaSpeed
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode

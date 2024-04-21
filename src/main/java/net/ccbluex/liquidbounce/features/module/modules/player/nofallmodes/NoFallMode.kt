@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes
 
-import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 
 open class NoFallMode(val modeName: String) : MinecraftInstance() {

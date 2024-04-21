@@ -6,6 +6,8 @@
 package net.ccbluex.liquidbounce.utils
 
 import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.events.MoveEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.minecraft.init.Blocks.*
 import net.minecraft.network.play.client.C03PacketPlayer

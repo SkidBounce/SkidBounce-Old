@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
 
-import net.ccbluex.liquidbounce.event.JumpEvent
-import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.events.JumpEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.boostMotion
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.boostTicksValue
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.damage

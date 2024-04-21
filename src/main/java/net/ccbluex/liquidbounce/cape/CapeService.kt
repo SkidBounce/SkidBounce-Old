@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.cape
 import com.google.gson.JsonParser
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.Listenable
-import net.ccbluex.liquidbounce.event.SessionEvent
+import net.ccbluex.liquidbounce.event.events.SessionEvent
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 import net.ccbluex.liquidbounce.utils.login.UserUtils
@@ -257,9 +257,4 @@ object CapeService : Listenable, MinecraftInstance() {
     }
 
     override fun handleEvents() = true
-
 }
-
-data class CapeSelfUser(val token: String, var enabled: Boolean, var uuid: String, val capeName: String)
-
-data class CapeCarrier(val uuid: UUID, val capeName: String)

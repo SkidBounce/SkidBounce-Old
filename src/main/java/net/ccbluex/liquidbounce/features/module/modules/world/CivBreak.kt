@@ -6,6 +6,10 @@
 package net.ccbluex.liquidbounce.features.module.modules.world
 
 import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.events.ClickBlockEvent
+import net.ccbluex.liquidbounce.event.events.MotionEvent
+import net.ccbluex.liquidbounce.event.events.Render3DEvent
+import net.ccbluex.liquidbounce.event.events.TickEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.WORLD
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket

@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.other
 
-import net.ccbluex.liquidbounce.event.MotionEvent
+import net.ccbluex.liquidbounce.event.events.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow.packetTiming
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoSlowMode
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket

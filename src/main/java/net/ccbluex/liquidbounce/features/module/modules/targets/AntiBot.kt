@@ -5,10 +5,10 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.targets
 
-import net.ccbluex.liquidbounce.event.AttackEvent
+import net.ccbluex.liquidbounce.event.events.AttackEvent
 import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.PacketEvent
-import net.ccbluex.liquidbounce.event.WorldEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
+import net.ccbluex.liquidbounce.event.events.WorldEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.TARGETS
 import net.ccbluex.liquidbounce.utils.extensions.getFullName

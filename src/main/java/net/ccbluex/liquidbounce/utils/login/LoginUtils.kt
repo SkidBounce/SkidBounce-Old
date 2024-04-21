@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.utils.login
 
 import com.google.gson.JsonParser
 import net.ccbluex.liquidbounce.event.EventManager.callEvent
-import net.ccbluex.liquidbounce.event.SessionEvent
+import net.ccbluex.liquidbounce.event.events.SessionEvent
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 import net.minecraft.util.Session
 import java.util.*

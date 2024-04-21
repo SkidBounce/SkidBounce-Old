@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.ui.client.altmanager.menus
 
 import me.liuli.elixir.account.CrackedAccount
 import net.ccbluex.liquidbounce.event.EventManager.callEvent
-import net.ccbluex.liquidbounce.event.SessionEvent
+import net.ccbluex.liquidbounce.event.events.SessionEvent
 import net.ccbluex.liquidbounce.file.FileManager.accountsConfig
 import net.ccbluex.liquidbounce.file.FileManager.saveConfig
 import net.ccbluex.liquidbounce.ui.client.altmanager.GuiAltManager

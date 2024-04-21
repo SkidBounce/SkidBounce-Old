@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.grim
 
-import net.ccbluex.liquidbounce.event.PacketEvent
-import net.ccbluex.liquidbounce.event.TickEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
+import net.ccbluex.liquidbounce.event.events.TickEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimAlways
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimFlagPause
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimOnlyAir

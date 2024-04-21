@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.mineplex
 
-import net.ccbluex.liquidbounce.event.JumpEvent
+import net.ccbluex.liquidbounce.event.events.JumpEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.longjumpmodes.LongJumpMode
 import net.ccbluex.liquidbounce.utils.MovementUtils
 

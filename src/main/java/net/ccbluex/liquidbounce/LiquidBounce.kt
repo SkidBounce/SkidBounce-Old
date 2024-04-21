@@ -7,9 +7,10 @@ package net.ccbluex.liquidbounce
 
 import net.ccbluex.liquidbounce.api.ClientUpdate.gitInfo
 import net.ccbluex.liquidbounce.cape.CapeService
-import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.EventManager
 import net.ccbluex.liquidbounce.event.EventManager.callEvent
 import net.ccbluex.liquidbounce.event.EventManager.registerListener
+import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.features.command.CommandManager
 import net.ccbluex.liquidbounce.features.command.CommandManager.registerCommands
 import net.ccbluex.liquidbounce.features.module.ModuleManager

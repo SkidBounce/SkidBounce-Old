@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.spartan
 
-import net.ccbluex.liquidbounce.event.MoveEvent
+import net.ccbluex.liquidbounce.event.events.MoveEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.spartan532Speed
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.spartan532Timer
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode

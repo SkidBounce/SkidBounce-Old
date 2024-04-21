@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes
 
-import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 
 open class VelocityMode(val modeName: String) : MinecraftInstance() {

@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.other
 
-import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 

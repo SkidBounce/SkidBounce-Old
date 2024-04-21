@@ -14,10 +14,10 @@ import me.liuli.elixir.account.MinecraftAccount
 import me.liuli.elixir.account.MojangAccount
 import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_CLOUD
 import net.ccbluex.liquidbounce.event.EventManager.callEvent
-import net.ccbluex.liquidbounce.event.SessionEvent
+import net.ccbluex.liquidbounce.event.events.SessionEvent
 import net.ccbluex.liquidbounce.file.FileManager.accountsConfig
 import net.ccbluex.liquidbounce.file.FileManager.saveConfig
-import net.ccbluex.liquidbounce.lang.translationMenu
+import net.ccbluex.liquidbounce.lang.LanguageManager.translationMenu
 import net.ccbluex.liquidbounce.ui.client.altmanager.menus.GuiDonatorCape
 import net.ccbluex.liquidbounce.ui.client.altmanager.menus.GuiLoginIntoAccount
 import net.ccbluex.liquidbounce.ui.client.altmanager.menus.GuiSessionLogin

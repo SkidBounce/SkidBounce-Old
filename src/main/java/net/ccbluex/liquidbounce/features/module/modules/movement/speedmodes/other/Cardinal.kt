@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.other
 
-import net.ccbluex.liquidbounce.event.MotionEvent
+import net.ccbluex.liquidbounce.event.events.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.IceSpeed
 import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.cardinalAboveWaterMultiplier
 import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.cardinalJumpWhenIceSpeed

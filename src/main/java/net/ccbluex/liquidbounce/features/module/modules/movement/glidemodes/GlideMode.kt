@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes
 
-import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 
 open class GlideMode(val modeName: String) : MinecraftInstance() {

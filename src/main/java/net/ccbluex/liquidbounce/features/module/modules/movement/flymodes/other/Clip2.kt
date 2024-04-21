@@ -6,8 +6,8 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
 
 import net.ccbluex.liquidbounce.event.EventState
-import net.ccbluex.liquidbounce.event.MotionEvent
-import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.events.MotionEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clip2Delay
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clip2GroundSpoof
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.clip2GroundSpoofOnlyClip

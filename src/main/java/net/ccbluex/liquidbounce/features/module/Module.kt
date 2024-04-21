@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.Listenable
 import net.ccbluex.liquidbounce.features.module.modules.client.GameDetector
 import net.ccbluex.liquidbounce.file.FileManager.modulesConfig
 import net.ccbluex.liquidbounce.file.FileManager.saveConfig
-import net.ccbluex.liquidbounce.lang.translation
+import net.ccbluex.liquidbounce.lang.LanguageManager.getTranslation
 import net.ccbluex.liquidbounce.ui.client.hud.HUD.addNotification
 import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Arraylist
 import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notifications.Notification
@@ -63,7 +63,7 @@ open class Module @JvmOverloads constructor(
         }
 
     val description
-        get() = forcedDescription ?: translation("module.${name.toLowerCamelCase()}.description")
+        get() = forcedDescription ?: getTranslation("module.${name.toLowerCamelCase()}.description")
 
     var slideStep = 0F
 
@@ -83,7 +83,7 @@ open class Module @JvmOverloads constructor(
                 mc.soundHandler.playSound(PositionedSoundRecord.create(ResourceLocation("random.click"), 1F))
                 addNotification(
                     Notification(
-                        translation(
+                        getTranslation(
                             "notification.module" + if (value) "Enabled" else "Disabled",
                             getName()
                         )

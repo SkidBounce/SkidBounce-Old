@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
 
-import net.ccbluex.liquidbounce.event.BlockBBEvent
+import net.ccbluex.liquidbounce.event.events.BlockBBEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.minecraft.block.BlockLadder
 import net.minecraft.block.material.Material

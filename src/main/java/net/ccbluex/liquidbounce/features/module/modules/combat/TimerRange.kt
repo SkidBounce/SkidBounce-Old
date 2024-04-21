@@ -6,7 +6,9 @@
 package net.ccbluex.liquidbounce.features.module.modules.combat
 
 import net.ccbluex.liquidbounce.LiquidBounce.hud
-import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.EventState.*
+import net.ccbluex.liquidbounce.event.EventTarget
+import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.player.Blink
@@ -322,7 +324,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
             confirmStop = false
         }
 
-        if (blink && event.eventState == EventState.POST) {
+        if (blink && event.eventState == POST) {
             synchronized(packetsReceived) {
                 queuedPackets.addAll(packetsReceived)
             }
@@ -562,13 +564,13 @@ object TimerRange : Module("TimerRange", COMBAT) {
             }
         }
 
-        if (event.eventType == EventState.RECEIVE && mc.thePlayer.ticksExisted > ticksValue) {
+        if (event.eventType == RECEIVE && mc.thePlayer.ticksExisted > ticksValue) {
             event.cancelEvent()
             synchronized(packetsReceived) {
                 packetsReceived += packet
             }
         }
-        if (event.eventType == EventState.SEND) {
+        if (event.eventType == SEND) {
             synchronized(packets) {
                 sendPackets(*packets.toTypedArray(), triggerEvents = false)
             }

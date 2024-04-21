@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.vanilla
 
-import net.ccbluex.liquidbounce.event.BlockBBEvent
-import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.events.BlockBBEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.minecraft.block.BlockAir

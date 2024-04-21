@@ -5,7 +5,9 @@
  */
 package net.ccbluex.liquidbounce.utils
 
-import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.EventTarget
+import net.ccbluex.liquidbounce.event.Listenable
+import net.ccbluex.liquidbounce.event.events.*
 import net.minecraft.network.play.client.C03PacketPlayer
 
 object TimerBalanceUtils : MinecraftInstance(), Listenable {

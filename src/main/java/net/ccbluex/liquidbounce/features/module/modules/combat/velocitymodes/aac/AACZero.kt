@@ -5,8 +5,8 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.aac
 
-import net.ccbluex.liquidbounce.event.JumpEvent
-import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.events.JumpEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 
 /**

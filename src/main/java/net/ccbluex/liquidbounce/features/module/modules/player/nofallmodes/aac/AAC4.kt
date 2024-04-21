@@ -6,8 +6,8 @@
 package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.aac
 
 import net.ccbluex.liquidbounce.event.EventState
-import net.ccbluex.liquidbounce.event.MotionEvent
-import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.events.MotionEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.aboveVoid
 import net.minecraft.network.play.client.C03PacketPlayer

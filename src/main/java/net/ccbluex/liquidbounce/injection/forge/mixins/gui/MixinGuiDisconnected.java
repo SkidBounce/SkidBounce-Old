@@ -14,7 +14,7 @@ import com.thealtening.api.TheAltening;
 import com.thealtening.api.data.AccountData;
 import me.liuli.elixir.account.MinecraftAccount;
 import net.ccbluex.liquidbounce.event.EventManager;
-import net.ccbluex.liquidbounce.event.SessionEvent;
+import net.ccbluex.liquidbounce.event.events.SessionEvent;
 import net.ccbluex.liquidbounce.features.special.AutoReconnect;
 import net.ccbluex.liquidbounce.features.special.ClientFixes;
 import net.ccbluex.liquidbounce.file.FileManager;

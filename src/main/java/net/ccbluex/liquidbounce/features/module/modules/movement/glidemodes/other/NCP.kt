@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.other
 
-import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Glide.ncpMotion
 import net.ccbluex.liquidbounce.features.module.modules.movement.glidemodes.GlideMode
 import net.ccbluex.liquidbounce.utils.MovementUtils

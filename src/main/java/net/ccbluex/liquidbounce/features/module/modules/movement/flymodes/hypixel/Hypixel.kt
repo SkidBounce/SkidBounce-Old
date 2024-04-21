@@ -5,10 +5,10 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.hypixel
 
-import net.ccbluex.liquidbounce.event.BlockBBEvent
-import net.ccbluex.liquidbounce.event.JumpEvent
-import net.ccbluex.liquidbounce.event.PacketEvent
-import net.ccbluex.liquidbounce.event.StepEvent
+import net.ccbluex.liquidbounce.event.events.BlockBBEvent
+import net.ccbluex.liquidbounce.event.events.JumpEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
+import net.ccbluex.liquidbounce.event.events.StepEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.hypixelBoost
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.hypixelBoostDelay
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.hypixelBoostTimer

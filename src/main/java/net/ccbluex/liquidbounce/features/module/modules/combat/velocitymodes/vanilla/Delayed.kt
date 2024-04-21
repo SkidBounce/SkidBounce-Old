@@ -5,9 +5,9 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.vanilla
 
-import net.ccbluex.liquidbounce.event.GameLoopEvent
-import net.ccbluex.liquidbounce.event.PacketEvent
-import net.ccbluex.liquidbounce.event.WorldEvent
+import net.ccbluex.liquidbounce.event.events.GameLoopEvent
+import net.ccbluex.liquidbounce.event.events.PacketEvent
+import net.ccbluex.liquidbounce.event.events.WorldEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.spoofDelay
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.ccbluex.liquidbounce.utils.PacketUtils.queuedPackets

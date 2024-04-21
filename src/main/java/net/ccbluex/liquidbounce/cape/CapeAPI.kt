@@ -15,7 +15,6 @@ import java.io.File
 import java.util.*
 
 object CapeAPI : MinecraftInstance() {
-
     private val capesCache = File(dir, "capes").apply {
         mkdir()
     }
@@ -51,5 +50,3 @@ object CapeAPI : MinecraftInstance() {
     }
 
 }
-
-data class CapeInfo(val resourceLocation: ResourceLocation, var isCapeAvailable: Boolean = false)

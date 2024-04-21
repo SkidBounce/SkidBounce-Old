@@ -6,7 +6,7 @@
 package net.ccbluex.liquidbounce.injection.forge.mixins.network;
 
 import io.netty.buffer.Unpooled;
-import net.ccbluex.liquidbounce.event.EntityMovementEvent;
+import net.ccbluex.liquidbounce.event.events.EntityMovementEvent;
 import net.ccbluex.liquidbounce.event.EventManager;
 import net.ccbluex.liquidbounce.features.module.modules.misc.NoRotate;
 import net.ccbluex.liquidbounce.features.module.modules.player.Blink;

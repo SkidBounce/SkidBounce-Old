@@ -7,6 +7,7 @@ package net.ccbluex.liquidbounce.script.api
 
 import jdk.nashorn.api.scripting.JSObject
 import net.ccbluex.liquidbounce.event.*
+import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER

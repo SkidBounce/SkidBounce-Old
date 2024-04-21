@@ -7,7 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.nc
 
 import net.ccbluex.liquidbounce.event.EventState.POST
 import net.ccbluex.liquidbounce.event.EventState.PRE
-import net.ccbluex.liquidbounce.event.MotionEvent
+import net.ccbluex.liquidbounce.event.events.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow.ncpFunnyReleasePacket
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow.ncpFunnyUsePacket
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoSlowMode
