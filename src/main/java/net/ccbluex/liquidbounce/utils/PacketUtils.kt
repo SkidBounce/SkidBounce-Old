@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.event.events.GameLoopEvent
 import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.event.events.TickEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity
-import net.ccbluex.liquidbounce.features.module.modules.misc.PacketDebugger
+import net.ccbluex.liquidbounce.features.module.modules.client.PacketDebugger
 import net.ccbluex.liquidbounce.features.module.modules.player.FakeLag
 import net.ccbluex.liquidbounce.injection.implementations.IMixinEntity
 import net.ccbluex.liquidbounce.utils.PacketType.*

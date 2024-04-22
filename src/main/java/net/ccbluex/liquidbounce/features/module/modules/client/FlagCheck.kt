@@ -3,14 +3,14 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge, Forked from LiquidBounce.
  * https://github.com/ManInMyVan/SkidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.misc
+package net.ccbluex.liquidbounce.features.module.modules.client
 
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.event.events.UpdateEvent
 import net.ccbluex.liquidbounce.event.events.WorldEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.extensions.onPlayerRightClick
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -25,7 +25,7 @@ import kotlin.math.abs
 import kotlin.math.roundToLong
 import kotlin.math.sqrt
 
-object FlagCheck : Module("FlagCheck", MISC, gameDetecting = true) {
+object FlagCheck : Module("FlagCheck", CLIENT, gameDetecting = true) {
 
     private val resetFlagCounterTicks by IntValue("ResetCounterTicks", 600, 100..1000)
     private val rubberbandThreshold by FloatValue("RubberBandThreshold", 5.0f, 0.05f..10.0f)

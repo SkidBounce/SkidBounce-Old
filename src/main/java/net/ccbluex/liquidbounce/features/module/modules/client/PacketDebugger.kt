@@ -3,12 +3,12 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge, Forked from LiquidBounce.
  * https://github.com/ManInMyVan/SkidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.misc
+package net.ccbluex.liquidbounce.features.module.modules.client
 
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
-import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
+import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.Value
@@ -30,7 +30,7 @@ import net.minecraft.network.status.server.S01PacketPong
 import net.minecraft.util.BlockPos
 import net.minecraft.util.Vec3
 
-object PacketDebugger : Module("PacketDebugger", MISC, gameDetecting = false) {
+object PacketDebugger : Module("PacketDebugger", CLIENT, gameDetecting = false) {
     private val fieldsValue = BooleanValue("ShowFields", true)
     private val fields by fieldsValue
     private val fieldMap = hashMapOf(
