@@ -23,7 +23,7 @@ jobs:
         run: gradle build
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4.3.1
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: skidbounce
           path: build/libs/skidbounce-v?.?.?.jar
