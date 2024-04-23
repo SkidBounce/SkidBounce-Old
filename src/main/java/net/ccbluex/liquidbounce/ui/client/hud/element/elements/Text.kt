@@ -19,6 +19,7 @@ import net.ccbluex.liquidbounce.utils.CPSCounter
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.ServerUtils
 import net.ccbluex.liquidbounce.utils.TimerBalanceUtils
+import net.ccbluex.liquidbounce.utils.TimerBalanceUtils.balance
 import net.ccbluex.liquidbounce.utils.extensions.ping
 import net.ccbluex.liquidbounce.utils.render.ColorUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRoundedRect2
@@ -127,7 +128,7 @@ class Text(x: Double = 10.0, y: Double = 10.0, scale: Float = 1F, side: Side = S
                 "pitchint" -> return DECIMAL_FORMAT.format(thePlayer.rotationPitch).toInt()
                 "food" -> return thePlayer.foodStats.foodLevel
                 "onground" -> return thePlayer.onGround
-                "tbalance", "timerbalance" -> return "${TimerBalanceUtils.balance}ms"
+                "bal", "tbal", "timerbal", "balance", "tbalance", "timerbalance" -> return "$balance"
             }
         }
 
@@ -144,7 +145,7 @@ class Text(x: Double = 10.0, y: Double = 10.0, scale: Float = 1F, side: Side = S
             "cps", "lcps" -> return CPSCounter.getCPS(CPSCounter.MouseButton.LEFT)
             "mcps" -> return CPSCounter.getCPS(CPSCounter.MouseButton.MIDDLE)
             "rcps" -> return CPSCounter.getCPS(CPSCounter.MouseButton.RIGHT)
-            else -> null // Null = don't replace
+            else -> null // don't replace
         }
     }
 
