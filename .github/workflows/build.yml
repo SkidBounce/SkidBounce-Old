@@ -26,5 +26,5 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: skidbounce
-          path: build
+          path: build/libs/skidbounce-v?.?.?.jar
           if-no-files-found: error
