@@ -22,7 +22,7 @@ import net.minecraft.network.play.client.C02PacketUseEntity
 import net.minecraft.network.play.client.C02PacketUseEntity.Action.ATTACK
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 
-class TeleportHit : Module("TeleportHit", COMBAT) {
+object TeleportHit : Module("TeleportHit", COMBAT) {
     private var targetEntity: EntityLivingBase? = null
     private var shouldHit = false
 
