@@ -33,7 +33,6 @@ import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui
 import net.ccbluex.liquidbounce.ui.client.hud.HUD
 import net.ccbluex.liquidbounce.ui.font.Fonts.loadFonts
 import net.ccbluex.liquidbounce.utils.*
-import net.ccbluex.liquidbounce.utils.ClassUtils.hasForge
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.ClientUtils.disableFastRender
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
@@ -83,10 +82,8 @@ object LiquidBounce {
 
         LOGGER.info("Starting $CLIENT_NAME $clientVersionText ${if (IN_DEV) clientCommit else ""}")
 
-        // Load languages
         loadLanguages()
 
-        // Register listeners
         registerListener(RotationUtils)
         registerListener(ClientFixes)
         registerListener(BungeeCordSpoof)
@@ -98,13 +95,10 @@ object LiquidBounce {
         registerListener(PacketUtils)
         registerListener(TimerBalanceUtils)
 
-        // Load client fonts
         loadFonts()
 
-        // Register commands
         registerCommands()
 
-        // Setup module manager and register modules
         registerModules()
 
         try {
@@ -122,20 +116,15 @@ object LiquidBounce {
             LOGGER.error("Failed to load scripts.", throwable)
         }
 
-        // Load configs
         loadAllConfigs()
 
-        // Update client window
         updateClientWindow()
 
-        // Tabs (Only for Forge!)
-        if (hasForge()) {
-            BlocksTab()
-            ExploitsTab()
-            HeadsTab()
-        }
+        // Tabs
+        BlocksTab
+        ExploitsTab
+        HeadsTab
 
-        // Disable optifine fastrender
         disableFastRender()
 
         // Load alt generators
@@ -177,7 +166,6 @@ object LiquidBounce {
             LOGGER.info("Successfully loaded background.")
         }
 
-        // Set is starting status
         isStarting = false
 
         callEvent(StartupEvent())

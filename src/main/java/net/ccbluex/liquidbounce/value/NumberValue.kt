@@ -13,16 +13,17 @@ import java.math.BigInteger
 /**
  * Number value represents a value with a number
  */
-open class NumberValue<T>(
+sealed class NumberValue<T>(
     name: String,
     value: T,
     val range: ClosedRange<T>,
     subjective: Boolean = false,
     isSupported: (() -> Boolean)? = null
-) : Value<T>(name, value, subjective, isSupported) where T : Number, T : Comparable<T> {
+) : Value<T>(name, value, subjective, isSupported)
+        where T : Number, T : Comparable<T> {
     @Suppress("UNCHECKED_CAST")
     // has to be internal?
-    internal fun set(newValue: Number): Boolean = super.set(
+    internal fun set(newValue: Number): Boolean = set(
         when (value) {
             is Float -> newValue.toFloat()
             is Double -> newValue.toDouble()

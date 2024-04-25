@@ -28,8 +28,6 @@ object ClassUtils {
             false
         }
 
-    fun hasForge() = hasClass("net.minecraftforge.common.MinecraftForge")
-
     val Class<*>.isObject: Boolean
         get() = fields.any { it.name == "INSTANCE" }
 

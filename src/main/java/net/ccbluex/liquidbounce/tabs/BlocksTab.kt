@@ -6,13 +6,12 @@
 package net.ccbluex.liquidbounce.tabs
 
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.init.Blocks
-import net.minecraft.init.Items
+import net.minecraft.init.Blocks.*
+import net.minecraft.init.Items.command_block_minecart
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 
-
-class BlocksTab : CreativeTabs("Special blocks") {
+object BlocksTab : CreativeTabs("Special blocks") {
 
     /**
      * Initialize of special blocks tab
@@ -27,15 +26,15 @@ class BlocksTab : CreativeTabs("Special blocks") {
      * @param itemList list of tab items
      */
     override fun displayAllReleventItems(itemList: MutableList<ItemStack>) {
-        itemList += ItemStack(Blocks.command_block)
-        itemList += ItemStack(Items.command_block_minecart)
-        itemList += ItemStack(Blocks.barrier)
-        itemList += ItemStack(Blocks.dragon_egg)
-        itemList += ItemStack(Blocks.brown_mushroom_block)
-        itemList += ItemStack(Blocks.red_mushroom_block)
-        itemList += ItemStack(Blocks.farmland)
-        itemList += ItemStack(Blocks.mob_spawner)
-        itemList += ItemStack(Blocks.lit_furnace)
+        itemList += ItemStack(command_block)
+        itemList += ItemStack(command_block_minecart)
+        itemList += ItemStack(barrier)
+        itemList += ItemStack(dragon_egg)
+        itemList += ItemStack(brown_mushroom_block)
+        itemList += ItemStack(red_mushroom_block)
+        itemList += ItemStack(farmland)
+        itemList += ItemStack(mob_spawner)
+        itemList += ItemStack(lit_furnace)
     }
 
     /**
@@ -43,7 +42,7 @@ class BlocksTab : CreativeTabs("Special blocks") {
      *
      * @return icon item
      */
-    override fun getTabIconItem(): Item = ItemStack(Blocks.command_block).item
+    override fun getTabIconItem(): Item = ItemStack(command_block).item
 
     /**
      * Return name of tab
