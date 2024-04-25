@@ -17,11 +17,13 @@ import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
+import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.network.play.server.S0BPacketAnimation
 import net.minecraft.network.play.server.S13PacketDestroyEntities
 import net.minecraft.network.play.server.S14PacketEntity
+import net.minecraft.network.play.server.S1CPacketEntityMetadata
 import net.minecraft.network.play.server.S20PacketEntityProperties
 
 object AntiBot : Module("AntiBot", TARGETS) {
@@ -48,6 +50,7 @@ object AntiBot : Module("AntiBot", TARGETS) {
     private val duplicateInWorld by BooleanValue("DuplicateInWorld", false)
     private val duplicateInTab by BooleanValue("DuplicateInTab", false)
     private val properties by BooleanValue("Properties", false)
+    private val metadata by BooleanValue("Metadata", false)
 
     private val alwaysInRadius by BooleanValue("AlwaysInRadius", false)
     private val alwaysRadius by FloatValue("AlwaysInRadiusBlocks", 20f, 5f..30f) { alwaysInRadius }
@@ -57,6 +60,7 @@ object AntiBot : Module("AntiBot", TARGETS) {
     private val invalidGroundList = mutableMapOf<Int, Int>()
     private val swingList = mutableListOf<Int>()
     private val invisibleList = mutableListOf<Int>()
+    private val metadataList = mutableListOf<Int>()
     private val propertiesList = mutableListOf<Int>()
     private val hitList = mutableListOf<Int>()
     private val notAlwaysInRadiusList = mutableListOf<Int>()
@@ -65,7 +69,7 @@ object AntiBot : Module("AntiBot", TARGETS) {
     private val tabPlayerNames = mutableSetOf<String>()
     private val tabDuplicateNames = mutableSetOf<String>()
 
-    fun isBot(entity: EntityLivingBase): Boolean {
+    fun isBot(entity: Entity): Boolean {
         // Check if entity is a player
         if (entity !is EntityPlayer)
             return false
@@ -104,6 +108,9 @@ object AntiBot : Module("AntiBot", TARGETS) {
             return true
 
         if (properties && entity.entityId !in propertiesList)
+            return true
+
+        if (metadata && entity.entityId !in metadataList)
             return true
 
         if (armor) {
@@ -189,84 +196,88 @@ object AntiBot : Module("AntiBot", TARGETS) {
         if (mc.thePlayer == null || mc.theWorld == null)
             return
 
-        val packet = event.packet
+        when (val packet = event.packet) {
+            is S14PacketEntity -> {
+                val entity = packet.getEntity(mc.theWorld)
 
-        if (packet is S14PacketEntity) {
-            val entity = packet.getEntity(mc.theWorld)
+                if (entity is EntityPlayer) {
+                    if (entity.onGround && entity.entityId !in groundList)
+                        groundList += entity.entityId
 
-            if (entity is EntityPlayer) {
-                if (entity.onGround && entity.entityId !in groundList)
-                    groundList += entity.entityId
+                    if (!entity.onGround && entity.entityId !in airList)
+                        airList += entity.entityId
 
-                if (!entity.onGround && entity.entityId !in airList)
-                    airList += entity.entityId
-
-                if (entity.onGround) {
-                    if (entity.fallDistance > 0.0 || entity.posY == entity.prevPosY) {
-                        invalidGroundList[entity.entityId] = invalidGroundList.getOrDefault(entity.entityId, 0) + 1
-                    } else if (!entity.isCollidedVertically) {
-                        invalidGroundList[entity.entityId] = invalidGroundList.getOrDefault(entity.entityId, 0) + 1
-                    }
-                } else {
-                    val currentVL = invalidGroundList.getOrDefault(entity.entityId, 0)
-                    if (currentVL > 0) {
-                        invalidGroundList[entity.entityId] = currentVL - 1
-                    } else {
-                        invalidGroundList.remove(entity.entityId)
-                    }
-                }
-
-                if ((entity.isInvisible || entity.isInvisibleToPlayer(mc.thePlayer)) && entity.entityId !in invisibleList)
-                    invisibleList += entity.entityId
-
-                if (alwaysInRadius) {
-                    val distance = mc.thePlayer.getDistanceToEntity(entity)
-
-                    if (distance < alwaysRadius) {
-                        if (entity.entityId in notAlwaysInRadiusList) {
-                            notAlwaysInRadiusList.remove(entity.entityId)
+                    if (entity.onGround) {
+                        if (entity.fallDistance > 0.0 || entity.posY == entity.prevPosY) {
+                            invalidGroundList[entity.entityId] = invalidGroundList.getOrDefault(entity.entityId, 0) + 1
+                        } else if (!entity.isCollidedVertically) {
+                            invalidGroundList[entity.entityId] = invalidGroundList.getOrDefault(entity.entityId, 0) + 1
                         }
                     } else {
-                        if (entity.entityId !in notAlwaysInRadiusList) {
-                            notAlwaysInRadiusList.add(entity.entityId)
+                        val currentVL = invalidGroundList.getOrDefault(entity.entityId, 0)
+                        if (currentVL > 0) {
+                            invalidGroundList[entity.entityId] = currentVL - 1
+                        } else {
+                            invalidGroundList.remove(entity.entityId)
+                        }
+                    }
+
+                    if ((entity.isInvisible || entity.isInvisibleToPlayer(mc.thePlayer)) && entity.entityId !in invisibleList)
+                        invisibleList += entity.entityId
+
+                    if (alwaysInRadius) {
+                        val distance = mc.thePlayer.getDistanceToEntity(entity)
+
+                        if (distance < alwaysRadius) {
+                            if (entity.entityId in notAlwaysInRadiusList) {
+                                notAlwaysInRadiusList.remove(entity.entityId)
+                            }
+                        } else {
+                            if (entity.entityId !in notAlwaysInRadiusList) {
+                                notAlwaysInRadiusList.add(entity.entityId)
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (packet is S0BPacketAnimation) {
-            val entity = mc.theWorld.getEntityByID(packet.entityID)
+            is S0BPacketAnimation -> {
+                val entity = mc.theWorld.getEntityByID(packet.entityID)
 
-            if (entity != null && entity is EntityLivingBase && packet.animationType == 0
-                && entity.entityId !in swingList
-            )
-                swingList += entity.entityId
-        }
+                if (entity != null && entity is EntityLivingBase && packet.animationType == 0
+                    && entity.entityId !in swingList
+                )
+                    swingList += entity.entityId
+            }
 
-        if (packet is S20PacketEntityProperties) {
-            propertiesList += packet.entityId
-        }
+            is S20PacketEntityProperties -> {
+                propertiesList += packet.entityId
+            }
 
-        if (packet is S13PacketDestroyEntities) {
-            for (entityID in packet.entityIDs) {
-                // Check if entityID exists in groundList and remove if found
-                if (entityID in groundList) groundList -= entityID
+            is S1CPacketEntityMetadata -> {
+                metadataList += packet.entityId
+            }
 
-                // Check if entityID exists in airList and remove if found
-                if (entityID in airList) airList -= entityID
+            is S13PacketDestroyEntities -> {
+                for (entityID in packet.entityIDs) {
+                    // Check if entityID exists in groundList and remove if found
+                    if (entityID in groundList) groundList -= entityID
 
-                // Check if entityID exists in invalidGroundList and remove if found
-                if (entityID in invalidGroundList) invalidGroundList -= entityID
+                    // Check if entityID exists in airList and remove if found
+                    if (entityID in airList) airList -= entityID
 
-                // Check if entityID exists in swingList and remove if found
-                if (entityID in swingList) swingList -= entityID
+                    // Check if entityID exists in invalidGroundList and remove if found
+                    if (entityID in invalidGroundList) invalidGroundList -= entityID
 
-                // Check if entityID exists in invisibleList and remove if found
-                if (entityID in invisibleList) invisibleList -= entityID
+                    // Check if entityID exists in swingList and remove if found
+                    if (entityID in swingList) swingList -= entityID
 
-                // Check if entityID exists in notAlwaysInRadiusList and remove if found
-                if (entityID in notAlwaysInRadiusList) notAlwaysInRadiusList -= entityID
+                    // Check if entityID exists in invisibleList and remove if found
+                    if (entityID in invisibleList) invisibleList -= entityID
+
+                    // Check if entityID exists in notAlwaysInRadiusList and remove if found
+                    if (entityID in notAlwaysInRadiusList) notAlwaysInRadiusList -= entityID
+                }
             }
         }
     }
@@ -286,6 +297,7 @@ object AntiBot : Module("AntiBot", TARGETS) {
         groundList.clear()
         invalidGroundList.clear()
         invisibleList.clear()
+        metadataList.clear()
         notAlwaysInRadiusList.clear()
         worldPlayerNames.clear()
         worldDuplicateNames.clear()
