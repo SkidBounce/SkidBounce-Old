@@ -19,7 +19,7 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
-import net.ccbluex.liquidbounce.value.NumberValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
@@ -30,17 +30,17 @@ import java.awt.Color
 object Tracers : Module("Tracers", RENDER, subjective = true) {
 
     private val colorMode by ListValue("Color", arrayOf("Custom", "DistanceColor", "Rainbow"), "Custom")
-    private val colorRed by NumberValue<Int>(
+    private val colorRed by IntValue(
         "R",
         0,
         0..255
     ) { colorMode == "Custom" }
-    private val colorGreen by NumberValue<Int>(
+    private val colorGreen by IntValue(
         "G",
         160,
         0..255
     ) { colorMode == "Custom" }
-    private val colorBlue by NumberValue<Int>(
+    private val colorBlue by IntValue(
         "B",
         255,
         0..255

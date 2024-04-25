@@ -18,7 +18,7 @@ import net.ccbluex.liquidbounce.utils.render.shader.shaders.GlowShader
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
-import net.ccbluex.liquidbounce.value.NumberValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.entity.item.EntityItem
 import java.awt.Color
 
@@ -26,12 +26,12 @@ object ItemESP : Module("ItemESP", RENDER, subjective = true) {
     private val mode by ListValue("Mode", arrayOf("Box", "OtherBox", "Glow"), "Box")
 
     private val glowRenderScale by FloatValue("Glow-Renderscale", 1f, 0.5f..2f) { mode == "Glow" }
-    private val glowRadius by NumberValue<Int>(
+    private val glowRadius by IntValue(
         "Glow-Radius",
         4,
         1..5
     ) { mode == "Glow" }
-    private val glowFade by NumberValue<Int>(
+    private val glowFade by IntValue(
         "Glow-Fade",
         10,
         0..30
@@ -39,9 +39,9 @@ object ItemESP : Module("ItemESP", RENDER, subjective = true) {
     private val glowTargetAlpha by FloatValue("Glow-Target-Alpha", 0f, 0f..1f) { mode == "Glow" }
 
     private val colorRainbow by BooleanValue("Rainbow", true)
-    private val colorRed by NumberValue<Int>("R", 0, 0..255) { !colorRainbow }
-    private val colorGreen by NumberValue<Int>("G", 255, 0..255) { !colorRainbow }
-    private val colorBlue by NumberValue<Int>("B", 0, 0..255) { !colorRainbow }
+    private val colorRed by IntValue("R", 0, 0..255) { !colorRainbow }
+    private val colorGreen by IntValue("G", 255, 0..255) { !colorRainbow }
+    private val colorBlue by IntValue("B", 0, 0..255) { !colorRainbow }
 
     val color
         get() = if (colorRainbow) rainbow() else Color(colorRed, colorGreen, colorBlue)

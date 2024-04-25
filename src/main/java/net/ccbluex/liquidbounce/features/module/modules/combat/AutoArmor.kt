@@ -22,7 +22,7 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.toHotbarIndex
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
 import net.ccbluex.liquidbounce.value.BooleanValue
-import net.ccbluex.liquidbounce.value.NumberValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.entity.EntityLiving.getArmorPosition
 import net.minecraft.item.ItemStack
@@ -30,19 +30,19 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.client.C09PacketHeldItemChange
 
 object AutoArmor : Module("AutoArmor", COMBAT) {
-    private val maxDelay: Int by object : NumberValue<Int>(
+    private val maxDelay: Int by object : IntValue(
         "MaxDelay",
         50,
         0..500
     ) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
     }
-    private val minDelay by object : NumberValue<Int>("MinDelay", 50, 0..500) {
+    private val minDelay by object : IntValue("MinDelay", 50, 0..500) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxDelay)
 
         override fun isSupported() = maxDelay > 0
     }
-    private val minItemAge by NumberValue<Int>("MinItemAge", 0, 0..2000)
+    private val minItemAge by IntValue("MinItemAge", 0, 0..2000)
 
     private val invOpen by InventoryManager.invOpenValue
     private val simulateInventory by InventoryManager.simulateInventoryValue

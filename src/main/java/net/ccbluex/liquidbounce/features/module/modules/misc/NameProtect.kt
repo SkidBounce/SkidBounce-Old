@@ -13,7 +13,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.MISC
 import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
 import net.ccbluex.liquidbounce.utils.render.ColorUtils.translateAlternateColorCodes
 import net.ccbluex.liquidbounce.value.BooleanValue
-import net.ccbluex.liquidbounce.value.NumberValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.TextValue
 import net.minecraft.network.play.server.S01PacketJoinGame
 import net.minecraft.network.play.server.S40PacketDisconnect
@@ -30,18 +30,18 @@ object NameProtect : Module("NameProtect", MISC, subjective = true, gameDetectin
     private val randomNames by BooleanValue("RandomNames", false) { allPlayers }
     private val randomNameLength by BooleanValue("RandomNameLength", false) { randomNames }
 
-    private var nameLength by NumberValue<Int>("NameLength", 6, 6..16) {
+    private var nameLength by IntValue("NameLength", 6, 6..16) {
         randomNames && allPlayers && !randomNameLength
     }
 
-    private val minNameLength: NumberValue<Int> =
-        object : NumberValue<Int>("MinNameLength", 6, 6..16) {
+    private val minNameLength: IntValue =
+        object : IntValue("MinNameLength", 6, 6..16) {
             override fun isSupported() = randomNames && randomNameLength
             override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxNameLength.get())
         }
 
-    private val maxNameLength: NumberValue<Int> =
-        object : NumberValue<Int>("MaxNameLength", 14, 6..16) {
+    private val maxNameLength: IntValue =
+        object : IntValue("MaxNameLength", 14, 6..16) {
             override fun isSupported() = randomNames && randomNameLength
             override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minNameLength.get())
         }

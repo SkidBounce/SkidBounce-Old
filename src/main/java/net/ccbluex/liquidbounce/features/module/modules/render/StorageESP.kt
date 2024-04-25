@@ -21,8 +21,8 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.glColor
 import net.ccbluex.liquidbounce.utils.render.shader.shaders.GlowShader
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
-import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher
 import net.minecraft.entity.item.EntityMinecartChest
 import net.minecraft.tileentity.*
@@ -35,19 +35,19 @@ object StorageESP : Module("StorageESP", RENDER, subjective = true) {
     ListValue("Mode", arrayOf("Box", "OtherBox", "Outline", "Glow", "2D", "WireFrame"), "Outline")
 
     private val glowRenderScale by FloatValue("Glow-Renderscale", 1f, 0.5f..2f) { mode == "Glow" }
-    private val glowRadius by NumberValue<Int>(
+    private val glowRadius by IntValue(
         "Glow-Radius",
         4,
         1..5
     ) { mode == "Glow" }
-    private val glowFade by NumberValue<Int>(
+    private val glowFade by IntValue(
         "Glow-Fade",
         10,
         0..30
     ) { mode == "Glow" }
     private val glowTargetAlpha by FloatValue("Glow-Target-Alpha", 0f, 0f..1f) { mode == "Glow" }
 
-    private val maxRenderDistance by object : NumberValue<Int>(
+    private val maxRenderDistance by object : IntValue(
         "MaxRenderDistance",
         100,
         1..500

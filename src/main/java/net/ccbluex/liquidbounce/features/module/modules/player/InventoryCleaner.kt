@@ -22,8 +22,8 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInvento
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.toHotbarIndex
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
 import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
-import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.BlockFalling
 import net.minecraft.block.BlockWorkbench
@@ -39,32 +39,32 @@ object InventoryCleaner : Module("InventoryCleaner", PLAYER) {
     private val drop by BooleanValue("Drop", true)
     val sort by BooleanValue("Sort", true)
 
-    private val maxDelay: Int by object : NumberValue<Int>(
+    private val maxDelay: Int by object : IntValue(
         "MaxDelay",
         50,
         0..500
     ) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
     }
-    private val minDelay by object : NumberValue<Int>("MinDelay", 50, 0..500) {
+    private val minDelay by object : IntValue("MinDelay", 50, 0..500) {
         override fun isSupported() = maxDelay > 0
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxDelay)
     }
-    private val minItemAge by NumberValue<Int>("MinItemAge", 0, 0..2000)
+    private val minItemAge by IntValue("MinItemAge", 0, 0..2000)
 
     private val limitStackCounts by BooleanValue("LimitStackCounts", true)
-    private val maxBlockStacks by NumberValue<Int>(
+    private val maxBlockStacks by IntValue(
         "MaxBlockStacks",
         5,
         0..36
     ) { limitStackCounts }
-    private val maxFoodStacks by NumberValue<Int>(
+    private val maxFoodStacks by IntValue(
         "MaxFoodStacks",
         5,
         0..36
     ) { limitStackCounts }
-    private val maxThrowableStacks by NumberValue<Int>(
+    private val maxThrowableStacks by IntValue(
         "MaxThrowableStacks",
         5,
         0..36

@@ -17,8 +17,8 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
-import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.init.Items
 import net.minecraft.network.play.client.C07PacketPlayerDigging
@@ -31,7 +31,7 @@ import net.minecraft.util.EnumFacing
 object AutoSoup : Module("AutoSoup", COMBAT) {
 
     private val health by FloatValue("Health", 15f, 0f..20f)
-    private val delay by NumberValue<Int>("Delay", 150, 0..500)
+    private val delay by IntValue("Delay", 150, 0..500)
     private val openInventory by BooleanValue("OpenInv", false)
     private val simulateInventory by BooleanValue("SimulateInventory", true) { !openInventory }
     private val bowl by ListValue("Bowl", arrayOf("Drop", "Move", "Stay"), "Drop")

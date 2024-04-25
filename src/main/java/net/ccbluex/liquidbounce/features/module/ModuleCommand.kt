@@ -61,7 +61,7 @@ class ModuleCommand(val module: Module, val values: List<Value<*>> = module.valu
                     else args.size != 3
                 ) {
                     when (value) {
-                        is NumberValue, is FloatValue, is TextValue ->
+                        is NumberValue, is TextValue ->
                             chatSyntax("$moduleName ${args[1].lowercase()} <value>")
 
                         is ListValue ->

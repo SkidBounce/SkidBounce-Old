@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.utils.extensions.getDistanceToEntityBox
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.NumberValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.init.Items
@@ -33,27 +33,27 @@ object AutoRod : Module("AutoRod", COMBAT) {
     private val absorption by BooleanValue("Absorption", false) { facingEnemy && ignoreOnEnemyLowHealth }
 
     private val activationDistance by FloatValue("ActivationDistance", 8f, 1f..20f)
-    private val enemiesNearby by NumberValue<Int>("EnemiesNearby", 1, 1..5)
+    private val enemiesNearby by IntValue("EnemiesNearby", 1, 1..5)
 
     // Improve health check customization
-    private val playerHealthThreshold by NumberValue<Int>(
+    private val playerHealthThreshold by IntValue(
         "PlayerHealthThreshold",
         5,
         1..20
     )
-    private val enemyHealthThreshold by NumberValue<Int>(
+    private val enemyHealthThreshold by IntValue(
         "EnemyHealthThreshold",
         5,
         1..20
     ) { facingEnemy && ignoreOnEnemyLowHealth }
-    private val escapeHealthThreshold by NumberValue<Int>(
+    private val escapeHealthThreshold by IntValue(
         "EscapeHealthThreshold",
         10,
         1..20
     )
 
-    private val pushDelay by NumberValue<Int>("PushDelay", 100, 50..1000)
-    private val pullbackDelay by NumberValue<Int>("PullbackDelay", 500, 50..1000)
+    private val pushDelay by IntValue("PushDelay", 100, 50..1000)
+    private val pullbackDelay by IntValue("PullbackDelay", 500, 50..1000)
 
     private val onUsingItem by BooleanValue("OnUsingItem", false)
 

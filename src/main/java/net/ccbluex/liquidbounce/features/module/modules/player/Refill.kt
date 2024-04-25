@@ -16,16 +16,16 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryManager.canClickInvento
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.CLICK_TIMER
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
 import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
-import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.play.client.C0EPacketClickWindow
 
 object Refill : Module("Refill", PLAYER) {
-    private val delay by NumberValue<Int>("Delay", 400, 10..1000)
+    private val delay by IntValue("Delay", 400, 10..1000)
 
-    private val minItemAge by NumberValue<Int>("MinItemAge", 400, 0..1000)
+    private val minItemAge by IntValue("MinItemAge", 400, 0..1000)
 
     private val mode by ListValue("Mode", arrayOf("Swap", "Merge"), "Swap")
 

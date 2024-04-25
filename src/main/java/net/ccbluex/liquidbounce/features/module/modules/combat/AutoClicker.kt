@@ -17,7 +17,6 @@ import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextInt
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.IntValue
-import net.ccbluex.liquidbounce.value.NumberValue
 import net.minecraft.client.settings.KeyBinding.onTick
 import net.minecraft.item.EnumAction
 import net.minecraft.util.MovingObjectPosition.MovingObjectType.BLOCK
@@ -27,7 +26,7 @@ object AutoClicker : Module("AutoClicker", COMBAT) {
 
     private val simulateDoubleClicking by BooleanValue("SimulateDoubleClicking", false)
 
-    private val maxCPSValue: NumberValue<Int> = object : IntValue("MaxCPS", 8, 1..20) {
+    private val maxCPSValue: IntValue = object : IntValue("MaxCPS", 8, 1..20) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minCPS)
     }
     private val maxCPS by maxCPSValue

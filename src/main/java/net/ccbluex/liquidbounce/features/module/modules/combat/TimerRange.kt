@@ -29,7 +29,7 @@ import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
-import net.ccbluex.liquidbounce.value.NumberValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.network.Packet
@@ -61,7 +61,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
 
     private val timerBoostMode by ListValue("TimerMode", arrayOf("Normal", "Smart", "Modern"), "Modern")
 
-    private val ticksValue by NumberValue<Int>("Ticks", 10, 1..20)
+    private val ticksValue by IntValue("Ticks", 10, 1..20)
 
     // Min & Max Boost Delay Settings
     private val timerBoostValue by FloatValue("TimerBoost", 1.5f, 0.01f..35f)
@@ -87,7 +87,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
 
     // Normal Mode Settings
     private val rangeValue by FloatValue("Range", 3.5f, 1f..5f) { timerBoostMode == "Normal" }
-    private val cooldownTickValue by NumberValue<Int>(
+    private val cooldownTickValue by IntValue(
         "CooldownTick",
         10,
         1..50
@@ -105,13 +105,13 @@ object TimerRange : Module("TimerRange", COMBAT) {
     }
 
     // Min & Max Tick Delay
-    private val minTickDelay: NumberValue<Int> =
-        object : NumberValue<Int>("MinTickDelay", 50, 1..500) {
+    private val minTickDelay: IntValue =
+        object : IntValue("MinTickDelay", 50, 1..500) {
             override fun isSupported() = timerBoostMode != "Normal"
             override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxTickDelay.get())
         }
-    private val maxTickDelay: NumberValue<Int> =
-        object : NumberValue<Int>("MaxTickDelay", 100, 1..500) {
+    private val maxTickDelay: IntValue =
+        object : IntValue("MaxTickDelay", 100, 1..500) {
             override fun isSupported() = timerBoostMode != "Normal"
             override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minTickDelay.get())
         }
@@ -131,7 +131,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
     private val blink by BooleanValue("Blink", false)
 
     // Prediction Settings
-    private val predictClientMovement by NumberValue<Int>(
+    private val predictClientMovement by IntValue(
         "PredictClientMovement",
         2,
         0..5
