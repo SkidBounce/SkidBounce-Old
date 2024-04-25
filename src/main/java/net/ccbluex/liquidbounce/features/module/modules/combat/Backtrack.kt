@@ -595,6 +595,6 @@ object Backtrack : Module("Backtrack", COMBAT) {
         target = null
         globalTimer.reset()
     }
-}
 
-data class BacktrackData(val x: Double, val y: Double, val z: Double, val time: Long)
+    data class BacktrackData(val x: Double, val y: Double, val z: Double, val time: Long)
+}
