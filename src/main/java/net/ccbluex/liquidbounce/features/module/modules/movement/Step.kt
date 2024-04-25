@@ -5,7 +5,6 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
-import net.ccbluex.liquidbounce.LiquidBounce.moduleManager
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.features.module.Module
@@ -165,7 +164,7 @@ object Step : Module("Step", MOVEMENT, gameDetecting = false) {
         val thePlayer = mc.thePlayer ?: return
 
         // Phase should disable step
-        if (moduleManager[Phase::class.java].handleEvents()) {
+        if (Phase.handleEvents()) {
             event.stepHeight = 0F
             return
         }
