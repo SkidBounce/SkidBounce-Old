@@ -18,10 +18,6 @@ open class ListValue(
     subjective: Boolean = false,
     isSupported: (() -> Boolean)? = null
 ) : Value<String>(name, value, subjective, isSupported) {
-
-    // TODO: Remove when all modules are ported to Kotlin
-    constructor(name: String, values: Array<String>, value: String) : this(name, values, value, false, null)
-
     var openList = false
 
     operator fun contains(string: String?) = values.any { it.equals(string, true) }

@@ -26,7 +26,6 @@ import net.minecraft.network.play.server.S14PacketEntity
 import net.minecraft.network.play.server.S18PacketEntityTeleport
 import net.minecraft.util.MovementInput
 
-// TODO: Remove annotations once all modules are converted to kotlin.
 object PacketUtils : MinecraftInstance(), Listenable {
 
     val queuedPackets = mutableListOf<Packet<*>>()
@@ -111,7 +110,6 @@ object PacketUtils : MinecraftInstance(), Listenable {
     override fun handleEvents() = true
 
     @JvmStatic
-    @JvmOverloads
     fun sendPacket(packet: Packet<*>, triggerEvent: Boolean = true) {
         if (triggerEvent) {
             mc.netHandler?.addToSendQueue(packet)
@@ -141,7 +139,6 @@ object PacketUtils : MinecraftInstance(), Listenable {
     )
 
     @JvmStatic
-    @JvmOverloads
     fun sendPackets(vararg packets: Packet<*>, triggerEvents: Boolean = true) =
         packets.forEach { sendPacket(it, triggerEvents) }
 

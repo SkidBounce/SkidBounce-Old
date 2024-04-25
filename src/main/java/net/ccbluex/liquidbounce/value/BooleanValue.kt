@@ -17,10 +17,6 @@ open class BooleanValue(
     subjective: Boolean = false,
     isSupported: (() -> Boolean)? = null
 ) : Value<Boolean>(name, value, subjective, isSupported) {
-
-    // TODO: Remove when all modules are ported to Kotlin
-    constructor(name: String, value: Boolean) : this(name, value, false, null)
-
     override fun toJsonF() = JsonPrimitive(value)
 
     override fun fromJsonF(element: JsonElement) =

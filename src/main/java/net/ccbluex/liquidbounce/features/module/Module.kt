@@ -24,8 +24,7 @@ import net.minecraft.client.audio.PositionedSoundRecord
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.input.Keyboard
 
-// TODO: Remove @JvmOverloads when all modules are ported to kotlin.
-open class Module @JvmOverloads constructor(
+open class Module(
     val name: String,
     val category: ModuleCategory,
     defaultKeyBind: Int = Keyboard.KEY_NONE,
