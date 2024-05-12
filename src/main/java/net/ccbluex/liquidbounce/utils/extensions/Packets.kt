@@ -6,11 +6,14 @@
 package net.ccbluex.liquidbounce.utils.extensions
 
 import net.minecraft.network.Packet
+import net.minecraft.network.play.client.C07PacketPlayerDigging
+import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.*
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.server.*
 import kotlin.math.roundToInt
 
 val Packet<*>.isUse get() = this is C08PacketPlayerBlockPlacement && placedBlockDirection == 255
+val Packet<*>.isRelease get() = this is C07PacketPlayerDigging && status == RELEASE_USE_ITEM
 
 var S12PacketEntityVelocity.realMotionX
     get() = motionX / 8000.0

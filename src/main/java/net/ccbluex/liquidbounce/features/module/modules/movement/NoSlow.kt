@@ -29,6 +29,7 @@ import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverUsing
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
+import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Blocks
 import net.minecraft.item.*
@@ -50,7 +51,6 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         AAC2,
         Place,
         EmptyPlace,
-        Slot,
         WatchDog,
         WatchDog2,
         Medusa,
@@ -64,7 +64,6 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         UNCP2,
         Place,
         EmptyPlace,
-        Slot,
         Medusa,
         Drop,
     ).sortedBy { it.modeName }
@@ -76,18 +75,23 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         UNCP2,
         Place,
         EmptyPlace,
-        Slot,
         Medusa,
         Drop,
     ).sortedBy { it.modeName }
 
-    private val noNoMoveCheck = arrayOf(
+    private val noNoMoveCheck = setOf(
         "Vanilla",
         "Drop",
     )
 
-    private val noAntiDesync = arrayOf(
+    private val noAntiDesync = setOf(
         "Drop",
+    )
+
+    private val packetTiming = setOf(
+        "SwitchItem",
+        "Place",
+        "EmptyPlace",
     )
 
     var shouldSwap = false
@@ -100,8 +104,10 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
     private val blocking by BooleanValue("Blocking", true)
     private val blockingMode by ListValue("BlockingMode", swordModes.map { it.modeName }.toTypedArray(), "Vanilla") { blocking }
     private val onlyMoveBlocking by BooleanValue("OnlyMoveBlocking", true) { blocking && blockingMode !in noNoMoveCheck }
-    private val blockingPacketTiming by ListValue("BlockingPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { blocking && blockingMode in arrayOf("Slot", "Place", "EmptyPlace") }
+    private val blockingPacketTiming by ListValue("BlockingPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { blocking && blockingMode in packetTiming }
     private val blockingDropWaitForPacket by BooleanValue("Blocking-Drop-WaitForPacket", true) { blocking && blockingMode == "Drop" }
+    val blockingSwitchItemPackets by IntValue("Blocking-SwitchItem-Packets", 2, 1..9) { blocking && blockingMode == "SwitchItem" }
+    val blockingSwitchItemEveryTick by BooleanValue("Blocking-SwitchItem-EveryTick", true) { blocking && blockingMode == "SwitchItem" }
     val ncpFunnyUsePacket by BooleanValue("NCP-FunnyUsePacket", false) { blocking && blockingMode == "NCP" }
     val ncpFunnyReleasePacket by BooleanValue("NCP-FunnyReleasePacket", false) { blocking && blockingMode == "NCP" }
     private val blockForwardMultiplier by FloatValue("BlockForwardMultiplier", 1f, 0.2f..1f) { blocking }
@@ -110,16 +116,20 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
     private val consuming by BooleanValue("Consuming", true)
     private val consumeMode by ListValue("ConsumeMode", consumeModes.map { it.modeName }.toTypedArray(), "Vanilla") { consuming }
     private val onlyMoveConsume by BooleanValue("OnlyMoveConsume", true) { consuming && consumeMode !in noNoMoveCheck }
-    private val consumePacketTiming by ListValue("ConsumePacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { consuming && consumeMode in arrayOf("Slot", "Place", "EmptyPlace") }
+    private val consumePacketTiming by ListValue("ConsumePacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { consuming && consumeMode in packetTiming }
     private val consumeDropWaitForPacket by BooleanValue("Consume-Drop-WaitForPacket", true) { consuming && consumeMode == "Drop" }
+    val consumeSwitchItemPackets by IntValue("Consume-SwitchItem-Packets", 2, 1..9) { consuming && consumeMode == "SwitchItem" }
+    val consumeSwitchItemEveryTick by BooleanValue("Consume-SwitchItem-EveryTick", true) { consuming && consumeMode == "SwitchItem" }
     private val consumeForwardMultiplier by FloatValue("ConsumeForwardMultiplier", 1f, 0.2f..1f) { consuming }
     private val consumeStrafeMultiplier by FloatValue("ConsumeStrafeMultiplier", 1f, 0.2f..1f) { consuming }
 
     private val bows by BooleanValue("Bows", true)
     private val bowMode by ListValue("BowMode", bowModes.map { it.modeName }.toTypedArray(), "Vanilla") { bows }
     private val onlyMoveBow by BooleanValue("OnlyMoveBow", true) { bows && bowMode !in noNoMoveCheck }
-    private val bowPacketTiming by ListValue("BowPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { bows && bowMode in arrayOf("Slot", "Place", "EmptyPlace") }
+    private val bowPacketTiming by ListValue("BowPacketTiming", arrayOf("Pre", "Post", "Any"), "Pre") { bows && bowMode in packetTiming }
     private val bowDropWaitForPacket by BooleanValue("Bow-Drop-WaitForPacket", true) { bows && bowMode == "Drop" }
+    val bowSwitchItemPackets by IntValue("Bow-SwitchItem-Packets", 2, 1..9) { bows && bowMode == "SwitchItem" }
+    val bowSwitchItemEveryTick by BooleanValue("Bow-SwitchItem-EveryTick", true) { bows && bowMode == "SwitchItem" }
     private val bowForwardMultiplier by FloatValue("BowForwardMultiplier", 1f, 0.2f..1f) { bows }
     private val bowStrafeMultiplier by FloatValue("BowStrafeMultiplier", 1f, 0.2f..1f) { bows }
 
@@ -270,7 +280,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
 
     private val isUsingItem get() = mc.thePlayer?.heldItem != null && (mc.thePlayer.isUsingItem || (mc.thePlayer.heldItem?.item is ItemSword && KillAura.blockStatus) || isUNCPBlocking())
 
-    private val noSlowItem: NoSlowItem
+    val noSlowItem: NoSlowItem
         get() = mc.thePlayer?.heldItem?.item?.run {
             return@run when {
                 this is ItemSword && blocking -> SWORD
