@@ -5,11 +5,12 @@
  */
 package net.ccbluex.liquidbounce.utils.extensions
 
+import net.minecraft.network.Packet
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.server.*
 import kotlin.math.roundToInt
 
-val C08PacketPlayerBlockPlacement.isUse get() = placedBlockDirection == 255
+val Packet<*>.isUse get() = this is C08PacketPlayerBlockPlacement && placedBlockDirection == 255
 
 var S12PacketEntityVelocity.realMotionX
     get() = motionX / 8000.0
