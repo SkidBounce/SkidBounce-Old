@@ -19,7 +19,6 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoS
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.other.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.other.Drop.received
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.watchdog.*
 import net.ccbluex.liquidbounce.utils.MovementUtils.hasMotion
 import net.ccbluex.liquidbounce.utils.NoSlowItem
@@ -55,6 +54,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         WatchDog2,
         Medusa,
         Drop,
+        Grim,
     ).sortedBy { it.modeName }
     private val consumeModes = arrayOf(
         Vanilla,
@@ -66,6 +66,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         EmptyPlace,
         Medusa,
         Drop,
+        Grim,
     ).sortedBy { it.modeName }
     private val bowModes = arrayOf(
         Vanilla,
@@ -77,6 +78,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         EmptyPlace,
         Medusa,
         Drop,
+        Grim,
     ).sortedBy { it.modeName }
 
     private val noNoMoveCheck = setOf(
@@ -211,18 +213,40 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         }
     }
 
+    private fun doNoSlow(noSlowItem: NoSlowItem): Boolean {
+        if (noSlowItem == OTHER)
+            return false
+
+        val mode = usedMode
+
+        if (mode == Drop && !Drop.received && when (noSlowItem) {
+            CONSUMABLE -> consumeDropWaitForPacket
+            SWORD -> blockingDropWaitForPacket
+            else -> bowDropWaitForPacket
+        }) return false
+
+        if (mode == Grim && Grim.slow)
+            return false
+
+        return true
+    }
+
     @EventTarget
     fun onSlowDown(event: SlowDownEvent) {
-        event.forward = when (noSlowItem) {
-            CONSUMABLE ->  if (consumeMode == "Drop" && consumeDropWaitForPacket && !received) 0.2f else consumeForwardMultiplier
-            SWORD ->  if (blockingMode == "Drop" && blockingDropWaitForPacket && !received) 0.2f else blockForwardMultiplier
-            BOW -> if (bowMode == "Drop" && bowDropWaitForPacket && !received) 0.2f else bowForwardMultiplier
+        val item = noSlowItem
+
+        if (!doNoSlow(item)) return
+
+        event.forward = when (item) {
+            CONSUMABLE ->  consumeForwardMultiplier
+            SWORD -> blockForwardMultiplier
+            BOW -> bowForwardMultiplier
             OTHER -> 0.2f
         }
-        event.strafe = when (noSlowItem) {
-            CONSUMABLE -> if (consumeMode == "Drop" && consumeDropWaitForPacket && !received) 0.2f else consumeStrafeMultiplier
-            SWORD ->  if (blockingMode == "Drop" && blockingDropWaitForPacket && !received) 0.2f else blockStrafeMultiplier
-            BOW -> if (bowMode == "Drop" && bowDropWaitForPacket && !received) 0.2f else bowStrafeMultiplier
+        event.strafe = when (item) {
+            CONSUMABLE -> consumeStrafeMultiplier
+            SWORD ->  blockStrafeMultiplier
+            BOW -> bowStrafeMultiplier
             OTHER -> 0.2f
         }
     }
