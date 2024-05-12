@@ -19,6 +19,9 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.Packet
 import net.minecraft.network.play.INetHandlerPlayClient
+import net.minecraft.network.play.client.C03PacketPlayer
+import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
+import net.minecraft.network.play.client.C03PacketPlayer.C06PacketPlayerPosLook
 import net.minecraft.network.play.client.C0CPacketInput
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer
 import net.minecraft.network.play.server.S0FPacketSpawnMob
@@ -112,11 +115,15 @@ object PacketUtils : MinecraftInstance(), Listenable {
     @JvmStatic
     fun sendPacket(packet: Packet<*>, triggerEvent: Boolean = true) {
         if (triggerEvent) {
+            if (packet is C03PacketPlayer && packet !is C04PacketPlayerPosition && packet !is C06PacketPlayerPosLook)
+                mc.thePlayer.positionUpdateTicks++
             mc.netHandler?.addToSendQueue(packet)
             return
         }
-        PacketDebugger.onPacket(PacketEvent(packet, EventState.SEND))
         val netManager = mc.netHandler?.networkManager ?: return
+        PacketDebugger.onPacket(PacketEvent(packet, EventState.SEND))
+        if (packet is C03PacketPlayer && packet !is C04PacketPlayerPosition && packet !is C06PacketPlayerPosLook)
+            mc.thePlayer.positionUpdateTicks++
         if (netManager.isChannelOpen) {
             netManager.flushOutboundQueue()
             netManager.dispatchPacket(packet, null)
