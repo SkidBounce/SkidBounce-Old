@@ -13,11 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.1.5
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3.3.2
-        with:
-          gradle-version: 6.9.4
-          add-job-summary: never
+      #- name: Setup Gradle
+      #  uses: gradle/actions/setup-gradle@v3.3.2
+      #  with:
+      #    gradle-version: 6.9.4
+      #    add-job-summary: never
 
       - name: Build with Gradle
         run: gradle build
