@@ -238,14 +238,14 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         if (!doNoSlow(item)) return
 
         event.forward = when (item) {
-            CONSUMABLE ->  consumeForwardMultiplier
+            CONSUMABLE -> consumeForwardMultiplier
             SWORD -> blockForwardMultiplier
             BOW -> bowForwardMultiplier
             OTHER -> 0.2f
         }
         event.strafe = when (item) {
             CONSUMABLE -> consumeStrafeMultiplier
-            SWORD ->  blockStrafeMultiplier
+            SWORD -> blockStrafeMultiplier
             BOW -> bowStrafeMultiplier
             OTHER -> 0.2f
         }
