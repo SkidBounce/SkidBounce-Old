@@ -262,7 +262,7 @@ object KillAura : Module("KillAura", COMBAT) {
     )
 
     // Visuals
-    private val mark by ListValue("Mark", arrayOf("Platform", "Box"), "Platform", subjective = true)
+    private val mark by ListValue("Mark", arrayOf("Off", "Platform", "Box"), "Platform", subjective = true)
     private val boxOutline by BooleanValue("Outline", true, subjective = true) { mark == "Box" }
     private val fakeSharp by BooleanValue("FakeSharp", true, subjective = true)
 
