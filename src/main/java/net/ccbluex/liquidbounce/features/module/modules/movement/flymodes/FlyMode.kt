@@ -7,6 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes
 
 import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
+import net.ccbluex.liquidbounce.utils.extensions.isActuallyPressed
 
 open class FlyMode(val modeName: String) : MinecraftInstance() {
     open fun onMove(event: MoveEvent) {}
@@ -20,4 +21,12 @@ open class FlyMode(val modeName: String) : MinecraftInstance() {
 
     open fun onEnable() {}
     open fun onDisable() {}
+
+    protected val yDirection: Int
+        get() {
+            var i = 0
+            if (mc.gameSettings.keyBindJump.isActuallyPressed) i++
+            if (mc.gameSettings.keyBindSneak.isActuallyPressed) i--
+            return i
+        }
 }

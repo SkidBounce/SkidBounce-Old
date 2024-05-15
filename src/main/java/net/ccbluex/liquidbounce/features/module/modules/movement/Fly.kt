@@ -17,10 +17,7 @@ import net.ccbluex.liquidbounce.utils.extensions.stop
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BooleanValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import net.minecraft.util.AxisAlignedBB
 import java.awt.Color
@@ -35,7 +32,11 @@ object Fly : Module("Fly", MOVEMENT) {
     val vanillaSpeed by FloatValue("Vanilla-Speed", 2f, 0f..10f)
     { mode in arrayOf("Vanilla", "KeepAlive", "MineSecure", "BugSpartan") }
     private val vanillaKickBypass by BooleanValue("Vanilla-KickBypass", false)
-    { mode in arrayOf("Vanilla", "SmoothVanilla") }
+    { mode in arrayOf("Vanilla", "SmoothVanilla", "LoyisaAGC") }
+
+    // AGC
+    val agcHorizontal by FloatValue("AGC-Horizontal", 2f, 0f..10f) { mode == "LoyisaAGC" }
+    val agcVertical by DoubleValue("AGC-Vertical", 2.0, 0.0..10.0) { mode == "LoyisaAGC" }
 
     // Spartan532
     val spartan532Speed by FloatValue("Spartan532-Speed", 5f, 0f..10f) { mode == "Spartan532" }
