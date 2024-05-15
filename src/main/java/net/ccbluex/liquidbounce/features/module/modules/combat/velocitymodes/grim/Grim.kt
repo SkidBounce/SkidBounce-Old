@@ -50,7 +50,7 @@ object Grim : VelocityMode("Grim") {
         val packet = event.packet
         if (packet is S08PacketPlayerPosLook)
             flagTimer.reset()
-        if (!flagTimer.hasTimePassed(grimFlagPause.toLong())) {
+        if (!flagTimer.hasTimePassed(grimFlagPause)) {
             gotVelo = false
             return
         }
@@ -71,7 +71,7 @@ object Grim : VelocityMode("Grim") {
             --timerTicks
         } else if (mc.timer.timerSpeed <= 1) mc.timer.resetSpeed()
 
-        if (!flagTimer.hasTimePassed(grimFlagPause.toLong())) {
+        if (!flagTimer.hasTimePassed(grimFlagPause)) {
             gotVelo = false
             return
         }

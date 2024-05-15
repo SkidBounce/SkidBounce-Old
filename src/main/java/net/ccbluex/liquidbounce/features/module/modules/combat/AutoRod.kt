@@ -15,6 +15,7 @@ import net.ccbluex.liquidbounce.utils.RaycastUtils
 import net.ccbluex.liquidbounce.utils.extensions.getDistanceToEntityBox
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.DoubleValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.IntValue
 import net.minecraft.entity.Entity
@@ -32,7 +33,7 @@ object AutoRod : Module("AutoRod", COMBAT) {
     ) { facingEnemy && ignoreOnEnemyLowHealth }
     private val absorption by BooleanValue("Absorption", false) { facingEnemy && ignoreOnEnemyLowHealth }
 
-    private val activationDistance by FloatValue("ActivationDistance", 8f, 1f..20f)
+    private val activationDistance by DoubleValue("ActivationDistance", 8.0, 1.0..20.0)
     private val enemiesNearby by IntValue("EnemiesNearby", 1, 1..5)
 
     // Improve health check customization
@@ -97,7 +98,7 @@ object AutoRod : Module("AutoRod", COMBAT) {
 
                 if (facingEntity == null) {
                     // Check if player is looking at enemy.
-                    facingEntity = RaycastUtils.raycastEntity(activationDistance.toDouble()) { isSelected(it, true) }
+                    facingEntity = RaycastUtils.raycastEntity(activationDistance) { isSelected(it, true) }
                 }
 
                 // Check whether player is using items/blocking.
@@ -138,9 +139,9 @@ object AutoRod : Module("AutoRod", COMBAT) {
                 // Check if player has rod in hand
                 if (mc.thePlayer.heldItem?.item != Items.fishing_rod) {
                     // Check if player has rod in hotbar
-                    val rod = findRod(36, 45)
+                    val rodInHotbar = findRod(36, 45)
 
-                    if (rod == -1) {
+                    if (rodInHotbar == -1) {
                         // There is no rod in hotbar
                         return
                     }
@@ -148,7 +149,7 @@ object AutoRod : Module("AutoRod", COMBAT) {
                     // Switch to rod
                     switchBack = mc.thePlayer.inventory.currentItem
 
-                    mc.thePlayer.inventory.currentItem = rod - 36
+                    mc.thePlayer.inventory.currentItem = rodInHotbar - 36
                     mc.playerController.updateController()
                 }
 

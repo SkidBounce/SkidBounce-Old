@@ -12,10 +12,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
-import net.ccbluex.liquidbounce.value.BooleanValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.IntValue
-import net.ccbluex.liquidbounce.value.ListValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.network.play.server.S27PacketExplosion
 
@@ -55,7 +52,7 @@ object Velocity : Module("Velocity", COMBAT) {
     val reverse by BooleanValue("Reverse", false) { mode == "Custom" }
     val onLook by BooleanValue("onLook", false) { reverse }
     val range by FloatValue("Range", 3.0F, 1F..5.0F) { onLook && reverse }
-    val maxAngleDifference by FloatValue("MaxAngleDifference", 45.0f, 5.0f..90f) { onLook && reverse }
+    val maxAngleDifference by DoubleValue("MaxAngleDifference", 45.0, 5.0..90.0) { onLook && reverse }
     val reverseSmooth by BooleanValue("Reverse-Smooth", false) { mode == "Custom" && reverse }
     val reverseNoGround by BooleanValue("Reverse-NoGround", true) { mode == "Custom" && reverse }
     val reverseTicks by IntValue("Reverse-StrafeTicks", 1, 1..20) { mode == "Custom" && reverse }
@@ -66,7 +63,7 @@ object Velocity : Module("Velocity", COMBAT) {
     val grimAlways by BooleanValue("Grim-Always", false) { mode == "Grim" }
     val grimOnlyAir by BooleanValue("Grim-OnlyBreakAir", true) { mode == "Grim" }
     val grimWorld by BooleanValue("Grim-BreakOnWorld", false) { mode == "Grim" }
-    val grimFlagPause by IntValue("Grim-FlagPauseTime", 10, 0..1000) { mode == "Grim" }
+    val grimFlagPause by LongValue("Grim-FlagPauseTime", 10, 0L..1000L) { mode == "Grim" }
     val grimPacket by ListValue("Grim-Packet", arrayOf("Flying", "Position", "Rotation", "Full", "Tick", "None"), "Position") { mode == "Grim" }
     val grimTimerMode by ListValue("Grim-TimerMode", arrayOf("New", "Old", "Off"), "New") { mode == "Grim" && grimPacket != "None" }
     val grimTimerTicks by IntValue("Grim-TimerTicks", 20, 1..100) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }

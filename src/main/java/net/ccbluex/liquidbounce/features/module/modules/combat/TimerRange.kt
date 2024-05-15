@@ -26,10 +26,7 @@ import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawEntityBox
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawPlatform
-import net.ccbluex.liquidbounce.value.BooleanValue
-import net.ccbluex.liquidbounce.value.FloatValue
-import net.ccbluex.liquidbounce.value.ListValue
-import net.ccbluex.liquidbounce.value.IntValue
+import net.ccbluex.liquidbounce.value.*
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.network.Packet
@@ -136,9 +133,9 @@ object TimerRange : Module("TimerRange", COMBAT) {
         2,
         0..5
     )
-    private val predictEnemyPosition by FloatValue("PredictEnemyPosition", 1.5f, -1f..2f)
+    private val predictEnemyPosition by DoubleValue("PredictEnemyPosition", 1.5, -1.0..2.0)
 
-    private val maxAngleDifference by FloatValue("MaxAngleDifference", 5f, 5f..90f) { timerBoostMode == "Modern" }
+    private val maxAngleDifference by DoubleValue("MaxAngleDifference", 5.0, 5.0..90.0) { timerBoostMode == "Modern" }
 
     // Mark Option
     private val markMode by ListValue("Mark", arrayOf("Off", "Box", "Platform"), "Off") { timerBoostMode == "Modern" }
@@ -257,7 +254,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
         }
 
         if (isPlayerMoving() && !confirmStop) {
-            if (isLookingOnEntities(nearbyEntity, maxAngleDifference.toDouble())) {
+            if (isLookingOnEntities(nearbyEntity, maxAngleDifference)) {
                 val entityDistance = mc.thePlayer.getDistanceToEntityBox(nearbyEntity)
                 if (confirmTick && entityDistance <= randomRange) {
                     if (updateDistance(nearbyEntity)) {
@@ -276,7 +273,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
         val player = mc.thePlayer ?: return false
 
         val (predictX, predictY, predictZ) = entity.currPos.subtract(entity.prevPos)
-            .times(2 + predictEnemyPosition.toDouble())
+            .times(2 + predictEnemyPosition)
 
         val boundingBox = entity.hitBox.offset(predictX, predictY, predictZ)
         val (currPos, oldPos) = player.currPos to player.prevPos
@@ -395,7 +392,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
 
             if (entityDistance !in minRange.get()..maxRange.get()) return@let
 
-            val color = if (isLookingOnEntities(nearbyEntity, maxAngleDifference.toDouble())) {
+            val color = if (isLookingOnEntities(nearbyEntity, maxAngleDifference)) {
                 Color(37, 126, 255, 70)
             } else {
                 Color(210, 60, 60, 70)

@@ -107,14 +107,14 @@ object KillAura : Module("KillAura", COMBAT) {
 
     // Range
     // TODO: Make block range independent from attack range
-    private val range: Float by object : FloatValue("Range", 3.7f, 1f..8f) {
-        override fun onChanged(oldValue: Float, newValue: Float) {
+    private val range: Double by object : DoubleValue("Range", 3.7, 1.0..8.0) {
+        override fun onChanged(oldValue: Double, newValue: Double) {
             blockRange = blockRange.coerceAtMost(newValue)
         }
     }
-    private val scanRange by FloatValue("ScanRange", 2f, 0f..10f)
-    private val throughWallsRange by FloatValue("ThroughWallsRange", 3f, 0f..8f)
-    private val rangeSprintReduction by FloatValue("RangeSprintReduction", 0f, 0f..0.4f)
+    private val scanRange by DoubleValue("ScanRange", 2.0, 0.0..10.0)
+    private val throughWallsRange by DoubleValue("ThroughWallsRange", 3.0, 0.0..8.0)
+    private val rangeSprintReduction by DoubleValue("RangeSprintReduction", 0.0, 0.0..0.4)
 
     // Modes
     private val priority by ListValue(
@@ -132,10 +132,10 @@ object KillAura : Module("KillAura", COMBAT) {
     )
     private val targetMode by ListValue("TargetMode", arrayOf("Single", "Switch", "Multi"), "Switch")
     private val limitedMultiTargets by IntValue("LimitedMultiTargets", 0, 0..50) { targetMode == "Multi" }
-    private val maxSwitchFOV by FloatValue("MaxSwitchFOV", 90f, 30f..180f) { targetMode == "Switch" }
+    private val maxSwitchFOV by DoubleValue("MaxSwitchFOV", 90.0, 30.0..180.0) { targetMode == "Switch" }
 
     // Delay
-    private val switchDelay by IntValue("SwitchDelay", 15, 1..1000) { targetMode == "Switch" }
+    private val switchDelay by LongValue("SwitchDelay", 15, 1L..1000L) { targetMode == "Switch" }
 
     // Bypass
     private val swing by SwingValue()
@@ -174,10 +174,10 @@ object KillAura : Module("KillAura", COMBAT) {
     { autoBlock != "Off" && smartAutoBlock }
 
     // TODO: Make block range independent from attack range
-    private var blockRange by object : FloatValue("BlockRange", range, 1f..8f) {
+    private var blockRange by object : DoubleValue("BlockRange", range, 1.0..8.0) {
         override fun isSupported() = autoBlock != "Off" && smartAutoBlock
 
-        override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(this@KillAura.range)
+        override fun onChange(oldValue: Double, newValue: Double) = newValue.coerceAtMost(this@KillAura.range)
     }
 
     // Don't block when you can't get damaged
@@ -238,7 +238,7 @@ object KillAura : Module("KillAura", COMBAT) {
 
     // Prediction
     private val predictClientMovement by IntValue("PredictClientMovement", 2, 0..5)
-    private val predictEnemyPosition by FloatValue("PredictEnemyPosition", 1.5f, -1f..2f)
+    private val predictEnemyPosition by DoubleValue("PredictEnemyPosition", 1.5, -1.0..2.0)
 
     // Extra swing
     private val failSwing by BooleanValue("FailSwing", true) { swing != "Off" }
@@ -488,7 +488,7 @@ object KillAura : Module("KillAura", COMBAT) {
                     }
                 }
 
-                runWithModifiedRaycastResult(rotation, range.toDouble(), throughWallsRange.toDouble()) {
+                runWithModifiedRaycastResult(rotation, range, throughWallsRange) {
                     if (swingOnlyInAir && it.typeOfHit != MovingObjectPosition.MovingObjectType.MISS) {
                         return@runWithModifiedRaycastResult
                     }
@@ -545,8 +545,8 @@ object KillAura : Module("KillAura", COMBAT) {
             if (target == currentTarget) this.target = null
         }
 
-        if (targetMode.equals("Switch", ignoreCase = true) && attackTimer.hasTimePassed((switchDelay).toLong())) {
-            if (switchDelay != 0) {
+        if (targetMode.equals("Switch", ignoreCase = true) && attackTimer.hasTimePassed(switchDelay)) {
+            if (switchDelay != 0L) {
                 prevTargetEntities += currentTarget.entityId
                 attackTimer.reset()
             }
@@ -595,7 +595,7 @@ object KillAura : Module("KillAura", COMBAT) {
             val entityFov = getRotationDifference(entity)
 
             if (distance <= maxRange && (fov == 180F || entityFov <= fov)) {
-                if (switchMode && isLookingOnEntities(entity, maxSwitchFOV.toDouble()) || !switchMode) {
+                if (switchMode && isLookingOnEntities(entity, maxSwitchFOV) || !switchMode) {
                     targets += entity
                 }
             }
@@ -746,7 +746,7 @@ object KillAura : Module("KillAura", COMBAT) {
             return false
 
         val (predictX, predictY, predictZ) = entity.currPos.subtract(entity.prevPos)
-            .times(2 + predictEnemyPosition.toDouble())
+            .times(2 + predictEnemyPosition)
 
         val boundingBox = entity.hitBox.offset(predictX, predictY, predictZ)
         val (currPos, oldPos) = player.currPos to player.prevPos
@@ -765,9 +765,9 @@ object KillAura : Module("KillAura", COMBAT) {
             randomCenter,
             gaussianOffset = this.gaussianOffset,
             predict = false,
-            lookRange = range + scanRange,
-            attackRange = range,
-            throughWallsRange = throughWallsRange
+            lookRange = range.toFloat() + scanRange.toFloat(),
+            attackRange = range.toFloat(),
+            throughWallsRange = throughWallsRange.toFloat()
         )
 
         if (rotation == null) {
@@ -788,7 +788,7 @@ object KillAura : Module("KillAura", COMBAT) {
 
         if (micronized) {
             // Is player facing the entity with current rotation?
-            if (isRotationFaced(entity, maxRange.toDouble(), currentRotation)) {
+            if (isRotationFaced(entity, maxRange, currentRotation)) {
                 // Limit angle change but this time modify the turn speed.
                 limitedRotation = limitAngleChange(
                     currentRotation, rotation,
@@ -835,7 +835,7 @@ object KillAura : Module("KillAura", COMBAT) {
 
         if (raycast) {
             chosenEntity = raycastEntity(
-                range.toDouble(),
+                range,
                 currentRotation.yaw,
                 currentRotation.pitch
             ) { entity -> !livingRaycast || entity is EntityLivingBase && entity !is EntityArmorStand }
@@ -848,7 +848,7 @@ object KillAura : Module("KillAura", COMBAT) {
 
             hittable = this.target == chosenEntity
         } else {
-            hittable = isRotationFaced(target, range.toDouble(), currentRotation)
+            hittable = isRotationFaced(target, range, currentRotation)
         }
 
         if (!hittable) {
@@ -875,7 +875,7 @@ object KillAura : Module("KillAura", COMBAT) {
                 // Recreate raycast logic
                 val intercept = targetToCheck.hitBox.calculateIntercept(
                     eyes,
-                    eyes + getVectorForRotation(currentRotation) * range.toDouble()
+                    eyes + getVectorForRotation(currentRotation) * range
                 )
 
                 if (intercept != null) {
@@ -900,7 +900,7 @@ object KillAura : Module("KillAura", COMBAT) {
         // Recreate raycast logic
         val intercept = targetToCheck.hitBox.calculateIntercept(
             eyes,
-            eyes + getVectorForRotation(currentRotation) * range.toDouble()
+            eyes + getVectorForRotation(currentRotation) * range
         )
 
         // Is the entity box raycast vector visible? If not, check through-wall range
@@ -939,7 +939,7 @@ object KillAura : Module("KillAura", COMBAT) {
 
                 val vec = getVectorForRotation(Rotation(yaw, pitch))
 
-                val lookAt = positionEye.add(vec * maxRange.toDouble())
+                val lookAt = positionEye.add(vec * maxRange)
 
                 val movingObject = boundingBox.calculateIntercept(positionEye, lookAt) ?: return
                 val hitVec = movingObject.hitVec
@@ -1041,7 +1041,7 @@ object KillAura : Module("KillAura", COMBAT) {
         get() = max(range + scanRange, throughWallsRange)
 
     private fun getRange(entity: Entity) =
-        (if (mc.thePlayer.getDistanceToEntityBox(entity) >= throughWallsRange) range + scanRange else throughWallsRange) - if (mc.thePlayer.isSprinting) rangeSprintReduction else 0F
+        (if (mc.thePlayer.getDistanceToEntityBox(entity) >= throughWallsRange) range + scanRange else throughWallsRange) - if (mc.thePlayer.isSprinting) rangeSprintReduction else 0.0
 
     /**
      * HUD Tag

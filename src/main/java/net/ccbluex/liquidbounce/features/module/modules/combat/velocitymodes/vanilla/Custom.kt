@@ -76,7 +76,7 @@ object Custom : VelocityMode("Custom") {
 
                 if (onLook && !isLookingOnEntities(
                         nearbyEntity,
-                        maxAngleDifference.toDouble()
+                        maxAngleDifference
                     )
                 ) {
                     if (reverseSmooth)
