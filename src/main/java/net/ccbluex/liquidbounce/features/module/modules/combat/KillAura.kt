@@ -499,7 +499,7 @@ object KillAura : Module("KillAura", COMBAT) {
 
                             // Use own function instead of clickMouse() to maintain keep sprint, auto block, etc
                             if (entity is EntityLivingBase) {
-                                attackEntity(entity)
+                                attackEntity(entity, isLastClick)
                             }
                         } else {
                             if (swing == "Visual")
@@ -523,7 +523,7 @@ object KillAura : Module("KillAura", COMBAT) {
             blockStopInDead = false
             // Attack
             if (!multi) {
-                attackEntity(currentTarget)
+                attackEntity(currentTarget, isLastClick)
             } else {
                 var targets = 0
 
@@ -531,7 +531,7 @@ object KillAura : Module("KillAura", COMBAT) {
                     val distance = thePlayer.getDistanceToEntityBox(entity)
 
                     if (entity is EntityLivingBase && isEnemy(entity) && distance <= getRange(entity)) {
-                        attackEntity(entity)
+                        attackEntity(entity, isLastClick)
 
                         targets += 1
 
@@ -688,7 +688,7 @@ object KillAura : Module("KillAura", COMBAT) {
     /**
      * Attack [entity]
      */
-    private fun attackEntity(entity: EntityLivingBase) {
+    private fun attackEntity(entity: EntityLivingBase, isLastClick: Boolean) {
         // Stop blocking
         val thePlayer = mc.thePlayer
 
@@ -726,7 +726,7 @@ object KillAura : Module("KillAura", COMBAT) {
         CPSCounter.registerClick(CPSCounter.MouseButton.LEFT)
 
         // Start blocking after attack
-        if (autoBlock != "Off" && (thePlayer.isBlocking || canBlock)) {
+        if (autoBlock != "Off" && (thePlayer.isBlocking || canBlock) && isLastClick) {
             startBlocking(entity, interactAutoBlock, autoBlock == "Fake")
         }
 

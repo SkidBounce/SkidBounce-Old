@@ -80,6 +80,9 @@ object NameProtect : Module("NameProtect", MISC, subjective = true, gameDetectin
     fun onPacket(event: PacketEvent) {
         val packet = event.packet
 
+        mc.thePlayer ?: return
+        mc.theWorld ?: return
+
         // Check for new players
         if (packet is S01PacketJoinGame) {
             for (playerInfo in mc.netHandler.playerInfoMap) {
