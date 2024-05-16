@@ -11,6 +11,8 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.getFixedSensitivityAngle
 import net.ccbluex.liquidbounce.utils.RotationUtils.serverRotation
 import net.ccbluex.liquidbounce.utils.extensions.toRadians
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.MathHelper.cos
+import net.minecraft.util.MathHelper.sin
 import kotlin.math.*
 
 /**
