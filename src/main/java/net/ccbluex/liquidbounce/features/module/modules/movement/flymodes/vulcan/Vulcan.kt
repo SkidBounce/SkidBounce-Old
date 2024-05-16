@@ -3,7 +3,12 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge, Forked from LiquidBounce.
  * https://github.com/ManInMyVan/SkidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
+/*
+ * SkidBounce Hacked Client
+ * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge, Forked from LiquidBounce.
+ * https://github.com/ManInMyVan/SkidBounce/
+ */
+package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.vulcan
 
 import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.state
@@ -14,7 +19,6 @@ import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.MovementUtils
 import net.ccbluex.liquidbounce.utils.PacketUtils
 import net.ccbluex.liquidbounce.utils.extensions.isActuallyPressed
-import net.minecraft.client.settings.GameSettings
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C0BPacketEntityAction
 import net.minecraft.network.play.server.S08PacketPlayerPosLook
