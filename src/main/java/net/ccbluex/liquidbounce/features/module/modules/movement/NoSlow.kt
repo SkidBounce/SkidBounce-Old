@@ -155,7 +155,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
 
         Blocks.slime_block.slipperiness = if (slime) slimeFriction else 0.8f
 
-        if (mc.thePlayer.isSneaking && !(onlyMoveSneak && !hasMotion)) {
+        if (mc.thePlayer.isSneaking && !(onlyMoveSneak && !hasMotion) && sneaking) {
             when (sneakMode) {
                 "Switch" -> when (event.eventState) {
                     PRE -> {
