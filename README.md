@@ -66,3 +66,6 @@ SkidBounce uses Gradle, so make sure that it is installed properly. Instructions
     - For Eclipse: `gradlew setupDevWorkspace eclipse build`
 4. Open the folder as a Gradle project in your IDE.
 5. Select either the Forge or Vanilla run configuration.
+
+## License
+This project is distributed under the `GPl 3.0-or-later` license. Check the `LICENSE` file for more information.
