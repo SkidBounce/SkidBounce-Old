@@ -55,6 +55,7 @@ We appreciate contributions. So if you want to support us, feel free to make cha
 - Performance
 - Bypasses
 - Visuals
+- Merging LiquidBounce commits
 
 ### Setting up a Workspace
 
