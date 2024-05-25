@@ -10,6 +10,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4.2.1
+        with:
+          java-version: 8
+          distribution: "adopt"
+
       - name: Checkout repository
         uses: actions/checkout@v4.1.6
 
