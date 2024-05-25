@@ -10,15 +10,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.6
+
       - name: Setup Java
         uses: actions/setup-java@v4.2.1
         with:
           java-version: 8
           distribution: "adopt"
           cache: "gradle"
-
-      - name: Checkout repository
-        uses: actions/checkout@v4.1.6
 
       # - name: Setup Gradle
       #   uses: gradle/actions/setup-gradle@v3.3.2
