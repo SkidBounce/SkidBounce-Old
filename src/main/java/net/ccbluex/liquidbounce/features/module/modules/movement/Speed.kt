@@ -78,15 +78,12 @@ object Speed : Module("Speed", MOVEMENT) {
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
-        val thePlayer = mc.thePlayer ?: return
+        mc.thePlayer ?: return
 
         updateJumping()
 
-        if (!shouldSpeed)
-            return
-
         if (isMoving && alwaysSprint)
-            thePlayer.isSprinting = true
+            mc.thePlayer.isSprinting = true
 
         modeModule.onUpdate()
     }
@@ -97,7 +94,7 @@ object Speed : Module("Speed", MOVEMENT) {
 
         updateJumping()
 
-        if (!shouldSpeed || event.eventState != PRE)
+        if (event.eventState != PRE)
             return
 
         if (isMoving && alwaysSprint)
@@ -109,20 +106,12 @@ object Speed : Module("Speed", MOVEMENT) {
     @EventTarget
     fun onMove(event: MoveEvent) {
         updateJumping()
-
-        if (!shouldSpeed)
-            return
-
         modeModule.onMove(event)
     }
 
     @EventTarget
     fun onTick(event: TickEvent) {
         updateJumping()
-
-        if (!shouldSpeed)
-            return
-
         modeModule.onTick()
     }
 
@@ -136,10 +125,6 @@ object Speed : Module("Speed", MOVEMENT) {
     @EventTarget
     fun onStrafe(event: StrafeEvent) {
         updateJumping()
-
-        if (!shouldSpeed)
-            return
-
         modeModule.onStrafe()
     }
 
@@ -172,24 +157,24 @@ object Speed : Module("Speed", MOVEMENT) {
     private val modes
         get() = speedModes.filter { it.modeName in arrayOf(normalMode, jumpingMode) }
 
-    private val shouldSpeed: Boolean
-        get() {
-            val shouldSpeed = (inLiquid || !mc.thePlayer.inLiquid)
-                    && (whenSneaking || !mc.thePlayer.isSneaking)
-                    && (inWeb || !mc.thePlayer.isInWeb)
-                    && (onLadder || !mc.thePlayer.isOnLadder)
-                    && (whenRiding || !mc.thePlayer.isRiding)
-                    && mc.thePlayer != null
-                    && (onFly || !Fly.handleEvents())
+    override fun handleEvents(): Boolean {
+        val shouldSpeed = (inLiquid || !mc.thePlayer.inLiquid)
+                && (whenSneaking || !mc.thePlayer.isSneaking)
+                && (inWeb || !mc.thePlayer.isInWeb)
+                && (onLadder || !mc.thePlayer.isOnLadder)
+                && (whenRiding || !mc.thePlayer.isRiding)
+                && mc.thePlayer != null
+                && (onFly || !Fly.handleEvents())
+                && super.handleEvents()
 
-            if (shouldSpeed != wasSpeed) {
-                onToggle(shouldSpeed)
-                if (shouldSpeed) onEnable() else onDisable()
-                wasSpeed = shouldSpeed
-            }
-
-            return shouldSpeed
+        if (shouldSpeed != wasSpeed) {
+            onToggle(shouldSpeed)
+            if (shouldSpeed) onEnable() else onDisable()
+            wasSpeed = shouldSpeed
         }
+
+        return shouldSpeed
+    }
 
     private fun updateJumping() {
         mc.gameSettings.keyBindJump.update()
