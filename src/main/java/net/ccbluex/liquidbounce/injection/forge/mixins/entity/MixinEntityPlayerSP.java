@@ -10,6 +10,7 @@ import net.ccbluex.liquidbounce.event.events.*;
 import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura;
 import net.ccbluex.liquidbounce.features.module.modules.exploit.PortalMenu;
 import net.ccbluex.liquidbounce.features.module.modules.misc.Derp;
+import net.ccbluex.liquidbounce.features.module.modules.misc.No003;
 import net.ccbluex.liquidbounce.features.module.modules.movement.InventoryMove;
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow;
 import net.ccbluex.liquidbounce.features.module.modules.movement.Sneak;
@@ -85,7 +86,7 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
     @Shadow
     private double lastReportedPosX;
     @Shadow
-    private int positionUpdateTicks;
+    public int positionUpdateTicks;
     @Shadow
     private double lastReportedPosY;
     @Shadow
@@ -177,7 +178,7 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
             double zDiff = posZ - lastReportedPosZ;
             double yawDiff = yaw - this.lastReportedYaw;
             double pitchDiff = pitch - this.lastReportedPitch;
-            boolean moved = xDiff * xDiff + yDiff * yDiff + zDiff * zDiff > 9.0E-4 || positionUpdateTicks >= 20;
+            boolean moved = xDiff * xDiff + yDiff * yDiff + zDiff * zDiff > (No003.INSTANCE.handleEvents() ? -1 : 9.0E-4) || positionUpdateTicks >= 20;
             boolean rotated = yawDiff != 0 || pitchDiff != 0;
 
             if (ridingEntity == null) {
@@ -344,7 +345,6 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
             modifiedInput.moveForward = secondSneakSlowDownEvent.getForward();
         }
 
-        final NoSlow noSlow = NoSlow.INSTANCE;
         final KillAura killAura = KillAura.INSTANCE;
 
         boolean isUsingItem = getHeldItem() != null && (isUsingItem() || (getHeldItem().getItem() instanceof ItemSword && killAura.getBlockStatus()) || NoSlow.INSTANCE.isUNCPBlocking());
