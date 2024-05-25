@@ -54,9 +54,10 @@ object ChestStealer : Module("ChestStealer", WORLD) {
     private val startDelay by IntValue("StartDelay", 50, 0..500)
     private val closeDelay by IntValue("CloseDelay", 50, 0..500)
 
-    private val noMove by InventoryManager.noMoveValue
-    private val noMoveAir by InventoryManager.noMoveAirValue
-    private val noMoveGround by InventoryManager.noMoveGroundValue
+    // needs annotation or it gets removed
+    @JvmStatic private val noMove by InventoryManager.noMoveValue
+    @JvmStatic private val noMoveAir by InventoryManager.noMoveAirValue
+    @JvmStatic private val noMoveGround by InventoryManager.noMoveGroundValue
 
     private val chestTitle by BooleanValue("ChestTitle", true)
 

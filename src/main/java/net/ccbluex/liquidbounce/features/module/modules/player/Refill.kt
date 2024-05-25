@@ -32,9 +32,10 @@ object Refill : Module("Refill", PLAYER) {
     private val invOpen by BooleanValue("InvOpen", false)
     private val simulateInventory by BooleanValue("SimulateInventory", false) { !invOpen }
 
-    private val noMove by InventoryManager.noMoveValue
-    private val noMoveAir by InventoryManager.noMoveAirValue
-    private val noMoveGround by InventoryManager.noMoveGroundValue
+    // needs annotation or it gets removed
+    @JvmStatic private val noMove by InventoryManager.noMoveValue
+    @JvmStatic private val noMoveAir by InventoryManager.noMoveAirValue
+    @JvmStatic private val noMoveGround by InventoryManager.noMoveGroundValue
 
     @EventTarget
     fun onTick(event: TickEvent) {

@@ -44,20 +44,22 @@ object AutoArmor : Module("AutoArmor", COMBAT) {
     }
     private val minItemAge by IntValue("MinItemAge", 0, 0..2000)
 
-    private val invOpen by InventoryManager.invOpenValue
-    private val simulateInventory by InventoryManager.simulateInventoryValue
+    // needs annotation or it gets removed
+    @JvmStatic private val invOpen by InventoryManager.invOpenValue
+    @JvmStatic private val simulateInventory by InventoryManager.simulateInventoryValue
 
-    private val autoClose by InventoryManager.autoCloseValue
-    private val startDelay by InventoryManager.startDelayValue
-    private val closeDelay by InventoryManager.closeDelayValue
+    @JvmStatic private val autoClose by InventoryManager.autoCloseValue
+    @JvmStatic private val startDelay by InventoryManager.startDelayValue
+    @JvmStatic private val closeDelay by InventoryManager.closeDelayValue
 
     // When swapping armor pieces, it grabs the better one, drags and swaps it with equipped one and drops the equipped one (no time of having no armor piece equipped)
     // Has to make more clicks, works slower
     val smartSwap by BooleanValue("SmartSwap", true)
 
-    private val noMove by InventoryManager.noMoveValue
-    private val noMoveAir by InventoryManager.noMoveAirValue
-    private val noMoveGround by InventoryManager.noMoveGroundValue
+    // needs annotation or it gets removed
+    @JvmStatic private val noMove by InventoryManager.noMoveValue
+    @JvmStatic private val noMoveAir by InventoryManager.noMoveAirValue
+    @JvmStatic private val noMoveGround by InventoryManager.noMoveGroundValue
 
     private val hotbar by BooleanValue("Hotbar", true)
 
