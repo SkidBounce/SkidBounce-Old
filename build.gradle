@@ -101,8 +101,10 @@ processResources {
 
 task moveResources {
     doLast {
-        ant.move file: "${buildDir}/resources/main",
-                todir: "${buildDir}/classes/java"
+        copy {
+            from "${buildDir}/resources/main"
+            into "${buildDir}/classes/java"
+        }
     }
 }
 
