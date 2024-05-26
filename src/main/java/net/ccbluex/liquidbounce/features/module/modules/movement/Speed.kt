@@ -5,7 +5,6 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
-import net.ccbluex.liquidbounce.event.EventState
 import net.ccbluex.liquidbounce.event.EventState.PRE
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.events.*
@@ -158,7 +157,8 @@ object Speed : Module("Speed", MOVEMENT) {
         get() = speedModes.filter { it.modeName in arrayOf(normalMode, jumpingMode) }
 
     override fun handleEvents(): Boolean {
-        val shouldSpeed = (inLiquid || !mc.thePlayer.inLiquid)
+        val shouldSpeed = mc.thePlayer != null
+                && (inLiquid || !mc.thePlayer.inLiquid)
                 && (whenSneaking || !mc.thePlayer.isSneaking)
                 && (inWeb || !mc.thePlayer.isInWeb)
                 && (onLadder || !mc.thePlayer.isOnLadder)
