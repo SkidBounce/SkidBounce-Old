@@ -11,8 +11,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(MovementInput.class)
 public class MixinMovementInput {
-
     @Shadow public float moveStrafe;
-    @Shadow
-    public float moveForward;
+    @Shadow public float moveForward;
 }

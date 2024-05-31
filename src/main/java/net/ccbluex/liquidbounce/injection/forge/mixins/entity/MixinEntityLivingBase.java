@@ -35,42 +35,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityLivingBase.class)
 public abstract class MixinEntityLivingBase extends MixinEntity {
-
-    @Shadow
-    public float rotationYawHead;
-    @Shadow
-    public boolean isJumping;
-    @Shadow
-    public int jumpTicks;
-
-    @Shadow
-    protected abstract float getJumpUpwardsMotion();
-
-    @Shadow
-    public abstract PotionEffect getActivePotionEffect(Potion potionIn);
-
-    @Shadow
-    public abstract boolean isPotionActive(Potion potionIn);
-
-    @Shadow
-    public void onLivingUpdate() {
-    }
-
-    @Shadow
-    protected abstract void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockPos pos);
-
-    @Shadow
-    public abstract float getHealth();
-
-    @Shadow
-    public abstract ItemStack getHeldItem();
-
-    @Shadow
-    protected abstract void updateAITick();
+    @Shadow public float rotationYawHead;
+    @Shadow public boolean isJumping;
+    @Shadow public int jumpTicks;
+    @Shadow protected abstract float getJumpUpwardsMotion();
+    @Shadow public abstract PotionEffect getActivePotionEffect(Potion potionIn);
+    @Shadow public abstract boolean isPotionActive(Potion potionIn);
+    @Shadow public void onLivingUpdate() {}
+    @Shadow protected abstract void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockPos pos);
+    @Shadow public abstract float getHealth();
+    @Shadow public abstract ItemStack getHeldItem();
+    @Shadow protected abstract void updateAITick();
 
     /**
      * @author CCBlueX
      */
+    @SuppressWarnings("OverwriteAuthorRequired")
     @Overwrite
     protected void jump() {
         final JumpEvent jumpEvent = new JumpEvent(getJumpUpwardsMotion());
@@ -133,11 +113,11 @@ public abstract class MixinEntityLivingBase extends MixinEntity {
     /**
      * Inject head yaw rotation modification
      */
+    @SuppressWarnings("UnreachableCode")
     @Inject(method = "onLivingUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;updateEntityActionState()V", shift = At.Shift.AFTER))
     private void hookHeadRotations(CallbackInfo ci) {
         Rotation rotation = Rotations.INSTANCE.getRotation();
 
-        //noinspection ConstantValue
         this.rotationYawHead = ((EntityLivingBase) (Object) this) instanceof EntityPlayerSP && Rotations.INSTANCE.shouldUseRealisticMode() && rotation != null ? rotation.getYaw() : this.rotationYawHead;
     }
 

@@ -22,39 +22,18 @@ import static net.ccbluex.liquidbounce.utils.MinecraftInstance.mc;
 
 @Mixin(EntityPlayer.class)
 public abstract class MixinEntityPlayer extends MixinEntityLivingBase {
+    @Shadow public abstract ItemStack getHeldItem();
+    @Shadow public abstract GameProfile getGameProfile();
+    @Shadow protected abstract boolean canTriggerWalking();
+    @Shadow protected abstract String getSwimSound();
+    @Shadow public abstract FoodStats getFoodStats();
+    @Shadow protected int flyToggleTimer;
+    @Shadow public PlayerCapabilities capabilities;
+    @Shadow public abstract int getItemInUseDuration();
+    @Shadow public abstract ItemStack getItemInUse();
+    @Shadow public abstract boolean isUsingItem();
+    @Shadow public InventoryPlayer inventory;
 
-    @Shadow
-    public abstract ItemStack getHeldItem();
-
-    @Shadow
-    public abstract GameProfile getGameProfile();
-
-    @Shadow
-    protected abstract boolean canTriggerWalking();
-
-    @Shadow
-    protected abstract String getSwimSound();
-
-    @Shadow
-    public abstract FoodStats getFoodStats();
-
-    @Shadow
-    protected int flyToggleTimer;
-
-    @Shadow
-    public PlayerCapabilities capabilities;
-
-    @Shadow
-    public abstract int getItemInUseDuration();
-
-    @Shadow
-    public abstract ItemStack getItemInUse();
-
-    @Shadow
-    public abstract boolean isUsingItem();
-
-    @Shadow
-    public InventoryPlayer inventory;
     private ItemStack cooldownStack;
     private int cooldownStackSlot;
 

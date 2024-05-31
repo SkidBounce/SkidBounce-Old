@@ -29,18 +29,13 @@ import java.util.List;
 @Mixin(GuiChat.class)
 @SideOnly(Side.CLIENT)
 public abstract class MixinGuiChat extends MixinGuiScreen {
-    @Shadow
-    protected GuiTextField inputField;
+    @Shadow protected GuiTextField inputField;
+    @Shadow private List<String> foundPlayerNames;
+    @Shadow private boolean waitingOnAutocomplete;
+    @Shadow public abstract void onAutocompleteResponse(String[] p_onAutocompleteResponse_1_);
 
-    @Shadow
-    private List<String> foundPlayerNames;
-    @Shadow
-    private boolean waitingOnAutocomplete;
     private float yPosOfInputField;
     private float fade = 0;
-
-    @Shadow
-    public abstract void onAutocompleteResponse(String[] p_onAutocompleteResponse_1_);
 
     @Inject(method = "initGui", at = @At("RETURN"))
     private void init(CallbackInfo callbackInfo) {

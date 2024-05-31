@@ -21,14 +21,8 @@ import java.util.List;
 
 @Mixin(ResourcePackRepository.class)
 public class MixinResourcePackRepository {
-
-    @Shadow
-    @Final
-    private File dirServerResourcepacks;
-
-    @Shadow
-    @Final
-    private static Logger logger;
+    @Shadow @Final private File dirServerResourcepacks;
+    @Shadow @Final private static Logger logger;
 
     /**
      * @author Mojang

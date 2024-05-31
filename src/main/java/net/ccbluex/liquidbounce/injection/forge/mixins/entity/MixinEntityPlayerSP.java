@@ -59,70 +59,35 @@ import static net.minecraft.network.play.client.C0BPacketEntityAction.Action.*;
 @Mixin(EntityPlayerSP.class)
 @SideOnly(Side.CLIENT)
 public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
-
-    @Shadow
-    public boolean serverSprintState;
-    @Shadow
-    public int sprintingTicksLeft;
-    @Shadow
-    public float timeInPortal;
-    @Shadow
-    public float prevTimeInPortal;
-    @Shadow
-    public MovementInput movementInput;
-    @Shadow
-    public float horseJumpPower;
-    @Shadow
-    public int horseJumpPowerCounter;
-    @Shadow
-    @Final
-    public NetHandlerPlayClient sendQueue;
-    @Shadow
-    protected int sprintToggleTimer;
-    @Shadow
-    protected Minecraft mc;
-    @Shadow
-    private boolean serverSneakState;
-    @Shadow
-    private double lastReportedPosX;
-    @Shadow
-    public int positionUpdateTicks;
-    @Shadow
-    private double lastReportedPosY;
-    @Shadow
-    private double lastReportedPosZ;
-    @Shadow
-    private float lastReportedYaw;
-    @Shadow
-    private float lastReportedPitch;
-
-    @Shadow
-    public abstract void playSound(String name, float volume, float pitch);
-
-    @Shadow
-    public abstract void setSprinting(boolean sprinting);
-
-    @Shadow
-    protected abstract boolean pushOutOfBlocks(double x, double y, double z);
-
-    @Shadow
-    public abstract void sendPlayerAbilities();
-
-    @Shadow
-    protected abstract void sendHorseJump();
-
-    @Shadow
-    public abstract boolean isRidingHorse();
-
-    @Shadow
-    public abstract boolean isSneaking();
-
-    @Shadow
-    protected abstract boolean isCurrentViewEntity();
+    @Shadow public boolean serverSprintState;
+    @Shadow public int sprintingTicksLeft;
+    @Shadow public float timeInPortal;
+    @Shadow public float prevTimeInPortal;
+    @Shadow public MovementInput movementInput;
+    @Shadow public float horseJumpPower;
+    @Shadow public int horseJumpPowerCounter;
+    @Shadow @Final public NetHandlerPlayClient sendQueue;
+    @Shadow protected int sprintToggleTimer;
+    @Shadow protected Minecraft mc;
+    @Shadow private boolean serverSneakState;
+    @Shadow private double lastReportedPosX;
+    @Shadow public int positionUpdateTicks;
+    @Shadow private double lastReportedPosY;
+    @Shadow private double lastReportedPosZ;
+    @Shadow private float lastReportedYaw;
+    @Shadow private float lastReportedPitch;
+    @Shadow public abstract void playSound(String name, float volume, float pitch);
+    @Shadow public abstract void setSprinting(boolean sprinting);
+    @Shadow protected abstract boolean pushOutOfBlocks(double x, double y, double z);
+    @Shadow public abstract void sendPlayerAbilities();
+    @Shadow protected abstract void sendHorseJump();
+    @Shadow public abstract boolean isRidingHorse();
+    @Shadow protected abstract boolean isCurrentViewEntity();
 
     /**
      * @author CCBlueX
      */
+    @SuppressWarnings("UnreachableCode")
     @Inject(method = "onUpdateWalkingPlayer", at = @At("HEAD"), cancellable = true)
     private void onUpdateWalkingPlayer(CallbackInfo ci) {
         EventManager.INSTANCE.callEvent(new MotionEvent(EventState.PRE));
@@ -248,6 +213,7 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
     /**
      * @author CCBlueX
      */
+    @SuppressWarnings("OverwriteAuthorRequired")
     @Overwrite
     public void onLivingUpdate() {
         EventManager.INSTANCE.callEvent(new UpdateEvent());
@@ -450,6 +416,7 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
         }
     }
 
+    @SuppressWarnings({"UnreachableCode", "ConstantValue", "ConstantConditions"})
     @Override
     public void moveEntity(double x, double y, double z) {
         MoveEvent moveEvent = new MoveEvent(x, y, z);
@@ -490,7 +457,6 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
             if (flag || moveEvent.isSafeWalk()) {
                 double d6;
 
-                //noinspection ConstantConditions
                 for (d6 = 0.05; x != 0 && worldObj.getCollidingBoundingBoxes((Entity) (Object) this, getEntityBoundingBox().offset(x, -1, 0)).isEmpty(); d3 = x) {
                     if (x < d6 && x >= -d6) {
                         x = 0;
@@ -501,7 +467,6 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
                     }
                 }
 
-                //noinspection ConstantConditions
                 for (; z != 0 && worldObj.getCollidingBoundingBoxes((Entity) (Object) this, getEntityBoundingBox().offset(0, -1, z)).isEmpty(); d5 = z) {
                     if (z < d6 && z >= -d6) {
                         z = 0;
@@ -512,7 +477,6 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
                     }
                 }
 
-                //noinspection ConstantConditions
                 for (; x != 0 && z != 0 && worldObj.getCollidingBoundingBoxes((Entity) (Object) this, getEntityBoundingBox().offset(x, -1, z)).isEmpty(); d5 = z) {
                     if (x < d6 && x >= -d6) {
                         x = 0;
@@ -534,7 +498,6 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
                 }
             }
 
-            //noinspection ConstantConditions
             List<AxisAlignedBB> list1 = worldObj.getCollidingBoundingBoxes((Entity) (Object) this, getEntityBoundingBox().addCoord(x, y, z));
             AxisAlignedBB axisalignedbb = getEntityBoundingBox();
 
@@ -566,7 +529,6 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
                 AxisAlignedBB axisalignedbb3 = getEntityBoundingBox();
                 setEntityBoundingBox(axisalignedbb);
                 y = stepEvent.getStepHeight();
-                //noinspection ConstantConditions
                 List<AxisAlignedBB> list = worldObj.getCollidingBoundingBoxes((Entity) (Object) this, getEntityBoundingBox().addCoord(d3, y, d5));
                 AxisAlignedBB axisalignedbb4 = getEntityBoundingBox();
                 AxisAlignedBB axisalignedbb5 = axisalignedbb4.addCoord(d3, 0, d5);
@@ -679,7 +641,6 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
             }
 
             if (d4 != y) {
-                //noinspection ConstantConditions
                 block1.onLanded(worldObj, (Entity) (Object) this);
             }
 
@@ -693,15 +654,14 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
                 }
 
                 if (onGround) {
-                    //noinspection ConstantConditions
                     block1.onEntityCollidedWithBlock(worldObj, blockpos, (Entity) (Object) this);
                 }
 
                 distanceWalkedModified = (float) (distanceWalkedModified + MathHelper.sqrt_double(d12 * d12 + d14 * d14) * 0.6);
                 distanceWalkedOnStepModified = (float) (distanceWalkedOnStepModified + MathHelper.sqrt_double(d12 * d12 + d13 * d13 + d14 * d14) * 0.6);
 
-                if (distanceWalkedOnStepModified > (float) getNextStepDistance() && block1.getMaterial() != Material.air) {
-                    setNextStepDistance((int) distanceWalkedOnStepModified + 1);
+                if (distanceWalkedOnStepModified > (float) nextStepDistance && block1.getMaterial() != Material.air) {
+                    nextStepDistance = (int) distanceWalkedOnStepModified + 1;
 
                     if (isInWater()) {
                         float f = MathHelper.sqrt_double(motionX * motionX * 0.20000000298023224 + motionY * motionY + motionZ * motionZ * 0.20000000298023224) * 0.35F;
@@ -732,17 +692,17 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
                 dealFireDamage(1);
 
                 if (!flag2) {
-                    setFire(getFire() + 1);
+                    setFire(fire + 1);
 
-                    if (getFire() == 0) {
+                    if (fire == 0) {
                         setFire(8);
                     }
                 }
-            } else if (getFire() <= 0) {
+            } else if (fire <= 0) {
                 setFire(-fireResistance);
             }
 
-            if (flag2 && getFire() > 0) {
+            if (flag2 && fire > 0) {
                 playSound("random.fizz", 0.7F, 1.6F + (rand.nextFloat() - rand.nextFloat()) * 0.4F);
                 setFire(-fireResistance);
             }

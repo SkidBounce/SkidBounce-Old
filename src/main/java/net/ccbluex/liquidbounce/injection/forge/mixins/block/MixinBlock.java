@@ -39,17 +39,9 @@ import java.util.List;
 @Mixin(Block.class)
 @SideOnly(Side.CLIENT)
 public abstract class MixinBlock {
-
-    @Shadow
-    @Final
-    protected BlockState blockState;
-
-    @Shadow
-    public abstract AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state);
-
-    @Shadow
-    public abstract void setBlockBounds(float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
-
+    @Shadow @Final protected BlockState blockState;
+    @Shadow public abstract AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state);
+    @Shadow public abstract void setBlockBounds(float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
     // Has to be implemented since a non-virtual call on an abstract method is illegal
     @Shadow
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {

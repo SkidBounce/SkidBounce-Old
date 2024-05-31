@@ -53,49 +53,25 @@ import static net.ccbluex.liquidbounce.utils.MinecraftInstance.mc;
 @Mixin(Minecraft.class)
 @SideOnly(Side.CLIENT)
 public abstract class MixinMinecraft {
+    @Shadow @Final private static Logger logger = LogManager.getLogger();
+    @Shadow public GuiScreen currentScreen;
+    @Shadow public boolean skipRenderWorld;
+    @Shadow private int leftClickCounter;
+    @Shadow public MovingObjectPosition objectMouseOver;
+    @Shadow public WorldClient theWorld;
+    @Shadow public EntityPlayerSP thePlayer;
+    @Shadow public EffectRenderer effectRenderer;
+    @Shadow public PlayerControllerMP playerController;
+    @Shadow public int displayWidth;
+    @Shadow public int displayHeight;
+    @Shadow public int rightClickDelayTimer;
+    @Shadow public GameSettings gameSettings;
+    @Shadow public abstract void displayGuiScreen(GuiScreen guiScreenIn);
 
-    @Final
-    @Shadow
-    private static final Logger logger = LogManager.getLogger();
-
-    @Shadow
-    public GuiScreen currentScreen;
-
-    @Shadow
-    public boolean skipRenderWorld;
-
-    @Shadow
-    private int leftClickCounter;
-
-    @Shadow
-    public MovingObjectPosition objectMouseOver;
-
-    @Shadow
-    public WorldClient theWorld;
-
-    @Shadow
-    public EntityPlayerSP thePlayer;
-
-    @Shadow
-    public EffectRenderer effectRenderer;
-
-    @Shadow
-    public PlayerControllerMP playerController;
-
-    @Shadow
-    public int displayWidth;
-
-    @Shadow
-    public int displayHeight;
-
-    @Shadow
-    public int rightClickDelayTimer;
-
-    @Shadow
-    public GameSettings gameSettings;
-
-    @Shadow
-    public abstract void displayGuiScreen(GuiScreen guiScreenIn);
+    private long lastFrame = getTime();
+    public long getTime() {
+        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+    }
 
     @Inject(method = "run", at = @At("HEAD"))
     private void init(CallbackInfo callbackInfo) {
@@ -149,8 +125,6 @@ public abstract class MixinMinecraft {
         EventManager.INSTANCE.callEvent(new ScreenEvent(currentScreen));
     }
 
-    private long lastFrame = getTime();
-
     @Inject(method = "runGameLoop", at = @At("HEAD"))
     private void runGameLoop(final CallbackInfo callbackInfo) {
         final long currentTime = getTime();
@@ -158,10 +132,6 @@ public abstract class MixinMinecraft {
         lastFrame = currentTime;
 
         RenderUtils.INSTANCE.setDeltaTime(deltaTime);
-    }
-
-    public long getTime() {
-        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
 
     @Inject(method = "runTick", at = @At("HEAD"))
@@ -205,10 +175,6 @@ public abstract class MixinMinecraft {
         LiquidBounce.INSTANCE.stopClient();
     }
 
-    /**
-     * @author ManInMyVan / SkidBounce
-     * @reason ViaMCP
-     */
     @Inject(method = "clickMouse", at = @At("HEAD"))
     private void clickMouse(CallbackInfo callbackInfo) {
         CPSCounter.INSTANCE.registerClick(CPSCounter.MouseButton.LEFT);

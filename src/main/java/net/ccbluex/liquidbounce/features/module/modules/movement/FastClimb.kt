@@ -24,6 +24,7 @@ import net.minecraft.util.EnumFacing
 
 object FastClimb : Module("FastClimb", MOVEMENT) {
 
+    @JvmStatic
     val mode by ListValue(
         "Mode",
         arrayOf("Vanilla", "Delay", "Clip", "AAC3.0.0", "AAC3.0.5", "SAAC3.1.2", "AAC3.1.2").sortedArray(), "Vanilla"

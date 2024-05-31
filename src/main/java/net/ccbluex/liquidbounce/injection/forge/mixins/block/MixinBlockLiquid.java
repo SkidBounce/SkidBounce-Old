@@ -26,6 +26,7 @@ public class MixinBlockLiquid {
             callbackInfoReturnable.setReturnValue(true);
     }
 
+    // TODO: multiplier
     @Inject(method = "modifyAcceleration", at = @At("HEAD"), cancellable = true)
     private void onModifyAcceleration(CallbackInfoReturnable<Vec3> callbackInfoReturnable) {
         if (NoLiquidPush.INSTANCE.handleEvents()) {

@@ -63,8 +63,8 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
     }
 
     private val onlyGround by BooleanValue("OnlyGround", false)
-    val onlyMove by BooleanValue("OnlyMove", true)
-    val onlyMoveForward by BooleanValue("OnlyMoveForward", true) { onlyMove }
+    @JvmStatic val onlyMove by BooleanValue("OnlyMove", true)
+    @JvmStatic val onlyMoveForward by BooleanValue("OnlyMoveForward", true) { onlyMove }
 
     private var ticks = 0
     private var forceSprintState = 0
@@ -238,6 +238,7 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
         }
     }
 
+    @JvmStatic
     fun shouldBlockInput() = handleEvents() && mode == "WTap" && blockInput
 
     override val tag
