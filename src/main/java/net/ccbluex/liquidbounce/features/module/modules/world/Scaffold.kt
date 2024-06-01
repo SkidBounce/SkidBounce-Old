@@ -330,7 +330,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val slowSpeed by FloatValue("SlowSpeed", 0.6f, 0.2f..0.8f) { slow }
 
     // Safety
-    private val keepY by BooleanValue("KeepY", false) { scaffoldMode != "GodBridge" }
+    private val keepY by ListValue("KeepY", arrayOf("Always", "Never", "Smart"), "Smart") { scaffoldMode != "GodBridge" }
     private val safeWalkValue = BooleanValue("SafeWalk", true) { scaffoldMode != "GodBridge" }
     private val airSafe by BooleanValue("AirSafe", false) { safeWalkValue.isActive() }
 
@@ -347,7 +347,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     // Launch position
     private var launchY = 0
     private val shouldKeepLaunchPosition
-        get() = keepY && scaffoldMode != "GodBridge"
+        get() = doKeepY && scaffoldMode != "GodBridge"
 
     // Zitter
     private var zitterDirection = false
@@ -367,7 +367,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     // Downwards
     private val shouldGoDown
-        get() = down && !keepY && mc.gameSettings.keyBindSneak.isActuallyPressed && scaffoldMode !in arrayOf(
+        get() = down && !doKeepY && mc.gameSettings.keyBindSneak.isActuallyPressed && scaffoldMode !in arrayOf(
             "GodBridge",
             "Telly"
         ) && blocksAmount > 1
@@ -891,6 +891,9 @@ object Scaffold : Module("Scaffold", WORLD) {
     private fun findBlock(expand: Boolean, area: Boolean) {
         val player = mc.thePlayer ?: return
 
+        if (!shouldKeepLaunchPosition)
+            launchY = player.posY.roundToInt()
+
         val blockPosition = if (shouldGoDown) {
             if (player.posY == player.posY.roundToInt() + 0.5) {
                 BlockPos(player.posX, player.posY - 0.6, player.posZ)
@@ -1096,7 +1099,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     @EventTarget
     fun onJump(event: JumpEvent) {
         if (onJump) {
-            if (scaffoldMode == "GodBridge" && (autoJump || jumpAutomatically) || keepY)
+            if (scaffoldMode == "GodBridge" && (autoJump || jumpAutomatically) || doKeepY)
                 return
             if (towerMode == "None" || towerMode == "Jump")
                 return
@@ -1713,6 +1716,13 @@ object Scaffold : Module("Scaffold", WORLD) {
                 }
             }
             return amount
+        }
+
+    private val doKeepY
+        get() = when (keepY) {
+            "Always" -> true
+            "Smart" -> !mc.gameSettings.keyBindJump.isActuallyPressed
+            else -> false
         }
 
     override val tag
