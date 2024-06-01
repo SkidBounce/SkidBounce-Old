@@ -138,9 +138,9 @@ object PacketUtils : MinecraftInstance(), Listenable {
     }
 
     @JvmStatic
-    fun C0CPacketInput(input: MovementInput): C0CPacketInput = C0CPacketInput(
-        input.moveStrafe,
-        input.moveForward,
+    fun C0CPacketInput(input: MovementInput, inputMultiplier: Float = 0.98f) = C0CPacketInput(
+        input.moveStrafe * inputMultiplier,
+        input.moveForward * inputMultiplier,
         input.jump,
         input.sneak
     )
