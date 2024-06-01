@@ -330,7 +330,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val slowSpeed by FloatValue("SlowSpeed", 0.6f, 0.2f..0.8f) { slow }
 
     // Safety
-    private val sameY by BooleanValue("SameY", false) { scaffoldMode != "GodBridge" }
+    private val keepY by BooleanValue("KeepY", false) { scaffoldMode != "GodBridge" }
     private val safeWalkValue = BooleanValue("SafeWalk", true) { scaffoldMode != "GodBridge" }
     private val airSafe by BooleanValue("AirSafe", false) { safeWalkValue.isActive() }
 
@@ -347,7 +347,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     // Launch position
     private var launchY = 0
     private val shouldKeepLaunchPosition
-        get() = sameY && scaffoldMode != "GodBridge"
+        get() = keepY && scaffoldMode != "GodBridge"
 
     // Zitter
     private var zitterDirection = false
@@ -367,7 +367,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     // Downwards
     private val shouldGoDown
-        get() = down && !sameY && mc.gameSettings.keyBindSneak.isActuallyPressed && scaffoldMode !in arrayOf(
+        get() = down && !keepY && mc.gameSettings.keyBindSneak.isActuallyPressed && scaffoldMode !in arrayOf(
             "GodBridge",
             "Telly"
         ) && blocksAmount > 1
@@ -1096,7 +1096,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     @EventTarget
     fun onJump(event: JumpEvent) {
         if (onJump) {
-            if (scaffoldMode == "GodBridge" && (autoJump || jumpAutomatically) || sameY)
+            if (scaffoldMode == "GodBridge" && (autoJump || jumpAutomatically) || keepY)
                 return
             if (towerMode == "None" || towerMode == "Jump")
                 return
