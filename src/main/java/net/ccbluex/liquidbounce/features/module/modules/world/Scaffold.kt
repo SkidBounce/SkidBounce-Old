@@ -1644,7 +1644,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
                 if (player.onGround) {
                     mc.gameSettings.keyBindSneak.pressed =
-                        eagleSneaking || GameSettings.isKeyDown(mc.gameSettings.keyBindSneak)
+                        eagleSneaking || mc.gameSettings.keyBindSneak.isActuallyPressed
                 }
 
                 if (input.jump || mc.gameSettings.keyBindJump.isKeyDown || notOnGround) {
