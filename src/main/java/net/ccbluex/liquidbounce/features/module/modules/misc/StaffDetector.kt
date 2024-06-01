@@ -5,10 +5,16 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.misc
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 import net.ccbluex.liquidbounce.LiquidBounce.hud
 import net.ccbluex.liquidbounce.LiquidBounce.CLIENT_CLOUD
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.events.PacketEvent
+import net.ccbluex.liquidbounce.event.events.WorldEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notifications.Notification
@@ -17,6 +23,8 @@ import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.misc.HttpUtils
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.ListValue
+import net.minecraft.entity.Entity
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.network.Packet
 import net.minecraft.network.play.server.*
@@ -25,11 +33,13 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
 
     // TODO: Add more Staff Mode
     private val staffmode by ListValue("StaffMode", arrayOf("BlocksMC"), "BlocksMC")
+    private val tab by BooleanValue("TAB", true) { staffmode == "BlocksMC" }
+    private val packet by BooleanValue("Packet", true) { staffmode == "BlocksMC" }
 
-    private val autoLeave by ListValue("AutoLeave", arrayOf("Off", "Leave", "Lobby", "Quit"), "Off")
+    private val autoLeave by ListValue("AutoLeave", arrayOf("Off", "Leave", "Lobby", "Quit"), "Off") { tab || packet }
 
-    private val spectator by BooleanValue("StaffSpectator", false) { staffmode == "BlocksMC" }
-    private val otherSpectator by BooleanValue("OtherSpectator", false) { staffmode == "BlocksMC" }
+    private val spectator by BooleanValue("StaffSpectator", false) { staffmode == "BlocksMC" && (tab || packet) }
+    private val otherSpectator by BooleanValue("OtherSpectator", false) { staffmode == "BlocksMC" && (tab || packet) }
 
     private val inGame by BooleanValue("InGame", true) { autoLeave != "Off" && staffmode == "BlocksMC" }
     private val warn by ListValue("Warn", arrayOf("Chat", "Notification"), "Chat")
@@ -45,10 +55,27 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
      * Last Updated: 7/02/2024
      */
     private val blocksMCStaff: Map<String, Set<String>> by lazy {
-        if (mc.thePlayer == null || mc.theWorld == null) {
-            return@lazy emptyMap()
+        runBlocking {
+            if (mc.thePlayer == null || mc.theWorld == null) {
+                return@runBlocking emptyMap()
+            }
+            loadStaffList("$CLIENT_CLOUD/staffs/blocksmc.com")
         }
-        loadStaffList("$CLIENT_CLOUD/staffs/blocksmc.com")
+    }
+
+    /**
+     * Reset on World Change
+     */
+    @EventTarget
+    fun onWorld(event: WorldEvent) {
+        if (checkedStaff.isNotEmpty())
+            checkedStaff.clear()
+
+        if (checkedSpectator.isNotEmpty())
+            checkedSpectator.clear()
+
+        if (playersInSpectatorMode.isNotEmpty())
+            playersInSpectatorMode.clear()
     }
 
     private fun checkedStaffRemoved() {
@@ -149,7 +176,13 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
         }
     }
 
+    /**
+     * Check staff using TAB
+     */
     private fun notifyStaff() {
+        if (!tab)
+            return
+
         if (mc.thePlayer == null || mc.theWorld == null) {
             return
         }
@@ -167,7 +200,7 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
                 else -> "§c(Ping error)"
             }
 
-            val warnings = "§d$player §3is a staff $condition"
+            val warnings = "§d$player §3is a staff §b(TAB) $condition"
 
             if (isStaff && player !in checkedStaff) {
                 if (warn == "Chat") {
@@ -181,6 +214,57 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
 
                 autoLeave()
             }
+        }
+    }
+
+    /**
+     * Check staff using Packet
+     */
+    private fun notifyStaffPacket(staff: Entity) {
+        if (!packet)
+            return
+
+        if (mc.thePlayer == null || mc.theWorld == null) {
+            return
+        }
+
+        val isStaff = if (staff is EntityPlayer) {
+            val playerName = staff.gameProfile.name
+
+            blocksMCStaff.any { entry ->
+                entry.value.any { staffName -> playerName.contains(staffName) }
+            }
+        } else {
+            false
+        }
+
+        val condition = when (staff) {
+            is EntityPlayer -> {
+                val responseTime = mc.netHandler?.getPlayerInfo(staff.uniqueID)?.responseTime ?: 0
+                when {
+                    responseTime > 0 -> "§e(${responseTime}ms)"
+                    responseTime == 0 -> "§a(Joined)"
+                    else -> "§c(Ping error)"
+                }
+            }
+            else -> ""
+        }
+
+        val playerName = if (staff is EntityPlayer) staff.gameProfile.name else ""
+
+        val warnings = "§c[STAFF] §d${playerName} §3is a staff §b(Packet) $condition"
+
+        if (isStaff && playerName !in checkedStaff) {
+            if (warn == "Chat") {
+                displayClientMessage(warnings)
+            } else {
+                hud.addNotification(Notification(warnings, 3000F))
+            }
+
+            attemptLeave = false
+            checkedStaff.add(playerName)
+
+            autoLeave()
         }
     }
 
@@ -202,38 +286,40 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
         attemptLeave = true
     }
 
-    private fun handleOtherChecks(packet: Packet<*>) {
+    private fun handleOtherChecks(packet: Packet<*>?) {
         if (mc.thePlayer == null || mc.theWorld == null) {
             return
         }
 
         when (packet) {
-            is S07PacketRespawn,
-            is S01PacketJoinGame,
-            is S39PacketPlayerAbilities,
-            is S0CPacketSpawnPlayer,
-            is S18PacketEntityTeleport,
-            is S1CPacketEntityMetadata,
-            is S1DPacketEntityEffect,
-            is S1EPacketRemoveEntityEffect,
-            is S19PacketEntityStatus,
-            is S19PacketEntityHeadLook,
-            is S49PacketUpdateEntityNBT -> handleStaff()
+            is S01PacketJoinGame -> handleStaff(mc.theWorld.getEntityByID(packet.entityId))
+            is S0CPacketSpawnPlayer -> handleStaff(mc.theWorld.getEntityByID(packet.entityID))
+            is S18PacketEntityTeleport -> handleStaff(mc.theWorld.getEntityByID(packet.entityId))
+            is S1CPacketEntityMetadata -> handleStaff(mc.theWorld.getEntityByID(packet.entityId))
+            is S1DPacketEntityEffect -> handleStaff(mc.theWorld.getEntityByID(packet.entityId))
+            is S1EPacketRemoveEntityEffect -> handleStaff(mc.theWorld.getEntityByID(packet.entityId))
+            is S19PacketEntityStatus -> handleStaff(mc.theWorld.getEntityByID(packet.entityId))
+            is S19PacketEntityHeadLook -> handleStaff(packet.getEntity(mc.theWorld))
+            is S49PacketUpdateEntityNBT -> handleStaff(packet.getEntity(mc.theWorld))
+            is S1BPacketEntityAttach -> handleStaff(mc.theWorld.getEntityByID(packet.entityId))
+            is S04PacketEntityEquipment -> handleStaff(mc.theWorld.getEntityByID(packet.entityID))
         }
     }
 
-    private fun handleStaff() {
-        if (mc.thePlayer == null || mc.theWorld == null) {
-            return
-        }
+    private fun handleStaff(staff: Entity?) {
+        mc.thePlayer ?: return
+        mc.theWorld ?: return
+        staff ?: return
 
         checkedStaffRemoved()
+
         notifyStaff()
+        notifyStaffPacket(staff)
     }
 
-    private fun loadStaffList(url: String): Map<String, Set<String>> {
+    private suspend fun loadStaffList(url: String): Map<String, Set<String>> {
         try {
-            val (response, code) = HttpUtils.request(url, "GET")
+            val (response, code) = fetchDataAsync(url)
 
             if (code == 200) {
                 val staffList = response.split("\n").filter { it.isNotBlank() && it.isNotEmpty() }.toSet()
@@ -245,6 +331,13 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
             LOGGER.error("§cFailed to load staff list. §9(${e.message})")
         }
         return emptyMap()
+    }
+
+    private suspend fun fetchDataAsync(url: String): Pair<String, Int> = coroutineScope {
+        async(IO) {
+            val (response, code) = HttpUtils.request(url, "GET")
+            Pair(response, code)
+        }.await()
     }
 
     /**
