@@ -13,6 +13,7 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity
 import net.ccbluex.liquidbounce.features.module.modules.client.PacketDebugger
 import net.ccbluex.liquidbounce.features.module.modules.player.FakeLag
 import net.ccbluex.liquidbounce.injection.implementations.IMixinEntity
+import net.ccbluex.liquidbounce.utils.PPSCounter.PacketType.SEND
 import net.ccbluex.liquidbounce.utils.PacketType.*
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.minecraft.entity.EntityLivingBase
@@ -122,6 +123,7 @@ object PacketUtils : MinecraftInstance(), Listenable {
         }
         val netManager = mc.netHandler?.networkManager ?: return
         PacketDebugger.onPacket(PacketEvent(packet, EventState.SEND))
+        PPSCounter.registerType(SEND)
         if (packet is C03PacketPlayer && packet !is C04PacketPlayerPosition && packet !is C06PacketPlayerPosLook)
             mc.thePlayer.positionUpdateTicks++
         if (netManager.isChannelOpen) {
@@ -152,8 +154,13 @@ object PacketUtils : MinecraftInstance(), Listenable {
     fun handlePackets(vararg packets: Packet<*>) =
         packets.forEach { handlePacket(it) }
 
-    fun handlePacket(packet: Packet<*>?) =
-        runCatching { (packet as Packet<INetHandlerPlayClient>).processPacket(mc.netHandler) }
+    fun handlePacket(packet: Packet<*>?) {
+        runCatching {
+            (packet as Packet<INetHandlerPlayClient>).processPacket(mc.netHandler)
+        }.onSuccess {
+            PPSCounter.registerType(PPSCounter.PacketType.RECEIVED)
+        }
+    }
 
     val Packet<*>.type
         get() = if (javaClass.simpleName[0] == 'C')
