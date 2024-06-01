@@ -3,7 +3,7 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge, Forked from LiquidBounce.
  * https://github.com/ManInMyVan/SkidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.other
+package net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.blocksmc
 
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.events.WorldEvent
@@ -41,6 +41,7 @@ import net.minecraft.world.World
  * you get the Fly message Line(153). Also avoid flying too many times (At long distance).
  *
  * @author EclipsesDev
+ * @author CCBlueX/LiquidBounce
  */
 object BlocksMC : FlyMode("BlocksMC") {
 

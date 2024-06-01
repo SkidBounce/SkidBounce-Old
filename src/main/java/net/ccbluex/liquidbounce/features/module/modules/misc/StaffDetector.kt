@@ -329,6 +329,7 @@ object StaffDetector : Module("StaffDetector", ModuleCategory.MISC, gameDetectin
             } else displayClientMessage("§cFailed to load staff list. §9(ERROR CODE: $code)")
         } catch (e: Exception) {
             LOGGER.error("§cFailed to load staff list. §9(${e.message})")
+            e.printStackTrace()
         }
         return emptyMap()
     }

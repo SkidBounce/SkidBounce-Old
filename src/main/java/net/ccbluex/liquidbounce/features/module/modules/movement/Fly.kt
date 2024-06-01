@@ -99,14 +99,14 @@ object Fly : Module("Fly", MOVEMENT) {
     val yBoost by FloatValue("YBoost", 0.42f, 0f..10f) { mode == "Verus" }
 
     // BlocksMC
-    val stable by BooleanValue("Stable", false) { mode == "BlocksMC" }
-    val timerSlowed by BooleanValue("TimerSlowed", true) { mode == "BlocksMC" }
-    val clipDistance by DoubleValue("ClipDistance", 0.05, 0.01..0.1) { mode == "BlocksMC" }
-    val boostSpeed by FloatValue("BoostSpeed", 8f, 1f..15f) { mode == "BlocksMC" }
-    val extraBoost by FloatValue("ExtraSpeed", 0.25f, 0.0F..2f) { mode == "BlocksMC" }
-    val stopOnLanding by BooleanValue("StopOnLanding", true) { mode == "BlocksMC" }
-    val stopOnNoMove by BooleanValue("StopOnNoMove", true) { mode == "BlocksMC" }
-    val debugFly by BooleanValue("Debug", false) { mode == "BlocksMC" }
+    val stable by BooleanValue("Stable", false) { mode == "BlocksMC" || mode == "BlocksMC2" }
+    val timerSlowed by BooleanValue("TimerSlowed", true) { mode == "BlocksMC" || mode == "BlocksMC2" }
+    val clipDistance by DoubleValue("ClipDistance", 0.05, 0.01..0.1) { mode == "BlocksMC" || mode == "BlocksMC2" }
+    val boostSpeed by FloatValue("BoostSpeed", 6f, 1f..15f) { mode == "BlocksMC" || mode == "BlocksMC2" }
+    val extraBoost by FloatValue("ExtraSpeed", 1f, 0.0F..2f) { mode == "BlocksMC" || mode == "BlocksMC2" }
+    val stopOnLanding by BooleanValue("StopOnLanding", true) { mode == "BlocksMC" || mode == "BlocksMC2" }
+    val stopOnNoMove by BooleanValue("StopOnNoMove", false) { mode == "BlocksMC" || mode == "BlocksMC2" }
+    val debugFly by BooleanValue("Debug", false) { mode == "BlocksMC" || mode == "BlocksMC2" }
 
     private val mark by BooleanValue("Mark", true, subjective = true)
 
