@@ -39,17 +39,7 @@ object AAC4 : NoFallMode("AAC4") {
 
     override fun onMotion(event: MotionEvent) {
         if (event.eventState == EventState.PRE) {
-            if (aboveVoid && blink) {
-                blink = false
-                if (packets.size > 0) {
-                    for (packet in packets) {
-                        mc.thePlayer.sendQueue.addToSendQueue(packet)
-                    }
-                    packets.clear()
-                }
-                return
-            }
-            if (mc.thePlayer.onGround && blink) {
+            if ((mc.thePlayer.onGround || aboveVoid) && blink) {
                 blink = false
                 if (packets.size > 0) {
                     for (packet in packets) {
