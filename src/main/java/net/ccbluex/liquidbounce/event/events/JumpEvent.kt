@@ -12,4 +12,4 @@ import net.ccbluex.liquidbounce.event.CancellableEvent
  *
  * @param motion jump motion (y motion)
  */
-class JumpEvent(var motion: Float) : CancellableEvent()
+class JumpEvent(var motion: Float, var sprintBoost: Float) : CancellableEvent()

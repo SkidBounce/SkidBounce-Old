@@ -30,7 +30,7 @@ object AAC3313 : SpeedMode("AAC3.3.13") {
             thePlayer.motionX -= sin(yawRad) * 0.202f
             thePlayer.motionZ += cos(yawRad) * 0.202f
             thePlayer.motionY = 0.405
-            callEvent(JumpEvent(0.405f))
+            callEvent(JumpEvent(0.405f, 0.202f))
             strafe()
         } else if (thePlayer.fallDistance < 0.31f) {
             if (getBlock(thePlayer.position) is BlockCarpet) // why?

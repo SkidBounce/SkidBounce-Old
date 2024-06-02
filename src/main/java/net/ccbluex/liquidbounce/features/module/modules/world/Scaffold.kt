@@ -18,6 +18,7 @@ import net.ccbluex.liquidbounce.ui.font.Fonts.font40
 import net.ccbluex.liquidbounce.utils.*
 import net.ccbluex.liquidbounce.utils.CPSCounter.MouseButton.RIGHT
 import net.ccbluex.liquidbounce.utils.CPSCounter.registerClick
+import net.ccbluex.liquidbounce.utils.MovementUtils.JUMP_HEIGHT
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
@@ -50,7 +51,6 @@ import net.ccbluex.liquidbounce.value.*
 import net.minecraft.block.BlockBush
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager.resetColor
-import net.minecraft.client.settings.GameSettings
 import net.minecraft.init.Blocks.air
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
@@ -197,46 +197,46 @@ object Scaffold : Module("Scaffold", WORLD) {
     }
 
     // GodBridge mode subvalues
-    private val useStaticRotation by BooleanValue("UseStaticRotation", false) { scaffoldMode == "GodBridge" }
-    private val autoJump by BooleanValue("AutoJump", true) { scaffoldMode == "GodBridge" }
-    private val jumpAutomatically by BooleanValue("JumpAutomatically", true) { scaffoldMode == "GodBridge" && autoJump }
-    private val maxBlocksToJump: IntValue = object : IntValue("MaxBlocksToJump", 4, 1..8) {
-        override fun isSupported() = scaffoldMode == "GodBridge" && !jumpAutomatically && autoJump
+    private val useStaticRotation by BooleanValue("GodBridge-UseStaticRotation", false) { scaffoldMode == "GodBridge" }
+    private val godBridgeAutoJump by BooleanValue("GodBridge-AutoJump", true) { scaffoldMode == "GodBridge" }
+    private val jumpAutomatically by BooleanValue("GodBridge-JumpAutomatically", true) { scaffoldMode == "GodBridge" && godBridgeAutoJump }
+    private val maxBlocksToJump: IntValue = object : IntValue("GodBridge-MaxBlocksToJump", 4, 1..8) {
+        override fun isSupported() = scaffoldMode == "GodBridge" && !jumpAutomatically && godBridgeAutoJump
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minBlocksToJump.get())
     }
 
-    private val minBlocksToJump: IntValue = object : IntValue("MinBlocksToJump", 4, 1..8) {
+    private val minBlocksToJump: IntValue = object : IntValue("GodBridge-MinBlocksToJump", 4, 1..8) {
         override fun isSupported() =
-            scaffoldMode == "GodBridge" && !jumpAutomatically && !maxBlocksToJump.isMinimal && autoJump
+            scaffoldMode == "GodBridge" && !jumpAutomatically && !maxBlocksToJump.isMinimal && godBridgeAutoJump
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxBlocksToJump.get())
     }
 
     // Telly mode subvalues
-    private val startHorizontally by BooleanValue("StartHorizontally", true) { scaffoldMode == "Telly" }
-    private val maxHorizontalPlacements: IntValue = object : IntValue("MaxHorizontalPlacements", 1, 1..10) {
+    private val startHorizontally by BooleanValue("Telly-StartHorizontally", true) { scaffoldMode == "Telly" }
+    private val maxHorizontalPlacements: IntValue = object : IntValue("Telly-MaxHorizontalPlacements", 1, 1..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minHorizontalPlacements.get())
     }
-    private val minHorizontalPlacements: IntValue = object : IntValue("MinHorizontalPlacements", 1, 1..10) {
+    private val minHorizontalPlacements: IntValue = object : IntValue("Telly-MinHorizontalPlacements", 1, 1..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxHorizontalPlacements.get())
     }
-    private val maxVerticalPlacements: IntValue = object : IntValue("MaxVerticalPlacements", 1, 1..10) {
+    private val maxVerticalPlacements: IntValue = object : IntValue("Telly-MaxVerticalPlacements", 1, 1..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minVerticalPlacements.get())
     }
 
-    private val minVerticalPlacements: IntValue = object : IntValue("MinVerticalPlacements", 1, 1..10) {
+    private val minVerticalPlacements: IntValue = object : IntValue("Telly-MinVerticalPlacements", 1, 1..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxVerticalPlacements.get())
     }
 
-    private val maxJumpTicks: IntValue = object : IntValue("MaxJumpTicks", 0, 0..10) {
+    private val maxJumpTicks: IntValue = object : IntValue("Telly-MaxJumpTicks", 0, 0..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minJumpTicks.get())
     }
-    private val minJumpTicks: IntValue = object : IntValue("MinJumpTicks", 0, 0..10) {
+    private val minJumpTicks: IntValue = object : IntValue("Telly-MinJumpTicks", 0, 0..10) {
         override fun isSupported() = scaffoldMode == "Telly"
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxJumpTicks.get())
     }
@@ -331,6 +331,11 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     // Safety
     private val keepY by ListValue("KeepY", arrayOf("Always", "Never", "Smart"), "Smart") { scaffoldMode != "GodBridge" }
+    private val autoJump by BooleanValue("AutoJump", false) { scaffoldMode != "GodBridge" }
+    private val autoJumpMotion by DoubleValue("AutoJump-Motion", JUMP_HEIGHT, 0.0..JUMP_HEIGHT) { scaffoldMode != "GodBridge" && autoJump }
+    private val autoJumpIngoreJumpBoost by BooleanValue("AutoJump-IngoreJumpBoost", false) { scaffoldMode != "GodBridge" && autoJump }
+    private val autoJumpNoBoost by BooleanValue("AutoJump-NoBoost", false) { scaffoldMode != "GodBridge" && autoJump }
+    private val autoJumpNoBoostForce by BooleanValue("AutoJump-NoBoost-Force", true) { scaffoldMode != "GodBridge" && autoJump && autoJumpNoBoost }
     private val safeWalkValue = BooleanValue("SafeWalk", true) { scaffoldMode != "GodBridge" }
     private val airSafe by BooleanValue("AirSafe", false) { safeWalkValue.isActive() }
 
@@ -446,6 +451,10 @@ object Scaffold : Module("Scaffold", WORLD) {
 
         if (mc.playerController.currentGameType == SPECTATOR)
             return
+
+        if (isMoving && autoJump) {
+            mc.thePlayer.jmp(autoJumpMotion, !autoJumpNoBoost, autoJumpIngoreJumpBoost)
+        }
 
         mc.timer.timerSpeed = timer
 
@@ -1098,8 +1107,12 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     @EventTarget
     fun onJump(event: JumpEvent) {
+        if (autoJump && scaffoldMode != "GodBridge" && autoJumpNoBoost && autoJumpNoBoostForce) {
+            event.sprintBoost = 0f
+        }
+
         if (onJump) {
-            if (scaffoldMode == "GodBridge" && (autoJump || jumpAutomatically) || doKeepY)
+            if (scaffoldMode == "GodBridge" && (godBridgeAutoJump || jumpAutomatically) || doKeepY)
                 return
             if (towerMode == "None" || towerMode == "Jump")
                 return
@@ -1309,7 +1322,7 @@ object Scaffold : Module("Scaffold", WORLD) {
                     val isSneaking = player.movementInput.sneak
 
                     if ((!isSneaking || speed != 0f) && it.blockPos == info.blockPos && (it.sideHit != info.enumFacing || shouldJumpForcefully) && isMoving && currRotation.yaw.roundToInt() % 45f == 0f) {
-                        if (!isSneaking && autoJump) {
+                        if (!isSneaking && godBridgeAutoJump) {
                             if (player.onGround && !isLookingDiagonally) {
                                 player.jmp()
                             }
@@ -1602,7 +1615,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
             mc.thePlayer.swing(swing)
 
-            if (isManualJumpOptionActive && autoJump)
+            if (isManualJumpOptionActive && godBridgeAutoJump)
                 blocksPlacedUntilJump++
 
             updatePlacedBlocksForTelly()

@@ -53,7 +53,7 @@ public abstract class MixinEntityLivingBase extends MixinEntity {
     @SuppressWarnings("OverwriteAuthorRequired")
     @Overwrite
     protected void jump() {
-        final JumpEvent jumpEvent = new JumpEvent(getJumpUpwardsMotion());
+        final JumpEvent jumpEvent = new JumpEvent(getJumpUpwardsMotion(), 0.2f);
         EventManager.INSTANCE.callEvent(jumpEvent);
         if (jumpEvent.isCancelled()) return;
 
@@ -77,8 +77,8 @@ public abstract class MixinEntityLivingBase extends MixinEntity {
             }
 
             final float f = fixedYaw * 0.017453292F;
-            motionX -= MathHelper.sin(f) * 0.2F;
-            motionZ += MathHelper.cos(f) * 0.2F;
+            motionX -= MathHelper.sin(f) * jumpEvent.getSprintBoost();
+            motionZ += MathHelper.cos(f) * jumpEvent.getSprintBoost();
         }
 
         isAirBorne = true;
