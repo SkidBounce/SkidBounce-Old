@@ -252,18 +252,14 @@ object Scaffold : Module("Scaffold", WORLD) {
     }
 
     // Eagle
-    private val eagleValue =
-        ListValue("Eagle", arrayOf("Normal", "Silent", "Off"), "Normal") { scaffoldMode != "GodBridge" }
+    private val eagleValue = ListValue("Eagle", arrayOf("Normal", "Silent", "Off"), "Normal") { scaffoldMode != "GodBridge" }
     val eagle by eagleValue
+    val eagleInAir by BooleanValue("EagleInAir", true) { eagleValue.isSupported() && eagle != "Off" }
     private val adjustedSneakSpeed by BooleanValue("AdjustedSneakSpeed", true) { eagle == "Silent" }
     private val eagleSpeed by FloatValue("EagleSpeed", 0.3f, 0.3f..1.0f) { eagleValue.isSupported() && eagle != "Off" }
     val eagleSprint by BooleanValue("EagleSprint", false) { eagleValue.isSupported() && eagle == "Normal" }
     private val blocksToEagle by IntValue("BlocksToEagle", 0, 0..10) { eagleValue.isSupported() && eagle != "Off" }
-    private val edgeDistance by FloatValue(
-        "EagleEdgeDistance",
-        0f,
-        0f..0.5f
-    ) { eagleValue.isSupported() && eagle != "Off" }
+    private val edgeDistance by FloatValue("EagleEdgeDistance", 0f, 0f..0.5f) { eagleValue.isSupported() && eagle != "Off" }
 
     // Rotation Options
     private val rotationMode by ListValue("Rotations", arrayOf("Off", "Normal", "Stabilized", "GodBridge"), "Normal")
@@ -503,7 +499,7 @@ object Scaffold : Module("Scaffold", WORLD) {
             }
 
             if (placedBlocksWithoutEagle >= blocksToEagle) {
-                val shouldEagle = isReplaceable(blockPos) || dif < edgeDistance
+                val shouldEagle = (isReplaceable(blockPos) || dif < edgeDistance) && (mc.thePlayer.onGround || eagleInAir)
                 if (eagle == "Silent") {
                     if (eagleSneaking != shouldEagle) {
                         sendPacket(C0BPacketEntityAction(player, if (shouldEagle) START_SNEAKING else STOP_SNEAKING))
