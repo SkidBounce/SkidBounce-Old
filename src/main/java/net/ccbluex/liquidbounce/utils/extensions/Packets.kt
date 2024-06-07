@@ -6,14 +6,25 @@
 package net.ccbluex.liquidbounce.utils.extensions
 
 import net.minecraft.network.Packet
+import net.minecraft.network.play.client.C03PacketPlayer
+import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
+import net.minecraft.network.play.client.C03PacketPlayer.C05PacketPlayerLook
+import net.minecraft.network.play.client.C03PacketPlayer.C06PacketPlayerPosLook
 import net.minecraft.network.play.client.C07PacketPlayerDigging
 import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.*
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.server.*
+import net.minecraft.network.play.server.S14PacketEntity.S15PacketEntityRelMove
+import net.minecraft.network.play.server.S14PacketEntity.S16PacketEntityLook
+import net.minecraft.network.play.server.S14PacketEntity.S17PacketEntityLookMove
 import kotlin.math.roundToInt
 
 val Packet<*>.isUse get() = this is C08PacketPlayerBlockPlacement && placedBlockDirection == 255
 val Packet<*>.isRelease get() = this is C07PacketPlayerDigging && status == RELEASE_USE_ITEM
+val C03PacketPlayer.hasPosition get() = this is C06PacketPlayerPosLook || this is C04PacketPlayerPosition
+val C03PacketPlayer.hasRotation get() = this is C06PacketPlayerPosLook || this is C05PacketPlayerLook
+val S14PacketEntity.hasPosition get() = this is S15PacketEntityRelMove || this is S17PacketEntityLookMove
+val S14PacketEntity.hasRotation get() = this is S16PacketEntityLook || this is S17PacketEntityLookMove
 
 var S12PacketEntityVelocity.realMotionX
     get() = motionX / 8000.0

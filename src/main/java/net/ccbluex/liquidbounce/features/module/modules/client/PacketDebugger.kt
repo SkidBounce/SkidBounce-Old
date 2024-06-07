@@ -10,6 +10,8 @@ import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.utils.ClientUtils
+import net.ccbluex.liquidbounce.utils.extensions.hasPosition
+import net.ccbluex.liquidbounce.utils.extensions.hasRotation
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.Value
 import net.minecraft.network.handshake.client.C00Handshake
@@ -20,6 +22,7 @@ import net.minecraft.network.login.server.S01PacketEncryptionRequest
 import net.minecraft.network.login.server.S02PacketLoginSuccess
 import net.minecraft.network.login.server.S03PacketEnableCompression
 import net.minecraft.network.play.client.*
+import net.minecraft.network.play.client.C02PacketUseEntity.Action.INTERACT_AT
 import net.minecraft.network.play.client.C03PacketPlayer.*
 import net.minecraft.network.play.server.*
 import net.minecraft.network.play.server.S14PacketEntity.*
@@ -33,6 +36,8 @@ import net.minecraft.util.Vec3
 object PacketDebugger : Module("PacketDebugger", CLIENT, gameDetecting = false) {
     private val fieldsValue = BooleanValue("ShowFields", true)
     private val fields by fieldsValue
+    private val rawFieldNamesValue = BooleanValue("RawFieldNames", false) { fields }
+    private val rawFieldNames by rawFieldNamesValue
     private val fieldMap = hashMapOf(
         "field_149600_a" to "Version",
         "field_149598_b" to "Ip",
@@ -388,10 +393,10 @@ object PacketDebugger : Module("PacketDebugger", CLIENT, gameDetecting = false) 
         "field_179781_a" to "Entity",
     )
 
-    private var settings = arrayListOf<Value<*>>(fieldsValue)
+    private var settings = arrayListOf<Value<*>>(fieldsValue, rawFieldNamesValue)
 
     init {
-        arrayListOf(
+        arrayOf(
             C00Handshake::class.java,
             C00PacketLoginStart::class.java,
             C01PacketEncryptionResponse::class.java,
@@ -525,16 +530,38 @@ object PacketDebugger : Module("PacketDebugger", CLIENT, gameDetecting = false) 
                 javaClass.declaringClass.declaredFields else javaClass.declaredFields
 
             for (field in packetFields) {
-                field.isAccessible = true
-
-                val name = fieldMap[field.name] ?: field.name
-                var value: Any? = null
+                // Filter fields that aren't written to the packet
+                if (field.name in arrayOf(
+                    "field_179726_a",
+                    "field_149480_h", // Moving (C03)
+                    "field_149481_i", // Rotating (C03)
+                    "field_149069_g" // Rotating (S14)
+                )) continue
 
                 when (field.name) {
-                    "field_179726_a" -> continue
-                    "field_149590_d" -> if (packet is C12PacketUpdateSign)
-                        value = packet.lines.asList()
-                    else -> value = field.get(packet)
+                    // HitVec
+                    "field_179713_c" -> if (packet is C02PacketUseEntity && packet.action != INTERACT_AT) continue
+                    // X, Y, Z
+                    "field_149479_a", "field_149477_b", "field_149478_c" ->  if (packet is C03PacketPlayer && !packet.hasPosition) continue
+                    // Yaw, Pitch
+                    "field_149476_e", "field_149473_f" -> if (packet is C03PacketPlayer && !packet.hasRotation) continue
+                    // TargetedBlock
+                    "field_179710_b" -> if (packet is C14PacketTabComplete && packet.targetBlock == null) continue
+                    // Yaw, Pitch
+                    "field_149071_e", "field_149068_f" -> if (packet is S14PacketEntity && !packet.hasRotation) continue
+                    // X, Y, Z, Ground
+                    "field_149072_b", "field_149073_c", "field_149070_d", "field_179743_g" -> if (packet is S14PacketEntity && !packet.hasPosition) continue
+                }
+
+                field.isAccessible = true
+
+                val name = fieldMap[field.name].let {
+                    if (it == null || rawFieldNames) field.name else it
+                }
+
+                val value: Any? = when {
+                    field.name == "field_149590_d" && packet is C12PacketUpdateSign -> packet.lines.asList()
+                    else -> field.get(packet)
                 }
 
                 val color = when (value) {
