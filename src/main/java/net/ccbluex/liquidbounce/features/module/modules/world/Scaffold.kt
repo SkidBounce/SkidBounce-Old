@@ -608,7 +608,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
         if (eventState == PRE) {
             update()
-            //placeInfo = null
+            placeInfo = null
             tickTimer.update()
 
             if (!stopWhenBlockAbove || BlockPos(mc.thePlayer).up(2).getBlock() == air) move()
