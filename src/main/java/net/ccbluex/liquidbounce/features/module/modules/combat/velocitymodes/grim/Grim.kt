@@ -104,7 +104,11 @@ object Grim : VelocityMode("Grim") {
                 "Position" -> sendPacket(C04PacketPlayerPosition(x, y, z, ground))
                 "Rotation" -> sendPacket(C05PacketPlayerLook(yaw, pitch, ground))
                 "Full" -> sendPacket(C06PacketPlayerPosLook(x, y, z, yaw, pitch, ground))
-                "Tick" -> mc.runGameLoop()
+                "Tick" -> {
+                    mc.timer.elapsedTicks--
+                    mc.runGameLoop()
+                    mc.timer.elapsedTicks++
+                }
             }
         }
 
