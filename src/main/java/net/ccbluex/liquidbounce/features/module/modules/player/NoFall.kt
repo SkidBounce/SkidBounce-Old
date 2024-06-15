@@ -29,6 +29,7 @@ object NoFall : Module("NoFall", PLAYER) {
 
     private val noVoid by BooleanValue("NoVoid", false)
     val mlgMinFallDistance by FloatValue("MLG-MinHeight", 5f, 2f..50f) { mode == "MLG" }
+    val mlgRetrieveDelay by IntValue("MLG-RetrieveDelay", 100, 100..500) { mode == "MLG" }
     val spoofgroundAlways by BooleanValue("SpoofGround-Always", true) { mode == "SpoofGround" }
     val spoofgroundMinFallDistance by FloatValue(
         "SpoofGround-MinFallDistance",

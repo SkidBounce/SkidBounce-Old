@@ -23,6 +23,8 @@ import net.minecraft.network.play.client.C02PacketUseEntity.Action.ATTACK
 
 object AutoWeapon : Module("AutoWeapon", COMBAT) {
 
+    private val onlySword by BooleanValue("OnlySword", false)
+
     private val spoof by BooleanValue("SpoofItem", false)
     private val spoofTicks by IntValue("SpoofTicks", 10, 1..20) { spoof }
 
@@ -43,7 +45,7 @@ object AutoWeapon : Module("AutoWeapon", COMBAT) {
             // Find the best weapon in hotbar (#Kotlin Style)
             val (slot, _) = (0..8)
                 .map { it to mc.thePlayer.inventory.getStackInSlot(it) }
-                .filter { it.second != null && (it.second.item is ItemSword || it.second.item is ItemTool) }
+                .filter { it.second != null && ((onlySword && it.second.item is ItemSword) || (!onlySword && (it.second.item is ItemSword || it.second.item is ItemTool))) }
                 .maxByOrNull { it.second.attackDamage } ?: return
 
             if (slot == mc.thePlayer.inventory.currentItem) // If in hand no need to swap

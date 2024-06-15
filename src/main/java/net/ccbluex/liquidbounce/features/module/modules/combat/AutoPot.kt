@@ -35,8 +35,16 @@ import net.minecraft.potion.Potion
 
 object AutoPot : Module("AutoPot", COMBAT) {
 
-    private val health by FloatValue("Health", 15F, 1F..20F)
+    private val health by FloatValue("Health", 15F, 1F..20F) { healPotion || regenerationPotion }
     private val delay by IntValue("Delay", 500, 500..1000)
+
+    // Useful potion options
+    private val healPotion by BooleanValue("HealPotion", true)
+    private val regenerationPotion by BooleanValue("RegenPotion", true)
+    private val fireResistancePotion by BooleanValue("FireResPotion", true)
+    private val strengthPotion by BooleanValue("StrengthPotion", true)
+    private val jumpPotion by BooleanValue("JumpPotion", true)
+    private val speedPotion by BooleanValue("SpeedPotion", true)
 
     private val openInventory by BooleanValue("OpenInv", false)
     private val simulateInventory by BooleanValue("SimulateInventory", true) { !openInventory }
@@ -59,7 +67,7 @@ object AutoPot : Module("AutoPot", COMBAT) {
                 // Hotbar Potion
                 val potionInHotbar = findPotion(36, 45)
 
-                if (potionInHotbar != null && thePlayer.health <= health) {
+                if (potionInHotbar != null) {
                     if (thePlayer.onGround) {
                         when (mode.lowercase()) {
                             "jump" -> thePlayer.jmp()
@@ -134,12 +142,32 @@ object AutoPot : Module("AutoPot", COMBAT) {
             val itemPotion = stack.item as ItemPotion
 
             for (potionEffect in itemPotion.getEffects(stack))
-                if (potionEffect.potionID == Potion.heal.id)
+                if (thePlayer.health <= health && healPotion && potionEffect.potionID == Potion.heal.id)
                     return i
 
             if (!thePlayer.isPotionActive(Potion.regeneration))
                 for (potionEffect in itemPotion.getEffects(stack))
-                    if (potionEffect.potionID == Potion.regeneration.id)
+                    if (thePlayer.health <= health && regenerationPotion && potionEffect.potionID == Potion.regeneration.id)
+                        return i
+
+            if (!thePlayer.isPotionActive(Potion.fireResistance))
+                for (potionEffect in itemPotion.getEffects(stack))
+                    if (fireResistancePotion && potionEffect.potionID == Potion.fireResistance.id)
+                        return i
+
+            if (!thePlayer.isPotionActive(Potion.moveSpeed))
+                for (potionEffect in itemPotion.getEffects(stack))
+                    if (speedPotion && potionEffect.potionID == Potion.moveSpeed.id)
+                        return i
+
+            if (!thePlayer.isPotionActive(Potion.jump))
+                for (potionEffect in itemPotion.getEffects(stack))
+                    if (jumpPotion && potionEffect.potionID == Potion.jump.id)
+                        return i
+
+            if (!thePlayer.isPotionActive(Potion.damageBoost))
+                for (potionEffect in itemPotion.getEffects(stack))
+                    if (strengthPotion && potionEffect.potionID == Potion.damageBoost.id)
                         return i
         }
 

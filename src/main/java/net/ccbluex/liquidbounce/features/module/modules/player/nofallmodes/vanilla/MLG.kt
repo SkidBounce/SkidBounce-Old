@@ -8,12 +8,15 @@ package net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.vani
 import net.ccbluex.liquidbounce.event.EventState
 import net.ccbluex.liquidbounce.event.events.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.player.NoFall
+import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.mlgRetrieveDelay
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.ccbluex.liquidbounce.utils.RotationUtils
 import net.ccbluex.liquidbounce.utils.VecRotation
 import net.ccbluex.liquidbounce.utils.extensions.eyes
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
+import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.misc.FallingPlayer
+import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.utils.timing.TickTimer
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
@@ -29,8 +32,11 @@ import kotlin.math.ceil
 object MLG : NoFallMode("MLG") {
 
     private val mlgTimer = TickTimer()
+    private val retrieveTimer = MSTimer()
     private var currentMlgRotation: VecRotation? = null
     private var currentMlgBlock: BlockPos? = null
+    private var mlgInProgress = false
+    private var bucketUsed = false
 
     override fun onMotion(event: MotionEvent) {
         val thePlayer = mc.thePlayer
@@ -75,17 +81,32 @@ object MLG : NoFallMode("MLG") {
 
                     currentMlgRotation = RotationUtils.faceBlock(collision.pos)
                     currentMlgRotation?.rotation?.toPlayer(thePlayer)
+                    mlgInProgress = true
+                    bucketUsed = false
                 }
             }
-        } else if (currentMlgRotation != null) {
-            val stack = thePlayer.inventory.getStackInSlot(InventoryUtils.serverSlot)
+        } else if (currentMlgRotation != null && mlgInProgress && !bucketUsed) {
+            val stack = thePlayer?.inventory?.getStackInSlot(serverSlot)
 
             // If used item was a water bucket, try to pick it back up later
-            if (mc.playerController.sendUseItem(thePlayer, mc.theWorld, stack) && stack.item is ItemBucket) {
+            if (mc.playerController.sendUseItem(thePlayer, mc.theWorld, stack) && stack?.item is ItemBucket) {
+                mlgInProgress = false
+                bucketUsed = true
                 mlgTimer.reset()
+                retrieveTimer.reset()
+            }
+        }
+
+        if (retrieveTimer.hasTimePassed(mlgRetrieveDelay) && !mlgInProgress && bucketUsed) {
+            // Auto-retrieve water bucket.
+            val stack = thePlayer?.inventory?.getStackInSlot(serverSlot)
+
+            if (stack?.item is ItemBucket && mc.playerController.sendUseItem(thePlayer, mc.theWorld, stack)) {
+                bucketUsed = false
+                retrieveTimer.reset()
             }
 
-            InventoryUtils.serverSlot = thePlayer.inventory.currentItem
+            serverSlot = thePlayer.inventory.currentItem
         }
     }
 }
