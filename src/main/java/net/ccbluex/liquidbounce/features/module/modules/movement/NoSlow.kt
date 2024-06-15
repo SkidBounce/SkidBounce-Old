@@ -18,6 +18,7 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoSlowMode
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.aac.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.UNCP.shouldSwap
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.other.*
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.watchdog.*
 import net.ccbluex.liquidbounce.utils.MovementUtils.hasMotion
@@ -32,7 +33,6 @@ import net.ccbluex.liquidbounce.value.IntValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.init.Blocks
 import net.minecraft.item.*
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.client.C0BPacketEntityAction
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action.START_SNEAKING
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action.STOP_SNEAKING
@@ -95,8 +95,6 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         "Place",
         "EmptyPlace",
     )
-
-    var shouldSwap = false
 
     override fun onDisable() {
         shouldSwap = false
@@ -191,26 +189,12 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
     fun onUpdate() {
         antiDesync()
 
-        if (!noMoveCheck && isUsingItem)
-            usedMode.onUpdate()
+        if (!noMoveCheck && isUsingItem) usedMode.onUpdate()
     }
 
     @EventTarget
     fun onPacket(event: PacketEvent) {
-        if (!noMoveCheck)
-            usedMode.onPacket(event)
-
-        val packet = event.packet
-        if (event.isCancelled || shouldSwap)
-            return
-
-        if (packet is C08PacketPlayerBlockPlacement) {
-            if (packet.stack?.item != null && mc.thePlayer.heldItem?.item != null && packet.stack.item == mc.thePlayer.heldItem?.item) {
-                if ((modeModuleConsume == UNCP && (packet.stack.item is ItemFood || packet.stack.item is ItemPotion || packet.stack.item is ItemBucketMilk)) || (modeModuleBow == UNCP && packet.stack.item is ItemBow)) {
-                    shouldSwap = true
-                }
-            }
-        }
+        if (!noMoveCheck) usedMode.onPacket(event)
     }
 
     private fun doNoSlow(noSlowItem: NoSlowItem): Boolean {
@@ -291,7 +275,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
             OTHER -> false
         }
 
-    private val usedMode: NoSlowMode
+    val usedMode: NoSlowMode
         get() = when (noSlowItem) {
             SWORD -> modeModuleBlocking
             BOW -> modeModuleBow
