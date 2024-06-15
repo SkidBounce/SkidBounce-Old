@@ -417,9 +417,9 @@ object TimerRange : Module("TimerRange", COMBAT) {
     /**
      * Get all entities in the world.
      */
-    private fun getAllEntities(): List<Entity> {
-        return mc.theWorld.loadedEntityList.toList()
-            .filter { EntityUtils.isSelected(it, true) }
+    private fun getAllEntities(): List<Entity?>? {
+        return mc.theWorld?.loadedEntityList?.toList()
+            ?.filter { EntityUtils.isSelected(it, true) }
     }
 
     /**
@@ -428,10 +428,10 @@ object TimerRange : Module("TimerRange", COMBAT) {
     private fun getNearestEntityInRange(): Entity? {
         val player = mc.thePlayer ?: return null
 
-        val entitiesInRange = getAllEntities().filter { entity ->
+        val entitiesInRange = getAllEntities()?.filter { entity ->
             var isInRange = false
 
-            Backtrack.runWithNearestTrackedDistance(entity) {
+            Backtrack.runWithNearestTrackedDistance(entity!!) {
                 val distance = player.getDistanceToEntityBox(entity)
                 isInRange = when (timerBoostMode.lowercase()) {
                     "normal" -> distance <= rangeValue
@@ -444,7 +444,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
         }
 
         // Find the nearest entity
-        return entitiesInRange.minByOrNull { player.getDistanceToEntityBox(it) }
+        return entitiesInRange?.minByOrNull { player.getDistanceToEntityBox(it!!) }
     }
 
     /**
