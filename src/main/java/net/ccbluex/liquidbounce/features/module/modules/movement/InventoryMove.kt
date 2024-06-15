@@ -32,11 +32,10 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
 
     private val isIntave = (mc.currentScreen is GuiInventory || mc.currentScreen is GuiChest) && intave
 
-    // needs annotation or it gets removed
-    @JvmStatic private val noMove by InventoryManager.noMoveValue
-    @JvmStatic private val noMoveAir by InventoryManager.noMoveAirValue
-    @JvmStatic private val noMoveGround by InventoryManager.noMoveGroundValue
-    @JvmStatic private val undetectable by InventoryManager.undetectableValue
+    private val noMove by InventoryManager.noMoveValue
+    private val noMoveAir by InventoryManager.noMoveAirValue
+    private val noMoveGround by InventoryManager.noMoveGroundValue
+    private val undetectable by BooleanValue("Undetectable", false)
 
     // If player violates nomove check and inventory is open, close inventory and reopen it when still
     private val silentlyCloseAndReopen by BooleanValue("SilentlyCloseAndReopen", false)

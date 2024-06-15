@@ -75,17 +75,16 @@ object InventoryCleaner : Module("InventoryCleaner", PLAYER) {
 
     private val repairEquipment by BooleanValue("RepairEquipment", true)
 
-    // needs annotation or it gets removed
-    @JvmStatic private val invOpen by InventoryManager.invOpenValue
-    @JvmStatic private val simulateInventory by InventoryManager.simulateInventoryValue
+    private val invOpen by InventoryManager.invOpenValue
+    private val simulateInventory by InventoryManager.simulateInventoryValue
 
-    @JvmStatic private val autoClose by InventoryManager.autoCloseValue
-    @JvmStatic private val startDelay by InventoryManager.startDelayValue
-    @JvmStatic private val closeDelay by InventoryManager.closeDelayValue
+    private val autoClose by InventoryManager.autoCloseValue
+    private val startDelay by InventoryManager.startDelayValue
+    private val closeDelay by InventoryManager.closeDelayValue
 
-    @JvmStatic private val noMove by InventoryManager.noMoveValue
-    @JvmStatic private val noMoveAir by InventoryManager.noMoveAirValue
-    @JvmStatic private val noMoveGround by InventoryManager.noMoveGroundValue
+    private val noMove by InventoryManager.noMoveValue
+    private val noMoveAir by InventoryManager.noMoveAirValue
+    private val noMoveGround by InventoryManager.noMoveGroundValue
 
     private val randomSlot by BooleanValue("RandomSlot", false)
     private val ignoreVehicles by BooleanValue("IgnoreVehicles", false)

@@ -21,22 +21,17 @@ import net.minecraft.client.gui.inventory.GuiInventory
 object InventoryManager: MinecraftInstance() {
 
 	// Shared no move click values
-	val noMoveValue = BooleanValue("NoMoveClicks", false)
-		val noMoveAirValue = BooleanValue("NoClicksInAir", false) { noMoveValue.get() }
-		val noMoveGroundValue = BooleanValue("NoClicksOnGround", true) { noMoveValue.get() }
+	@JvmStatic val noMoveValue = BooleanValue("NoMoveClicks", false)
+	@JvmStatic val noMoveAirValue = BooleanValue("NoClicksInAir", false) { noMoveValue.get() }
+	@JvmStatic val noMoveGroundValue = BooleanValue("NoClicksOnGround", true) { noMoveValue.get() }
 
 	// Shared values between AutoArmor and InventoryCleaner
-	val invOpenValue = BooleanValue("InvOpen", false)
-		val simulateInventoryValue = BooleanValue("SimulateInventory", true) { !invOpenValue.get() }
-		val autoCloseValue = BooleanValue("AutoClose", false) { invOpenValue.get() }
+	@JvmStatic val invOpenValue = BooleanValue("InvOpen", false)
+	@JvmStatic val simulateInventoryValue = BooleanValue("SimulateInventory", true) { !invOpenValue.get() }
+	@JvmStatic 	val autoCloseValue = BooleanValue("AutoClose", false) { invOpenValue.get() }
 
-		val startDelayValue = IntValue("StartDelay", 0, 0..500)
-			{ invOpenValue.get() || simulateInventoryValue.get() }
-		val closeDelayValue = IntValue("CloseDelay", 0, 0..500)
-			{ if (invOpenValue.get()) autoCloseValue.get() else simulateInventoryValue.get() }
-
-	// Undetectable
-	val undetectableValue = BooleanValue("Undetectable", false)
+	@JvmStatic 	val startDelayValue = IntValue("StartDelay", 0, 0..500) { invOpenValue.get() || simulateInventoryValue.get() }
+	@JvmStatic 	val closeDelayValue = IntValue("CloseDelay", 0, 0..500) { if (invOpenValue.get()) autoCloseValue.get() else simulateInventoryValue.get() }
 
 	private lateinit var inventoryWorker: Job
 
