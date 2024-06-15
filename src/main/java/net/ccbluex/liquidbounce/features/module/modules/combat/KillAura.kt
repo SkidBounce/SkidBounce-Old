@@ -141,6 +141,8 @@ object KillAura : Module("KillAura", COMBAT) {
     private val swing by SwingValue()
 
     // Settings
+    // TODO: only swap view if the user didn't manually change view
+    private val autoF5 by BooleanValue("AutoF5", false)
     private val onScaffold by BooleanValue("OnScaffold", false)
     private val onDestroyBlock by BooleanValue("OnDestroyBlock", false)
 
@@ -303,6 +305,9 @@ object KillAura : Module("KillAura", COMBAT) {
         attackTimer.reset()
         clicks = 0
 
+        if (autoF5)
+            mc.gameSettings.thirdPersonView = 0
+
         stopBlocking()
     }
 
@@ -322,6 +327,9 @@ object KillAura : Module("KillAura", COMBAT) {
 
         // Update target
         updateTarget()
+
+        if (autoF5)
+            mc.gameSettings.thirdPersonView = if (target != null || mc.thePlayer.swingProgress > 0) 1 else 0
     }
 
     @EventTarget

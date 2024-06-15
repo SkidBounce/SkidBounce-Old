@@ -186,6 +186,9 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Pick", "Spoof", "Switch"), "Spoof")
     private val sortByHighestAmount by BooleanValue("SortByHighestAmount", false) { autoBlock != "Off" }
 
+    // Settings
+    private val autoF5 by BooleanValue("AutoF5", false)
+
     // Basic stuff
     val sprint by BooleanValue("Sprint", false)
     private val swing by SwingValue()
@@ -803,9 +806,9 @@ object Scaffold : Module("Scaffold", WORLD) {
         placeRotation ?: return false
 
         //if (rotations) {
-        //    val fixedSensitivityRotation = placeRotation.rotation.fixedSensitivity()
-        //    setTargetRotation(fixedSensitivityRotation)
-        //    lockRotation = fixedSensitivityRotation
+        val fixedSensitivityRotation = placeRotation.rotation.fixedSensitivity()
+        setTargetRotation(fixedSensitivityRotation)
+        lockRotation = fixedSensitivityRotation
         //}
         placeInfo = placeRotation.placeInfo
         return true
@@ -1066,7 +1069,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
         if (!mc.gameSettings.keyBindSneak.isActuallyPressed) {
             mc.gameSettings.keyBindSneak.pressed = false
-            if (eagleSneaking) {
+            if (eagleSneaking && player.isSneaking) {
                 sendPacket(C0BPacketEntityAction(player, STOP_SNEAKING))
             }
         }
@@ -1077,6 +1080,8 @@ object Scaffold : Module("Scaffold", WORLD) {
         if (!mc.gameSettings.keyBindLeft.isActuallyPressed) {
             mc.gameSettings.keyBindLeft.pressed = false
         }
+
+        if (autoF5) mc.gameSettings.thirdPersonView = 0
 
         lockRotation = null
         placeRotation = null
@@ -1219,7 +1224,10 @@ object Scaffold : Module("Scaffold", WORLD) {
         val player = mc.thePlayer ?: return false
 
         if (!isReplaceable(blockPosition)) {
+            if (autoF5) mc.gameSettings.thirdPersonView = 0
             return false
+        } else {
+            if (autoF5) mc.gameSettings.thirdPersonView = 1
         }
 
         val maxReach = mc.playerController.blockReachDistance
