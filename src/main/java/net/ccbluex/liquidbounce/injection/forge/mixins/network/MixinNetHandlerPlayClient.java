@@ -67,7 +67,7 @@ public abstract class MixinNetHandlerPlayClient {
     @Redirect(method = "handleExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/S27PacketExplosion;getStrength()F"))
     private float onExplosionVelocity(S27PacketExplosion packetExplosion) {
         if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitExplosionStrength()) {
-            float fixedStrength = MathHelper.clamp_float(packetExplosion.getStrength(), -1000.0f, 1000.0f);
+            float fixedStrength = MathHelper.clamp_float(packetExplosion.getStrength(), -1000f, 1000f);
 
             if (fixedStrength != packetExplosion.getStrength()) {
                 displayClientMessage("Limited too strong explosion");
@@ -78,20 +78,20 @@ public abstract class MixinNetHandlerPlayClient {
     }
 
     @Redirect(method = "handleExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/S27PacketExplosion;func_149149_c()F"))
-    private float onExplosionWorld(S27PacketExplosion instance) {
+    private float onExplosionWorld(S27PacketExplosion packetExplosion) {
         if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitExplosionRange()) {
-            float radius = MathHelper.clamp_float(instance.func_149149_c(), -1000.0f, 1000.0f);
-            if (radius != instance.func_149149_c()) {
+            float radius = MathHelper.clamp_float(packetExplosion.func_149149_c(), -1000f, 1000f);
+            if (radius != packetExplosion.func_149149_c()) {
                 displayClientMessage("Limited too big TNT explosion radius");
                 return radius;
             }
         }
-        return instance.func_149149_c();
+        return packetExplosion.func_149149_c();
     }
 
     @Redirect(method = "handleParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/S2APacketParticles;getParticleCount()I", ordinal = 1))
     private int onParticleAmount(S2APacketParticles packetParticles) {
-        if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitParticlesAmount() && 500 <= packetParticles.getParticleCount()) {
+        if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitParticlesAmount() && packetParticles.getParticleCount() >= 500) {
             displayClientMessage("Limited too many particles");
             return 100;
         }
@@ -100,9 +100,9 @@ public abstract class MixinNetHandlerPlayClient {
 
     @Redirect(method = "handleParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/S2APacketParticles;getParticleSpeed()F"))
     private float onParticleSpeed(S2APacketParticles packetParticles) {
-        if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitParticlesSpeed() && 10.0f <= packetParticles.getParticleSpeed()) {
+        if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitParticlesSpeed() && packetParticles.getParticleSpeed() >= 10f) {
             displayClientMessage("Limited too fast particles speed");
-            return 10.0f;
+            return 5f;
         }
         return packetParticles.getParticleSpeed();
     }
@@ -217,8 +217,8 @@ public abstract class MixinNetHandlerPlayClient {
         }
 
         // Slightly modify the client-side rotations, so they pass the rotation difference check in onUpdateWalkingPlayer, EntityPlayerSP.
-        player.rotationYaw = (rotation.getYaw() + 0.000001f * sign) % 360.0F;
-        player.rotationPitch = (rotation.getPitch() + 0.000001f * sign) % 360.0F;
+        player.rotationYaw = (rotation.getYaw() + 0.000001f * sign) % 360f;
+        player.rotationPitch = (rotation.getPitch() + 0.000001f * sign) % 360f;
         RotationUtils.INSTANCE.syncRotations();
     }
 }
