@@ -8,6 +8,7 @@ package net.ccbluex.liquidbounce.injection.forge.mixins.network;
 import io.netty.buffer.Unpooled;
 import net.ccbluex.liquidbounce.event.events.EntityMovementEvent;
 import net.ccbluex.liquidbounce.event.EventManager;
+import net.ccbluex.liquidbounce.features.module.modules.exploit.AntiExploit;
 import net.ccbluex.liquidbounce.features.module.modules.misc.NoRotate;
 import net.ccbluex.liquidbounce.features.module.modules.player.Blink;
 import net.ccbluex.liquidbounce.features.special.ClientFixes;
@@ -31,6 +32,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.PacketThreadUtil;
 import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.*;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldSettings;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.spongepowered.asm.mixin.Final;
@@ -44,6 +46,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage;
 import static net.ccbluex.liquidbounce.utils.MinecraftInstance.mc;
 import static net.minecraft.network.play.client.C19PacketResourcePackStatus.Action.ACCEPTED;
 import static net.minecraft.network.play.client.C19PacketResourcePackStatus.Action.FAILED_DOWNLOAD;
@@ -60,6 +63,70 @@ public abstract class MixinNetHandlerPlayClient {
     private Minecraft gameController;
     @Shadow
     private WorldClient clientWorldController;
+
+    @Redirect(method = "handleExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/S27PacketExplosion;getStrength()F"))
+    private float onExplosionVelocity(S27PacketExplosion packetExplosion) {
+        if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitExplosionStrength()) {
+            float fixedStrength = MathHelper.clamp_float(packetExplosion.getStrength(), -1000.0f, 1000.0f);
+
+            if (fixedStrength != packetExplosion.getStrength()) {
+                displayClientMessage("Limited too strong explosion");
+                return fixedStrength;
+            }
+        }
+        return packetExplosion.getStrength();
+    }
+
+    @Redirect(method = "handleExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/S27PacketExplosion;func_149149_c()F"))
+    private float onExplosionWorld(S27PacketExplosion instance) {
+        if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitExplosionRange()) {
+            float radius = MathHelper.clamp_float(instance.func_149149_c(), -1000.0f, 1000.0f);
+            if (radius != instance.func_149149_c()) {
+                displayClientMessage("Limited too big TNT explosion radius");
+                return radius;
+            }
+        }
+        return instance.func_149149_c();
+    }
+
+    @Redirect(method = "handleParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/S2APacketParticles;getParticleCount()I", ordinal = 1))
+    private int onParticleAmount(S2APacketParticles packetParticles) {
+        if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitParticlesAmount() && 500 <= packetParticles.getParticleCount()) {
+            displayClientMessage("Limited too many particles");
+            return 100;
+        }
+        return packetParticles.getParticleCount();
+    }
+
+    @Redirect(method = "handleParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/S2APacketParticles;getParticleSpeed()F"))
+    private float onParticleSpeed(S2APacketParticles packetParticles) {
+        if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitParticlesSpeed() && 10.0f <= packetParticles.getParticleSpeed()) {
+            displayClientMessage("Limited too fast particles speed");
+            return 10.0f;
+        }
+        return packetParticles.getParticleSpeed();
+    }
+
+    @Redirect(method = "handleSpawnObject", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/S0EPacketSpawnObject;getType()I"))
+    private int onSpawnObjectType(S0EPacketSpawnObject packet) {
+        if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getLimitedArrowsSpawned() && packet.getType() == 60) {
+            int arrows = AntiExploit.getArrowMax();
+
+            if (++arrows >= AntiExploit.getMaxArrowsSpawned()) {
+                return -1; // Cancel arrows spawn
+            }
+        }
+        return packet.getType();
+    }
+
+    @Redirect(method = "handleChangeGameState", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/S2BPacketChangeGameState;getGameState()I"))
+    private int onChangeGameState(S2BPacketChangeGameState packet) {
+        if (AntiExploit.INSTANCE.handleEvents() && AntiExploit.getCancelDemo() && mc.isDemo()) {
+            return -1; // Cancel demo
+        }
+
+        return packet.getGameState();
+    }
 
     @Inject(method = "handleResourcePack", at = @At("HEAD"), cancellable = true)
     private void handleResourcePack(final S48PacketResourcePackSend p_handleResourcePack_1_, final CallbackInfo callbackInfo) {

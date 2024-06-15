@@ -59,6 +59,9 @@ object FakeLag : Module("FakeLag", PLAYER, gameDetecting = false) {
 
     @EventTarget(priority = -1)
     fun onPacket(event: PacketEvent) {
+        if (!handleEvents())
+            return
+
         val packet = event.packet
 
         if (mc.thePlayer == null || mc.thePlayer.isDead)

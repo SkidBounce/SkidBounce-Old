@@ -15,41 +15,26 @@
         "notification.moduleDisabled": "Disabled %s",
         "module.autoPlay.description": "Automatically queues up for next match",
         "module.aimBot.description": "Automatically faces selected entities around you.",
-
         "module.autoArmor.description": "Automatically equips the best armor in your inventory.",
         "module.noInvClose.description": "Prevents the server from closing your inventory.",
         "module.autoBow.description": "Automatically shoots an arrow whenever your bow is fully loaded.",
-
         "module.autoClicker.description": "Constantly clicks when holding down a mouse button.",
-
         "module.autoLeave.description": "Automatically makes you leave the server whenever your health is low.",
-
         "module.autoPot.description": "Automatically throws healing potions.",
-
         "module.autoRod.description": "Auto use fishing rod to PVP.",
-
         "module.autoSoup.description": "Makes you automatically eat soup whenever your health is low.",
         "module.staffDetector.description": "Detects and notify user of staff members on the server",
         "module.autoWeapon.description": "Automatically selects the best weapon in your hotbar.",
-
         "module.backtrack.description": "Allows you to hit players by attacking their previous cached positions.",
-
         "module.bowAimBot.description": "Automatically aims at players when using a bow.",
-
         "module.criticals.description": "Automatically deals critical hits.",
-
         "module.fastBow.description": "Turns your bow into a machine gun.",
-
         "module.hitBox.description": "Makes hitboxes of targets bigger.",
-
         "module.ignite.description": "Automatically sets targets around you on fire.",
         "module.flagCheck.description": "Detects if you get flagged by an AntiCheat.",
         "module.killAura.description": "Automatically attacks targets around you.",
-
         "module.friends.description": "Allows you to attack friends.",
-
         "module.superKnockback.description": "Increases knockback dealt to other entities.",
-
         "module.teleportHit.description": "Allows to hit entities from far away.",
 
         "module.tNTBlock.description": "Automatically blocks with your sword when TNT around you explodes.",
@@ -221,7 +206,7 @@
         "module.noClip.description": "Allows you to freely move through walls (A sandblock has to fall on your head).",
         
         "module.noFOV.description": "Disables FOV changes caused by speed effect, etc.",
-        
+
         "module.noFall.description": "Prevents you from taking fall damage.",
         
         "module.noFluid.description": "Ignore fluids like water and lava.",
@@ -314,19 +299,13 @@
 
         "module.timer.description": "Changes the speed of the entire game.",
         "module.tracers.description": "Draws a line to targets around you.",
-        
         "module.trueSight.description": "Allows you to see invisible entities and barriers.",
-        
         "module.vehicleOneHit.description": "Allows you to break vehicles with a single hit.",
-        
         "module.spider.description": "Allows you to climb up walls like a spider.",
-
         "module.waterSpeed.description": "Allows you to swim faster.",
-        
         "module.xRay.description": "Allows you to see ores through walls.",
-
         "module.zoot.description": "Removes all bad potion effects/fire.",
-
+        "module.antiExploit": "Prevents server from crashing you.",
         "module.keepSprint.description": "Keeps you sprinting after attacking.",
         "module.antiBounce.description": "Prevents bouncing on slime blocks."
     }

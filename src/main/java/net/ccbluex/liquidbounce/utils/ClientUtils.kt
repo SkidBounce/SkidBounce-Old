@@ -57,6 +57,7 @@ object ClientUtils : MinecraftInstance() {
         )
     }
 
+    @JvmStatic
     fun displayChatMessage(message: Any? = "") {
         val jsonObject = JsonObject()
         jsonObject.addProperty("text", message.toString())
@@ -67,6 +68,7 @@ object ClientUtils : MinecraftInstance() {
             LOGGER.error(e)
         }
     }
+    @JvmStatic
     fun displayClientMessage(message: Any? = "") = displayChatMessage("§8[§9$CLIENT_NAME§8] §r$message")
 
     fun resource(directory: String) = ResourceLocation("${CLIENT_NAME.lowercase()}/$directory")
