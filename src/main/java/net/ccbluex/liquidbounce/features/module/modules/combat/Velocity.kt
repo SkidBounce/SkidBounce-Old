@@ -66,8 +66,8 @@ object Velocity : Module("Velocity", COMBAT) {
     val grimFlagPause by LongValue("Grim-FlagPauseTime", 10, 0L..1000L) { mode == "Grim" }
     val grimPacket by ListValue("Grim-Packet", arrayOf("Flying", "Position", "Rotation", "Full", "Tick", "None"), "Position") { mode == "Grim" }
     val grimTimerMode by ListValue("Grim-TimerMode", arrayOf("New", "Old", "Off"), "New") { mode == "Grim" && grimPacket != "None" }
-    val grimTimerTicks by IntValue("Grim-TimerTicks", 20, 1..100) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }
-    val grimTimerSpeed by FloatValue("Grim-TimerSpeed", 0.8f, 0f..1f) { mode == "Grim" && grimPacket != "None" && grimTimerMode != "Off" }
+    val grimTimerTicks by IntValue("Grim-TimerTicks", 20, 1..100) { mode == "Grim" && grimPacket != "None" && grimPacket != "Tick" && grimTimerMode != "Off" }
+    val grimTimerSpeed by FloatValue("Grim-TimerSpeed", 0.8f, 0f..1f) { mode == "Grim" && grimPacket != "None" && grimPacket != "Tick" && grimTimerMode != "Off" }
 
     val aacv4MotionReducer by FloatValue("AACv4MotionReducer", 0.62f, 0f..1f) { mode == "AACv4" }
 
