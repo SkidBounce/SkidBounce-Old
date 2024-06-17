@@ -92,7 +92,7 @@ object Grim : VelocityMode("Grim") {
             return false
 
         if (grimPacket != "None") {
-            timerTicks = grimTimerTicks
+            if (grimPacket != "Tick") timerTicks = grimTimerTicks
 
             val (x, y, z) = mc.thePlayer.positionVector
             val yaw = mc.thePlayer.rotationYaw
