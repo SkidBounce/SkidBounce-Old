@@ -6,10 +6,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.EventTarget
-import net.ccbluex.liquidbounce.event.events.ClickWindowEvent
-import net.ccbluex.liquidbounce.event.events.JumpEvent
-import net.ccbluex.liquidbounce.event.events.StrafeEvent
-import net.ccbluex.liquidbounce.event.events.UpdateEvent
+import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui
@@ -23,11 +20,15 @@ import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.GuiIngameMenu
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.client.gui.inventory.GuiInventory
+import net.minecraft.network.play.client.C0DPacketCloseWindow
+import net.minecraft.network.play.client.C16PacketClientStatus
+import net.minecraft.network.play.client.C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT
 
 object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) {
 
     private val notInChests by BooleanValue("NotInChests", false)
     val aacAdditionPro by BooleanValue("AACAdditionPro", false)
+    private val silent by BooleanValue("Silent", false)
     private val intave by BooleanValue("Intave", false)
 
     private val isIntave = (mc.currentScreen is GuiInventory || mc.currentScreen is GuiChest) && intave
@@ -91,6 +92,15 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
     fun onClick(event: ClickWindowEvent) {
         if (!canClickInventory()) event.cancelEvent()
         else if (reopenOnClick) serverOpenInventory = true
+    }
+
+    @EventTarget
+    fun onPacket(event: PacketEvent) {
+        if (silent) {
+            if (event.packet is C0DPacketCloseWindow && event.packet.windowId == 0
+                || event.packet is C16PacketClientStatus && event.packet.status == OPEN_INVENTORY_ACHIEVEMENT
+                ) event.cancelEvent()
+        }
     }
 
     override fun onDisable() {
