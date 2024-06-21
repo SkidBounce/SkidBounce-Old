@@ -36,7 +36,7 @@
         "module.friends.description": "Allows you to attack friends.",
         "module.superKnockback.description": "Increases knockback dealt to other entities.",
         "module.teleportHit.description": "Allows to hit entities from far away.",
-
+        "module.noPush.description": "Prevents blocks from pushing you.",
         "module.tNTBlock.description": "Automatically blocks with your sword when TNT around you explodes.",
 
         "module.triggerBot.description": "Automatically attacks the entity you are looking at.",

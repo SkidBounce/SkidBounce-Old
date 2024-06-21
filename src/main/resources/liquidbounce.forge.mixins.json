@@ -9,6 +9,7 @@
     "block.MixinBlockLadder",
     "block.MixinBlockLiquid",
     "block.MixinBlockModelRenderer",
+    "block.MixinBlockPistonBase",
     "block.MixinBlockSlime",
     "block.MixinBlockSoulSand",
     "client.MixinGameSettings",
