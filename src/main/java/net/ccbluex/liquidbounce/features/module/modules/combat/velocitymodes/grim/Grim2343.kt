@@ -12,38 +12,26 @@ import net.minecraft.network.play.server.S32PacketConfirmTransaction
 /**
  * @author SkidderMC/FDPClient
  */
-object GrimTransaction : VelocityMode("GrimTransaction") {
-    private var cancelPacket = 6
-    private var resetPersec = 8
-    private var grimTCancel = 0
-    private var updates = 0
+object Grim2343 : VelocityMode("Grim2.3.43") {
+    private var cancel = 0
 
     override fun onEnable() {
-        grimTCancel = 0
+        cancel = 0
     }
 
     override fun onVelocityPacket(event: PacketEvent) {
         event.cancelEvent()
-        grimTCancel = cancelPacket
+        cancel = 6
     }
 
     override fun onPacket(event: PacketEvent) {
-        if (event.packet is S32PacketConfirmTransaction && grimTCancel > 0) {
+        if (event.packet is S32PacketConfirmTransaction && cancel > 0) {
             event.cancelEvent()
-            grimTCancel--
+            cancel--
         }
     }
 
     override fun onUpdate() {
-        updates++
-
-        if (resetPersec > 0) {
-            if (updates >= 0 || updates >= resetPersec) {
-                updates = 0
-                if (grimTCancel > 0) {
-                    grimTCancel--
-                }
-            }
-        }
+        if (cancel > 0) cancel--
     }
 }
