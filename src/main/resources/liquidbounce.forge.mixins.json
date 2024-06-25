@@ -67,6 +67,8 @@
     "render.MixinVisGraph",
     "resources.MixinSkinManager",
     "tweaks.MixinAnvilChunkLoader",
+    "tweaks.MixinEntityFX",
+    "tweaks.MixinMinecraftServer",
     "world.MixinChunk",
     "world.MixinWorldClient"
   ]
