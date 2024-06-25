@@ -50,10 +50,6 @@ public abstract class MixinGuiSlot {
     @Unique private int skidBounce$listWidth = 220;
     @Unique private boolean skidBounce$enableScissor = false;
 
-    public int skidBounce$getListWidth() {
-        return skidBounce$listWidth;
-    }
-
     public void skidBounce$setListWidth(int listWidth) {
         skidBounce$listWidth = listWidth;
     }
@@ -82,7 +78,7 @@ public abstract class MixinGuiSlot {
             disableFog();
             Tessellator tessellator = Tessellator.getInstance();
             WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-            int k = left + width / 2 - skidBounce$getListWidth() / 2 + 2;
+            int k = left + width / 2 - getListWidth() / 2 + 2;
             int l = top + 4 - (int) amountScrolled;
             if (hasListHeader) {
                 drawListHeader(k, l, tessellator);
@@ -164,5 +160,13 @@ public abstract class MixinGuiSlot {
     @Overwrite
     protected int getScrollBarX() {
         return width - 5;
+    }
+
+    /**
+     * @author CCBlueX (superblaubeere27)
+     */
+    @Overwrite
+    public int getListWidth() {
+        return skidBounce$listWidth;
     }
 }
