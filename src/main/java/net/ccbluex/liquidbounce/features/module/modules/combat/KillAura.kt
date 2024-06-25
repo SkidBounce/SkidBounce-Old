@@ -398,7 +398,7 @@ object KillAura : Module("KillAura", COMBAT) {
                     return
                 }
             }
-        }
+        } else renderBlocking = false
     }
 
     /**

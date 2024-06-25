@@ -67,5 +67,8 @@
     "tweaks.MixinAnvilChunkLoader",
     "world.MixinChunk",
     "world.MixinWorldClient"
+  ],
+  "client": [
+    "gui.MixinGuiAchievement"
   ]
 }
