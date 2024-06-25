@@ -30,6 +30,7 @@ object Criticals : Module("Criticals", COMBAT) {
 
     private val delay by IntValue("Delay", 0, 0..5000) { settings }
     private val attacks by IntValue("Attacks", 0, 0..10) { settings }
+    private val ticks by IntValue("Ticks", 1, 1..10) { settings }
     private val hurtTime by IntValue("HurtTime", 10, 0..10) { settings }
     private val onlyAura by BooleanValue("OnlyAura", false) { settings }
     private val onlyGround by BooleanValue("OnlyGround", false) { settings }
@@ -53,6 +54,7 @@ object Criticals : Module("Criticals", COMBAT) {
         mc.thePlayer ?: return
         if (event.targetEntity !is EntityLivingBase ||
             !delayTimer.hasTimePassed(delay) ||
+            mc.thePlayer.ticksExisted % ticks != 0 ||
             (noMotionUp && mc.thePlayer.motionY > 0) ||
             (noMotionDown && mc.thePlayer.motionY < 0 && !mc.thePlayer.onGround) ||
             (noFly && mc.thePlayer.capabilities.isFlying) ||
