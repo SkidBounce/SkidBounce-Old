@@ -12,10 +12,9 @@ import net.minecraft.entity.Entity
  * @author CCBlueX/LiquidBounce
  * @author EclipsesDev
  */
-object BlocksMC6 : CriticalsMode("BlocksMC6") {
+object BlocksMC7 : CriticalsMode("BlocksMC7") {
     override fun onAttack(entity: Entity) {
-        sendPacket(0.002, true)
-        sendPacket(-0.000001, false)
+        sendPacket(0.0011, true)
         sendPacket(0.0, false)
         crit(entity)
     }
