@@ -44,36 +44,18 @@ import static net.minecraft.client.renderer.GlStateManager.disableLighting;
 @Mixin(GuiScreen.class)
 @SideOnly(Side.CLIENT)
 public abstract class MixinGuiScreen {
-    @Shadow
-    public Minecraft mc;
-
-    @Shadow
-    protected List<GuiButton> buttonList;
-
-    @Shadow
-    public int width;
-
-    @Shadow
-    public int height;
-
-    @Shadow
-    protected FontRenderer fontRendererObj;
-
-    @Shadow
-    public void updateScreen() {
-    }
-
-    @Shadow
-    public abstract void handleComponentHover(IChatComponent component, int x, int y);
-
-    @Shadow
-    protected abstract void drawHoveringText(List<String> textLines, int x, int y);
+    @Shadow public Minecraft mc;
+    @Shadow public List<GuiButton> buttonList;
+    @Shadow public int width;
+    @Shadow public int height;
+    @Shadow public FontRenderer fontRendererObj;
+    @Shadow public abstract void updateScreen();
+    @Shadow public abstract void handleComponentHover(IChatComponent component, int x, int y);
+    @Shadow protected abstract void drawHoveringText(List<String> textLines, int x, int y);
 
     @Inject(method = "drawWorldBackground", at = @At("HEAD"))
     private void drawWorldBackground(final CallbackInfo callbackInfo) {
-        final HUD hud = HUD.INSTANCE;
-
-        if (hud.getInventoryParticle() && mc.thePlayer != null) {
+        if (HUD.INSTANCE.getInventoryParticle() && mc.thePlayer != null) {
             final ScaledResolution scaledResolution = new ScaledResolution(mc);
             final int width = scaledResolution.getScaledWidth();
             final int height = scaledResolution.getScaledHeight();

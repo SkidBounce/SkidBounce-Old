@@ -28,38 +28,17 @@ import static org.lwjgl.opengl.GL11.glColor4f;
 
 @Mixin(GuiNewChat.class)
 public abstract class MixinGuiNewChat {
-
-    @Shadow
-    @Final
-    private Minecraft mc;
-    @Shadow
-    @Final
-    private List<ChatLine> drawnChatLines;
-    @Shadow
-    private int scrollPos;
-    @Shadow
-    private boolean isScrolled;
-    @Shadow
-    @Final
-    private List<ChatLine> chatLines;
-
-    @Shadow
-    public abstract int getLineCount();
-
-    @Shadow
-    public abstract boolean getChatOpen();
-
-    @Shadow
-    public abstract float getChatScale();
-
-    @Shadow
-    public abstract int getChatWidth();
-
-    @Shadow
-    public abstract void deleteChatLine(int p_deleteChatLine_1_);
-
-    @Shadow
-    public abstract void scroll(int p_scroll_1_);
+    @Shadow @Final private Minecraft mc;
+    @Shadow @Final private List<ChatLine> drawnChatLines;
+    @Shadow private int scrollPos;
+    @Shadow private boolean isScrolled;
+    @Shadow @Final private List<ChatLine> chatLines;
+    @Shadow public abstract int getLineCount();
+    @Shadow public abstract boolean getChatOpen();
+    @Shadow public abstract float getChatScale();
+    @Shadow public abstract int getChatWidth();
+    @Shadow public abstract void deleteChatLine(int p_deleteChatLine_1_);
+    @Shadow public abstract void scroll(int p_scroll_1_);
 
     @Inject(method = "drawChat", at = @At("HEAD"), cancellable = true)
     private void drawChat(int p_drawChat_1_, final CallbackInfo callbackInfo) {
@@ -179,26 +158,21 @@ public abstract class MixinGuiNewChat {
 
     @Inject(method = "getChatComponent", at = @At("HEAD"), cancellable = true)
     private void getChatComponent(int p_getChatComponent_1_, int p_getChatComponent_2_, final CallbackInfoReturnable<IChatComponent> callbackInfo) {
-        final HUD hud = HUD.INSTANCE;
-
-        if (hud.handleEvents() && hud.getFontChat()) {
+        if (HUD.INSTANCE.handleEvents() && HUD.INSTANCE.getFontChat()) {
             if (getChatOpen()) {
-                ScaledResolution lvt_3_1_ = new ScaledResolution(mc);
-                int lvt_4_1_ = lvt_3_1_.getScaleFactor();
-                float lvt_5_1_ = getChatScale();
-                int lvt_6_1_ = p_getChatComponent_1_ / lvt_4_1_ - 3;
-                int lvt_7_1_ = p_getChatComponent_2_ / lvt_4_1_ - 27;
-                lvt_6_1_ = MathHelper.floor_float((float) lvt_6_1_ / lvt_5_1_);
-                lvt_7_1_ = MathHelper.floor_float((float) lvt_7_1_ / lvt_5_1_);
+                int scaleFactor = new ScaledResolution(mc).getScaleFactor();
+                float chatScale = getChatScale();
+                int lvt_6_1_ = MathHelper.floor_float((float) p_getChatComponent_1_ / scaleFactor - 3 / chatScale);
+                int lvt_7_1_ = MathHelper.floor_float((float) p_getChatComponent_2_ / scaleFactor - 27 / chatScale);
                 if (lvt_6_1_ >= 0 && lvt_7_1_ >= 0) {
                     int lvt_8_1_ = Math.min(getLineCount(), drawnChatLines.size());
                     if (lvt_6_1_ <= MathHelper.floor_float((float) getChatWidth() / getChatScale()) && lvt_7_1_ < Fonts.font40.getFontHeight() * lvt_8_1_ + lvt_8_1_) {
                         int lvt_9_1_ = lvt_7_1_ / Fonts.font40.getFontHeight() + scrollPos;
                         if (lvt_9_1_ >= 0 && lvt_9_1_ < drawnChatLines.size()) {
-                            ChatLine lvt_10_1_ = drawnChatLines.get(lvt_9_1_);
+                            ChatLine chatLine = drawnChatLines.get(lvt_9_1_);
                             int lvt_11_1_ = 0;
 
-                            for (IChatComponent lvt_13_1_ : lvt_10_1_.getChatComponent()) {
+                            for (IChatComponent lvt_13_1_ : chatLine.getChatComponent()) {
                                 if (lvt_13_1_ instanceof ChatComponentText) {
                                     lvt_11_1_ += Fonts.font40.getStringWidth(GuiUtilRenderComponents.func_178909_a(((ChatComponentText) lvt_13_1_).getChatComponentText_TextValue(), false));
                                     if (lvt_11_1_ > lvt_6_1_) {
@@ -211,9 +185,7 @@ public abstract class MixinGuiNewChat {
 
                     }
                 }
-
             }
-
             callbackInfo.setReturnValue(null);
         }
     }

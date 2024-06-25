@@ -16,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -27,29 +28,26 @@ import static net.ccbluex.liquidbounce.utils.MinecraftInstance.mc;
 @Mixin(AbstractClientPlayer.class)
 @SideOnly(Side.CLIENT)
 public abstract class MixinAbstractClientPlayer extends MixinEntityPlayer {
-
-    private CapeInfo capeInfo;
+    @Unique private CapeInfo skidBounce$capeInfo;
 
     @Inject(method = "getLocationCape", at = @At("HEAD"), cancellable = true)
     private void getCape(CallbackInfoReturnable<ResourceLocation> callbackInfoReturnable) {
-        if (capeInfo == null) {
+        if (skidBounce$capeInfo == null) {
             CapeAPI.INSTANCE.loadCape(getUniqueID(), newCapeInfo -> {
-                capeInfo = newCapeInfo;
+                skidBounce$capeInfo = newCapeInfo;
                 return null;
             });
         }
 
-        if (capeInfo != null && capeInfo.isCapeAvailable()) {
-            callbackInfoReturnable.setReturnValue(capeInfo.getResourceLocation());
+        if (skidBounce$capeInfo != null && skidBounce$capeInfo.isCapeAvailable()) {
+            callbackInfoReturnable.setReturnValue(skidBounce$capeInfo.getResourceLocation());
         }
     }
 
     @Inject(method = "getFovModifier", at = @At("HEAD"), cancellable = true)
     private void getFovModifier(CallbackInfoReturnable<Float> callbackInfoReturnable) {
-        final NoFOV fovModule = NoFOV.INSTANCE;
-
-        if (fovModule.handleEvents()) {
-            float newFOV = fovModule.getFov();
+        if (NoFOV.INSTANCE.handleEvents()) {
+            float newFOV = NoFOV.INSTANCE.getFov();
 
             if (!isUsingItem()) {
                 callbackInfoReturnable.setReturnValue(newFOV);
@@ -71,10 +69,8 @@ public abstract class MixinAbstractClientPlayer extends MixinEntityPlayer {
 
     @Inject(method = "getLocationSkin()Lnet/minecraft/util/ResourceLocation;", at = @At("HEAD"), cancellable = true)
     private void getSkin(CallbackInfoReturnable<ResourceLocation> callbackInfoReturnable) {
-        final NameProtect nameProtect = NameProtect.INSTANCE;
-
-        if (nameProtect.handleEvents() && nameProtect.getSkinProtect()) {
-            if (!nameProtect.getAllPlayers() && !Objects.equals(getGameProfile().getName(), mc.thePlayer.getGameProfile().getName()))
+        if (NameProtect.INSTANCE.handleEvents() && NameProtect.INSTANCE.getSkinProtect()) {
+            if (!NameProtect.INSTANCE.getAllPlayers() && !Objects.equals(getGameProfile().getName(), mc.thePlayer.getGameProfile().getName()))
                 return;
 
             callbackInfoReturnable.setReturnValue(DefaultPlayerSkin.getDefaultSkin(getUniqueID()));

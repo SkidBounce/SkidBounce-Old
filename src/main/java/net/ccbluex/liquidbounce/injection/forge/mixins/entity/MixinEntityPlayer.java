@@ -63,5 +63,4 @@ public abstract class MixinEntityPlayer extends MixinEntityLivingBase {
             instance.setSprinting(sprint);
         }
     }
-
 }

@@ -5,11 +5,7 @@
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.client;
 
-import com.google.common.collect.Lists;
 import net.minecraft.client.resources.ResourcePackRepository;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.comparator.LastModifiedFileComparator;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +14,12 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.io.File;
 import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static org.apache.commons.io.FileUtils.deleteQuietly;
+import static org.apache.commons.io.FileUtils.listFiles;
+import static org.apache.commons.io.comparator.LastModifiedFileComparator.LASTMODIFIED_REVERSE;
+import static org.apache.commons.io.filefilter.TrueFileFilter.TRUE;
 
 @Mixin(ResourcePackRepository.class)
 public class MixinResourcePackRepository {
@@ -31,17 +33,17 @@ public class MixinResourcePackRepository {
     @Overwrite
     private void deleteOldServerResourcesPacks() {
         try {
-            List<File> lvt_1_1_ = Lists.newArrayList(FileUtils.listFiles(dirServerResourcepacks, TrueFileFilter.TRUE, null));
-            lvt_1_1_.sort(LastModifiedFileComparator.LASTMODIFIED_REVERSE);
-            int lvt_2_1_ = 0;
+            List<File> serverResourcepacks = newArrayList(listFiles(dirServerResourcepacks, TRUE, null));
+            serverResourcepacks.sort(LASTMODIFIED_REVERSE);
+            int packs = 0;
 
-            for (File lvt_4_1_ : lvt_1_1_) {
-                if (lvt_2_1_++ >= 10) {
-                    logger.info("Deleting old server resource pack " + lvt_4_1_.getName());
-                    FileUtils.deleteQuietly(lvt_4_1_);
+            for (File resourcePack : serverResourcepacks) {
+                if (packs++ >= 10) {
+                    logger.info("Deleting old server resource pack " + resourcePack.getName());
+                    deleteQuietly(resourcePack);
                 }
             }
-        }catch(final Throwable e) {
+        } catch (final Throwable e) {
             e.printStackTrace();
         }
     }

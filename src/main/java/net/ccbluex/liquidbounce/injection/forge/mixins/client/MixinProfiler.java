@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Profiler.class)
 public class MixinProfiler {
+
     @Inject(method = "startSection", at = @At("HEAD"))
     private void startSection(String name, CallbackInfo callbackInfo) {
         if (name.equals("bossHealth") && ClassUtils.INSTANCE.hasClass("net.labymod.api.LabyModAPI")) {

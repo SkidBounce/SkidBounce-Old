@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameSettings.class)
 public class MixinGameSettings {
-
     @Shadow public int guiScale;
 
     /**
@@ -27,5 +26,4 @@ public class MixinGameSettings {
     private void injectGuiScaleDefault(final CallbackInfo callbackInfo) {
         this.guiScale = 2;
     }
-
 }

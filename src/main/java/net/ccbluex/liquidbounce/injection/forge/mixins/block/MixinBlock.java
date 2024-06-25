@@ -71,9 +71,7 @@ public abstract class MixinBlock {
 
     @Inject(method = "isCollidable", at = @At("HEAD"), cancellable = true)
     private void isCollidable(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        final GhostHand ghostHand = GhostHand.INSTANCE;
-
-        if (ghostHand.handleEvents() && !(ghostHand.getBlock() == Block.getIdFromBlock((Block) (Object) this))) {
+        if (GhostHand.INSTANCE.handleEvents() && !(GhostHand.INSTANCE.getBlock() == Block.getIdFromBlock((Block) (Object) this))) {
             callbackInfoReturnable.setReturnValue(false);
         }
     }

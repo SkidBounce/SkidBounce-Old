@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(ServerSelectionList.class)
 public abstract class MixinServerSelectionList extends GuiSlot {
-
     public MixinServerSelectionList(Minecraft mcIn, int width, int height, int topIn, int bottomIn, int slotHeightIn) {
         super(mcIn, width, height, topIn, bottomIn, slotHeightIn);
     }

@@ -19,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @SideOnly(Side.CLIENT)
 @Mixin(BlockLiquid.class)
 public class MixinBlockLiquid {
-
     @Inject(method = "canCollideCheck", at = @At("HEAD"), cancellable = true)
     private void onCollideCheck(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (Liquids.INSTANCE.handleEvents())
