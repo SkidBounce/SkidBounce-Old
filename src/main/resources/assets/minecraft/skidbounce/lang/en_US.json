@@ -38,7 +38,7 @@
         "module.teleportHit.description": "Allows to hit entities from far away.",
         "module.noPush.description": "Prevents blocks from pushing you.",
         "module.tNTBlock.description": "Automatically blocks with your sword when TNT around you explodes.",
-
+        "module.tNTTimer.description": "Display a timer indicating how long until nearby TNT explodes.",
         "module.triggerBot.description": "Automatically attacks the entity you are looking at.",
 
         "module.velocity.description": "Allows you to modify the amount of knockback you take.",
