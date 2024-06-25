@@ -12,6 +12,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
+import net.ccbluex.liquidbounce.utils.extensions.getDistanceToEntityBox
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
@@ -22,6 +23,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C0BPacketEntityAction
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action.*
+import kotlin.math.abs
 
 object SuperKnockback : Module("SuperKnockback", COMBAT) {
 
@@ -50,6 +52,8 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
 
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(reSprintMaxTicks.get())
     }
+
+    private val targetDistance by IntValue("TargetDistance", 3, 1..5) { mode == "WTap" }
 
     private val stopTicks: IntValue = object : IntValue("PressBackTicks", 1, 1..5) {
         override fun isSupported() = mode == "SprintTap2"
@@ -94,7 +98,8 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
     fun onAttack(event: AttackEvent) {
         val player = mc.thePlayer ?: return
 
-        if (event.targetEntity !is EntityLivingBase) return
+        val target = event.targetEntity as? EntityLivingBase ?: return
+        val distance = player.getDistanceToEntityBox(target)
 
         if (event.targetEntity.hurtTime > hurtTime || !timer.hasTimePassed(delay) || (onlyGround && !player.onGround)) return
 
@@ -138,7 +143,9 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
             "WTap" -> {
                 // We want the player to be sprinting before we block inputs
                 if (player.isSprinting && player.serverSprintState && !blockInput && !startWaiting) {
-                    blockInputTicks = randomDelay(minTicksUntilBlock.get(), maxTicksUntilBlock.get())
+                    val delayMultiplier = 1.0 / (abs(targetDistance - distance) + 1)
+
+                    blockInputTicks = (randomDelay(minTicksUntilBlock.get(), maxTicksUntilBlock.get()) * delayMultiplier).toInt()
 
                     blockInput = blockInputTicks == 0
 
@@ -146,7 +153,7 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
                         startWaiting = true
                     }
 
-                    allowInputTicks = randomDelay(reSprintMinTicks.get(), reSprintMaxTicks.get())
+                    allowInputTicks = (randomDelay(reSprintMinTicks.get(), reSprintMaxTicks.get()) * delayMultiplier).toInt()
                 }
             }
 
