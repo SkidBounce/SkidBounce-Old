@@ -379,7 +379,8 @@ object KillAura : Module("KillAura", COMBAT) {
             if (mc.thePlayer.getDistanceToEntityBox(target!!) > range && blockStatus) {
                 stopBlocking()
                 return
-            }
+            } else if (autoBlock != "Off")
+                renderBlocking = true
 
             // Usually when you butterfly click, you end up clicking two (and possibly more) times in a single tick.
             // Sometimes you also do not click. The positives outweigh the negatives, however.
