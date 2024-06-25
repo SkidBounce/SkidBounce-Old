@@ -235,7 +235,6 @@ public abstract class MixinMinecraft {
                 if (leftClickCounter == 0)
                     EventManager.INSTANCE.callEvent(new ClickBlockEvent(blockPos, objectMouseOver.sideHit));
 
-
                 if (theWorld.getBlockState(blockPos).getBlock().getMaterial() != Material.air && playerController.onPlayerDamageBlock(blockPos, objectMouseOver.sideHit)) {
                     effectRenderer.addBlockHitEffects(blockPos, objectMouseOver.sideHit);
                     thePlayer.swingItem();

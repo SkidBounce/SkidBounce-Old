@@ -3,6 +3,7 @@
   "package": "net.ccbluex.liquidbounce.injection.forge.mixins",
   "refmap": "liquidbounce.mixins.refmap.json",
   "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7.11",
   "mixins": [
     "block.MixinBlock",
     "block.MixinBlockAnvil",
