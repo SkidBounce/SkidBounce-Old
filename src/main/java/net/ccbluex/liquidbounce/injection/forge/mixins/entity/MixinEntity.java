@@ -20,9 +20,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -35,7 +33,8 @@ import static net.ccbluex.liquidbounce.utils.MinecraftInstance.mc;
 
 @Mixin(Entity.class)
 @SideOnly(Side.CLIENT)
-public abstract class MixinEntity implements IMixinEntity {
+@Implements(@Interface(iface = IMixinEntity.class, prefix = "skidBounce$"))
+public abstract class MixinEntity {
     @Shadow public double posX;
     @Shadow public double posY;
     @Shadow public double posZ;
@@ -90,52 +89,36 @@ public abstract class MixinEntity implements IMixinEntity {
 
     // getters & setters
 
-    @Override
-    @SuppressWarnings("AddedMixinMembersNamePattern")
-    public double getTrueX() {
+    public double skidBounce$getTrueX() {
         return skidBounce$trueX;
     }
 
-    @Override
-    @SuppressWarnings("AddedMixinMembersNamePattern")
-    public void setTrueX(double x) {
-        skidBounce$trueX = x;
+    public void skidBounce$setTrueX(double trueX) {
+        skidBounce$trueX = trueX;
     }
 
-    @Override
-    @SuppressWarnings("AddedMixinMembersNamePattern")
-    public double getTrueY() {
+    public double skidBounce$getTrueY() {
         return skidBounce$trueY;
     }
 
-    @Override
-    @SuppressWarnings("AddedMixinMembersNamePattern")
-    public void setTrueY(double y) {
-        skidBounce$trueY = y;
+    public void skidBounce$setTrueY(double trueY) {
+        skidBounce$trueY = trueY;
     }
 
-    @Override
-    @SuppressWarnings("AddedMixinMembersNamePattern")
-    public double getTrueZ() {
+    public double skidBounce$getTrueZ() {
         return skidBounce$trueZ;
     }
 
-    @Override
-    @SuppressWarnings("AddedMixinMembersNamePattern")
-    public void setTrueZ(double z) {
-        skidBounce$trueZ = z;
+    public void skidBounce$setTrueZ(double trueZ) {
+        skidBounce$trueZ = trueZ;
     }
 
-    @Override
-    @SuppressWarnings("AddedMixinMembersNamePattern")
-    public boolean getTruePos() {
+    public boolean skidBounce$getTruePos() {
         return skidBounce$truePos;
     }
 
-    @Override
-    @SuppressWarnings("AddedMixinMembersNamePattern")
-    public void setTruePos(boolean set) {
-        skidBounce$truePos = set;
+    public void skidBounce$setTruePos(boolean truePos) {
+        skidBounce$truePos = truePos;
     }
 
     @Inject(method = "getCollisionBorderSize", at = @At("HEAD"), cancellable = true)

@@ -92,13 +92,9 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
     private void onUpdateWalkingPlayer(CallbackInfo ci) {
         EventManager.INSTANCE.callEvent(new MotionEvent(EventState.PRE));
 
-        final InventoryMove inventoryMove = InventoryMove.INSTANCE;
-        final Sneak sneak = Sneak.INSTANCE;
-        final Sprint sprint = Sprint.INSTANCE;
-        final boolean fakeSprint =
-                ( inventoryMove.handleEvents() && inventoryMove.getAacAdditionPro() )
-                        || ( sneak.handleEvents() && (!MovementUtils.INSTANCE.isMoving() || !sneak.getStopMove()) && sneak.getMode().equals("MineSecure") )
-                        || ( sprint.handleEvents() && sprint.getSilent() );
+        final boolean fakeSprint = (Sprint.INSTANCE.handleEvents() && Sprint.INSTANCE.getSilent())
+                || (InventoryMove.INSTANCE.handleEvents() && InventoryMove.INSTANCE.getAacAdditionPro())
+                || (Sneak.INSTANCE.handleEvents() && (!MovementUtils.INSTANCE.isMoving() || !Sneak.INSTANCE.getStopMove()) && Sneak.INSTANCE.getMode().equals("MineSecure"));
 
         boolean sprinting = isSprinting() && !fakeSprint;
 
@@ -112,7 +108,7 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
 
         boolean sneaking = isSneaking();
 
-        if (sneaking != serverSneakState && (!sneak.handleEvents() || sneak.getMode().equals("Legit"))) {
+        if (sneaking != serverSneakState && (!Sneak.INSTANCE.handleEvents() || Sneak.INSTANCE.getMode().equals("Legit"))) {
             if (sneaking)
                 sendQueue.addToSendQueue(new C0BPacketEntityAction((EntityPlayerSP) (Object) this, START_SNEAKING));
             else sendQueue.addToSendQueue(new C0BPacketEntityAction((EntityPlayerSP) (Object) this, STOP_SNEAKING));
@@ -126,9 +122,8 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
 
             final Rotation currentRotation = RotationUtils.INSTANCE.getCurrentRotation();
 
-            final Derp derp = Derp.INSTANCE;
-            if (derp.handleEvents()) {
-                Rotation rot = derp.getRotation();
+            if (Derp.INSTANCE.handleEvents()) {
+                Rotation rot = Derp.INSTANCE.getRotation();
                 yaw = rot.getYaw();
                 pitch = rot.getPitch();
             }
@@ -138,13 +133,13 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
                 pitch = currentRotation.getPitch();
             }
 
-            double xDiff = posX - lastReportedPosX;
-            double yDiff = getEntityBoundingBox().minY - lastReportedPosY;
-            double zDiff = posZ - lastReportedPosZ;
-            double yawDiff = yaw - this.lastReportedYaw;
-            double pitchDiff = pitch - this.lastReportedPitch;
-            boolean moved = xDiff * xDiff + yDiff * yDiff + zDiff * zDiff > (No003.INSTANCE.handleEvents() ? -1 : 9.0E-4) || positionUpdateTicks >= 20;
-            boolean rotated = yawDiff != 0 || pitchDiff != 0;
+            double deltaX = posX - lastReportedPosX;
+            double deltaY = getEntityBoundingBox().minY - lastReportedPosY;
+            double deltaZ = posZ - lastReportedPosZ;
+            double deltaYaw = yaw - this.lastReportedYaw;
+            double deltaPitch = pitch - this.lastReportedPitch;
+            boolean moved = No003.INSTANCE.handleEvents() || deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ > 9e-4 || positionUpdateTicks >= 20;
+            boolean rotated = deltaYaw != 0 || deltaPitch != 0;
 
             if (ridingEntity == null) {
                 if (moved && rotated) {
@@ -183,26 +178,24 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
 
     @Inject(method = "swingItem", at = @At("HEAD"), cancellable = true)
     private void swingItem(CallbackInfo callbackInfo) {
-        final NoSwing noSwing = NoSwing.INSTANCE;
-
-        if (noSwing.handleEvents()) {
+        if (NoSwing.INSTANCE.handleEvents()) {
             callbackInfo.cancel();
 
-            if (!noSwing.getServerSide()) {
+            if (!NoSwing.INSTANCE.getServerSide()) {
                 sendQueue.addToSendQueue(new C0APacketAnimation());
                 CooldownHelper.INSTANCE.resetLastAttackedTicks();
             }
-        } else {
-            CooldownHelper.INSTANCE.resetLastAttackedTicks();
-        }
+        } else CooldownHelper.INSTANCE.resetLastAttackedTicks();
     }
 
     @Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
     private void onPushOutOfBlocks(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         PushOutEvent event = new PushOutEvent();
+
         if (noClip) {
             event.cancelEvent();
         }
+
         EventManager.INSTANCE.callEvent(event);
 
         if (event.isCancelled()) {
@@ -419,14 +412,14 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
     @SuppressWarnings({"UnreachableCode", "ConstantValue", "ConstantConditions"})
     @Override
     public void moveEntity(double x, double y, double z) {
-        MoveEvent moveEvent = new MoveEvent(x, y, z);
-        EventManager.INSTANCE.callEvent(moveEvent);
+        MoveEvent event = new MoveEvent(x, y, z);
+        EventManager.INSTANCE.callEvent(event);
 
-        if (moveEvent.isCancelled()) return;
+        if (event.isCancelled()) return;
 
-        x = moveEvent.getX();
-        y = moveEvent.getY();
-        z = moveEvent.getZ();
+        x = event.getX();
+        y = event.getY();
+        z = event.getZ();
 
         if (noClip) {
             setEntityBoundingBox(getEntityBoundingBox().offset(x, y, z));
@@ -454,7 +447,7 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
             double d5 = z;
             boolean flag = onGround && isSneaking();
 
-            if (flag || moveEvent.isSafeWalk()) {
+            if (flag || event.isSafeWalk()) {
                 double d6;
 
                 for (d6 = 0.05; x != 0 && worldObj.getCollidingBoundingBoxes((Entity) (Object) this, getEntityBoundingBox().offset(x, -1, 0)).isEmpty(); d3 = x) {

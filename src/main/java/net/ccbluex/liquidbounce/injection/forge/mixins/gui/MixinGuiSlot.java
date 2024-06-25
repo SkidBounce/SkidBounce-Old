@@ -18,77 +18,53 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 
 import static net.minecraft.client.renderer.GlStateManager.*;
 import static org.lwjgl.opengl.GL11.*;
 
 @Mixin(GuiSlot.class)
 @SideOnly(Side.CLIENT)
-public abstract class MixinGuiSlot implements IMixinGuiSlot {
-    private int listWidth = 220;
-    private boolean enableScissor = false;
+@Implements(@Interface(iface = IMixinGuiSlot.class, prefix = "skidBounce$"))
+public abstract class MixinGuiSlot {
+    @Shadow protected boolean field_178041_q;
+    @Shadow protected int mouseX;
+    @Shadow protected int mouseY;
+    @Shadow protected abstract void drawBackground();
+    @Shadow protected abstract void bindAmountScrolled();
+    @Shadow public int left;
+    @Shadow public int top;
+    @Shadow public int width;
+    @Shadow protected float amountScrolled;
+    @Shadow protected boolean hasListHeader;
+    @Shadow protected abstract void drawListHeader(int p_148129_1_, int p_148129_2_, Tessellator p_148129_3_);
+    @Shadow protected abstract void drawSelectionBox(int p_148120_1_, int p_148120_2_, int mouseXIn, int mouseYIn);
+    @Shadow public int right;
+    @Shadow public int bottom;
+    @Shadow @Final protected Minecraft mc;
+    @Shadow public int height;
+    @Shadow protected abstract int getContentHeight();
+    @Shadow public abstract int func_148135_f();
+    @Shadow protected abstract void func_148142_b(int p_148142_1_, int p_148142_2_);
 
-    @Shadow
-    protected boolean field_178041_q;
+    @Unique private int skidBounce$listWidth = 220;
+    @Unique private boolean skidBounce$enableScissor = false;
 
-    @Shadow
-    protected int mouseX;
+    public int skidBounce$getListWidth() {
+        return skidBounce$listWidth;
+    }
 
-    @Shadow
-    protected int mouseY;
+    public void skidBounce$setListWidth(int listWidth) {
+        skidBounce$listWidth = listWidth;
+    }
 
-    @Shadow
-    protected abstract void drawBackground();
+    public boolean skidBounce$getEnableScissor() {
+        return skidBounce$enableScissor;
+    }
 
-    @Shadow
-    protected abstract void bindAmountScrolled();
-
-    @Shadow
-    public int left;
-
-    @Shadow
-    public int top;
-
-    @Shadow
-    public int width;
-
-    @Shadow
-    protected float amountScrolled;
-
-    @Shadow
-    protected boolean hasListHeader;
-
-    @Shadow
-    protected abstract void drawListHeader(int p_148129_1_, int p_148129_2_, Tessellator p_148129_3_);
-
-    @Shadow
-    protected abstract void drawSelectionBox(int p_148120_1_, int p_148120_2_, int mouseXIn, int mouseYIn);
-
-    @Shadow
-    public int right;
-
-    @Shadow
-    public int bottom;
-
-    @Shadow
-    @Final
-    protected Minecraft mc;
-
-    @Shadow
-    public int height;
-
-    @Shadow
-    protected abstract int getContentHeight();
-
-    @Shadow
-    public abstract int func_148135_f();
-
-    @Shadow
-    protected abstract void func_148142_b(int p_148142_1_, int p_148142_2_);
+    public void skidBounce$setEnableScissor(boolean enableScissor) {
+        skidBounce$enableScissor = enableScissor;
+    }
 
     /**
      * @author CCBlueX
@@ -106,7 +82,7 @@ public abstract class MixinGuiSlot implements IMixinGuiSlot {
             disableFog();
             Tessellator tessellator = Tessellator.getInstance();
             WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-            int k = left + width / 2 - getListWidth() / 2 + 2;
+            int k = left + width / 2 - skidBounce$getListWidth() / 2 + 2;
             int l = top + 4 - (int) amountScrolled;
             if (hasListHeader) {
                 drawListHeader(k, l, tessellator);
@@ -189,28 +165,4 @@ public abstract class MixinGuiSlot implements IMixinGuiSlot {
     protected int getScrollBarX() {
         return width - 5;
     }
-
-    @Override
-    public void setEnableScissor(boolean enableScissor) {
-        this.enableScissor = enableScissor;
-    }
-
-    @Override
-    public boolean getEnableScissor() {
-        return enableScissor;
-    }
-
-    /**
-     * @author CCBlueX (superblaubeere27)
-     */
-    @Overwrite
-    public int getListWidth() {
-        return listWidth;
-    }
-
-    @Override
-    public void setListWidth(int listWidth) {
-        this.listWidth = listWidth;
-    }
-
 }
