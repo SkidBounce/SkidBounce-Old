@@ -22,14 +22,7 @@ public class MixinAnvilChunkLoader {
      * Due to limitations with local variable capture in Mixins,
      * a Redirect is used as an alternative.
      */
-    @Redirect(
-            method = "loadChunk__Async",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/nbt/CompressedStreamTools;read(Ljava/io/DataInputStream;)Lnet/minecraft/nbt/NBTTagCompound;"
-            )
-    )
-
+    @Redirect(method = "loadChunk__Async", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompressedStreamTools;read(Ljava/io/DataInputStream;)Lnet/minecraft/nbt/NBTTagCompound;"))
     private NBTTagCompound redirectReadChunkData(DataInputStream inputStream) throws IOException {
         try (DataInputStream stream = inputStream) {
             return CompressedStreamTools.read(stream);

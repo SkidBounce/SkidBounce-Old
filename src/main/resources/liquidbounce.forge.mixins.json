@@ -25,6 +25,7 @@
     "entity.MixinEntityPlayer",
     "entity.MixinEntityPlayerSP",
     "entity.MixinPlayerControllerMP",
+    "gui.MixinGuiAchievement",
     "gui.MixinGuiButton",
     "gui.MixinGuiButtonExt",
     "gui.MixinGuiChat",
@@ -68,8 +69,5 @@
     "tweaks.MixinAnvilChunkLoader",
     "world.MixinChunk",
     "world.MixinWorldClient"
-  ],
-  "client": [
-    "gui.MixinGuiAchievement"
   ]
 }
