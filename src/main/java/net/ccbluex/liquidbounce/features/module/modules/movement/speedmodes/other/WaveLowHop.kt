@@ -19,7 +19,6 @@ import net.minecraft.potion.Potion.moveSpeed
  * @author ManInMyVan
  */
 object WaveLowHop : SpeedMode("WaveLowHop") {
-    private var speed = 0.0f
     private var wasGround = false
 
     override fun onUpdate() {
@@ -34,13 +33,15 @@ object WaveLowHop : SpeedMode("WaveLowHop") {
         if (mc.thePlayer.onGround) {
             wasGround = true
             mc.thePlayer.jmp(ignoreJumpBoost = true)
-            speed = if (hasSpeed) 1.2f else 0.49f
         } else if (wasGround) {
             wasGround = false
             mc.thePlayer.motionY = 0.0
-            speed = if (hasSpeed) 1.32f else 0.588f
         }
-        strafe(speed)
+        strafe(
+            if (mc.thePlayer.onGround) {
+                if (hasSpeed) 1.2f else 0.49f
+            } else if (hasSpeed) 1.32f else 0.588f
+        )
     }
 
     override fun onDisable() {
