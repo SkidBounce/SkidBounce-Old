@@ -11,7 +11,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.Fly.waveUpSpeed
 import net.ccbluex.liquidbounce.features.module.modules.movement.flymodes.FlyMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.minecraft.potion.Potion.moveSpeed
 
 /**
@@ -23,7 +23,7 @@ object Wave : FlyMode("Wave") {
         mc.timer.timerSpeed = if (isMoving) waveTimer else 1f
 
         if (mc.thePlayer.onGround) {
-            mc.thePlayer.jump(0.0798)
+            mc.thePlayer.jmp(0.0798)
             return
         }
 

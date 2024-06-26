@@ -12,7 +12,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 
 /**
@@ -28,7 +28,7 @@ object UNCPYPort : SpeedMode("UNCPYPort") {
             mc.thePlayer.motionY -= 0.16
 
         if (mc.thePlayer.onGround && isMoving) {
-            mc.thePlayer.jump(0.3993535)
+            mc.thePlayer.jmp(0.3993535)
         }
         speed = speed.coerceAtMost(1.75f)
         strafe(speed, true)

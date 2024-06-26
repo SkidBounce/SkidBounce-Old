@@ -13,7 +13,6 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.direction
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlockIntersects
 import net.ccbluex.liquidbounce.utils.extensions.jmp
-import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.ccbluex.liquidbounce.value.BooleanValue
@@ -91,7 +90,7 @@ object Spider : Module("Spider", MOVEMENT) {
                     glitch = collideGlitch
                 if (mc.thePlayer.isCollidedHorizontally)
                     if (mc.thePlayer.onGround) {
-                        mc.thePlayer.jump(collideJumpMotion)
+                        mc.thePlayer.jmp(collideJumpMotion)
                     } else if (collideFast && mc.thePlayer.motionY < 0)
                         mc.thePlayer.motionY = -collideFastSpeed.toDouble()
             }

@@ -9,7 +9,6 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.Spee
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.extensions.jmp
-import net.ccbluex.liquidbounce.utils.extensions.jump
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -36,7 +35,7 @@ object AAC4BHop : SpeedMode("AAC4BHop") {
             if (thePlayer.onGround) {
                 thePlayer.onGround = false
                 strafe(0.375f)
-                thePlayer.jump(0.41, ignoreGround = true)
+                thePlayer.jmp(0.41, ignoreGround = true)
             } else thePlayer.speedInAir = 0.0211f
         } else {
             thePlayer.motionX = 0.0

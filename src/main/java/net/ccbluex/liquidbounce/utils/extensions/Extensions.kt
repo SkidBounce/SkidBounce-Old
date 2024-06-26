@@ -10,7 +10,6 @@ import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
 import net.ccbluex.liquidbounce.utils.MovementUtils.JUMP_HEIGHT
 import net.ccbluex.liquidbounce.utils.MovementUtils.getJumpBoostModifier
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
-import net.ccbluex.liquidbounce.utils.PotionUtils.Potions
 import net.ccbluex.liquidbounce.utils.Rotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.getFixedSensitivityAngle
 import net.ccbluex.liquidbounce.utils.block.BlockUtils
@@ -395,14 +394,6 @@ fun EntityPlayer.jmp(
     ignoreJumpBoost: Boolean = false,
     ignoreGround: Boolean = false,
     whenJumping: Boolean = false,
-) = jump(motion, boost, ignoreJumpBoost, ignoreGround, whenJumping)
-
-fun EntityPlayer.jump(
-    motion: Number = JUMP_HEIGHT,
-    boost: Boolean = true,
-    ignoreJumpBoost: Boolean = false,
-    ignoreGround: Boolean = false,
-    whenJumping: Boolean = false,
 ) {
     if (!ignoreGround && !onGround) return
     if (!whenJumping && mc.gameSettings.keyBindJump.pressed) return
@@ -411,7 +402,10 @@ fun EntityPlayer.jump(
     val z = motionZ
 
     jump()
-    motionY = getJumpBoostModifier(motion.toDouble(), !ignoreJumpBoost)
+
+    // only change motion if the jump wasn't cancelled
+    if (motionY == getJumpBoostModifier(JUMP_HEIGHT))
+        motionY = getJumpBoostModifier(motion.toDouble(), !ignoreJumpBoost)
 
     if (!boost) {
         motionX = x
@@ -419,15 +413,11 @@ fun EntityPlayer.jump(
     }
 }
 
-infix fun EntityPlayer.has(potion: Potions) = isPotionActive(potion.potion)
 infix fun EntityPlayer.has(potion: Potion) = isPotionActive(potion)
-fun EntityPlayer.get(potion: Potions): PotionEffect? = getActivePotionEffect(potion.potion)
 fun EntityPlayer.get(potion: Potion): PotionEffect? = getActivePotionEffect(potion)
 
 infix fun Entity.isInsideOf(material: Material) = isInsideOfMaterial(material)
 
-val Potion.potion
-    get() = Potions.entries.find { it.potion == this }
 
 val PotionEffect?.level
     get() = this?.let { amplifier + 1 } ?: 0

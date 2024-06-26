@@ -15,7 +15,6 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
 import net.ccbluex.liquidbounce.utils.extensions.jmp
-import net.ccbluex.liquidbounce.utils.extensions.jump
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
@@ -128,7 +127,7 @@ object BufferSpeed : Module("BufferSpeed", MOVEMENT) {
 
                         strafe(0.375f)
 
-                        thePlayer.jump(0.41, ignoreJumpBoost = true)
+                        thePlayer.jmp(0.41, ignoreJumpBoost = true)
                         return
                     }
                 }
@@ -152,7 +151,7 @@ object BufferSpeed : Module("BufferSpeed", MOVEMENT) {
 
                         thePlayer.onGround = false
                         strafe(0.375f)
-                        thePlayer.jump(0.41, ignoreJumpBoost = true)
+                        thePlayer.jmp(0.41, ignoreJumpBoost = true)
                         return
                     }
                 }
@@ -188,7 +187,7 @@ object BufferSpeed : Module("BufferSpeed", MOVEMENT) {
 
                     "new" ->
                         if (isNearBlock && !thePlayer.movementInput.jump) {
-                            thePlayer.jump(0.08, ignoreJumpBoost = true)
+                            thePlayer.jmp(0.08, ignoreJumpBoost = true)
                             thePlayer.motionX *= 0.99
                             thePlayer.motionZ *= 0.99
                             down = true

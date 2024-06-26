@@ -69,7 +69,7 @@ object Custom : VelocityMode("Custom") {
 
     override fun onUpdate() {
         if (jump && mc.thePlayer.hurtTime == 9 && chanceOf(1f - jumpFailRate / 100f))
-            mc.thePlayer.jump(jumpMotion)
+            mc.thePlayer.jmp(jumpMotion)
         if (reverse && !(reverseNoGround && mc.thePlayer.onGround)) {
             run {
                 val nearbyEntity = getNearestEntityInRange() ?: return@run

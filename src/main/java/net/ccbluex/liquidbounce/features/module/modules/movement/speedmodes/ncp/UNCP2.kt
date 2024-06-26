@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.event.events.MotionEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 
 /**
@@ -27,6 +27,6 @@ object UNCP2 : SpeedMode("UNCP2") {
         mc.timer.timerSpeed = 1.08f
         strafe()
         mc.thePlayer.jumpMovementFactor = 0.024f
-        mc.thePlayer.jump(0.39935305)
+        mc.thePlayer.jmp(0.39935305)
     }
 }

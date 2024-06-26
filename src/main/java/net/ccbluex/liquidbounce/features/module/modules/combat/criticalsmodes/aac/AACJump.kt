@@ -6,7 +6,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.aac
 
 import net.ccbluex.liquidbounce.features.module.modules.combat.criticalsmodes.CriticalsMode
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.minecraft.entity.Entity
 
 /**
@@ -15,7 +15,7 @@ import net.minecraft.entity.Entity
 object AACJump : CriticalsMode("AACJump") {
     override fun onAttack(entity: Entity) {
         mc.thePlayer.isInWeb = true
-        mc.thePlayer.jump(ignoreGround = true)
+        mc.thePlayer.jmp(ignoreGround = true)
         mc.thePlayer.prevPosY = mc.thePlayer.posY
         mc.thePlayer.isInWeb = false
         if (!mc.thePlayer.onGround) {

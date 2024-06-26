@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.Speed.wavelowho
 import net.ccbluex.liquidbounce.features.module.modules.movement.speedmodes.SpeedMode
 import net.ccbluex.liquidbounce.utils.MovementUtils.isMoving
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
-import net.ccbluex.liquidbounce.utils.extensions.jump
+import net.ccbluex.liquidbounce.utils.extensions.jmp
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.utils.extensions.stopXZ
 import net.minecraft.potion.Potion.moveSpeed
@@ -33,7 +33,7 @@ object WaveLowHop : SpeedMode("WaveLowHop") {
 
         if (mc.thePlayer.onGround) {
             wasGround = true
-            mc.thePlayer.jump(0.42, ignoreJumpBoost = true)
+            mc.thePlayer.jmp(ignoreJumpBoost = true)
             speed = if (hasSpeed) 1.2f else 0.49f
         } else if (wasGround) {
             wasGround = false
