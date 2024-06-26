@@ -38,7 +38,7 @@ object WaveLowHop : SpeedMode("WaveLowHop") {
         } else if (wasGround) {
             wasGround = false
             mc.thePlayer.motionY = 0.0
-            speed *= if (hasSpeed) 1.1f else 1.2f
+            speed = if (hasSpeed) 1.32f else 0.588f
         }
         strafe(speed)
     }
