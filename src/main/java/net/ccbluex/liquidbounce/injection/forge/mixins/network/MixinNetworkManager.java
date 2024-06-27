@@ -28,12 +28,11 @@ public class MixinNetworkManager {
         final PacketEvent event = new PacketEvent(packet, EventState.RECEIVE);
         EventManager.INSTANCE.callEvent(event);
 
+        PPSCounter.INSTANCE.registerType(RECEIVED);
+
         if (event.isCancelled()) {
             callback.cancel();
-            return;
         }
-
-        PPSCounter.INSTANCE.registerType(RECEIVED);
     }
 
     @Inject(method = "sendPacket(Lnet/minecraft/network/Packet;)V", at = @At("HEAD"), cancellable = true)

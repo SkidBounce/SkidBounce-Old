@@ -10,7 +10,10 @@ import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.utils.ClientUtils
+import net.ccbluex.liquidbounce.utils.PacketType
+import net.ccbluex.liquidbounce.utils.PacketType.SERVER
 import net.ccbluex.liquidbounce.utils.PacketUtils.PacketBuffer
+import net.ccbluex.liquidbounce.utils.PacketUtils.type
 import net.ccbluex.liquidbounce.utils.extensions.actual
 import net.ccbluex.liquidbounce.utils.extensions.hasPosition
 import net.ccbluex.liquidbounce.utils.extensions.hasRotation
@@ -517,7 +520,7 @@ object PacketDebugger : Module("PacketDebugger", CLIENT, gameDetecting = false) 
 
     @EventTarget(priority = Int.MIN_VALUE)
     fun onPacket(event: PacketEvent) {
-        if (event.isCancelled || !state) return
+        if (!state || event.isCancelled && event.packet.type != SERVER) return
         val packet = event.packet
 
         val enabled = settings.filterIsInstance<BooleanValue>().find { it.name == packet.javaClass.simpleName } ?: return
