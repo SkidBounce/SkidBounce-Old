@@ -10,6 +10,8 @@ import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.utils.ClientUtils
+import net.ccbluex.liquidbounce.utils.PacketUtils.PacketBuffer
+import net.ccbluex.liquidbounce.utils.extensions.actual
 import net.ccbluex.liquidbounce.utils.extensions.hasPosition
 import net.ccbluex.liquidbounce.utils.extensions.hasRotation
 import net.ccbluex.liquidbounce.value.BooleanValue
@@ -30,8 +32,8 @@ import net.minecraft.network.status.client.C00PacketServerQuery
 import net.minecraft.network.status.client.C01PacketPing
 import net.minecraft.network.status.server.S00PacketServerInfo
 import net.minecraft.network.status.server.S01PacketPong
-import net.minecraft.util.BlockPos
 import net.minecraft.util.Vec3
+import net.minecraft.util.Vec3i
 
 object PacketDebugger : Module("PacketDebugger", CLIENT, gameDetecting = false) {
     private val fieldsValue = BooleanValue("ShowFields", true)
@@ -526,6 +528,9 @@ object PacketDebugger : Module("PacketDebugger", CLIENT, gameDetecting = false) 
         var lines = arrayOf("§6${javaClass.simpleName}")
 
         if (fields) {
+            @Suppress("NAME_SHADOWING")
+            val packet = packet.actual
+
             val packetFields = if (javaClass.isMemberClass)
                 javaClass.declaringClass.declaredFields else javaClass.declaredFields
 
@@ -564,27 +569,37 @@ object PacketDebugger : Module("PacketDebugger", CLIENT, gameDetecting = false) 
                     else -> field.get(packet)
                 }
 
-                val color = when (value) {
-                    is BlockPos, is Vec3 -> ""
-                    null -> "§4"
-                    is String -> "§2"
-                    is Number -> "§e"
-                    true -> "§a"
-                    false -> "§c"
-                    else -> "§d"
-                }
-                val displayedField = when (value) {
-                    is String -> "\"$value\""
-                    is Vec3 -> "§e${value.xCoord}§7, §e${value.yCoord}§7, §e${value.zCoord}"
-                    is BlockPos -> "§e${value.x}§7, §e${value.y}§7, §e${value.z}"
-                    else -> "$value"
-                }
-
-                lines += "§9$name§7: $color$displayedField"
+                lines += "§9$name§7: ${format(value)}"
             }
         }
 
         ClientUtils.displayChatMessage(lines.joinToString("\n  "))
+    }
+
+    fun format(value: Any?, arrayBrackets: Boolean = true): String {
+        when (value) {
+            is Vec3 -> return format(listOf(value.xCoord, value.yCoord, value.zCoord), false)
+            is Vec3i -> return format(listOf(value.x, value.y, value.z), false)
+            is Array<*> -> return format(value.toList(), arrayBrackets)
+        }
+
+        val color = when (value) {
+            is Collection<*> -> ""
+            null -> "§4"
+            is String -> "§2"
+            is Number -> "§e"
+            true -> "§a"
+            false -> "§c"
+            else -> "§d"
+        }
+
+        val display = when (value) {
+            is String -> "\"$value\""
+            is Collection<*> -> (if (arrayBrackets) "§7[" else "") + (value.joinToString("§7, ") { format(it) }) + (if (arrayBrackets) "§7]" else "")
+            else -> "$value"
+        }
+
+        return "$color$display"
     }
 
     override val values: List<Value<*>>

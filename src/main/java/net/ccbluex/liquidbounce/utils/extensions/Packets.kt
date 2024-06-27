@@ -5,6 +5,9 @@
  */
 package net.ccbluex.liquidbounce.utils.extensions
 
+import net.ccbluex.liquidbounce.utils.PacketUtils.PacketBuffer
+import net.ccbluex.liquidbounce.utils.Rotation
+import net.minecraft.network.INetHandler
 import net.minecraft.network.Packet
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
@@ -19,12 +22,24 @@ import net.minecraft.network.play.server.S14PacketEntity.S16PacketEntityLook
 import net.minecraft.network.play.server.S14PacketEntity.S17PacketEntityLookMove
 import kotlin.math.roundToInt
 
+val <T : INetHandler> Packet<T>.actual: Packet<T>
+    get() {
+        val buffer = PacketBuffer()
+        this.writePacketData(buffer)
+
+        // this is safe because all packets have an empty constructor
+        val packet = this::class.java.newInstance()
+        packet.readPacketData(buffer)
+
+        return packet
+    }
 val Packet<*>.isUse get() = this is C08PacketPlayerBlockPlacement && placedBlockDirection == 255
 val Packet<*>.isRelease get() = this is C07PacketPlayerDigging && status == RELEASE_USE_ITEM
 val C03PacketPlayer.hasPosition get() = this is C06PacketPlayerPosLook || this is C04PacketPlayerPosition
 val C03PacketPlayer.hasRotation get() = this is C06PacketPlayerPosLook || this is C05PacketPlayerLook
 val S14PacketEntity.hasPosition get() = this is S15PacketEntityRelMove || this is S17PacketEntityLookMove
 val S14PacketEntity.hasRotation get() = this is S16PacketEntityLook || this is S17PacketEntityLookMove
+val C03PacketPlayer.rotation get() = Rotation(yaw, pitch)
 
 var S12PacketEntityVelocity.realMotionX
     get() = motionX / 8000.0

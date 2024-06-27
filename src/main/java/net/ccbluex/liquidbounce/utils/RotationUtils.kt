@@ -90,7 +90,7 @@ object RotationUtils : MinecraftInstance(), Listenable {
     fun onPacket(event: PacketEvent) {
         val packet = event.packet
 
-        if (packet !is C03PacketPlayer || !packet.rotating) {
+        if (packet !is C03PacketPlayer || !packet.hasRotation) {
             return
         }
 

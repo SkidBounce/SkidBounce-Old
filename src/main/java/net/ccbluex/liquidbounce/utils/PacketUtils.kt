@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.utils
 
+import io.netty.buffer.Unpooled.buffer
 import net.ccbluex.liquidbounce.event.*
 import net.ccbluex.liquidbounce.event.events.GameLoopEvent
 import net.ccbluex.liquidbounce.event.events.PacketEvent
@@ -146,6 +147,8 @@ object PacketUtils : MinecraftInstance(), Listenable {
         input.jump,
         input.sneak
     )
+
+    fun PacketBuffer() = net.minecraft.network.PacketBuffer(buffer())
 
     @JvmStatic
     fun sendPackets(vararg packets: Packet<*>, triggerEvents: Boolean = true) =
