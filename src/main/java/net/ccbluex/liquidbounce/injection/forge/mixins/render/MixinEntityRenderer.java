@@ -164,7 +164,7 @@ public abstract class MixinEntityRenderer {
      * @author CCBlueX
      */
     @Inject(method = "getMouseOver", at = @At("HEAD"), cancellable = true)
-    private void getMouseOver(float p_getMouseOver_1_, CallbackInfo ci) {
+    private void getMouseOver(float partialTicks, CallbackInfo ci) {
         Entity entity = mc.getRenderViewEntity();
         if (entity != null && mc.theWorld != null) {
             mc.mcProfiler.startSection("pick");
@@ -172,13 +172,13 @@ public abstract class MixinEntityRenderer {
 
             final Reach reach = Reach.INSTANCE;
 
-            double d0 = reach.handleEvents() ? reach.getMaxRange() : mc.playerController.getBlockReachDistance();
-            Vec3 vec3 = entity.getPositionEyes(p_getMouseOver_1_);
+            double d0 = reach.handleEvents() ? reach.getMaxReach() : mc.playerController.getBlockReachDistance();
+            Vec3 eyes = entity.getPositionEyes(partialTicks);
             Rotation rotation = new Rotation(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch);
-            Vec3 vec31 = RotationUtils.INSTANCE.getVectorForRotation(RotationUtils.INSTANCE.getCurrentRotation() != null ? RotationUtils.INSTANCE.getCurrentRotation() : rotation);
+            Vec3 rotationVector = RotationUtils.INSTANCE.getVectorForRotation(RotationUtils.INSTANCE.getCurrentRotation() != null ? RotationUtils.INSTANCE.getCurrentRotation() : rotation);
             double p_rayTrace_1_ = (reach.handleEvents() ? reach.getBuildReach() : d0);
-            Vec3 vec32 = vec3.addVector(vec31.xCoord * p_rayTrace_1_, vec31.yCoord * p_rayTrace_1_, vec31.zCoord * p_rayTrace_1_);
-            mc.objectMouseOver = entity.worldObj.rayTraceBlocks(vec3, vec32, false, false, true);
+            Vec3 vec32 = eyes.addVector(rotationVector.xCoord * p_rayTrace_1_, rotationVector.yCoord * p_rayTrace_1_, rotationVector.zCoord * p_rayTrace_1_);
+            mc.objectMouseOver = entity.worldObj.rayTraceBlocks(eyes, vec32, false, false, true);
             double d1 = d0;
             boolean flag = false;
             if (mc.playerController.extendedReach()) {
@@ -189,20 +189,20 @@ public abstract class MixinEntityRenderer {
             }
 
             if (mc.objectMouseOver != null) {
-                d1 = mc.objectMouseOver.hitVec.distanceTo(vec3);
+                d1 = mc.objectMouseOver.hitVec.distanceTo(eyes);
             }
 
             if (reach.handleEvents()) {
                 double p_rayTrace_1_2 = reach.getBuildReach();
-                Vec3 vec322 = vec3.addVector(vec31.xCoord * p_rayTrace_1_2, vec31.yCoord * p_rayTrace_1_2, vec31.zCoord * p_rayTrace_1_2);
-                final MovingObjectPosition movingObjectPosition = entity.worldObj.rayTraceBlocks(vec3, vec322, false, false, true);
+                Vec3 vec322 = eyes.addVector(rotationVector.xCoord * p_rayTrace_1_2, rotationVector.yCoord * p_rayTrace_1_2, rotationVector.zCoord * p_rayTrace_1_2);
+                final MovingObjectPosition movingObjectPosition = entity.worldObj.rayTraceBlocks(eyes, vec322, false, false, true);
 
-                if (movingObjectPosition != null) d1 = movingObjectPosition.hitVec.distanceTo(vec3);
+                if (movingObjectPosition != null) d1 = movingObjectPosition.hitVec.distanceTo(eyes);
             }
 
             pointedEntity = null;
             Vec3 vec33 = null;
-            List<Entity> list = mc.theWorld.getEntities(Entity.class, Predicates.and(EntitySelectors.NOT_SPECTATING, p_apply_1_ -> p_apply_1_ != null && p_apply_1_.canBeCollidedWith() && p_apply_1_ != entity));
+            List<Entity> list = mc.theWorld.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().addCoord(rotationVector.xCoord * d0, rotationVector.yCoord * d0, rotationVector.zCoord * d0).expand(1, 1, 1), Predicates.and(EntitySelectors.NOT_SPECTATING, p_apply_1_ -> p_apply_1_ != null && p_apply_1_.canBeCollidedWith()));
             double d2 = d1;
 
             for (Entity entity1 : list) {
@@ -217,15 +217,15 @@ public abstract class MixinEntityRenderer {
                 });
 
                 for (final AxisAlignedBB axisalignedbb : boxes) {
-                    MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
-                    if (axisalignedbb.isVecInside(vec3)) {
+                    MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(eyes, vec32);
+                    if (axisalignedbb.isVecInside(eyes)) {
                         if (d2 >= 0) {
                             pointedEntity = entity1;
-                            vec33 = movingobjectposition == null ? vec3 : movingobjectposition.hitVec;
+                            vec33 = movingobjectposition == null ? eyes : movingobjectposition.hitVec;
                             d2 = 0;
                         }
                     } else if (movingobjectposition != null) {
-                        double d3 = vec3.distanceTo(movingobjectposition.hitVec);
+                        double d3 = eyes.distanceTo(movingobjectposition.hitVec);
                         if (d3 < d2 || d2 == 0) {
                             if (entity1 == entity.ridingEntity && !entity.canRiderInteract()) {
                                 if (d2 == 0) {
@@ -242,7 +242,7 @@ public abstract class MixinEntityRenderer {
                 }
             }
 
-            if (pointedEntity != null && flag && vec3.distanceTo(vec33) > (reach.handleEvents() ? reach.getCombatReach() : 3)) {
+            if (pointedEntity != null && flag && eyes.distanceTo(vec33) > (reach.handleEvents() ? reach.getCombatReach() : 3)) {
                 pointedEntity = null;
                 mc.objectMouseOver = new MovingObjectPosition(MovingObjectPosition.MovingObjectType.MISS, Objects.requireNonNull(vec33), null, new BlockPos(vec33));
             }
