@@ -52,7 +52,7 @@
         "module.teleportHit.description": "允许你手动攻击时打击远处的生物。",
 
         "module.tNTBlock.description": "当周围的TNT爆炸时，自动用剑格挡。",
-
+        "module.tNTTimer.description": "显示一个计时器，指示距离附近 TNT 爆炸还有多长时间。",
         "module.triggerBot.description": "自动攻击瞄准的目标。",
 
         "module.velocity.description": "修改你所受到的击退。",
@@ -78,7 +78,7 @@
         "module.antiBlind.description": "消除失明效果。(视觉上)",
         
         "module.antiBot.description": "防止杀戮光环攻击反作弊发的假人。",
-
+        "module.antiExploit": "防止服务器崩溃你。",
         "module.antiFireball.description": "自动打走火球。",
         
         "module.atAllProvider.description": "当你在消息中使用'@a'时，自动提及服务器上的所有人。",
@@ -150,7 +150,7 @@
         "module.fastUse.description": "允许你更快地使用物品。",
         
         "module.fly.description": "允许你在生存模式下飞行。",
-        
+        "module.flagCheck.description": "检测您是否被反作弊标记。",
         "module.forceUnicodeChat.description": "允许你在聊天栏中发送unicode消息。",
         
         "module.freeCam.description": "允许你离开身体。(灵魂出窍)",
