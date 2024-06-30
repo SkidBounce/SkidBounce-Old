@@ -28,20 +28,36 @@ object NoFall : Module("NoFall", PLAYER) {
     val mode by ListValue("Mode", noFallModes.map { it.modeName }.toTypedArray(), "SpoofGround")
 
     private val noVoid by BooleanValue("NoVoid", false)
+
     val mlgMinFallDistance by FloatValue("MLG-MinHeight", 5f, 2f..50f) { mode == "MLG" }
     val mlgRetrieveDelay by IntValue("MLG-RetrieveDelay", 100, 100..500) { mode == "MLG" }
+
     val spoofgroundAlways by BooleanValue("SpoofGround-Always", true) { mode == "SpoofGround" }
-    val spoofgroundMinFallDistance by FloatValue(
-        "SpoofGround-MinFallDistance",
-        0f,
-        0f..3f
-    ) { mode == "SpoofGround" && !spoofgroundAlways }
+    val spoofgroundMinFallDistance by FloatValue("SpoofGround-MinFallDistance", 0f, 0f..3f) { mode == "SpoofGround" && !spoofgroundAlways }
+
     val motionMotion by FloatValue("Motion-Motion", -0.01f, -5f..5f) { mode == "Motion" }
+
     val phaseOffset by IntValue("Phase-Offset", 1, 0..5) { mode == "Phase" }
+
     val verusMulti by FloatValue("Verus-XZMulti", 0.6f, 0f..1f) { mode == "Verus" }
+
     val vulcan2Motion by FloatValue("Vulcan2-Motion", 0.35f, 0f..10f) { mode == "Vulcan2" }
+
     val aac5014NightX by BooleanValue("AAC5.0.14-NightX", false) { mode == "AAC5.0.14" }
+
     val matrix6632Safe by BooleanValue("Matrix6.6.3-2-Safe", false) { mode == "Matrix6.6.3-2" }
+
+    val minFallDist: FloatValue = object : FloatValue("MinFallDistance", 2.5f, 0f..10f) {
+        override fun isSupported() = mode == "HypixelBlink2"
+        override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxFallDist.get())
+    }
+    val maxFallDist: FloatValue = object : FloatValue("MaxFallDistance", 20f, 0f..100f) {
+        override fun isSupported() = mode == "HypixelBlink2"
+        override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtLeast(minFallDist.get())
+    }
+    val autoOff by BooleanValue("AutoOff", true)
+    val simulateDebug by BooleanValue("SimulationDebug", false, subjective = true) { mode == "HypixelBlink2" }
+    val fakePlayer by BooleanValue("FakePlayer", true, subjective = true) { mode == "HypixelBlink2" }
 
     override fun onEnable() {
         mc.timer.resetSpeed()

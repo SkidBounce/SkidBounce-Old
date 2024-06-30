@@ -138,7 +138,7 @@ class Text(x: Double = 10.0, y: Double = 10.0, scale: Float = 1F, side: Side = S
                 "bal", "tbal", "timerbal", "balance", "tbalance", "timerbalance" -> return "$balance"
                 "pps_sent" -> return PPSCounter.getPPS(SEND)
                 "pps_received" -> return PPSCounter.getPPS(RECEIVED)
-                "block", "blocking" -> return (thePlayer.heldItem.item is ItemSword && (blockStatus || thePlayer.isUsingItem || thePlayer.isBlocking))
+                "block", "blocking" -> return (thePlayer.heldItem?.item is ItemSword && (blockStatus || thePlayer.isUsingItem || thePlayer.isBlocking))
                 "sneak", "sneaking" -> return (thePlayer.isSneaking || mc.gameSettings.keyBindSneak.isKeyDown)
                 "sprint", "sprinting" -> return (thePlayer.serverSprintState || thePlayer.isSprinting || mc.gameSettings.keyBindSprint.isKeyDown)
                 "inventory", "inv" -> return mc.currentScreen is GuiInventory || mc.currentScreen is GuiContainer
