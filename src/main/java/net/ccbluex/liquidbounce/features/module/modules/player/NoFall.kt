@@ -55,7 +55,7 @@ object NoFall : Module("NoFall", PLAYER) {
         override fun isSupported() = mode == "HypixelBlink2"
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtLeast(minFallDist.get())
     }
-    val autoOff by BooleanValue("AutoOff", true)
+    val autoOff by BooleanValue("AutoOff", true) { mode == "HypixelBlink2" }
     val simulateDebug by BooleanValue("SimulationDebug", false, subjective = true) { mode == "HypixelBlink2" }
     val fakePlayer by BooleanValue("FakePlayer", true, subjective = true) { mode == "HypixelBlink2" }
 
