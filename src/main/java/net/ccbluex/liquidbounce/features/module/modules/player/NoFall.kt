@@ -47,17 +47,19 @@ object NoFall : Module("NoFall", PLAYER) {
 
     val matrix6632Safe by BooleanValue("Matrix6.6.3-2-Safe", false) { mode == "Matrix6.6.3-2" }
 
+    // Using too many times of simulatePlayer could result timer flag. Hence, why this is disabled by default.
+    val checkFallDist by BooleanValue("CheckFallDistance", false) { mode == "Blink" }
     val minFallDist: FloatValue = object : FloatValue("MinFallDistance", 2.5f, 0f..10f) {
-        override fun isSupported() = mode == "HypixelBlink2"
+        override fun isSupported() = mode == "Blink" && checkFallDist
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtMost(maxFallDist.get())
     }
     val maxFallDist: FloatValue = object : FloatValue("MaxFallDistance", 20f, 0f..100f) {
-        override fun isSupported() = mode == "HypixelBlink2"
+        override fun isSupported() = mode == "Blink" && checkFallDist
         override fun onChange(oldValue: Float, newValue: Float) = newValue.coerceAtLeast(minFallDist.get())
     }
-    val autoOff by BooleanValue("AutoOff", true) { mode == "HypixelBlink2" }
-    val simulateDebug by BooleanValue("SimulationDebug", false, subjective = true) { mode == "HypixelBlink2" }
-    val fakePlayer by BooleanValue("FakePlayer", true, subjective = true) { mode == "HypixelBlink2" }
+    val autoOff by BooleanValue("AutoOff", true) { mode == "Blink" }
+    val simulateDebug by BooleanValue("SimulationDebug", false, subjective = true) { mode == "Blink" }
+    val fakePlayer by BooleanValue("FakePlayer", true, subjective = true) { mode == "Blink" }
 
     override fun onEnable() {
         mc.timer.resetSpeed()
