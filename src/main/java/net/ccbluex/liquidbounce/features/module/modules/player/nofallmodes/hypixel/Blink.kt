@@ -27,7 +27,7 @@ import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.util.AxisAlignedBB
 import java.awt.Color
 
-object Blink : NoFallMode("HypixelBlink2") {
+object Blink : NoFallMode("Blink") {
     private var blinked = false
     private val tick = TickTimer()
 
