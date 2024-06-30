@@ -1741,7 +1741,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val doKeepY
         get() = when (keepY) {
             "Always" -> true
-            "Smart" -> !mc.gameSettings.keyBindJump.isActuallyPressed
+            "Smart" -> !mc.gameSettings.keyBindJump.isActuallyPressed && mc.thePlayer.posY >= launchY && !mc.thePlayer.onGround
             else -> false
         }
 
