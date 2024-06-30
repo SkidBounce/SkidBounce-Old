@@ -16,20 +16,23 @@ import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.simulateDe
 import net.ccbluex.liquidbounce.features.module.modules.player.NoFall.state
 import net.ccbluex.liquidbounce.features.module.modules.player.nofallmodes.NoFallMode
 import net.ccbluex.liquidbounce.injection.implementations.IMixinEntity
-import net.ccbluex.liquidbounce.script.api.global.Chat
 import net.ccbluex.liquidbounce.utils.BlinkUtils
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.SimulatedPlayer
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBacktrackBox
+import net.ccbluex.liquidbounce.utils.timing.TickTimer
 import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.util.AxisAlignedBB
 import java.awt.Color
 
 object HypixelBlink2 : NoFallMode("HypixelBlink2") {
     private var blinked = false
+    private val tick = TickTimer()
 
     override fun onDisable() {
         BlinkUtils.unblink()
         blinked = false
+        tick.reset()
     }
 
     override fun onPacket(event: PacketEvent) {
@@ -45,14 +48,21 @@ object HypixelBlink2 : NoFallMode("HypixelBlink2") {
             simPlayer.tick()
         }
 
-        if (thePlayer.onGround && simPlayer.onGround && blinked) {
-            BlinkUtils.unblink()
-            blinked = false
+        if (simPlayer.onGround && blinked) {
+            if (thePlayer.onGround) {
+                tick.update()
 
-            if (autoOff) {
-                state = false
+                if (tick.hasTimePassed(150)) {
+                    BlinkUtils.unblink()
+                    blinked = false
+                    displayClientMessage("Unblink")
+
+                    if (autoOff) {
+                        state = false
+                    }
+                    tick.reset()
+                }
             }
-            Chat.print("Unblink")
         }
 
         if (event.packet is C03PacketPlayer) {
@@ -62,7 +72,7 @@ object HypixelBlink2 : NoFallMode("HypixelBlink2") {
                         event.packet.onGround = thePlayer.ticksExisted % 2 == 0
                     }
                 } else {
-                    Chat.print("rewriting ground")
+                    displayClientMessage("rewriting ground")
                     BlinkUtils.unblink()
                     blinked = false
                     event.packet.onGround = false
@@ -88,8 +98,8 @@ object HypixelBlink2 : NoFallMode("HypixelBlink2") {
                 if (fakePlayer)
                     BlinkUtils.addFakePlayer()
 
-                Chat.print("Blinked")
-                BlinkUtils.blink(packet, event)
+                displayClientMessage("Blinked")
+                BlinkUtils.blink(packet, event, sent = true, receive = true)
             }
         }
     }
