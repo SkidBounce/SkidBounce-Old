@@ -10,6 +10,7 @@ import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.event.events.WorldEvent
 import net.ccbluex.liquidbounce.features.module.modules.misc.NoSlotSet
 import net.ccbluex.liquidbounce.features.module.modules.world.ChestAura
+import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.MinecraftInstance
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.extensions.canUse
@@ -18,7 +19,6 @@ import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.utils.timing.TickedActions
 import net.minecraft.block.BlockBush
 import net.minecraft.init.Blocks
-import net.minecraft.init.Items.*
 import net.minecraft.item.*
 import net.minecraft.network.play.client.*
 import net.minecraft.network.play.client.C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT
@@ -217,20 +217,26 @@ object InventoryUtils : MinecraftInstance(), Listenable {
 
                     event.cancelEvent()
                 }
-
-                // Prevent desync in minemen server?
-                serverSlot = _serverSlot
             }
         }
     }
 
     @EventTarget
     fun onWorld(event: WorldEvent) {
-        // Prevents desync
-        _serverOpenInventory = false
-        _serverSlot = 0
-        serverOpenContainer = false
-        _serverUsing = false
+        if (_serverSlot > 0 || _serverOpenInventory || serverOpenContainer) {
+            LOGGER.info("previous slot: $_serverSlot")
+
+            // Prevents desync
+            _serverOpenInventory = false
+            _serverSlot = 0
+            serverOpenContainer = false
+
+            // Prevent desync in minemen server
+            serverSlot = _serverSlot
+            mc.playerController?.currentPlayerItem = serverSlot
+
+            LOGGER.info("reset slot: $serverSlot")
+        }
     }
 
     override fun handleEvents() = true
