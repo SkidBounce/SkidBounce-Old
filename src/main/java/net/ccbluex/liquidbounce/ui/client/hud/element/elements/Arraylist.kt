@@ -15,6 +15,7 @@ import net.ccbluex.liquidbounce.ui.font.*
 import net.ccbluex.liquidbounce.utils.render.AnimationUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.deltaTime
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRectNew
+import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawRoundedRect
 import net.ccbluex.liquidbounce.utils.render.animation.AnimationUtil
 import net.ccbluex.liquidbounce.utils.render.shader.shaders.*
 import net.ccbluex.liquidbounce.value.*
@@ -38,17 +39,15 @@ class Arraylist(
     private val textBlue by IntValue("Text-B", 255, 0..255) { textColorMode == "Custom" }
 
     private val rectMode by ListValue("Rect", arrayOf("None", "Left", "Right"), "None")
-    private val rectColorMode by ListValue(
-        "Rect-Color",
-        arrayOf("Custom", "Random", "Rainbow"),
-        "Rainbow"
-    ) { rectMode != "None" }
+    private val roundedRectRadius by FloatValue("RoundedRect-Radius", 0F, 0F..2F)
+    private val rectColorMode by ListValue("Rect-Color", arrayOf("Custom", "Random", "Rainbow"), "Rainbow") { rectMode != "None" }
     private val isCustomRectSupported = { rectMode != "None" && rectColorMode == "Custom" }
     private val rectRed by IntValue("Rect-R", 255, 0..255, isSupported = isCustomRectSupported)
     private val rectGreen by IntValue("Rect-G", 255, 0..255, isSupported = isCustomRectSupported)
     private val rectBlue by IntValue("Rect-B", 255, 0..255, isSupported = isCustomRectSupported)
     private val rectAlpha by IntValue("Rect-Alpha", 255, 0..255, isSupported = isCustomRectSupported)
 
+    private val roundedBackgroundRadius by FloatValue("RoundedBackGround-Radius", 0F, 0F..5F)
     private val backgroundMode by ListValue("Background-Color", arrayOf("Custom", "Random", "Rainbow"), "Custom")
     private val backgroundRed by IntValue("Background-R", 0, 0..255) { backgroundMode == "Custom" }
     private val backgroundGreen by IntValue("Background-G", 0, 0..255) { backgroundMode == "Custom" }
@@ -80,7 +79,7 @@ class Arraylist(
     private val moduleCase by ListValue("ModuleCase", arrayOf("Normal", "Uppercase", "Lowercase"), "Normal")
     private val space by FloatValue("Space", 0F, 0F..5F)
     private val textHeight by FloatValue("TextHeight", 11F, 1F..20F)
-    private val textY by FloatValue("TextY", 1F, 0F..20F)
+    private val textY by FloatValue("TextY", 1.5F, 0F..20F)
 
     private val animation by ListValue("Animation", arrayOf("Slide", "Smooth"), "Smooth") { tags }
     private val animationSpeed by FloatValue("AnimationSpeed", 0.2F, 0.01F..1F) { animation == "Smooth" }
@@ -208,7 +207,7 @@ class Arraylist(
                     val xPos = -module.slide - 2
 
                     RainbowShader.begin(backgroundMode == "Rainbow", rainbowX, rainbowY, rainbowOffset).use {
-                        drawRectNew (
+                        drawRoundedRect(
                             xPos - if (rectMode == "Right") 5 else 2,
                             yPos,
                             if (rectMode == "Right") -1F else 0F,
@@ -217,7 +216,8 @@ class Arraylist(
                                 "Rainbow" -> 0
                                 "Random" -> moduleColor
                                 else -> backgroundCustomColor
-                            }
+                            },
+                            roundedBackgroundRadius
                         )
                     }
 
@@ -255,8 +255,8 @@ class Arraylist(
                                 }
 
                             when (rectMode) {
-                                "Left" -> drawRectNew(xPos - 5, yPos + 0.8F, xPos - 2, yPos + textHeight, rectColor)
-                                "Right" -> drawRectNew(-3F, yPos, 0F, yPos + textHeight, rectColor)
+                                "Left" -> drawRoundedRect(xPos - 5, yPos + 0.8F, xPos - 2, yPos + textHeight, rectColor, roundedRectRadius)
+                                "Right" -> drawRoundedRect(-3F, yPos, 0F, yPos + textHeight, rectColor, roundedRectRadius)
                             }
                         }
                     }
@@ -267,13 +267,14 @@ class Arraylist(
                     val xPos = -(width - module.slide) + if (rectMode == "Left") 5 else 2
 
                     RainbowShader.begin(backgroundMode == "Rainbow", rainbowX, rainbowY, rainbowOffset).use {
-                        drawRectNew (
+                        drawRoundedRect(
                             0F, yPos, xPos + width + if (rectMode == "Right") 5 else 2, yPos + textHeight,
                             when (backgroundMode) {
                                 "Rainbow" -> 0
                                 "Random" -> moduleColor
                                 else -> backgroundCustomColor
-                            }
+                            },
+                            roundedBackgroundRadius
                         )
                     }
 
@@ -311,13 +312,14 @@ class Arraylist(
                                 }
 
                             when (rectMode) {
-                                "Left" -> drawRectNew (0F, yPos - 1, 3F, yPos + textHeight, rectColor)
-                                "Right" -> drawRectNew (
+                                "Left" -> drawRoundedRect(0F, yPos - 1, 3F, yPos + textHeight, rectColor, roundedRectRadius)
+                                "Right" -> drawRoundedRect(
                                     xPos + width + 2,
                                     yPos,
                                     xPos + width + 2 + 3,
                                     yPos + textHeight,
-                                    rectColor
+                                    rectColor,
+                                    roundedRectRadius
                                 )
                             }
                         }
