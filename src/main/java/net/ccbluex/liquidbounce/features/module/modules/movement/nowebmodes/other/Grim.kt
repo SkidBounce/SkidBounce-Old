@@ -5,7 +5,9 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other
 
+import net.ccbluex.liquidbounce.features.module.modules.movement.NoWeb.grimBreakOnWorld
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoWeb.grimExpand
+import net.ccbluex.liquidbounce.features.module.modules.movement.NoWeb.grimStrict
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
@@ -45,6 +47,14 @@ object Grim : NoWebMode("Grim") {
             }
         }
         blocks.forEach {
+            if (grimStrict) sendPacket(
+                C07PacketPlayerDigging(
+                    C07PacketPlayerDigging.Action.START_DESTROY_BLOCK,
+                    it,
+                    EnumFacing.DOWN
+                )
+            )
+
             sendPacket(
                 C07PacketPlayerDigging(
                     C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK,
@@ -52,6 +62,8 @@ object Grim : NoWebMode("Grim") {
                     EnumFacing.DOWN
                 )
             )
+
+            if (grimBreakOnWorld) mc.theWorld.setBlockToAir(it)
         }
         mc.thePlayer.isInWeb = false
     }
