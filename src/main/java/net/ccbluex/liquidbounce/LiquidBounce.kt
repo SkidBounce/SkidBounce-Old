@@ -5,6 +5,8 @@
  */
 package net.ccbluex.liquidbounce
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import net.ccbluex.liquidbounce.api.ClientUpdate.gitInfo
 import net.ccbluex.liquidbounce.cape.CapeService
 import net.ccbluex.liquidbounce.event.EventManager
@@ -35,6 +37,7 @@ import net.ccbluex.liquidbounce.ui.font.Fonts.loadFonts
 import net.ccbluex.liquidbounce.utils.*
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.ClientUtils.disableFastRender
+import net.ccbluex.liquidbounce.utils.background.Background
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.utils.render.MiniMapRegister
 import net.ccbluex.liquidbounce.utils.timing.TickedActions
@@ -81,88 +84,102 @@ object LiquidBounce {
 
         LOGGER.info("Starting $CLIENT_NAME $clientVersionText ${if (IN_DEV) clientCommit else ""}")
 
-        loadLanguages()
-
-        registerListener(RotationUtils)
-        registerListener(ClientFixes)
-        registerListener(BungeeCordSpoof)
-        registerListener(CapeService)
-        registerListener(InventoryUtils)
-        registerListener(MiniMapRegister)
-        registerListener(TickedActions)
-        registerListener(MovementUtils)
-        registerListener(PacketUtils)
-        registerListener(TimerBalanceUtils)
-
-        loadFonts()
-
-        registerCommands()
-
-        registerModules()
-
-        try {
-            // Remapper
-            loadSrg()
-
-            if (!Remapper.mappingsLoaded) {
-                error("Failed to load SRG mappings.")
-            }
-
-            // ScriptManager
-            loadScripts()
-            enableScripts()
-        } catch (throwable: Throwable) {
-            LOGGER.error("Failed to load scripts.", throwable)
-        }
-
-        loadAllConfigs()
-
-        updateClientWindow()
-
-        // Tabs
-        BlocksTab
-        ExploitsTab
-        HeadsTab
-
-        disableFastRender()
-
-        // Load alt generators
-        loadActiveGenerators()
-
-        // Setup Discord RPC
-        if (showRichPresenceValue) {
-            thread {
-                try {
-                    clientRichPresence.setup()
-                } catch (throwable: Throwable) {
-                    LOGGER.error("Failed to setup Discord RPC.", throwable)
-                }
-            }
-        }
-
-        // Login into known token if not empty
-        if (CapeService.knownToken.isNotBlank()) {
+        runBlocking {
             runCatching {
-                CapeService.login(CapeService.knownToken)
-            }.onFailure {
-                LOGGER.error("Failed to login into known cape token.", it)
-            }.onSuccess {
-                LOGGER.info("Successfully logged in into known cape token.")
-            }
-        }
+                async {
+                    loadLanguages()
 
-        // Refresh cape service
-        CapeService.refreshCapeCarriers {
-            LOGGER.info("Successfully loaded ${CapeService.capeCarriers.size} cape carriers.")
+                    registerListener(RotationUtils)
+                    registerListener(ClientFixes)
+                    registerListener(BungeeCordSpoof)
+                    registerListener(CapeService)
+                    registerListener(InventoryUtils)
+                    registerListener(MiniMapRegister)
+                    registerListener(TickedActions)
+                    registerListener(MovementUtils)
+                    registerListener(PacketUtils)
+                    registerListener(TimerBalanceUtils)
+                    registerListener(BPSUtils)
+
+                    loadFonts()
+
+                    registerCommands()
+
+                    registerModules()
+
+                    runCatching {
+                        // Remapper
+                        loadSrg()
+
+                        if (!Remapper.mappingsLoaded) {
+                            error("Failed to load SRG mappings.")
+                        }
+
+                        // ScriptManager
+                        loadScripts()
+                        enableScripts()
+                    }.onFailure {
+                        LOGGER.error("Failed to load scripts.", it)
+                    }
+
+                    loadAllConfigs()
+
+                    updateClientWindow()
+
+                    // Tabs
+                    BlocksTab
+                    ExploitsTab
+                    HeadsTab
+
+                    disableFastRender()
+
+                    // Load alt generators
+                    loadActiveGenerators()
+
+                    // Setup Discord RPC
+                    if (showRichPresenceValue) {
+                        thread {
+                            try {
+                                clientRichPresence.setup()
+                            } catch (throwable: Throwable) {
+                                LOGGER.error("Failed to setup Discord RPC.", throwable)
+                            }
+                        }
+                    }
+
+                    // Login into known token if not empty
+                    if (CapeService.knownToken.isNotBlank()) {
+                        runCatching {
+                            CapeService.login(CapeService.knownToken)
+                        }.onFailure {
+                            LOGGER.error("Failed to login into known cape token.", it)
+                        }.onSuccess {
+                            LOGGER.info("Successfully logged in into known cape token.")
+                        }
+                    }
+
+                    // Refresh cape service
+                    CapeService.refreshCapeCarriers {
+                        LOGGER.info("Successfully loaded ${CapeService.capeCarriers.size} cape carriers.")
+                    }
+                }.await() // Wait to load
+
+                // Load background
+                FileManager.loadBackground()
+            }.onFailure {
+                LOGGER.error("Failed to start client ${it.message}")
+            }.onSuccess {
+                // Set is starting status
+                isStarting = false
+
+                callEvent(StartupEvent())
+                LOGGER.info("Successfully started client")
+            }
         }
 
         // Load background
         runCatching {
             FileManager.loadBackground()
-        }.onFailure {
-            LOGGER.error("Failed to load background.", it)
-        }.onSuccess {
-            LOGGER.info("Successfully loaded background.")
         }
 
         isStarting = false

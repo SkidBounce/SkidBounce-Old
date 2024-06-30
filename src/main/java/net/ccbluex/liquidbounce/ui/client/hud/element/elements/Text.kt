@@ -16,13 +16,14 @@ import net.ccbluex.liquidbounce.ui.client.hud.element.Element
 import net.ccbluex.liquidbounce.ui.client.hud.element.ElementInfo
 import net.ccbluex.liquidbounce.ui.client.hud.element.Side
 import net.ccbluex.liquidbounce.ui.font.Fonts
+import net.ccbluex.liquidbounce.utils.BPSUtils.bps
 import net.ccbluex.liquidbounce.utils.CPSCounter
+import net.ccbluex.liquidbounce.utils.CPSCounter.MouseButton.*
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.PPSCounter
 import net.ccbluex.liquidbounce.utils.PPSCounter.PacketType.RECEIVED
 import net.ccbluex.liquidbounce.utils.PPSCounter.PacketType.SEND
 import net.ccbluex.liquidbounce.utils.ServerUtils
-import net.ccbluex.liquidbounce.utils.TimerBalanceUtils
 import net.ccbluex.liquidbounce.utils.TimerBalanceUtils.balance
 import net.ccbluex.liquidbounce.utils.extensions.ping
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
@@ -145,6 +146,7 @@ class Text(x: Double = 10.0, y: Double = 10.0, scale: Float = 1F, side: Side = S
                 "inventory", "inv" -> return mc.currentScreen is GuiInventory || mc.currentScreen is GuiContainer
                 "serverslot" -> return serverSlot
                 "clientslot" -> return thePlayer.inventory?.currentItem
+                "bps", "blockpersecond" -> return DECIMAL_FORMAT.format(bps)
             }
         }
 
@@ -158,9 +160,9 @@ class Text(x: Double = 10.0, y: Double = 10.0, scale: Float = 1F, side: Side = S
             "date" -> DATE_FORMAT.format(System.currentTimeMillis())
             "time" -> HOUR_FORMAT.format(System.currentTimeMillis())
             "serverip" -> ServerUtils.remoteIp
-            "cps", "lcps" -> return CPSCounter.getCPS(CPSCounter.MouseButton.LEFT)
-            "mcps" -> return CPSCounter.getCPS(CPSCounter.MouseButton.MIDDLE)
-            "rcps" -> return CPSCounter.getCPS(CPSCounter.MouseButton.RIGHT)
+            "cps", "lcps" -> return CPSCounter.getCPS(LEFT)
+            "mcps" -> return CPSCounter.getCPS(MIDDLE)
+            "rcps" -> return CPSCounter.getCPS(RIGHT)
             else -> null // don't replace
         }
     }

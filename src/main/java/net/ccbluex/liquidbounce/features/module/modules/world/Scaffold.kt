@@ -1070,7 +1070,10 @@ object Scaffold : Module("Scaffold", WORLD) {
         if (!mc.gameSettings.keyBindSneak.isActuallyPressed) {
             mc.gameSettings.keyBindSneak.pressed = false
             if (eagleSneaking && player.isSneaking) {
-                sendPacket(C0BPacketEntityAction(player, STOP_SNEAKING))
+//                sendPacket(C0BPacketEntityAction(player, C0BPacketEntityAction.Action.STOP_SNEAKING))
+
+                // Should prevent false flag by some AntiCheat (Ex: Verus)
+                player.isSneaking = false
             }
         }
 
