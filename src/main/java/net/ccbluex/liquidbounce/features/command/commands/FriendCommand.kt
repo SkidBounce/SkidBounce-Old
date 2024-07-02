@@ -10,7 +10,7 @@ import net.ccbluex.liquidbounce.file.FileManager.friendsConfig
 import net.ccbluex.liquidbounce.file.FileManager.saveConfig
 import net.ccbluex.liquidbounce.utils.misc.StringUtils
 
-object FriendCommand : Command("friend", "friends") {
+object FriendCommand : Command("friend", "friends", "f") {
     /**
      * Execute commands with provided [args]
      */
@@ -19,6 +19,17 @@ object FriendCommand : Command("friend", "friends") {
             val friendsConfig = friendsConfig
 
             when {
+                args[1].equals("addall", ignoreCase = true) -> {
+                    val players = mc.theWorld.playerEntities
+                        .filterNot { it == mc.thePlayer || friendsConfig.isFriend(it.name) }
+                        .map { it.name }
+                        .onEach { friendsConfig.addFriend(it) }
+                        .size
+                    chat("§a§l$players§3 players were added to your friends list.")
+                    playEdit()
+                    return
+                }
+
                 args[1].equals("add", ignoreCase = true) -> {
                     if (args.size > 2) {
                         val name = args[2]
@@ -30,7 +41,7 @@ object FriendCommand : Command("friend", "friends") {
 
                         if (if (args.size > 3) friendsConfig.addFriend(name, StringUtils.toCompleteString(args, 3)) else friendsConfig.addFriend(name)) {
                             saveConfig(friendsConfig)
-                            chat("§a§l$name§3 was added to your friend list.")
+                            chat("§a§l$name§3 was added to your friends list.")
                             playEdit()
                         } else
                             chat("The name is already in the list.")
@@ -76,14 +87,14 @@ object FriendCommand : Command("friend", "friends") {
             }
         }
 
-        chatSyntax("friend <add/remove/list/clear>")
+        chatSyntax("friend <add/addall/remove/list/clear>")
     }
 
     override fun tabComplete(args: Array<String>): List<String> {
         if (args.isEmpty()) return emptyList()
 
         return when (args.size) {
-            1 -> listOf("add", "remove", "list", "clear").filter { it.startsWith(args[0], true) }
+            1 -> listOf("add", "addall", "remove", "list", "clear").filter { it.startsWith(args[0], true) }
             2 -> {
                 when (args[0].lowercase()) {
                     "add" -> {
