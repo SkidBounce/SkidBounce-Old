@@ -54,6 +54,7 @@ import net.minecraft.client.renderer.GlStateManager.resetColor
 import net.minecraft.init.Blocks.air
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
+import net.minecraft.network.play.client.C03PacketPlayer
 import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
 import net.minecraft.network.play.client.C0BPacketEntityAction
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action.START_SNEAKING
@@ -82,21 +83,22 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     // TODO: (Scaffold & Tower) Optimize & Improve Code
 
-    // -->
-
     private val towerMode by ListValue(
         "TowerMode",
         arrayOf(
-            "None",
-            "Jump",
-            "MotionJump",
-            "Motion",
+            "AAC3.3.9",
+            "AAC3.6.4",
             "ConstantMotion",
+            "Jump",
+            "Motion",
+            "MotionJump",
             "MotionTP",
+            "NCP",
+            "None",
             "Packet",
             "Teleport",
-            "AAC3.3.9",
-            "AAC3.6.4"
+            "Vanilla",
+            "Verus",
         ),
         "None"
     )
@@ -105,24 +107,20 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     private val onJump by BooleanValue("TowerOnJump", true) { towerMode != "None" }
     private val matrix by BooleanValue("TowerMatrix", false) { towerMode != "None" }
-    private val placeMode by ListValue(
-        "TowerPlaceTiming",
-        arrayOf("Pre", "Post"),
-        "Post"
-    ) { towerMode != "Packet" && towerMode != "None" }
+    private val placeMode by ListValue("TowerPlaceTiming", arrayOf("Pre", "Post"), "Post") { towerMode != "Packet" && towerMode != "None" }
 
-    // Jump mode
+    // Jump
     private val jumpMotion by FloatValue("JumpMotion", 0.42f, 0.3681289f..0.79f) { towerMode == "MotionJump" }
     private val jumpDelay by IntValue("JumpDelay", 0, 0..20) { towerMode == "MotionJump" || towerMode == "Jump" }
 
     // ConstantMotion
     private val constantMotion by FloatValue("ConstantMotion", 0.42f, 0.1f..1f) { towerMode == "ConstantMotion" }
-    private val constantMotionJumpGround by FloatValue(
-        "ConstantMotionJumpGround",
-        0.79f,
-        0.76f..1f
-    ) { towerMode == "ConstantMotion" }
+    private val constantMotionJumpGround by FloatValue("ConstantMotionJumpGround", 0.79f, 0.76f..1f) { towerMode == "ConstantMotion" }
     private val constantMotionJumpPacket by BooleanValue("JumpPacket", true) { towerMode == "ConstantMotion" }
+
+    // Vanilla
+    private val vanillaMotion by DoubleValue("VanillaMotion", JUMP_HEIGHT, 0.1..1.0) { towerMode == "Vanilla" }
+    private val vanillaFakeJump by BooleanValue("VanillaFakeJump", true) { towerMode == "Vanilla" }
 
     // Teleport
     private val teleportHeight by FloatValue("TeleportHeight", 1.15f, 0.1f..5f) { towerMode == "Teleport" }
@@ -130,19 +128,11 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val teleportGround by BooleanValue("TeleportGround", true) { towerMode == "Teleport" }
     private val teleportNoMotion by BooleanValue("TeleportNoMotion", false) { towerMode == "Teleport" }
 
-    // <--
-
     /**
      * SCAFFOLD MODES & SETTINGS
      */
 
-    // -->
-
-    private val scaffoldMode by ListValue(
-        "ScaffoldMode",
-        arrayOf("Normal", "Rewinside", "Expand", "Telly", "GodBridge"),
-        "Normal"
-    )
+    private val scaffoldMode by ListValue("ScaffoldMode", arrayOf("Normal", "Rewinside", "Expand", "Telly", "GodBridge"), "Normal")
 
     // Expand
     private val omniDirectionalExpand by BooleanValue("OmniDirectionalExpand", false) { scaffoldMode == "Expand" }
@@ -176,11 +166,7 @@ object Scaffold : Module("Scaffold", WORLD) {
         override fun isSupported() = extraClicks && !extraClickMaxCPSValue.isMinimal
     }
 
-    private val placementAttempt by ListValue(
-        "PlacementAttempt",
-        arrayOf("Fail", "Independent"),
-        "Fail"
-    ) { extraClicks }
+    private val placementAttempt by ListValue("PlacementAttempt", arrayOf("Fail", "Independent"), "Fail") { extraClicks }
 
     // Autoblock
     private val autoBlock by ListValue("AutoBlock", arrayOf("Off", "Pick", "Spoof", "Switch"), "Spoof")
@@ -209,9 +195,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     }
 
     private val minBlocksToJump: IntValue = object : IntValue("GodBridge-MinBlocksToJump", 4, 1..8) {
-        override fun isSupported() =
-            scaffoldMode == "GodBridge" && !jumpAutomatically && !maxBlocksToJump.isMinimal && godBridgeAutoJump
-
+        override fun isSupported() = scaffoldMode == "GodBridge" && !jumpAutomatically && !maxBlocksToJump.isMinimal && godBridgeAutoJump
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxBlocksToJump.get())
     }
 
@@ -257,7 +241,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     // Eagle
     private val eagleValue = ListValue("Eagle", arrayOf("Normal", "Silent", "Off"), "Normal") { scaffoldMode != "GodBridge" }
     val eagle by eagleValue
-    val eagleInAir by BooleanValue("EagleInAir", true) { eagleValue.isSupported() && eagle != "Off" }
+    private val eagleInAir by BooleanValue("EagleInAir", true) { eagleValue.isSupported() && eagle != "Off" }
     private val adjustedSneakSpeed by BooleanValue("AdjustedSneakSpeed", true) { eagle == "Silent" }
     private val eagleSpeed by FloatValue("EagleSpeed", 0.3f, 0.3f..1.0f) { eagleValue.isSupported() && eagle != "Off" }
     val eagleSprint by BooleanValue("EagleSprint", false) { eagleValue.isSupported() && eagle == "Normal" }
@@ -266,11 +250,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     // Rotation Options
     private val rotationMode by ListValue("Rotations", arrayOf("Off", "Normal", "Stabilized", "GodBridge"), "Normal")
-    private val smootherMode by ListValue(
-        "SmootherMode",
-        arrayOf("Linear", "Relative"),
-        "Relative"
-    ) { rotationMode != "Off" }
+    private val smootherMode by ListValue("SmootherMode", arrayOf("Linear", "Relative"), "Relative") { rotationMode != "Off" }
     private val silentRotation by BooleanValue("SilentRotation", true) { rotationMode != "Off" }
     private val strafe by BooleanValue("Strafe", false) { rotationMode != "Off" && silentRotation }
     private val keepRotation by BooleanValue("KeepRotation", true) { rotationMode != "Off" && silentRotation }
@@ -294,11 +274,7 @@ object Scaffold : Module("Scaffold", WORLD) {
         override fun isSupported() = !maxTurnSpeedValue.isMinimal && rotationMode != "Off"
     }
 
-    private val angleThresholdUntilReset by FloatValue(
-        "AngleThresholdUntilReset",
-        5f,
-        0.1f..180f
-    ) { rotationMode != "Off" && silentRotation }
+    private val angleThresholdUntilReset by FloatValue("AngleThresholdUntilReset", 5f, 0.1f..180f) { rotationMode != "Off" && silentRotation }
 
     // Zitter
     private val zitterMode by ListValue("Zitter", arrayOf("Off", "Teleport", "Smooth"), "Off")
@@ -381,8 +357,7 @@ object Scaffold : Module("Scaffold", WORLD) {
         get() = currentRotation ?: mc.thePlayer.rotation
 
     // Extra clicks
-    private var extraClick =
-        ExtraClickInfo(randomClickDelay(extraClickMinCPS, extraClickMaxCPS), 0L, 0)
+    private var extraClick = ExtraClickInfo(randomClickDelay(extraClickMinCPS, extraClickMaxCPS), 0L, 0)
 
     // GodBridge
     private var blocksPlacedUntilJump = 0
@@ -419,11 +394,11 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val shouldPlaceHorizontally
         get() = scaffoldMode == "Telly" && isMoving && (startHorizontally && blocksUntilAxisChange <= horizontalPlacements || !startHorizontally && blocksUntilAxisChange > verticalPlacements)
 
-    // <--
-
     // Enabling module
     override fun onEnable() {
         val player = mc.thePlayer ?: return
+
+        doSpoof = false
 
         launchY = player.posY.roundToInt()
         blocksUntilAxisChange = 0
@@ -432,6 +407,8 @@ object Scaffold : Module("Scaffold", WORLD) {
     /**
      * TOWER SETTINGS
      */
+
+    private var doSpoof = false
 
     // Target block
     private var placeInfo: PlaceInfo? = null
@@ -627,118 +604,196 @@ object Scaffold : Module("Scaffold", WORLD) {
     }
 
     /**
-     *
      * TOWER FUNCTION
      *
      * Move player
      */
     private fun move() {
-        val thePlayer = mc.thePlayer ?: return
+        mc.thePlayer ?: return
 
         if (blocksAmount <= 0)
             return
 
-        when (towerMode.lowercase()) {
-            "jump" -> if (thePlayer.onGround && tickTimer.hasTimePassed(jumpDelay)) {
-                thePlayer.fakeJump()
-                thePlayer.jmp()
-            } else if (!thePlayer.onGround) {
-                thePlayer.isAirBorne = false
-                tickTimer.reset()
-            }
+        when (towerMode) {
 
-            "motion" -> if (thePlayer.onGround) {
-                thePlayer.fakeJump()
-                thePlayer.motionY = 0.42
-            } else if (thePlayer.motionY < 0.1) {
-                thePlayer.motionY = -0.3
-            }
-
-            // Old Name (Jump)
-            "motionjump" -> if (thePlayer.onGround && tickTimer.hasTimePassed(jumpDelay)) {
-                thePlayer.fakeJump()
-                thePlayer.motionY = jumpMotion.toDouble()
-                tickTimer.reset()
-            }
-
-            "motiontp" -> if (thePlayer.onGround) {
-                thePlayer.fakeJump()
-                thePlayer.motionY = 0.42
-            } else if (thePlayer.motionY < 0.23) {
-                thePlayer.setPosition(thePlayer.posX, truncate(thePlayer.posY), thePlayer.posZ)
-            }
-
-            "packet" -> if (thePlayer.onGround && tickTimer.hasTimePassed(2)) {
-                thePlayer.fakeJump()
-                sendPackets(
-                    C04PacketPlayerPosition(
-                        thePlayer.posX,
-                        thePlayer.posY + 0.42,
-                        thePlayer.posZ,
-                        false
-                    ),
-                    C04PacketPlayerPosition(
-                        thePlayer.posX,
-                        thePlayer.posY + 0.753,
-                        thePlayer.posZ,
-                        false
-                    )
-                )
-                thePlayer.setPosition(thePlayer.posX, thePlayer.posY + 1.0, thePlayer.posZ)
-                tickTimer.reset()
-            }
-
-            "teleport" -> {
-                if (teleportNoMotion) {
-                    thePlayer.motionY = 0.0
+            /**
+             * @author CCBlueX/LiquidBounce
+             */
+            "Jump" -> {
+                if (mc.thePlayer.onGround && tickTimer.hasTimePassed(jumpDelay)) {
+                    mc.thePlayer.fakeJump()
+                    mc.thePlayer.jmp()
+                } else if (!mc.thePlayer.onGround) {
+                    mc.thePlayer.isAirBorne = false
+                    tickTimer.reset()
                 }
-                if ((thePlayer.onGround || !teleportGround) && tickTimer.hasTimePassed(teleportDelay)) {
-                    thePlayer.fakeJump()
-                    thePlayer.setPositionAndUpdate(
-                        thePlayer.posX, thePlayer.posY + teleportHeight, thePlayer.posZ
+            }
+
+            /**
+             * @author CCBlueX/LiquidBounce
+             */
+            "Motion" -> {
+                if (mc.thePlayer.onGround) {
+                    mc.thePlayer.fakeJump()
+                    mc.thePlayer.motionY = 0.42
+                } else if (mc.thePlayer.motionY < 0.1) {
+                    mc.thePlayer.motionY = -0.3
+                }
+            }
+
+            /**
+             * Old Name (Jump)
+             *
+             * @author CCBlueX/LiquidBounce
+             */
+            "MotionJump" -> {
+                if (mc.thePlayer.onGround && tickTimer.hasTimePassed(jumpDelay)) {
+                    mc.thePlayer.fakeJump()
+                    mc.thePlayer.motionY = jumpMotion.toDouble()
+                    tickTimer.reset()
+                }
+            }
+
+            /**
+             * @author CCBlueX/LiquidBounce
+             */
+            "MotionTP" -> {
+                if (mc.thePlayer.onGround) {
+                    mc.thePlayer.fakeJump()
+                    mc.thePlayer.motionY = 0.42
+                } else if (mc.thePlayer.motionY < 0.23) {
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, truncate(mc.thePlayer.posY), mc.thePlayer.posZ)
+                }
+            }
+
+            /**
+             * @author CCBlueX/LiquidBounce
+             */
+            "Packet" -> {
+                if (mc.thePlayer.onGround && tickTimer.hasTimePassed(2)) {
+                    mc.thePlayer.fakeJump()
+                    sendPackets(
+                        C04PacketPlayerPosition(
+                            mc.thePlayer.posX,
+                            mc.thePlayer.posY + 0.42,
+                            mc.thePlayer.posZ,
+                            false
+                        ),
+                        C04PacketPlayerPosition(
+                            mc.thePlayer.posX,
+                            mc.thePlayer.posY + 0.753,
+                            mc.thePlayer.posZ,
+                            false
+                        )
+                    )
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1, mc.thePlayer.posZ)
+                    tickTimer.reset()
+                }
+            }
+
+            /**
+             * @author CCBlueX/LiquidBounce
+             */
+            "Teleport" -> {
+                if (teleportNoMotion) {
+                    mc.thePlayer.motionY = 0.0
+                }
+                if ((mc.thePlayer.onGround || !teleportGround) && tickTimer.hasTimePassed(teleportDelay)) {
+                    mc.thePlayer.fakeJump()
+                    mc.thePlayer.setPositionAndUpdate(
+                        mc.thePlayer.posX, mc.thePlayer.posY + teleportHeight, mc.thePlayer.posZ
                     )
                     tickTimer.reset()
                 }
             }
 
-            "constantmotion" -> {
-                if (thePlayer.onGround) {
-                    if (constantMotionJumpPacket) {
-                        thePlayer.fakeJump()
-                    }
-                    jumpGround = thePlayer.posY
-                    thePlayer.motionY = constantMotion.toDouble()
-                }
-                if (thePlayer.posY > jumpGround + constantMotionJumpGround) {
-                    if (constantMotionJumpPacket) {
-                        thePlayer.fakeJump()
-                    }
-                    thePlayer.setPosition(
-                        thePlayer.posX, truncate(thePlayer.posY), thePlayer.posZ
-                    ) // TODO: toInt() required?
-                    thePlayer.motionY = constantMotion.toDouble()
-                    jumpGround = thePlayer.posY
+            /**
+             * @author ManInMyVan/SkidBounce
+             * @author ManInMyVan
+             */
+            "Vanilla" -> {
+                mc.thePlayer.motionY = vanillaMotion
+                if (vanillaFakeJump) mc.thePlayer.fakeJump()
+            }
+
+            /**
+             * @author SkidderMC/FDPClient
+             */
+            "NCP" -> {
+                if (mc.thePlayer.posY % 1 <= 0.00153598) {
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, floor(mc.thePlayer.posY), mc.thePlayer.posZ)
+                    mc.thePlayer.motionY = 0.41998
+                } else if (mc.thePlayer.posY % 1 < 0.1 && offGroundTicks != 0) {
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, floor(mc.thePlayer.posY), mc.thePlayer.posZ)
                 }
             }
 
-            "aac3.3.9" -> {
-                if (thePlayer.onGround) {
-                    thePlayer.fakeJump()
-                    thePlayer.motionY = 0.4001
+            /**
+             * @author SkidderMC/FDPClient
+             */
+            "Verus" -> {
+                mc.thePlayer.setPosition(mc.thePlayer.posX, (mc.thePlayer.posY * 2).roundToInt().toDouble() / 2, mc.thePlayer.posZ)
+                if (mc.thePlayer.ticksExisted % 2 == 0) {
+                    mc.thePlayer.motionY = 0.5
+                    mc.timer.timerSpeed = 0.8f
+                    doSpoof = false
+                } else {
+                    mc.timer.timerSpeed = 1.33f
+                    mc.thePlayer.motionY = 0.0
+                    mc.thePlayer.onGround = true
+                    doSpoof = true
+                }
+            }
+
+            /**
+             * @author CCBlueX/LiquidBounce
+             */
+            "ConstantMotion" -> {
+                if (mc.thePlayer.onGround) {
+                    if (constantMotionJumpPacket) {
+                        mc.thePlayer.fakeJump()
+                    }
+                    jumpGround = mc.thePlayer.posY
+                    mc.thePlayer.motionY = constantMotion.toDouble()
+                }
+                if (mc.thePlayer.posY > jumpGround + constantMotionJumpGround) {
+                    if (constantMotionJumpPacket) {
+                        mc.thePlayer.fakeJump()
+                    }
+                    mc.thePlayer.setPosition(
+                        mc.thePlayer.posX, truncate(mc.thePlayer.posY), mc.thePlayer.posZ
+                    ) // TODO: toInt() required?
+                    mc.thePlayer.motionY = constantMotion.toDouble()
+                    jumpGround = mc.thePlayer.posY
+                }
+            }
+
+            /**
+             * @author CCBlueX/LiquidBounce
+             */
+            "AAC3.3.9" -> {
+                if (mc.thePlayer.onGround) {
+                    mc.thePlayer.fakeJump()
+                    mc.thePlayer.motionY = 0.4001
                 }
                 mc.timer.timerSpeed = 1f
-                if (thePlayer.motionY < 0) {
-                    thePlayer.motionY -= 0.00000945
+                if (mc.thePlayer.motionY < 0) {
+                    mc.thePlayer.motionY -= 0.00000945
                     mc.timer.timerSpeed = 1.6f
                 }
             }
 
-            "aac3.6.4" -> if (thePlayer.ticksExisted % 4 == 1) {
-                thePlayer.motionY = 0.4195464
-                thePlayer.setPosition(thePlayer.posX - 0.035, thePlayer.posY, thePlayer.posZ)
-            } else if (thePlayer.ticksExisted % 4 == 0) {
-                thePlayer.motionY = -0.5
-                thePlayer.setPosition(thePlayer.posX + 0.035, thePlayer.posY, thePlayer.posZ)
+            /**
+             * @author CCBlueX/LiquidBounce
+             */
+            "AAC3.6.4" -> {
+                if (mc.thePlayer.ticksExisted % 4 == 1) {
+                    mc.thePlayer.motionY = 0.4195464
+                    mc.thePlayer.setPosition(mc.thePlayer.posX - 0.035, mc.thePlayer.posY, mc.thePlayer.posZ)
+                } else if (mc.thePlayer.ticksExisted % 4 == 0) {
+                    mc.thePlayer.motionY = -0.5
+                    mc.thePlayer.setPosition(mc.thePlayer.posX + 0.035, mc.thePlayer.posY, mc.thePlayer.posZ)
+                }
             }
         }
     }
@@ -1714,6 +1769,19 @@ object Scaffold : Module("Scaffold", WORLD) {
                 player.motionX -= sin(yaw) * zitterStrength
                 player.motionZ += cos(yaw) * zitterStrength
                 zitterDirection = !zitterDirection
+            }
+        }
+    }
+
+    @EventTarget
+    fun onPacket(event: PacketEvent) {
+        mc.thePlayer ?: return
+        val packet = event.packet
+
+        if (packet is C03PacketPlayer) {
+            if (doSpoof) {
+                doSpoof = false
+                packet.onGround = true
             }
         }
     }
