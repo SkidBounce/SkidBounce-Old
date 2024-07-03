@@ -88,9 +88,12 @@ object Scaffold : Module("Scaffold", WORLD) {
         arrayOf(
             "AAC3.3.9",
             "AAC3.6.4",
+            "AAC4.4Constant",
             "ConstantMotion",
             "Jump",
             "Motion",
+            "Motion2",
+            "Motion3",
             "MotionJump",
             "MotionTP",
             "NCP",
@@ -642,6 +645,30 @@ object Scaffold : Module("Scaffold", WORLD) {
             }
 
             /**
+             * @author SkidderMC/FDPClient
+             */
+            "Motion2" -> {
+                if (mc.thePlayer.onGround) {
+                    mc.thePlayer.fakeJump()
+                    mc.thePlayer.motionY = 0.41999998688698
+                } else if (mc.thePlayer.motionY < 0.18) {
+                    mc.thePlayer.motionY -= 0.02
+                }
+            }
+
+            /**
+             * @author SkidderMC/FDPClient
+             */
+            "Motion3" -> {
+                if (mc.thePlayer.onGround) {
+                    mc.thePlayer.fakeJump()
+                    mc.thePlayer.motionY = 0.41999998688698
+                } else if (mc.thePlayer.motionY < 0.1) {
+                    mc.thePlayer.motionY = -0.08 * 0.98
+                }
+            }
+
+            /**
              * Old Name (Jump)
              *
              * @author CCBlueX/LiquidBounce
@@ -793,6 +820,28 @@ object Scaffold : Module("Scaffold", WORLD) {
                 } else if (mc.thePlayer.ticksExisted % 4 == 0) {
                     mc.thePlayer.motionY = -0.5
                     mc.thePlayer.setPosition(mc.thePlayer.posX + 0.035, mc.thePlayer.posY, mc.thePlayer.posZ)
+                }
+            }
+
+            /**
+             * @author SkidderMC/FDPClient
+             */
+            "AAC4.4Constant" -> {
+                if (mc.thePlayer.onGround) {
+                    mc.thePlayer.fakeJump()
+                    jumpGround = mc.thePlayer.posY
+                    mc.thePlayer.motionY = 0.41999998688698
+                }
+                mc.thePlayer.motionX = 0.0
+                mc.thePlayer.motionZ = -0.00000001
+                mc.thePlayer.jumpMovementFactor = 0.000F
+                mc.timer.timerSpeed = 0.60f
+                if (mc.thePlayer.posY > jumpGround + 0.99) {
+                    mc.thePlayer.fakeJump()
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 0.001335979112146, mc.thePlayer.posZ)
+                    mc.thePlayer.motionY = 0.42
+                    jumpGround = mc.thePlayer.posY
+                    mc.timer.timerSpeed = 0.75f
                 }
             }
         }
