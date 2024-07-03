@@ -6,16 +6,20 @@
 package net.ccbluex.liquidbounce.injection.forge.mixins.entity;
 
 import net.ccbluex.liquidbounce.event.EventManager;
+import net.ccbluex.liquidbounce.event.events.BlockCollideEvent;
 import net.ccbluex.liquidbounce.event.events.StrafeEvent;
 import net.ccbluex.liquidbounce.features.module.modules.combat.HitBox;
 import net.ccbluex.liquidbounce.features.module.modules.exploit.NoPitchLimit;
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoFluid;
 import net.ccbluex.liquidbounce.injection.implementations.IMixinEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ReportedException;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,6 +34,8 @@ import java.util.Random;
 import java.util.UUID;
 
 import static net.ccbluex.liquidbounce.utils.MinecraftInstance.mc;
+import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
+import static org.spongepowered.asm.mixin.injection.At.Shift.BEFORE;
 
 @Mixin(Entity.class)
 @SideOnly(Side.CLIENT)
@@ -69,7 +75,6 @@ public abstract class MixinEntity {
     @Shadow protected abstract void dealFireDamage(int amount);
     @Shadow public abstract boolean isWet();
     @Shadow public abstract void addEntityCrashInfo(CrashReportCategory category);
-    @Shadow protected abstract void doBlockCollisions();
     @Shadow protected abstract void playStepSound(BlockPos pos, Block blockIn);
     @Shadow public abstract void setEntityBoundingBox(AxisAlignedBB bb);
     @Shadow public int nextStepDistance;
@@ -82,6 +87,10 @@ public abstract class MixinEntity {
 
     // True Pos (IMixinEntity)
 
+    @Shadow public abstract boolean canRenderOnFire();
+
+    @Shadow public int chunkCoordY;
+    @Shadow private int entityId;
     @Unique private double skidBounce$trueX;
     @Unique private double skidBounce$trueY;
     @Unique private double skidBounce$trueZ;
@@ -164,6 +173,44 @@ public abstract class MixinEntity {
     private void isInLava(final CallbackInfoReturnable<Boolean> cir) {
         if (NoFluid.INSTANCE.handleEvents() && NoFluid.INSTANCE.getLava()) {
             cir.setReturnValue(false);
+        }
+    }
+
+    /**
+     * @author ManInMyVan/SkidBounce
+     * @reason BlockCollideEvent
+     */
+    @Overwrite
+    protected void doBlockCollisions() {
+        BlockPos blockpos = new BlockPos(this.getEntityBoundingBox().minX + 0.001, this.getEntityBoundingBox().minY + 0.001, this.getEntityBoundingBox().minZ + 0.001);
+        BlockPos blockpos1 = new BlockPos(this.getEntityBoundingBox().maxX - 0.001, this.getEntityBoundingBox().maxY - 0.001, this.getEntityBoundingBox().maxZ - 0.001);
+        if (this.worldObj.isAreaLoaded(blockpos, blockpos1)) {
+            for (int x = blockpos.getX(); x <= blockpos1.getX(); ++x) {
+                for (int y = blockpos.getY(); y <= blockpos1.getY(); ++y) {
+                    for (int z = blockpos.getZ(); z <= blockpos1.getZ(); ++z) {
+                        BlockPos blockpos2 = new BlockPos(x, y, z);
+                        IBlockState iblockstate = this.worldObj.getBlockState(blockpos2);
+
+                        if (mc.thePlayer == (Entity) (Object) this) {
+                            BlockCollideEvent event = new BlockCollideEvent(blockpos2, iblockstate);
+                            EventManager.INSTANCE.callEvent(event);
+
+                            if (event.isCancelled()) {
+                                continue;
+                            }
+                        }
+
+                        try {
+                            iblockstate.getBlock().onEntityCollidedWithBlock(this.worldObj, blockpos2, iblockstate, (Entity) (Object) this);
+                        } catch (Throwable var11) {
+                            CrashReport crashreport = CrashReport.makeCrashReport(var11, "Colliding entity with block");
+                            CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being collided with");
+                            CrashReportCategory.addBlockInfo(crashreportcategory, blockpos2, iblockstate);
+                            throw new ReportedException(crashreport);
+                        }
+                    }
+                }
+            }
         }
     }
 }

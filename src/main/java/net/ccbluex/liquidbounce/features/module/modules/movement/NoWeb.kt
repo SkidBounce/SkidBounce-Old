@@ -6,6 +6,8 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.EventTarget
+import net.ccbluex.liquidbounce.event.events.BlockCollideEvent
+import net.ccbluex.liquidbounce.event.events.MotionEvent
 import net.ccbluex.liquidbounce.event.events.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
@@ -13,6 +15,7 @@ import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWe
 import net.ccbluex.liquidbounce.utils.ClassUtils.getAllObjects
 import net.ccbluex.liquidbounce.utils.extensions.resetSpeed
 import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.DoubleValue
 import net.ccbluex.liquidbounce.value.FloatValue
 import net.ccbluex.liquidbounce.value.ListValue
 
@@ -28,13 +31,17 @@ object NoWeb : Module("NoWeb", MOVEMENT) {
     val customUpSpeed by FloatValue("CustomUpSpeed", 1F, 0F..3F) { mode == "Custom" && customFloat }
     val customDownSpeed by FloatValue("CustomDownSpeed", 1F, 0F..3F) { mode == "Custom" && customFloat }
     val customSpeed by FloatValue("CustomSpeed", 1.1F, 0.1F..1.16F) { mode == "Custom" }
-    val grimExpand by FloatValue("GrimExpand", 0.25F, 0F..1F) { mode == "Grim" }
     val grimStrict by BooleanValue("GrimStrict", true) { mode == "Grim" }
     val grimBreakOnWorld by BooleanValue("GrimBreakOnWorld", true) { mode == "Grim" }
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
         modeModule.onUpdate()
+    }
+
+    @EventTarget
+    fun onCollide(event: BlockCollideEvent) {
+        modeModule.onCollide(event)
     }
 
     override fun onDisable() {

@@ -5,66 +5,30 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.other
 
+import net.ccbluex.liquidbounce.event.events.BlockCollideEvent
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoWeb.grimBreakOnWorld
-import net.ccbluex.liquidbounce.features.module.modules.movement.NoWeb.grimExpand
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoWeb.grimStrict
 import net.ccbluex.liquidbounce.features.module.modules.movement.nowebmodes.NoWebMode
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
-import net.ccbluex.liquidbounce.utils.block.BlockUtils.getBlock
-import net.minecraft.init.Blocks.web
+import net.minecraft.block.BlockWeb
 import net.minecraft.network.play.client.C07PacketPlayerDigging
-import net.minecraft.util.BlockPos
-import net.minecraft.util.EnumFacing
+import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.START_DESTROY_BLOCK
+import net.minecraft.network.play.client.C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK
+import net.minecraft.util.EnumFacing.DOWN
 
 /**
  * @author ManInMyVan/SkidBounce
  * @author ManInMyVan
  */
 object Grim : NoWebMode("Grim") {
-    override fun onUpdate() {
-        if (mc.thePlayer == null) return
-        val blocks: MutableSet<BlockPos> = mutableSetOf()
+    override fun onCollide(event: BlockCollideEvent) {
+        if (event.blockState.block is BlockWeb) {
+            event.cancelEvent()
 
-        for (x in 3 downTo -3) {
-            for (y in 3 downTo -3) {
-                for (z in 3 downTo -3) {
+            if (grimStrict) sendPacket(C07PacketPlayerDigging(START_DESTROY_BLOCK, event.blockPos, DOWN))
+            if (grimBreakOnWorld) mc.theWorld.setBlockToAir(event.blockPos)
 
-                    val pos = BlockPos(
-                        mc.thePlayer.posX.toInt() + x,
-                        mc.thePlayer.posY.toInt() + y,
-                        mc.thePlayer.posZ.toInt() + z
-                    )
-
-                    if (getBlock(pos) == web && // "collision" check
-                        pos.x > mc.thePlayer.entityBoundingBox.minX - grimExpand - 1 &&
-                        pos.x < mc.thePlayer.entityBoundingBox.maxX + grimExpand &&
-                        pos.y > mc.thePlayer.entityBoundingBox.minY - grimExpand - 1 &&
-                        pos.y < mc.thePlayer.entityBoundingBox.maxY + grimExpand &&
-                        pos.z > mc.thePlayer.entityBoundingBox.minZ - grimExpand - 1 &&
-                        pos.z < mc.thePlayer.entityBoundingBox.maxZ + grimExpand
-                    ) blocks += pos
-                }
-            }
+            sendPacket(C07PacketPlayerDigging(STOP_DESTROY_BLOCK, event.blockPos, DOWN))
         }
-        blocks.forEach {
-            if (grimStrict) sendPacket(
-                C07PacketPlayerDigging(
-                    C07PacketPlayerDigging.Action.START_DESTROY_BLOCK,
-                    it,
-                    EnumFacing.DOWN
-                )
-            )
-
-            sendPacket(
-                C07PacketPlayerDigging(
-                    C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK,
-                    it,
-                    EnumFacing.DOWN
-                )
-            )
-
-            if (grimBreakOnWorld) mc.theWorld.setBlockToAir(it)
-        }
-        mc.thePlayer.isInWeb = false
     }
 }
