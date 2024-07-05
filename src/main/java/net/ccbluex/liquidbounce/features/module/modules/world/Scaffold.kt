@@ -834,8 +834,8 @@ object Scaffold : Module("Scaffold", WORLD) {
                 }
                 mc.thePlayer.motionX = 0.0
                 mc.thePlayer.motionZ = -0.00000001
-                mc.thePlayer.jumpMovementFactor = 0.000F
-                mc.timer.timerSpeed = 0.60f
+                mc.thePlayer.jumpMovementFactor = 0f
+                mc.timer.timerSpeed = 0.6f
                 if (mc.thePlayer.posY > jumpGround + 0.99) {
                     mc.thePlayer.fakeJump()
                     mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 0.001335979112146, mc.thePlayer.posZ)
