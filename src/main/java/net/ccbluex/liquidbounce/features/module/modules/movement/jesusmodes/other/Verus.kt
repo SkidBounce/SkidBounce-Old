@@ -6,7 +6,10 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement.jesusmodes.other
 
 import net.ccbluex.liquidbounce.event.events.PacketEvent
+import net.ccbluex.liquidbounce.features.module.modules.movement.Jesus.verusStrafe
+import net.ccbluex.liquidbounce.features.module.modules.movement.Jesus.verusStrafeSpeed
 import net.ccbluex.liquidbounce.features.module.modules.movement.jesusmodes.JesusMode
+import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.block.BlockUtils.collideBlock
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.minecraft.block.BlockLiquid
@@ -15,6 +18,7 @@ import net.minecraft.util.AxisAlignedBB.fromBounds
 
 object Verus : JesusMode("Verus", true) {
     private var nextTick = true
+    private var wasJesus = false
 
     override fun onPacket(event: PacketEvent) {
         mc.thePlayer ?: return
@@ -34,8 +38,18 @@ object Verus : JesusMode("Verus", true) {
                 )
             ) { it is BlockLiquid }
         ) {
-            event.packet.onGround = nextTick
-            nextTick = !nextTick
-        } else nextTick = true
+            if (verusStrafe) strafe(verusStrafeSpeed)
+            wasJesus = true
+
+            if (mc.thePlayer.posY % 0.5 == 0.0) { // FlyL
+                event.packet.onGround = nextTick
+                nextTick = !nextTick
+            }
+        } else {
+            if (wasJesus && verusStrafe) strafe(0)
+
+            wasJesus = false
+            nextTick = true
+        }
     }
 }

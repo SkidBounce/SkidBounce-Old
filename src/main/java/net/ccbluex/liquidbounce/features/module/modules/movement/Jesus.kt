@@ -32,6 +32,9 @@ object Jesus : Module("Jesus", MOVEMENT) {
 
     val aacFly by FloatValue("AACFlyMotion", 0.5f, 0.1f..1f) { mode == "AACFly" }
 
+    val verusStrafe by BooleanValue("VerusStrafe", true) { mode == "Verus" }
+    val verusStrafeSpeed by FloatValue("VerusStrafeSpeed", 0.9f, 0.1f..2f) { mode == "Verus" }
+
     private val noJump by BooleanValue("NoJump", false)
 
     @EventTarget
