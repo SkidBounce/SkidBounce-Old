@@ -39,36 +39,19 @@ object InventoryCleaner : Module("InventoryCleaner", PLAYER) {
     private val drop by BooleanValue("Drop", true)
     val sort by BooleanValue("Sort", true)
 
-    private val maxDelay: Int by object : IntValue(
-        "MaxDelay",
-        50,
-        0..500
-    ) {
+    private val maxDelay: Int by object : IntValue("MaxDelay", 50, 0..500) {
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(minDelay)
     }
     private val minDelay by object : IntValue("MinDelay", 50, 0..500) {
         override fun isSupported() = maxDelay > 0
-
         override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtMost(maxDelay)
     }
     private val minItemAge by IntValue("MinItemAge", 0, 0..2000)
 
     private val limitStackCounts by BooleanValue("LimitStackCounts", true)
-    private val maxBlockStacks by IntValue(
-        "MaxBlockStacks",
-        5,
-        0..36
-    ) { limitStackCounts }
-    private val maxFoodStacks by IntValue(
-        "MaxFoodStacks",
-        5,
-        0..36
-    ) { limitStackCounts }
-    private val maxThrowableStacks by IntValue(
-        "MaxThrowableStacks",
-        5,
-        0..36
-    ) { limitStackCounts }
+    private val maxBlockStacks by IntValue("MaxBlockStacks", 5, 0..36) { limitStackCounts }
+    private val maxFoodStacks by IntValue("MaxFoodStacks", 5, 0..36) { limitStackCounts }
+    private val maxThrowableStacks by IntValue("MaxThrowableStacks", 5, 0..36) { limitStackCounts }
     // TODO: max potion, vehicle, ..., stacks?
 
     private val mergeStacks by BooleanValue("MergeStacks", true)

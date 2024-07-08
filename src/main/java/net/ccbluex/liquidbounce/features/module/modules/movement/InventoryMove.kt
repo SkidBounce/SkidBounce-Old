@@ -27,7 +27,6 @@ import net.minecraft.network.play.client.C16PacketClientStatus.EnumState.OPEN_IN
 object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) {
 
     private val notInChests by BooleanValue("NotInChests", false)
-    val aacAdditionPro by BooleanValue("AACAdditionPro", false)
     private val silent by BooleanValue("Silent", false)
     private val intave by BooleanValue("Intave", false)
 
@@ -79,13 +78,16 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
 
     @EventTarget
     fun onStrafe(event: StrafeEvent) {
-        if (isIntave)
+        if (isIntave) {
             mc.gameSettings.keyBindSneak.pressed = true
+        }
     }
 
     @EventTarget
     fun onJump(event: JumpEvent) {
-        if (isIntave) event.cancelEvent()
+        if (isIntave) {
+            event.cancelEvent()
+        }
     }
 
     @EventTarget

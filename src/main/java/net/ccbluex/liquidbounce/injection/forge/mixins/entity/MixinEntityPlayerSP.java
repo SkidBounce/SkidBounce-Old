@@ -93,7 +93,6 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
         EventManager.INSTANCE.callEvent(new MotionEvent(EventState.PRE));
 
         final boolean fakeSprint = (Sprint.INSTANCE.handleEvents() && Sprint.INSTANCE.getSilent())
-                || (InventoryMove.INSTANCE.handleEvents() && InventoryMove.INSTANCE.getAacAdditionPro())
                 || (Sneak.INSTANCE.handleEvents() && (!MovementUtils.INSTANCE.isMoving() || !Sneak.INSTANCE.getStopMove()) && Sneak.INSTANCE.getMode().equals("MineSecure"));
 
         boolean sprinting = isSprinting() && !fakeSprint;
