@@ -11,23 +11,27 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui
 import net.ccbluex.liquidbounce.ui.client.hud.designer.GuiHudDesigner
+import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
+import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.extensions.updateKeys
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager
 import net.ccbluex.liquidbounce.utils.inventory.InventoryManager.canClickInventory
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
 import net.ccbluex.liquidbounce.value.BooleanValue
+import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.GuiIngameMenu
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.network.play.client.C0DPacketCloseWindow
+import net.minecraft.network.play.client.C0EPacketClickWindow
 import net.minecraft.network.play.client.C16PacketClientStatus
 import net.minecraft.network.play.client.C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT
 
 object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) {
 
     private val notInChests by BooleanValue("NotInChests", false)
-    private val silent by BooleanValue("Silent", false)
+    private val mode by ListValue("Mode", arrayOf("Normal", "Silent", "Packet"), "Normal")
     private val intave by BooleanValue("Intave", false)
 
     private val isIntave = (mc.currentScreen is GuiInventory || mc.currentScreen is GuiChest) && intave
@@ -38,12 +42,10 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
     private val undetectable by BooleanValue("Undetectable", false)
 
     // If player violates nomove check and inventory is open, close inventory and reopen it when still
-    private val silentlyCloseAndReopen by BooleanValue("SilentlyCloseAndReopen", false)
-    { noMove && (noMoveAir || noMoveGround) }
+    private val silentlyCloseAndReopen by BooleanValue("SilentlyCloseAndReopen", false) { noMove && (noMoveAir || noMoveGround) && mode == "Normal" }
 
     // Reopen closed inventory just before a click (could flag for clicking too fast after opening inventory)
-    private val reopenOnClick by BooleanValue("ReopenOnClick", false)
-    { silentlyCloseAndReopen && noMove && (noMoveAir || noMoveGround) }
+    private val reopenOnClick by BooleanValue("ReopenOnClick", false) { silentlyCloseAndReopen && noMove && (noMoveAir || noMoveGround) && mode == "Normal" }
 
     private val affectedBindings = arrayOf(
         mc.gameSettings.keyBindForward,
@@ -53,6 +55,8 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
         mc.gameSettings.keyBindJump,
         mc.gameSettings.keyBindSprint
     )
+
+    private var clicking = false
 
     @EventTarget(priority = 999)
     fun onUpdate(event: UpdateEvent) {
@@ -98,14 +102,35 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
 
     @EventTarget
     fun onPacket(event: PacketEvent) {
-        if (silent) {
+        if (mode == "Packet") {
+            if (event.packet is C0EPacketClickWindow && event.packet.windowId == 0 && !clicking) {
+                clicking = true
+                event.cancelEvent()
+
+                sendPackets(
+                    C16PacketClientStatus(OPEN_INVENTORY_ACHIEVEMENT),
+                    event.packet,
+                    C0DPacketCloseWindow(0)
+                )
+
+                clicking = false
+            }
+        }
+
+        if (mode == "Silent" || mode == "Packet") {
             if (event.packet is C0DPacketCloseWindow && event.packet.windowId == 0
-                || event.packet is C16PacketClientStatus && event.packet.status == OPEN_INVENTORY_ACHIEVEMENT
-                ) event.cancelEvent()
+                || event.packet is C16PacketClientStatus && event.packet.status == OPEN_INVENTORY_ACHIEVEMENT) {
+                if (mode != "Packet" || !clicking) {
+                    event.cancelEvent()
+                }
+            }
         }
     }
 
     override fun onDisable() {
         mc.gameSettings.updateKeys(*affectedBindings)
     }
+
+    override val tag
+        get() = mode
 }

@@ -155,7 +155,7 @@ object InventoryUtils : MinecraftInstance(), Listenable {
         return if (parsed in 0..8) parsed else null
     }
 
-    @EventTarget
+    @EventTarget(priority = Int.MIN_VALUE)
     fun onPacket(event: PacketEvent) {
 
         if (event.isCancelled) return
