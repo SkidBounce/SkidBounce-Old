@@ -72,7 +72,7 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
         if (notInChests && screen is GuiChest)
             return
 
-        if (silentlyCloseAndReopen && screen is GuiInventory) {
+        if (silentlyCloseAndReopen && screen is GuiInventory && noMove && (noMoveAir || noMoveGround) && mode == "Normal") {
             if (canClickInventory(closeWhenViolating = true) && !reopenOnClick)
                 serverOpenInventory = true
         }
@@ -97,7 +97,7 @@ object InventoryMove : Module("InventoryMove", MOVEMENT, gameDetecting = false) 
     @EventTarget
     fun onClick(event: ClickWindowEvent) {
         if (!canClickInventory()) event.cancelEvent()
-        else if (reopenOnClick) serverOpenInventory = true
+        else if (reopenOnClick && silentlyCloseAndReopen && noMove && (noMoveAir || noMoveGround) && mode == "Normal") serverOpenInventory = true
     }
 
     @EventTarget
