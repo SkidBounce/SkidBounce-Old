@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.client
 
+import net.ccbluex.liquidbounce.LiquidBounce.originalSession
 import net.ccbluex.liquidbounce.chat.Client
 import net.ccbluex.liquidbounce.chat.packet.packets.*
 import net.ccbluex.liquidbounce.event.EventTarget
@@ -13,6 +14,7 @@ import net.ccbluex.liquidbounce.event.events.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.CLIENT
 import net.ccbluex.liquidbounce.utils.ClientUtils
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayChatMessage
 import net.ccbluex.liquidbounce.utils.login.UserUtils
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.ccbluex.liquidbounce.value.BooleanValue
@@ -20,19 +22,23 @@ import net.minecraft.event.ClickEvent
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.IChatComponent
+import net.minecraft.util.Session
 import java.net.URI
 import java.net.URISyntaxException
 import java.util.regex.*
 import kotlin.concurrent.thread
 
-object LiquidChat : Module("LiquidChat", CLIENT, subjective = true, gameDetecting = false) {
-
-    init {
-        state = true
-        inArray = false
+object LiquidChat : Module("LiquidChat", CLIENT, subjective = true, gameDetecting = false, defaultInArray = false) {
+    var jwt by object : BooleanValue("JWT", false) {
+        override fun onChanged(oldValue: Boolean, newValue: Boolean) {
+            if (state) {
+                state = false
+                state = true
+            }
+        }
     }
 
-    var jwt by object : BooleanValue("JWT", false) {
+    private val useOriginalSession by object : BooleanValue("UseOriginalSession", true) {
         override fun onChanged(oldValue: Boolean, newValue: Boolean) {
             if (state) {
                 state = false
@@ -43,17 +49,22 @@ object LiquidChat : Module("LiquidChat", CLIENT, subjective = true, gameDetectin
 
     var jwtToken = ""
 
+    private val prefix = "§8[§9LiquidChat§8]"
+
+    val session: Session
+        get() = if (useOriginalSession) originalSession else mc.session
+
     val client = object : Client() {
 
         /**
          * Handle connect to web socket
          */
-        override fun onConnect() = ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §9Connecting to chat server...")
+        override fun onConnect() = displayChatMessage("$prefix §3Connecting to chat server...")
 
         /**
          * Handle connect to web socket
          */
-        override fun onConnected() = ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §9Connected to chat server!")
+        override fun onConnected() = displayChatMessage("$prefix §3Connected to chat server!")
 
         /**
          * Handle handshake
@@ -63,12 +74,12 @@ object LiquidChat : Module("LiquidChat", CLIENT, subjective = true, gameDetectin
         /**
          * Handle disconnect
          */
-        override fun onDisconnect() = ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §cDisconnected from chat server!")
+        override fun onDisconnect() = displayChatMessage("$prefix §3Disconnected from chat server!")
 
         /**
          * Handle logon to web socket with minecraft account
          */
-        override fun onLogon() = ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §9Logging in...")
+        override fun onLogon() = displayChatMessage("$prefix §3Logging in...")
 
         /**
          * Handle incoming packets
@@ -83,14 +94,10 @@ object LiquidChat : Module("LiquidChat", CLIENT, subjective = true, gameDetectin
                         return
                     }
 
-                    val chatComponent = ChatComponentText("§7[§aLiquidChat§7] §9${packet.user.name}: ")
-                    val messageComponent = toChatComponent(packet.content)
-                    chatComponent.appendSibling(messageComponent)
-
-                    thePlayer.addChatMessage(chatComponent)
+                    displayChatMessage("$prefix §3${packet.user.name}§7: ${packet.content}")
                 }
 
-                is ClientPrivateMessagePacket -> ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §c(P)§9 ${packet.user.name}: §7${packet.content}")
+                is ClientPrivateMessagePacket -> displayChatMessage("$prefix §c(P) §3${packet.user.name}§7: ${packet.content}")
                 is ClientErrorPacket -> {
                     val message = when (packet.message) {
                         "NotSupported" -> "This method is not supported!"
@@ -111,25 +118,18 @@ object LiquidChat : Module("LiquidChat", CLIENT, subjective = true, gameDetectin
                         else -> packet.message
                     }
 
-                    ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §cError: §7$message")
+                    displayChatMessage("$prefix §cError§7: $message")
                 }
 
                 is ClientSuccessPacket -> {
                     when (packet.reason) {
                         "Login" -> {
-                            ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §9Logged in!")
-
-                            ClientUtils.displayChatMessage("====================================")
-                            ClientUtils.displayChatMessage("§c>> §lLiquidChat")
-                            ClientUtils.displayChatMessage("§7Write message: §a.chat <message>")
-                            ClientUtils.displayChatMessage("§7Write private message: §a.pchat <user> <message>")
-                            ClientUtils.displayChatMessage("====================================")
-
+                            displayChatMessage("$prefix §3Logged in!")
                             loggedIn = true
                         }
 
-                        "Ban" -> ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §9Successfully banned user!")
-                        "Unban" -> ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §9Successfully unbanned user!")
+                        "Ban" -> displayChatMessage("$prefix §3Successfully banned user!")
+                        "Unban" -> displayChatMessage("$prefix §3Successfully unbanned user!")
                     }
                 }
 
@@ -147,7 +147,7 @@ object LiquidChat : Module("LiquidChat", CLIENT, subjective = true, gameDetectin
          * Handle error
          */
         override fun onError(cause: Throwable) =
-            ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §c§lError: §7${cause.javaClass.name}: ${cause.message}")
+            displayChatMessage("$prefix §cError§7: ${cause.javaClass.name}: ${cause.message}")
     }
 
     private var loggedIn = false
@@ -181,7 +181,7 @@ object LiquidChat : Module("LiquidChat", CLIENT, subjective = true, gameDetectin
         if (client.isConnected() || (loginThread?.isAlive == true)) return
 
         if (jwt && jwtToken.isEmpty()) {
-            ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §cError: §7No token provided!")
+            displayChatMessage("$prefix §cError§7: No token provided!")
             state = false
             return
         }
@@ -194,12 +194,12 @@ object LiquidChat : Module("LiquidChat", CLIENT, subjective = true, gameDetectin
 
                 if (jwt)
                     client.loginJWT(jwtToken)
-                else if (UserUtils.isValidTokenOffline(mc.session.token)) {
+                else if (UserUtils.isValidTokenOffline(session.token)) {
                     client.loginMojang()
                 }
             } catch (cause: Exception) {
                 ClientUtils.LOGGER.error("LiquidChat error", cause)
-                ClientUtils.displayChatMessage("§7[§aLiquidChat§7] §cError: §7${cause.javaClass.name}: ${cause.message}")
+                displayChatMessage("$prefix §cError§7: ${cause.javaClass.name}: ${cause.message}")
             }
 
             loginThread = null

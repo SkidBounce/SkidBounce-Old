@@ -37,10 +37,12 @@ import net.ccbluex.liquidbounce.ui.font.Fonts.loadFonts
 import net.ccbluex.liquidbounce.utils.*
 import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.ClientUtils.disableFastRender
+import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
 import net.ccbluex.liquidbounce.utils.background.Background
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.utils.render.MiniMapRegister
 import net.ccbluex.liquidbounce.utils.timing.TickedActions
+import net.minecraft.util.Session
 import kotlin.concurrent.thread
 
 object LiquidBounce {
@@ -75,6 +77,8 @@ object LiquidBounce {
 
     // Discord RPC
     val clientRichPresence = ClientRichPresence
+
+    val originalSession: Session = mc.session
 
     /**
      * Execute if client will be started
