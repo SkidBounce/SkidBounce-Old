@@ -32,7 +32,6 @@ class ModulesConfig(file: File) : FileConfig(file) {
             val jsonModule = value as JsonObject
             module.state = jsonModule["State"].asBoolean
             module.keyBind = jsonModule["KeyBind"].asInt
-            if (jsonModule.has("Array")) module.inArray = jsonModule["Array"].asBoolean
 
             if (jsonModule.has("AutoDisable")) {
                 module.AutoDisable.flag = jsonModule["AutoDisable"].asJsonObject["flag"].asBoolean
@@ -54,7 +53,6 @@ class ModulesConfig(file: File) : FileConfig(file) {
             jsonObject[module.name] = JsonObject().apply {
                 addProperty("State", module.state)
                 addProperty("KeyBind", module.keyBind)
-                addProperty("Array", module.inArray)
                 this["AutoDisable"] = JsonObject().apply {
                     addProperty("flag", module.AutoDisable.flag)
                     addProperty("world", module.AutoDisable.world)

@@ -41,6 +41,12 @@ open class Module(
     // Value that determines whether the module should depend on GameDetector
     private val onlyInGameValue = BooleanValue("OnlyInGame", true, subjective = true) { GameDetector.state }
 
+    private val hideModuleValue = object : BooleanValue("Hide", !defaultInArray, subjective = true) {
+        override fun onChanged(oldValue: Boolean, newValue: Boolean) {
+            saveConfig(modulesConfig)
+        }
+    }
+
     protected val TickScheduler = TickScheduler(this)
 
     // Module information
@@ -55,11 +61,10 @@ open class Module(
             saveConfig(modulesConfig)
         }
 
-    var inArray = defaultInArray
+    var inArray
+        get() = !hideModuleValue.get()
         set(value) {
-            field = value
-
-            saveConfig(modulesConfig)
+            hideModuleValue.set(!value)
         }
 
     val description
@@ -163,6 +168,8 @@ open class Module(
             .also {
                 if (gameDetecting)
                     it.add(onlyInGameValue)
+
+                it.add(hideModuleValue)
             }
             .distinctBy { it.name }
 
