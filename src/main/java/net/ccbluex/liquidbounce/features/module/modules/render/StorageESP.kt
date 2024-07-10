@@ -30,7 +30,7 @@ import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import kotlin.math.pow
 
-object StorageESP : Module("StorageESP", RENDER, subjective = true) {
+object StorageESP : Module("StorageESP", RENDER) {
     private val mode by
     ListValue("Mode", arrayOf("Box", "OtherBox", "Outline", "Glow", "2D", "WireFrame"), "Outline")
 

@@ -8,4 +8,4 @@ package net.ccbluex.liquidbounce.features.module.modules.render
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 
-object NoHurtCam : Module("NoHurtCam", RENDER, gameDetecting = false, subjective = true)
+object NoHurtCam : Module("NoHurtCam", RENDER, gameDetecting = false)

@@ -37,7 +37,7 @@ import org.lwjgl.opengl.GL11.glTranslatef
  *
  * @author CCBlueX
  */
-object Animations : Module("Animations", RENDER, gameDetecting = false, subjective = true) {
+object Animations : Module("Animations", RENDER, gameDetecting = false) {
 
     // Default animation
     val defaultAnimation = OneSevenAnimation()

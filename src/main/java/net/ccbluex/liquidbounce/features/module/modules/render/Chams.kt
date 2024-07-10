@@ -9,7 +9,7 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.value.BooleanValue
 
-object Chams : Module("Chams", RENDER, subjective = true) {
+object Chams : Module("Chams", RENDER) {
     val targets by BooleanValue("Targets", true)
     val chests by BooleanValue("Chests", true)
     val items by BooleanValue("Items", true)

@@ -40,7 +40,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 
-object ESP : Module("ESP", RENDER, subjective = true) {
+object ESP : Module("ESP", RENDER) {
 
     val mode by ListValue(
         "Mode",

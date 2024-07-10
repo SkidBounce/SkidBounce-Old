@@ -9,6 +9,6 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.RENDER
 import net.ccbluex.liquidbounce.value.BooleanValue
 
-object NoSwing : Module("NoSwing", RENDER, subjective = true) {
+object NoSwing : Module("NoSwing", RENDER) {
     val serverSide by BooleanValue("ServerSide", true)
 }

@@ -25,7 +25,7 @@ import net.minecraft.init.Blocks.air
 import net.minecraft.util.BlockPos
 import java.awt.Color
 
-object BlockESP : Module("BlockESP", RENDER, subjective = true) {
+object BlockESP : Module("BlockESP", RENDER) {
     private val mode by ListValue("Mode", arrayOf("Box", "2D"), "Box")
     private val block by BlockValue("Block", 168)
     private val radius by IntValue("Radius", 40, 5..120)

@@ -25,7 +25,7 @@ import net.minecraft.util.BlockPos
 import java.awt.Color
 import java.util.*
 
-object BedProtectionESP : Module("BedProtectionESP", RENDER, subjective = true) {
+object BedProtectionESP : Module("BedProtectionESP", RENDER) {
     private val targetBlock by ListValue("TargetBlock", arrayOf("Bed", "DragonEgg"), "Bed")
     private val renderMode by ListValue("LayerRenderMode", arrayOf("Current", "All"), "Current")
     private val radius by IntValue("Radius", 8, 0..32)
