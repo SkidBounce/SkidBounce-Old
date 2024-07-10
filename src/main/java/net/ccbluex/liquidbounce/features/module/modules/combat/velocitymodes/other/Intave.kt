@@ -27,5 +27,7 @@ object Intave : VelocityMode("Intave") {
         }
     }
 
-    override fun onVelocityPacket(event: PacketEvent) { velocity = true }
+    override fun onVelocityPacket(event: PacketEvent) {
+        velocity = true
+    }
 }

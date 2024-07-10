@@ -7,6 +7,7 @@ package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.ot
 
 import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
+import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.vanilla.Vanilla
 import net.minecraft.network.play.client.C0FPacketConfirmTransaction
 
 /**
@@ -18,5 +19,7 @@ object OldVulcan : VelocityMode("OldVulcan") {
             event.cancelEvent()
     }
 
-    override fun onVelocityPacket(event: PacketEvent) = event.cancelEvent()
+    override fun onVelocityPacket(event: PacketEvent) {
+        Vanilla.onVelocityPacket(event)
+    }
 }

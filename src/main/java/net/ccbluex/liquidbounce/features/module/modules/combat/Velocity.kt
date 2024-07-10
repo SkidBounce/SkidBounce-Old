@@ -34,10 +34,11 @@ object Velocity : Module("Velocity", COMBAT) {
     private val onlyGround by BooleanValue("OnlyGround", false) { mode !in arrayOf("AACv4", "AACPush") }
     private val explosions by BooleanValue("Explosions", true) { mode !in arrayOf("AACv4", "AACPush", "Matrix") }
 
-    val cancelHorizontal by BooleanValue("CancelHorizontal", true) { mode == "Custom" }
-    val cancelVertical by BooleanValue("CancelVertical", true) { mode == "Custom" }
-    val horizontalMultiplier by FloatValue("HorizontalMultiplier", 0f, 0f..1f) { mode == "Custom" && !cancelHorizontal }
-    val verticalMultiplier by FloatValue("VerticalMultiplier", 0f, 0f..1f) { mode == "Custom" && !cancelVertical }
+    val multiplyAddedMotion by BooleanValue("MultiplyAddedMotion", true) { mode == "Custom" }
+    val cancelHorizontal by BooleanValue("CancelHorizontal", true) { mode == "Custom" && !multiplyAddedMotion }
+    val cancelVertical by BooleanValue("CancelVertical", true) { mode == "Custom" && !multiplyAddedMotion }
+    val horizontalMultiplier by FloatValue("HorizontalMultiplier", 0f, 0f..1f) { mode == "Custom" && (!cancelHorizontal || multiplyAddedMotion) }
+    val verticalMultiplier by FloatValue("VerticalMultiplier", 0f, 0f..1f) { mode == "Custom" && (!cancelVertical || multiplyAddedMotion) }
     val chance by FloatValue("Chance", 100f, 0f..100f) { mode == "Custom" }
     val attackReduce by BooleanValue("AttackReduce", false) { mode == "Custom" }
     val attackReduceMultiplier by FloatValue("AttackReduce-Multiplier", 0.8f, 0f..1f) { mode == "Custom" && attackReduce }
@@ -131,10 +132,12 @@ object Velocity : Module("Velocity", COMBAT) {
     fun onPacket(event: PacketEvent) {
         modeModule.onPacket(event)
         val packet = event.packet
-        if ((packet is S27PacketExplosion && explosions)
-            || (packet is S12PacketEntityVelocity && packet.entityID == mc.thePlayer.entityId)
-            && !(noFire && mc.thePlayer.isBurning)
-            && !(onlyGround && !mc.thePlayer.onGround)
+
+        if (noFire && mc.thePlayer.isBurning) return
+        if (onlyGround && !mc.thePlayer.onGround) return
+
+        if (packet is S27PacketExplosion && explosions && (packet.field_149152_f != 0f || packet.field_149153_g != 0f || packet.field_149159_h != 0f)
+            || packet is S12PacketEntityVelocity && packet.entityID == mc.thePlayer.entityId
         ) {
             velocityTimer.reset()
             velocityTick = 0

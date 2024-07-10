@@ -7,6 +7,8 @@ package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.va
 
 import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
+import net.minecraft.network.play.server.S12PacketEntityVelocity
+import net.minecraft.network.play.server.S27PacketExplosion
 
 /**
  * @author ManInMyVan/SkidBounce
@@ -14,6 +16,13 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.Vel
  */
 object Vanilla : VelocityMode("Vanilla") {
     override fun onVelocityPacket(event: PacketEvent) {
-        event.cancelEvent()
+        when (event.packet) {
+            is S12PacketEntityVelocity -> event.cancelEvent()
+            is S27PacketExplosion -> {
+                event.packet.field_149152_f = 0f
+                event.packet.field_149153_g = 0f
+                event.packet.field_149159_h = 0f
+            }
+        }
     }
 }

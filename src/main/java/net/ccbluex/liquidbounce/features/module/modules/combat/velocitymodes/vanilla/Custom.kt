@@ -16,6 +16,7 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.jump
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.jumpFailRate
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.jumpMotion
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.maxAngleDifference
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.multiplyAddedMotion
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.onLook
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.range
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.reverse
@@ -32,12 +33,14 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.velocity
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.verticalMultiplier
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
 import net.ccbluex.liquidbounce.utils.*
+import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.EntityUtils.isLookingOnEntities
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.chanceOf
 import net.minecraft.entity.Entity
 import net.minecraft.network.play.server.S12PacketEntityVelocity
+import net.minecraft.network.play.server.S27PacketExplosion
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -46,30 +49,55 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity
  * @author SkidderMC/FDPClient
  */
 object Custom : VelocityMode("Custom") {
-    override fun onVelocityPacket(event: PacketEvent) { // TODO: explosions
+    override fun onVelocityPacket(event: PacketEvent) {
         val packet = event.packet
+
         chanceOf(chance / 100.0) {
-            if (packet !is S12PacketEntityVelocity)
-                return@chanceOf
-
-            packet.motionX = (packet.motionX * horizontalMultiplier).toInt()
-            packet.motionY = (packet.motionY * verticalMultiplier).toInt()
-            packet.motionZ = (packet.motionZ * horizontalMultiplier).toInt()
-
-            event.cancelEvent()
-
-            if (!cancelVertical)
-                mc.thePlayer.motionY = packet.realMotionY
-            if (!cancelHorizontal) {
-                mc.thePlayer.motionX = packet.realMotionX
-                mc.thePlayer.motionZ = packet.realMotionZ
+            if (packet is S12PacketEntityVelocity) {
+                event.cancelEvent()
+                if (multiplyAddedMotion) mc.thePlayer.setVelocity(
+                    mc.thePlayer.motionX + (packet.realMotionX - mc.thePlayer.motionX) * horizontalMultiplier,
+                    mc.thePlayer.motionY + (packet.realMotionY - mc.thePlayer.motionY) * verticalMultiplier,
+                    mc.thePlayer.motionZ + (packet.realMotionZ - mc.thePlayer.motionZ) * horizontalMultiplier
+                ) else mc.thePlayer.setVelocity(
+                    if (cancelHorizontal) mc.thePlayer.motionX else packet.realMotionX * horizontalMultiplier,
+                    if (cancelVertical) mc.thePlayer.motionY else packet.realMotionY * verticalMultiplier,
+                    if (cancelHorizontal) mc.thePlayer.motionZ else packet.realMotionZ * horizontalMultiplier
+                )
             }
+
+            if (packet is S27PacketExplosion) {
+                if (multiplyAddedMotion) {
+                    packet.field_149152_f *= horizontalMultiplier
+                    packet.field_149153_g *= verticalMultiplier
+                    packet.field_149159_h *= horizontalMultiplier
+                } else {
+                    packet.field_149152_f
+                    packet.field_149153_g
+                    packet.field_149159_h
+
+                    if (!cancelVertical) {
+                        mc.thePlayer.motionY = (packet.field_149153_g + mc.thePlayer.motionY) * verticalMultiplier
+                    }
+
+                    if (!cancelHorizontal) {
+                        mc.thePlayer.motionX = (packet.field_149152_f + mc.thePlayer.motionX) * horizontalMultiplier
+                        mc.thePlayer.motionZ = (packet.field_149159_h + mc.thePlayer.motionZ) * horizontalMultiplier
+                    }
+
+                    packet.field_149152_f = 0f
+                    packet.field_149153_g = 0f
+                    packet.field_149159_h = 0f
+                }
+            } else return@chanceOf
         }
     }
 
     override fun onUpdate() {
-        if (jump && mc.thePlayer.hurtTime == 9 && chanceOf(1f - jumpFailRate / 100f))
+        if (jump && mc.thePlayer.hurtTime == 9 && chanceOf(1f - jumpFailRate / 100f)) {
             mc.thePlayer.jmp(jumpMotion)
+        }
+
         if (reverse && !(reverseNoGround && mc.thePlayer.onGround)) {
             run {
                 val nearbyEntity = getNearestEntityInRange() ?: return@run
@@ -93,6 +121,7 @@ object Custom : VelocityMode("Custom") {
                     mc.thePlayer.speedInAir = 0.02f
             }
         }
+
         if (tickreduce && tickreduceTicks == velocityTick) {
             if (tickreduceVertical)
                 mc.thePlayer.motionY *= tickreduceMultiplier

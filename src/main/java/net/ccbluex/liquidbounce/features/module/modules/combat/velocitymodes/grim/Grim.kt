@@ -16,6 +16,7 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimTime
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimTimerTicks
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.grimWorld
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
+import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.vanilla.Vanilla
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.extensions.component1
 import net.ccbluex.liquidbounce.utils.extensions.component2
@@ -57,7 +58,7 @@ object Grim : VelocityMode("Grim") {
     }
 
     override fun onVelocityPacket(event: PacketEvent) {
-        event.cancelEvent()
+        Vanilla.onVelocityPacket(event)
         gotVelo = true
     }
 
