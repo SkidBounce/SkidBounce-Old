@@ -42,7 +42,7 @@ open class Module(
     private val onlyInGameValue = BooleanValue("OnlyInGame", true, subjective = true) { GameDetector.state }
 
     private val hideModuleValue = object : BooleanValue("Hide", !defaultInArray, subjective = true) {
-        override fun onChanged(oldValue: Boolean, newValue: Boolean) {
+        override fun onUpdate(value: Boolean) {
             saveConfig(modulesConfig)
         }
     }
