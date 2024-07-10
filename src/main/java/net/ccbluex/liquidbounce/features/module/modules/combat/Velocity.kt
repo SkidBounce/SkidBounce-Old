@@ -34,12 +34,15 @@ object Velocity : Module("Velocity", COMBAT) {
     private val onlyGround by BooleanValue("OnlyGround", false) { mode !in arrayOf("AACv4", "AACPush") }
     private val explosions by BooleanValue("Explosions", true) { mode !in arrayOf("AACv4", "AACPush", "Matrix") }
 
-    val multiplyAddedMotion by BooleanValue("MultiplyAddedMotion", true) { mode == "Custom" }
-    val cancelHorizontal by BooleanValue("CancelHorizontal", true) { mode == "Custom" && !multiplyAddedMotion }
-    val cancelVertical by BooleanValue("CancelVertical", true) { mode == "Custom" && !multiplyAddedMotion }
-    val horizontalMultiplier by FloatValue("HorizontalMultiplier", 0f, 0f..1f) { mode == "Custom" && (!cancelHorizontal || multiplyAddedMotion) }
-    val verticalMultiplier by FloatValue("VerticalMultiplier", 0f, 0f..1f) { mode == "Custom" && (!cancelVertical || multiplyAddedMotion) }
-    val chance by FloatValue("Chance", 100f, 0f..100f) { mode == "Custom" }
+    val modify by BooleanValue("Modify", false) { mode == "Custom" }
+    val overrideDirection by BooleanValue("OverrideDirection", true) { mode == "Custom" && modify }
+    val overrideDirectionRotation by ListValue("OverrideDirectionRotation", arrayOf("Server", "Client"), "Client") { mode == "Custom" && modify }
+    val modifyAddedMotion by BooleanValue("ModifyAddedMotion", true) { mode == "Custom" && modify }
+    val cancelHorizontal by BooleanValue("CancelHorizontal", true) { mode == "Custom" && modify && !modifyAddedMotion }
+    val cancelVertical by BooleanValue("CancelVertical", true) { mode == "Custom" && modify && !modifyAddedMotion }
+    val horizontalMultiplier by FloatValue("HorizontalMultiplier", 0f, 0f..1f) { mode == "Custom" && modify && (!cancelHorizontal || modifyAddedMotion) }
+    val verticalMultiplier by FloatValue("VerticalMultiplier", 0f, 0f..1f) { mode == "Custom" && modify && (!cancelVertical || modifyAddedMotion) }
+    val chance by FloatValue("Chance", 100f, 0f..100f) { mode == "Custom" && modify }
     val attackReduce by BooleanValue("AttackReduce", false) { mode == "Custom" }
     val attackReduceMultiplier by FloatValue("AttackReduce-Multiplier", 0.8f, 0f..1f) { mode == "Custom" && attackReduce }
     val jump by BooleanValue("Jump", false) { mode == "Custom" }
@@ -51,7 +54,7 @@ object Velocity : Module("Velocity", COMBAT) {
     val tickreduceVertical by BooleanValue("TickReduce-Vertical", false) { mode == "Custom" && tickreduce }
     val tickreduceHorizontal by BooleanValue("TickReduce-Horizontal", false) { mode == "Custom" && tickreduce }
     val reverse by BooleanValue("Reverse", false) { mode == "Custom" }
-    val onLook by BooleanValue("onLook", false) { reverse }
+    val onLook by BooleanValue("onLook", false) { mode == "Custom" && reverse }
     val range by FloatValue("Range", 3.0F, 1F..5.0F) { onLook && reverse }
     val maxAngleDifference by DoubleValue("MaxAngleDifference", 45.0, 5.0..90.0) { onLook && reverse }
     val reverseSmooth by BooleanValue("Reverse-Smooth", false) { mode == "Custom" && reverse }

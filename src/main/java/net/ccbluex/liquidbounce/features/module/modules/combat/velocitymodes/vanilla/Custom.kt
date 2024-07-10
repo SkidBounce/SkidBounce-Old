@@ -16,8 +16,11 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.jump
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.jumpFailRate
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.jumpMotion
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.maxAngleDifference
-import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.multiplyAddedMotion
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.modify
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.modifyAddedMotion
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.onLook
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.overrideDirection
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.overrideDirectionRotation
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.range
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.reverse
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.reverseNoGround
@@ -35,11 +38,15 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.Vel
 import net.ccbluex.liquidbounce.utils.*
 import net.ccbluex.liquidbounce.utils.EntityUtils.isLookingOnEntities
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
+import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.chanceOf
 import net.minecraft.entity.Entity
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.network.play.server.S27PacketExplosion
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 /**
  * @author CCBlueX/LiquidBounce
@@ -49,24 +56,59 @@ import net.minecraft.network.play.server.S27PacketExplosion
  */
 object Custom : VelocityMode("Custom") {
     override fun onVelocityPacket(event: PacketEvent) {
+        if (!modify) return
+
         val packet = event.packet
 
         chanceOf(chance / 100.0) {
             if (packet is S12PacketEntityVelocity) {
                 event.cancelEvent()
-                if (multiplyAddedMotion) mc.thePlayer.setVelocity(
-                    mc.thePlayer.motionX + (packet.realMotionX - mc.thePlayer.motionX) * horizontalMultiplier,
-                    mc.thePlayer.motionY + (packet.realMotionY - mc.thePlayer.motionY) * verticalMultiplier,
-                    mc.thePlayer.motionZ + (packet.realMotionZ - mc.thePlayer.motionZ) * horizontalMultiplier
-                ) else mc.thePlayer.setVelocity(
-                    if (cancelHorizontal) mc.thePlayer.motionX else packet.realMotionX * horizontalMultiplier,
-                    if (cancelVertical) mc.thePlayer.motionY else packet.realMotionY * verticalMultiplier,
-                    if (cancelHorizontal) mc.thePlayer.motionZ else packet.realMotionZ * horizontalMultiplier
-                )
+
+                var x = packet.realMotionX
+                var y = packet.realMotionY
+                var z = packet.realMotionZ
+
+                if (overrideDirection) {
+                    val yaw = when (overrideDirectionRotation) {
+                        "Server" -> currentRotation?.yaw ?: mc.thePlayer.rotationYaw
+                        else -> mc.thePlayer.rotationYaw
+                    }.plus(90).toRadiansD()
+
+                    val dist = sqrt(x * x + z * z)
+
+                    x = cos(yaw) * dist
+                    z = sin(yaw) * dist
+                }
+
+                if (modifyAddedMotion) {
+                    x -= mc.thePlayer.motionX
+                    y -= mc.thePlayer.motionY
+                    z -= mc.thePlayer.motionZ
+                }
+
+                x *= horizontalMultiplier
+                y *= verticalMultiplier
+                z *= horizontalMultiplier
+
+                if (modifyAddedMotion) {
+                    x += mc.thePlayer.motionX
+                    y += mc.thePlayer.motionY
+                    z += mc.thePlayer.motionZ
+                } else {
+                    if (cancelVertical) {
+                        y = mc.thePlayer.motionY
+                    }
+                    if (cancelHorizontal) {
+                        x = mc.thePlayer.motionX
+                        z = mc.thePlayer.motionZ
+                    }
+                }
+
+                mc.thePlayer.setVelocity(x, y, z)
             }
 
             if (packet is S27PacketExplosion) {
-                if (multiplyAddedMotion) {
+                if (modifyAddedMotion) {
                     packet.field_149152_f *= horizontalMultiplier
                     packet.field_149153_g *= verticalMultiplier
                     packet.field_149159_h *= horizontalMultiplier
