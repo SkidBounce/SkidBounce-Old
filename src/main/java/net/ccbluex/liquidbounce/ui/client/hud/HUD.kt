@@ -39,17 +39,20 @@ object HUD : MinecraftInstance() {
           Target::class.java,
           Radar::class.java,
           SpeedGraph::class.java,
-          Cooldown::class.java)
+          Cooldown::class.java,
+          BlockCounter::class.java,
+      )
 
   /** Create default HUD */
   fun setDefault() {
-    elements.clear()
+      elements.clear()
 
-    addElement(Arraylist())
-    addElement(ScoreboardElement())
-    addElement(Armor())
-    addElement(Effects())
-    addElement(Notifications())
+      addElement(Arraylist())
+      addElement(ScoreboardElement())
+      addElement(Armor())
+      addElement(Effects())
+      addElement(Notifications())
+      addElement(BlockCounter())
   }
 
   /** Render all elements */

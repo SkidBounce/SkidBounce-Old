@@ -318,7 +318,6 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val airSafe by BooleanValue("AirSafe", false) { safeWalkValue.isActive() }
 
     // Visuals
-    private val counterDisplay by BooleanValue("Counter", true, subjective = true)
     private val mark by BooleanValue("Mark", false, subjective = true)
     private val trackCPS by BooleanValue("TrackCPS", false, subjective = true)
     private val safetyLines by BooleanValue("SafetyLines", false, subjective = true) { isGodBridgeEnabled }
@@ -1228,40 +1227,6 @@ object Scaffold : Module("Scaffold", WORLD) {
                 return
 
             event.cancelEvent()
-        }
-    }
-
-    // Scaffold visuals
-    @EventTarget
-    fun onRender2D(event: Render2DEvent) {
-        if (counterDisplay) {
-            glPushMatrix()
-
-            if (BlockOverlay.handleEvents() && BlockOverlay.info && BlockOverlay.currentBlock != null) glTranslatef(
-                0f,
-                15f,
-                0f
-            )
-
-            val info = "Blocks: §7$blocksAmount"
-            val (width, height) = ScaledResolution(mc)
-
-            drawBorderedRect(
-                width / 2 - 2,
-                height / 2 + 5,
-                width / 2 + font40.getStringWidth(info) + 2,
-                height / 2 + 16,
-                3,
-                BLACK.rgb,
-                BLACK.rgb
-            )
-
-            resetColor()
-
-            font40.drawString(
-                info, width / 2, height / 2 + 7, WHITE.rgb
-            )
-            glPopMatrix()
         }
     }
 
