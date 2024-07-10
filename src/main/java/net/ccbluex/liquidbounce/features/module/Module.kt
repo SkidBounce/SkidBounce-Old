@@ -35,6 +35,7 @@ open class Module(
     val spacedName: String = name.split("(?<=[a-z])(?=[A-Z])".toRegex()).joinToString(separator = " "),
     val subjective: Boolean = category == ModuleCategory.RENDER,
     val gameDetecting: Boolean = canBeEnabled,
+    defaultEnabled: Boolean = false,
 ) : MinecraftInstance(), Listenable {
 
     // Value that determines whether the module should depend on GameDetector
@@ -172,4 +173,10 @@ open class Module(
      * Events should be handled when module is enabled
      */
     override fun handleEvents() = state && isActive
+
+    init {
+        if (defaultEnabled) {
+            state = true
+        }
+    }
 }

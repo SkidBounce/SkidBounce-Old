@@ -18,7 +18,7 @@ import net.ccbluex.liquidbounce.utils.ClientUtils.resource
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.minecraft.client.gui.GuiChat
 
-object HUD : Module("HUD", CLIENT, defaultInArray = false, gameDetecting = false, subjective = true) {
+object HUD : Module("HUD", CLIENT, defaultInArray = false, gameDetecting = false, subjective = true, defaultEnabled = true) {
     val blackHotbar by BooleanValue("BlackHotbar", true)
     val inventoryParticle by BooleanValue("InventoryParticle", false)
     private val blur by BooleanValue("Blur", false)
@@ -48,9 +48,5 @@ object HUD : Module("HUD", CLIENT, defaultInArray = false, gameDetecting = false
         ) else if (mc.entityRenderer.shaderGroup != null &&
             "${LiquidBounce.CLIENT_NAME.lowercase()}/blur.json" in mc.entityRenderer.shaderGroup.shaderGroupName
         ) mc.entityRenderer.stopUseShader()
-    }
-
-    init {
-        state = true
     }
 }
