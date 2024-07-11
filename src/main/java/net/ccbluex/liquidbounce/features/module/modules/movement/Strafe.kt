@@ -31,7 +31,7 @@ object Strafe : Module("Strafe", MOVEMENT, gameDetecting = false) {
     private val inAir by BooleanValue("InAir", true)
     private val inLiquid by BooleanValue("InLiquid", true)
     private val outOfLiquidTicks by IntValue("OutOfLiquidTicks", 40, 0..100)
-    private val onGround by BooleanValue("OnGroundStrafe", false)
+    private val onGround by BooleanValue("OnGround", false)
 
     private val allDirectionsJump by BooleanValue("AllDirectionsJump", false)
 
