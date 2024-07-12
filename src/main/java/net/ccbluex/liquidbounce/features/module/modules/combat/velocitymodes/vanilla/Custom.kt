@@ -140,7 +140,7 @@ object Custom : VelocityMode("Custom") {
     }
 
     override fun onUpdate() {
-        if (jump && mc.thePlayer.hurtTime == 9 && chanceOf(1f - jumpFailRate / 100f)) {
+        if (jump && mc.thePlayer.isSprinting && mc.thePlayer.hurtTime == 9 && chanceOf(1f - jumpFailRate / 100f)) {
             mc.thePlayer.jmp(jumpMotion)
         }
 
