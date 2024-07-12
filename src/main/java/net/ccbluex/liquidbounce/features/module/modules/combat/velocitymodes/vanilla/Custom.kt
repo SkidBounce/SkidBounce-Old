@@ -5,8 +5,12 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.vanilla
 
+import net.ccbluex.liquidbounce.event.events.AttackEvent
 import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.attackReduce
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.attackReduceLegit
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.attackReduceMaxHurtTime
+import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.attackReduceMinHurtTime
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.attackReduceMultiplier
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.cancelHorizontal
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.cancelVertical
@@ -35,12 +39,13 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.tickredu
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.velocityTick
 import net.ccbluex.liquidbounce.features.module.modules.combat.Velocity.verticalMultiplier
 import net.ccbluex.liquidbounce.features.module.modules.combat.velocitymodes.VelocityMode
-import net.ccbluex.liquidbounce.utils.*
+import net.ccbluex.liquidbounce.utils.EntityUtils
 import net.ccbluex.liquidbounce.utils.EntityUtils.isLookingOnEntities
 import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.chanceOf
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.Entity
 import net.minecraft.network.play.server.S12PacketEntityVelocity
 import net.minecraft.network.play.server.S27PacketExplosion
@@ -173,10 +178,12 @@ object Custom : VelocityMode("Custom") {
         }
     }
 
-    override fun onAttack() {
-        if (mc.thePlayer.hurtTime >= 3 && attackReduce) {
-            mc.thePlayer.motionX *= attackReduceMultiplier
-            mc.thePlayer.motionZ *= attackReduceMultiplier
+    override fun onAttack(event: AttackEvent) {
+        if (attackReduce && !attackReduceLegit) {
+            if (mc.thePlayer.hurtTime in attackReduceMinHurtTime..attackReduceMaxHurtTime) {
+                mc.thePlayer.motionX *= attackReduceMultiplier
+                mc.thePlayer.motionZ *= attackReduceMultiplier
+            }
         }
     }
 

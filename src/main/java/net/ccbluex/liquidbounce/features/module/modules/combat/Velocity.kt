@@ -19,13 +19,15 @@ import net.minecraft.network.play.server.S27PacketExplosion
 object Velocity : Module("Velocity", COMBAT) {
     private val velocityModes = javaClass.`package`.getAllObjects<VelocityMode>().sortedBy { it.modeName }
 
+    val doAttackReduceLegit
+        get() = handleEvents() && mode == "Custom" && attackReduce && attackReduceLegit && mc.thePlayer.hurtTime in attackReduceMinHurtTime..attackReduceMaxHurtTime
+
     private val modeModule get() = velocityModes.find { it.modeName == mode }!!
     override val tag get() = mode
 
     /* TODO:
      *   Motion Limits
      *   Only Combat
-     *   Direction Override
      *   Delayed setting in Custom
      */
 
@@ -44,6 +46,15 @@ object Velocity : Module("Velocity", COMBAT) {
     val verticalMultiplier by FloatValue("VerticalMultiplier", 0f, 0f..1f) { mode == "Custom" && modify && (!cancelVertical || modifyAddedMotion) }
     val chance by FloatValue("Chance", 100f, 0f..100f) { mode == "Custom" && modify }
     val attackReduce by BooleanValue("AttackReduce", false) { mode == "Custom" }
+    val attackReduceLegit by BooleanValue("AttackReduce-Legit", true) { mode == "Custom" && attackReduce }
+    val attackReduceMaxHurtTime: Int by object : IntValue("AttackReduce-MaxHurtTime", 9, 1..10) {
+        override fun isSupported() = mode == "Custom" && attackReduce
+        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceAtLeast(attackReduceMinHurtTime)
+    }
+    val attackReduceMinHurtTime by object : IntValue("AttackReduce-MinHurtTime", 1, 1..10) {
+        override fun isSupported() = mode == "Custom" && attackReduce && attackReduceMaxHurtTime > 1
+        override fun onChange(oldValue: Int, newValue: Int) = newValue.coerceIn(1, attackReduceMaxHurtTime)
+    }
     val attackReduceMultiplier by FloatValue("AttackReduce-Multiplier", 0.8f, 0f..1f) { mode == "Custom" && attackReduce }
     val jump by BooleanValue("Jump", false) { mode == "Custom" }
     val jumpMotion by FloatValue("Jump-Motion", 0.42f, 0f..0.42f) { mode == "Custom" && jump }
@@ -128,7 +139,7 @@ object Velocity : Module("Velocity", COMBAT) {
     @Suppress("UNUSED_PARAMETER")
     @EventTarget
     fun onAttack(event: AttackEvent) {
-        modeModule.onAttack()
+        modeModule.onAttack(event)
     }
 
     @EventTarget(priority = 1)
