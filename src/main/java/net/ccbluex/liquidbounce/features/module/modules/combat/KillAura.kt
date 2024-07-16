@@ -36,6 +36,7 @@ import net.ccbluex.liquidbounce.utils.RotationUtils.searchCenter
 import net.ccbluex.liquidbounce.utils.RotationUtils.setTargetRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.toRotation
 import net.ccbluex.liquidbounce.utils.SimulatedPlayer
+import net.ccbluex.liquidbounce.utils.blink.FakePlayer
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverOpenInventory
@@ -678,6 +679,10 @@ object KillAura : Module("KillAura", COMBAT) {
      * Check if [entity] is selected as enemy with current target options and other modules
      */
     private fun isEnemy(entity: Entity?): Boolean {
+        if (entity is FakePlayer) {
+            return false
+        }
+
         if (entity is EntityLivingBase && (Dead.state || isAlive(entity)) && entity != mc.thePlayer) {
             if (!Invisible.state && entity.isInvisible) return false
 

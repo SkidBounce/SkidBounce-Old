@@ -39,6 +39,7 @@ import net.ccbluex.liquidbounce.utils.ClientUtils.LOGGER
 import net.ccbluex.liquidbounce.utils.ClientUtils.disableFastRender
 import net.ccbluex.liquidbounce.utils.MinecraftInstance.Companion.mc
 import net.ccbluex.liquidbounce.utils.background.Background
+import net.ccbluex.liquidbounce.utils.blink.BlinkHandler
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
 import net.ccbluex.liquidbounce.utils.render.MiniMapRegister
 import net.ccbluex.liquidbounce.utils.timing.TickedActions
@@ -104,6 +105,7 @@ object LiquidBounce {
                     registerListener(PacketUtils)
                     registerListener(TimerBalanceUtils)
                     registerListener(BPSUtils)
+                    registerListener(BlinkHandler)
 
                     loadFonts()
 

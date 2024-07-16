@@ -7,6 +7,7 @@ package net.ccbluex.liquidbounce.utils
 
 import net.ccbluex.liquidbounce.features.module.modules.targets.*
 import net.ccbluex.liquidbounce.features.module.modules.targets.AntiBot.isBot
+import net.ccbluex.liquidbounce.utils.blink.FakePlayer
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.StringUtils.contains
 import net.minecraft.entity.*
@@ -19,6 +20,10 @@ object EntityUtils : MinecraftInstance() {
     private val healthSubstrings = arrayOf("hp", "health", "❤", "lives")
 
     fun isSelected(entity: Entity?, canAttackCheck: Boolean): Boolean {
+        if (entity is FakePlayer) {
+            return false
+        }
+
         if (entity is EntityLivingBase && (Dead.handleEvents() || entity.isEntityAlive) && entity != mc.thePlayer) {
             if (Invisible.handleEvents() || !entity.isInvisible) {
                 if (Players.handleEvents() && entity is EntityPlayer) {

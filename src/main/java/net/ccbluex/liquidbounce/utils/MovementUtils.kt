@@ -129,7 +129,7 @@ object MovementUtils : MinecraftInstance(), Listenable {
     var serverY = .0
     var serverZ = .0
 
-    @EventTarget(priority = Int.MIN_VALUE)
+    @EventTarget(priority = Int.MIN_VALUE + 1)
     fun onPacket(event: PacketEvent) {
         if (event.isCancelled)
             return
@@ -139,7 +139,7 @@ object MovementUtils : MinecraftInstance(), Listenable {
         if (packet is C03PacketPlayer) {
             serverOnGround = packet.onGround
 
-            if (packet.isMoving) {
+            if (packet.hasPosition) {
                 serverX = packet.x
                 serverY = packet.y
                 serverZ = packet.z

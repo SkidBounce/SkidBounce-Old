@@ -14,13 +14,13 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory.COMBAT
 import net.ccbluex.liquidbounce.features.module.modules.player.Reach
 import net.ccbluex.liquidbounce.features.module.modules.targets.Dead
 import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notifications.Notification
-import net.ccbluex.liquidbounce.utils.BlinkUtils
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
 import net.ccbluex.liquidbounce.utils.EntityUtils
 import net.ccbluex.liquidbounce.utils.EntityUtils.isLookingOnEntities
 import net.ccbluex.liquidbounce.utils.PacketUtils.queuedPackets
 import net.ccbluex.liquidbounce.utils.RotationUtils.searchCenter
 import net.ccbluex.liquidbounce.utils.SimulatedPlayer
+import net.ccbluex.liquidbounce.utils.blink.IBlink
 import net.ccbluex.liquidbounce.utils.extensions.*
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawEntityBox
@@ -33,7 +33,7 @@ import net.minecraft.network.play.client.*
 import net.minecraft.network.play.server.*
 import java.awt.Color
 
-object TimerRange : Module("TimerRange", COMBAT) {
+object TimerRange : Module("TimerRange", COMBAT), IBlink {
 
     private var playerTicks = 0
     private var smartTick = 0
@@ -42,7 +42,6 @@ object TimerRange : Module("TimerRange", COMBAT) {
 
     private val packets = mutableListOf<Packet<*>>()
     private val packetsReceived = mutableListOf<Packet<*>>()
-    private var blinked = false
 
     // Condition to confirm
     private var confirmTick = false
@@ -154,13 +153,12 @@ object TimerRange : Module("TimerRange", COMBAT) {
 
     override fun onDisable() {
         timerReset()
-        BlinkUtils.unblink()
 
         smartTick = 0
         cooldownTick = 0
         playerTicks = 0
 
-        blinked = false
+        blinkingServer = false
 
         confirmTick = false
         confirmMove = false
@@ -353,9 +351,8 @@ object TimerRange : Module("TimerRange", COMBAT) {
         if (playerTicks <= 0 || confirmStop) {
             timerReset()
 
-            if (blink && blinked) {
-                BlinkUtils.unblink()
-                blinked = false
+            if (blink && blinkingServer) {
+                blinkingServer = false
             }
 
             return
@@ -478,23 +475,22 @@ object TimerRange : Module("TimerRange", COMBAT) {
             return
 
         if (blink) {
-            if (playerTicks > 0 && !blinked) {
-                BlinkUtils.blink(packet, event, sent = false, receive = true)
-                blinked = true
+            if (playerTicks > 0 && !blinkingServer) {
+                blinkingServer = true
             }
 
-            if (blink && blinked) {
+            if (blink && blinkingServer) {
                 when (packet) {
                     // Flush on doing/getting action.
                     is S08PacketPlayerPosLook, is C07PacketPlayerDigging, is C12PacketUpdateSign, is C19PacketResourcePackStatus -> {
-                        BlinkUtils.unblink()
+                        release()
                         return
                     }
 
                     // Flush on explosion
                     is S27PacketExplosion -> {
                         if (packet.field_149153_g != 0f || packet.field_149152_f != 0f || packet.field_149159_h != 0f) {
-                            BlinkUtils.unblink()
+                            release()
                             return
                         }
                     }
@@ -502,7 +498,7 @@ object TimerRange : Module("TimerRange", COMBAT) {
                     // Flush on damage
                     is S06PacketUpdateHealth -> {
                         if (packet.health < mc.thePlayer.health) {
-                            BlinkUtils.unblink()
+                            release()
                             return
                         }
                     }

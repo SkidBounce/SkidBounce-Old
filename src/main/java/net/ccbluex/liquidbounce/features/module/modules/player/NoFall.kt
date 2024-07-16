@@ -59,7 +59,6 @@ object NoFall : Module("NoFall", PLAYER) {
     }
     val autoOff by BooleanValue("AutoOff", true) { mode == "Blink" }
     val simulateDebug by BooleanValue("SimulationDebug", false, subjective = true) { mode == "Blink" }
-    val fakePlayer by BooleanValue("FakePlayer", true, subjective = true) { mode == "Blink" }
 
     override fun onEnable() {
         mc.timer.resetSpeed()
