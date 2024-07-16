@@ -58,7 +58,7 @@ object Backtrack : Module("Backtrack", COMBAT) {
 
     // Legacy
     private val legacyPos by ListValue(
-        "Caching mode",
+        "CachingMode",
         arrayOf("ClientPos", "ServerPos"),
         "ClientPos"
     ) { mode == "Legacy" }
