@@ -54,7 +54,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         WatchDog2,
         Medusa,
         Drop,
-        Grim,
+        Grim2365,
     ).sortedBy { it.modeName }
     private val consumeModes = arrayOf(
         Vanilla,
@@ -66,7 +66,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         EmptyPlace,
         Medusa,
         Drop,
-        Grim,
+        Grim2365,
     ).sortedBy { it.modeName }
     private val bowModes = arrayOf(
         Vanilla,
@@ -78,7 +78,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         EmptyPlace,
         Medusa,
         Drop,
-        Grim,
+        Grim2365,
     ).sortedBy { it.modeName }
 
     private val noNoMoveCheck = setOf(
@@ -209,7 +209,7 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
             else -> bowDropWaitForPacket
         }) return false
 
-        if (mode == Grim && Grim.slow)
+        if (mode == Grim2365 && Grim2365.slow)
             return false
 
         return true

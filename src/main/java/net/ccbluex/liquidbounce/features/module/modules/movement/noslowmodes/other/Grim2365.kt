@@ -13,7 +13,7 @@ import net.ccbluex.liquidbounce.utils.extensions.canUse
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 
-object Grim : NoSlowMode("Grim") {
+object Grim2365 : NoSlowMode("Grim2.3.65") {
     var slow = false
     override fun onMotion(event: MotionEvent) {
         if (event.eventState != PRE) return
