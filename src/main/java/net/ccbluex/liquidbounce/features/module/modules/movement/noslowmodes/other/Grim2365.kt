@@ -15,6 +15,8 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 
 object Grim2365 : NoSlowMode("Grim2.3.65") {
     var slow = false
+        private set
+
     override fun onMotion(event: MotionEvent) {
         if (event.eventState != PRE) return
         for (i in 0..8) {
