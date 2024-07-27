@@ -309,7 +309,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     private val keepY by ListValue("KeepY", arrayOf("Always", "Never", "Smart"), "Smart") { scaffoldMode != "GodBridge" }
     private val autoJump by BooleanValue("AutoJump", false) { scaffoldMode != "GodBridge" }
     private val autoJumpMotion by DoubleValue("AutoJump-Motion", JUMP_HEIGHT, 0.0..JUMP_HEIGHT) { scaffoldMode != "GodBridge" && autoJump }
-    private val autoJumpIngoreJumpBoost by BooleanValue("AutoJump-IngoreJumpBoost", false) { scaffoldMode != "GodBridge" && autoJump }
+    private val autoJumpIgnoreJumpBoost by BooleanValue("AutoJump-IgnoreJumpBoost", false) { scaffoldMode != "GodBridge" && autoJump }
     private val autoJumpNoBoost by BooleanValue("AutoJump-NoBoost", false) { scaffoldMode != "GodBridge" && autoJump }
     private val autoJumpNoBoostForce by BooleanValue("AutoJump-NoBoost-Force", true) { scaffoldMode != "GodBridge" && autoJump && autoJumpNoBoost }
     private val safeWalkValue = BooleanValue("SafeWalk", true) { scaffoldMode != "GodBridge" }
@@ -428,8 +428,8 @@ object Scaffold : Module("Scaffold", WORLD) {
         if (mc.playerController.currentGameType == SPECTATOR)
             return
 
-        if (isMoving && autoJump) {
-            mc.thePlayer.jmp(autoJumpMotion, !autoJumpNoBoost, autoJumpIngoreJumpBoost)
+        if (isMoving && autoJump && !shouldGoDown && blocksAmount > 1) {
+            mc.thePlayer.jmp(autoJumpMotion, !autoJumpNoBoost, autoJumpIgnoreJumpBoost)
         }
 
         mc.timer.timerSpeed = timer
@@ -1223,7 +1223,7 @@ object Scaffold : Module("Scaffold", WORLD) {
         if (onJump) {
             if (scaffoldMode == "GodBridge" && (godBridgeAutoJump || jumpAutomatically) || doKeepY)
                 return
-            if (towerMode == "None" || towerMode == "Jump")
+            if (towerMode == "None" || towerMode == "Jump" || onJump && !mc.gameSettings.keyBindJump.isKeyDown)
                 return
             if (Speed.state || Fly.state)
                 return
