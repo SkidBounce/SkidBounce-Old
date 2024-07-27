@@ -137,6 +137,8 @@ object TimerRange : Module("TimerRange", COMBAT), IBlink {
     private val outline by BooleanValue("Outline", false) { timerBoostMode == "Modern" && markMode == "Box" }
 
     // Optional
+    private val onWeb by BooleanValue("OnWeb", false)
+    private val onWater by BooleanValue("OnWater", false)
     private val resetOnlagBack by BooleanValue("ResetOnLagback", false)
     private val resetOnKnockback by BooleanValue("ResetOnKnockback", false)
     private val chatDebug by BooleanValue("ChatDebug", true) { resetOnlagBack || resetOnKnockback }
@@ -187,7 +189,7 @@ object TimerRange : Module("TimerRange", COMBAT), IBlink {
             shouldReturn = !updateDistance(targetEntity)
         }
 
-        if (shouldReturn) {
+        if (shouldReturn || (mc.thePlayer.isInWeb && !onWeb) || (mc.thePlayer.isInWater && !onWater)) {
             return
         }
 
@@ -231,7 +233,7 @@ object TimerRange : Module("TimerRange", COMBAT), IBlink {
             shouldReturn = !updateDistance(nearbyEntity)
         }
 
-        if (shouldReturn) {
+        if (shouldReturn || (mc.thePlayer.isInWeb && !onWeb) || (mc.thePlayer.isInWater && !onWater)) {
             return
         }
 
