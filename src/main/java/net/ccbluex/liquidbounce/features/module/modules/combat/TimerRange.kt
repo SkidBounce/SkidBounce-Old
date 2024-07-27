@@ -139,10 +139,10 @@ object TimerRange : Module("TimerRange", COMBAT), IBlink {
     // Optional
     private val onWeb by BooleanValue("OnWeb", false)
     private val onWater by BooleanValue("OnWater", false)
-    private val resetOnlagBack by BooleanValue("ResetOnLagback", false)
+    private val resetOnLagback by BooleanValue("ResetOnLagback", false)
     private val resetOnKnockback by BooleanValue("ResetOnKnockback", false)
-    private val chatDebug by BooleanValue("ChatDebug", true) { resetOnlagBack || resetOnKnockback }
-    private val notificationDebug by BooleanValue("NotificationDebug", false) { resetOnlagBack || resetOnKnockback }
+    private val chatDebug by BooleanValue("ChatDebug", true) { resetOnLagback || resetOnKnockback }
+    private val notificationDebug by BooleanValue("NotificationDebug", false) { resetOnLagback || resetOnKnockback }
 
     private fun timerReset() {
         if (shouldResetTimer())
@@ -511,7 +511,7 @@ object TimerRange : Module("TimerRange", COMBAT), IBlink {
         if (shouldResetTimer()) {
 
             // Check for lagback
-            if (resetOnlagBack && packet is S08PacketPlayerPosLook) {
+            if (resetOnLagback && packet is S08PacketPlayerPosLook) {
                 timerReset()
 
                 if (chatDebug) {
