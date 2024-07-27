@@ -5,17 +5,14 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.world
 
-import net.ccbluex.liquidbounce.event.*
-import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.event.EventState.POST
 import net.ccbluex.liquidbounce.event.EventState.PRE
+import net.ccbluex.liquidbounce.event.EventTarget
+import net.ccbluex.liquidbounce.event.events.*
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.WORLD
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly
 import net.ccbluex.liquidbounce.features.module.modules.movement.Speed
-import net.ccbluex.liquidbounce.features.module.modules.render.BlockOverlay
-import net.ccbluex.liquidbounce.ui.font.Fonts.font40
-import net.ccbluex.liquidbounce.utils.*
 import net.ccbluex.liquidbounce.utils.CPSCounter.MouseButton.RIGHT
 import net.ccbluex.liquidbounce.utils.CPSCounter.registerClick
 import net.ccbluex.liquidbounce.utils.MovementUtils.JUMP_HEIGHT
@@ -24,6 +21,9 @@ import net.ccbluex.liquidbounce.utils.MovementUtils.speed
 import net.ccbluex.liquidbounce.utils.MovementUtils.strafe
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
+import net.ccbluex.liquidbounce.utils.PlaceRotation
+import net.ccbluex.liquidbounce.utils.Rotation
+import net.ccbluex.liquidbounce.utils.RotationUtils
 import net.ccbluex.liquidbounce.utils.RotationUtils.currentRotation
 import net.ccbluex.liquidbounce.utils.RotationUtils.faceBlock
 import net.ccbluex.liquidbounce.utils.RotationUtils.getRotationDifference
@@ -43,14 +43,14 @@ import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextFloat
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils.nextInt
 import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBlockBox
-import net.ccbluex.liquidbounce.utils.render.RenderUtils.drawBorderedRect
-import net.ccbluex.liquidbounce.utils.timing.*
+import net.ccbluex.liquidbounce.utils.timing.DelayTimer
+import net.ccbluex.liquidbounce.utils.timing.MSTimer
+import net.ccbluex.liquidbounce.utils.timing.TickDelayTimer
+import net.ccbluex.liquidbounce.utils.timing.TickTimer
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomClickDelay
 import net.ccbluex.liquidbounce.utils.timing.TimeUtils.randomDelay
 import net.ccbluex.liquidbounce.value.*
 import net.minecraft.block.BlockBush
-import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.client.renderer.GlStateManager.resetColor
 import net.minecraft.init.Blocks.air
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
@@ -69,8 +69,6 @@ import net.minecraft.world.WorldSettings.GameType.SPECTATOR
 import net.minecraftforge.event.ForgeEventFactory
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
-import java.awt.Color.BLACK
-import java.awt.Color.WHITE
 import java.lang.System.currentTimeMillis
 import javax.vecmath.Color3f
 import kotlin.math.*
@@ -576,7 +574,14 @@ object Scaffold : Module("Scaffold", WORLD) {
         if (onJump && !mc.gameSettings.keyBindJump.isKeyDown) return
 
         // Lock Rotation
-        if (keepRotation && lockRotation != null) setTargetRotation(lockRotation!!)
+        if (keepRotation && lockRotation != null) {
+            setTargetRotation(
+                lockRotation!!.fixedSensitivity(),
+                strafe =  strafe,
+                resetSpeed = minTurnSpeed to maxTurnSpeed,
+                smootherMode = smootherMode
+            )
+        }
 
         mc.timer.timerSpeed = timer
         val eventState = event.eventState
@@ -586,7 +591,7 @@ object Scaffold : Module("Scaffold", WORLD) {
             placeInfo?.let { place(it) }
 
         if (eventState == PRE) {
-            update()
+            lockRotation = null
             placeInfo = null
             tickTimer.update()
 
@@ -908,12 +913,9 @@ object Scaffold : Module("Scaffold", WORLD) {
 
         placeRotation ?: return false
 
-//        if (rotations) {
-//            val fixedSensitivityRotation = placeRotation.rotation.fixedSensitivity()
-//            setTargetRotation(fixedSensitivityRotation)
-//            lockRotation = fixedSensitivityRotation
-//        }
+        lockRotation = placeRotation.rotation.fixedSensitivity()
         placeInfo = placeRotation.placeInfo
+
         return true
     }
 
