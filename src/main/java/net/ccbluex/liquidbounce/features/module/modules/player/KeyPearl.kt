@@ -6,15 +6,19 @@
 package net.ccbluex.liquidbounce.features.module.modules.player
 
 import net.ccbluex.liquidbounce.event.EventTarget
+import net.ccbluex.liquidbounce.event.events.KeyEvent
 import net.ccbluex.liquidbounce.event.events.TickEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.PLAYER
 import net.ccbluex.liquidbounce.utils.ClientUtils.displayClientMessage
+import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils
+import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverSlot
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.ccbluex.liquidbounce.value.TextValue
+import net.minecraft.client.settings.GameSettings
 import net.minecraft.init.Items
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.client.C09PacketHeldItemChange
@@ -40,38 +44,27 @@ object KeyPearl : Module("KeyPearl", PLAYER, gameDetecting = false) {
     private var hasThrown = false
 
     private fun throwEnderPearl() {
-        val pearlInHotbar = InventoryUtils.findItem(36, 44, Items.ender_pearl)
-
-        if (pearlInHotbar == null) {
+        val pearlInHotbar = InventoryUtils.findItem(36, 44, Items.ender_pearl) ?: run {
             if (noEnderPearlsMessage) {
                 displayClientMessage("§6§lWarning: §aThere are no ender pearls in your hotbar.")
             }
             return
         }
 
-        // don't wait before and after throwing if the player is already holding an ender pearl
-        if (!delayedSlotSwitch || mc.thePlayer.inventory.currentItem == pearlInHotbar - 36) {
-            sendPackets(
-                C09PacketHeldItemChange(pearlInHotbar - 36),
-                C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem),
-                C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem)
-            )
-            return
-        }
+        val click = C08PacketPlayerBlockPlacement(mc.thePlayer.openContainer.getSlot(pearlInHotbar).stack)
 
-        sendPackets(
-            C09PacketHeldItemChange(pearlInHotbar - 36),
-            C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem)
-        )
-        hasThrown = true
+        serverSlot = pearlInHotbar - 36
+        sendPacket(click)
+
+        if (delayedSlotSwitch) hasThrown = true
+        else serverSlot = mc.thePlayer.inventory.currentItem
     }
 
     @EventTarget
     fun onTick(event: TickEvent) {
         if (hasThrown) {
-            sendPackets(C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem))
+            serverSlot = mc.thePlayer.inventory.currentItem
             hasThrown = false
-
         }
 
         if (mc.currentScreen != null || mc.playerController.currentGameType == WorldSettings.GameType.SPECTATOR
