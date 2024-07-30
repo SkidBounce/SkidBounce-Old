@@ -308,10 +308,11 @@ object Scaffold : Module("Scaffold", WORLD) {
     // Safety
     private val keepY by ListValue("KeepY", arrayOf("Always", "Never", "Smart"), "Smart") { scaffoldMode != "GodBridge" }
     private val autoJump by BooleanValue("AutoJump", false) { scaffoldMode != "GodBridge" }
-    private val autoJumpMotion by DoubleValue("AutoJump-Motion", JUMP_HEIGHT, 0.0..JUMP_HEIGHT) { scaffoldMode != "GodBridge" && autoJump }
-    private val autoJumpIgnoreJumpBoost by BooleanValue("AutoJump-IgnoreJumpBoost", false) { scaffoldMode != "GodBridge" && autoJump }
+    private val autoJumpInput by BooleanValue("AutoJump-Input", true) { scaffoldMode != "GodBridge" && autoJump }
+    private val autoJumpMotion by DoubleValue("AutoJump-Motion", JUMP_HEIGHT, 0.0..JUMP_HEIGHT) { scaffoldMode != "GodBridge" && autoJump && !autoJumpInput }
+    private val autoJumpIgnoreJumpBoost by BooleanValue("AutoJump-IgnoreJumpBoost", false) { scaffoldMode != "GodBridge" && autoJump && !autoJumpInput }
     private val autoJumpNoBoost by BooleanValue("AutoJump-NoBoost", false) { scaffoldMode != "GodBridge" && autoJump }
-    private val autoJumpNoBoostForce by BooleanValue("AutoJump-NoBoost-Force", true) { scaffoldMode != "GodBridge" && autoJump && autoJumpNoBoost }
+    private val autoJumpNoBoostForce by BooleanValue("AutoJump-NoBoost-Force", true) { scaffoldMode != "GodBridge" && autoJump && autoJumpNoBoost && !autoJumpInput }
     private val safeWalkValue = BooleanValue("SafeWalk", true) { scaffoldMode != "GodBridge" }
     private val airSafe by BooleanValue("AirSafe", false) { safeWalkValue.isActive() }
 
@@ -383,6 +384,8 @@ object Scaffold : Module("Scaffold", WORLD) {
             ).any { yaw == it } && player.movementInput.moveForward != 0f && player.movementInput.moveStrafe == 0f
         }
 
+    private var wasJumpingLastTick = false
+
     // Telly
     private var offGroundTicks = 0
     private var ticksUntilJump = 0
@@ -428,8 +431,16 @@ object Scaffold : Module("Scaffold", WORLD) {
         if (mc.playerController.currentGameType == SPECTATOR)
             return
 
-        if (isMoving && autoJump && !shouldGoDown && blocksAmount > 1) {
-            mc.thePlayer.jmp(autoJumpMotion, !autoJumpNoBoost, autoJumpIgnoreJumpBoost)
+        if (isMoving && autoJump && !shouldGoDown && blocksAmount > 0) {
+            if (autoJumpInput) {
+                mc.gameSettings.keyBindJump.pressed = true
+                wasJumpingLastTick = true
+            } else mc.thePlayer.jmp(autoJumpMotion, boost = !autoJumpNoBoost, ignoreJumpBoost = autoJumpIgnoreJumpBoost)
+        } else {
+            if (wasJumpingLastTick && !mc.gameSettings.keyBindJump.isActuallyPressed) {
+                mc.gameSettings.keyBindJump.pressed = false
+            }
+            wasJumpingLastTick = false
         }
 
         mc.timer.timerSpeed = timer
@@ -1188,6 +1199,9 @@ object Scaffold : Module("Scaffold", WORLD) {
         if (!mc.gameSettings.keyBindLeft.isActuallyPressed) {
             mc.gameSettings.keyBindLeft.pressed = false
         }
+        if (!mc.gameSettings.keyBindJump.isActuallyPressed) {
+            mc.gameSettings.keyBindJump.pressed = false
+        }
 
         if (autoF5) mc.gameSettings.thirdPersonView = 0
 
@@ -1216,7 +1230,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     @EventTarget
     fun onJump(event: JumpEvent) {
-        if (autoJump && scaffoldMode != "GodBridge" && autoJumpNoBoost && autoJumpNoBoostForce) {
+        if (autoJump && scaffoldMode != "GodBridge" && autoJumpNoBoost && (autoJumpNoBoostForce || autoJumpInput)) {
             event.sprintBoost = 0f
         }
 
