@@ -308,6 +308,7 @@ object Scaffold : Module("Scaffold", WORLD) {
     // Safety
     private val keepY by ListValue("KeepY", arrayOf("Always", "Never", "Smart"), "Smart") { scaffoldMode != "GodBridge" }
     private val autoJump by BooleanValue("AutoJump", false) { scaffoldMode != "GodBridge" }
+    private val autoJumpOnlySprinting by BooleanValue("AutoJump-OnlySprinting", true) { scaffoldMode != "GodBridge" && autoJump && sprint }
     private val autoJumpInput by BooleanValue("AutoJump-Input", true) { scaffoldMode != "GodBridge" && autoJump }
     private val autoJumpMotion by DoubleValue("AutoJump-Motion", JUMP_HEIGHT, 0.0..JUMP_HEIGHT) { scaffoldMode != "GodBridge" && autoJump && !autoJumpInput }
     private val autoJumpIgnoreJumpBoost by BooleanValue("AutoJump-IgnoreJumpBoost", false) { scaffoldMode != "GodBridge" && autoJump && !autoJumpInput }
@@ -431,7 +432,7 @@ object Scaffold : Module("Scaffold", WORLD) {
         if (mc.playerController.currentGameType == SPECTATOR)
             return
 
-        if (isMoving && autoJump && !shouldGoDown && blocksAmount > 0) {
+        if (isMoving && autoJump && (!autoJumpOnlySprinting || mc.thePlayer.isSprinting) && !shouldGoDown && blocksAmount > 0) {
             if (autoJumpInput) {
                 mc.gameSettings.keyBindJump.pressed = true
                 wasJumpingLastTick = true
@@ -1230,7 +1231,7 @@ object Scaffold : Module("Scaffold", WORLD) {
 
     @EventTarget
     fun onJump(event: JumpEvent) {
-        if (autoJump && scaffoldMode != "GodBridge" && autoJumpNoBoost && (autoJumpNoBoostForce || autoJumpInput)) {
+        if (autoJump && (!autoJumpOnlySprinting || mc.thePlayer.isSprinting) && scaffoldMode != "GodBridge" && autoJumpNoBoost && (autoJumpNoBoostForce || autoJumpInput)) {
             event.sprintBoost = 0f
         }
 
