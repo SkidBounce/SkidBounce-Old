@@ -54,16 +54,27 @@ object Sprint : Module("Sprint", MOVEMENT, gameDetecting = false) {
     val silent by BooleanValue("Silent", false)
 
     private var isSprinting = false
+
     private val isBackwards
-        get() = if (backwards) {
-            if (mc.thePlayer.onGround) backwardsGround else backwardsAir
-        } else false
+        get() = when {
+            !backwards -> false
+            mc.thePlayer.onGround -> backwardsGround
+            else -> backwardsAir
+        }
+
     private val isSideways
-        get() = if (sideways) {
-            if (mc.thePlayer.onGround) sidewaysGround else sidewaysAir
-        } else false
+        get() = when {
+            !sideways -> false
+            mc.thePlayer.onGround -> sidewaysGround
+            else -> sidewaysAir
+        }
+
     private val doCheckServerSide
-        get() = if (checkServerSide) if (mc.thePlayer.onGround) checkServerSideGround else checkServerSideAir else true
+        get() = when {
+            !checkServerSide -> false
+            mc.thePlayer.onGround -> checkServerSideGround
+            else -> checkServerSideAir
+        }
 
     fun correctSprintState(movementInput: MovementInput, isUsingItem: Boolean) {
         val player = mc.thePlayer ?: return
