@@ -197,8 +197,8 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
         if (!noMoveCheck) usedMode.onPacket(event)
     }
 
-    private fun doNoSlow(noSlowItem: NoSlowItem): Boolean {
-        if (noSlowItem == OTHER)
+    fun doNoSlow(noSlowItem: NoSlowItem = NoSlow.noSlowItem): Boolean {
+        if (noSlowItem == OTHER || !handleEvents())
             return false
 
         val mode = usedMode

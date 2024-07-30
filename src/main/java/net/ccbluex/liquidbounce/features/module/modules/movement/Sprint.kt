@@ -44,6 +44,7 @@ object Sprint : Module("Sprint", MOVEMENT, gameDetecting = false) {
     private val blindness by BooleanValue("Blindness", true)
     private val sneaking by BooleanValue("Sneaking", true)
     private val usingItem by BooleanValue("UsingItem", true)
+    private val usingItemOnlyNoSlow by BooleanValue("UsingItem-OnlyOnNoSlow", true) { usingItem }
     private val inventory by BooleanValue("Inventory", true)
     private val hunger by BooleanValue("Hunger", false)
 
@@ -128,12 +129,12 @@ object Sprint : Module("Sprint", MOVEMENT, gameDetecting = false) {
     private fun shouldStopSprinting(movementInput: MovementInput, isUsingItem: Boolean): Boolean {
         mc.thePlayer ?: return false
 
-        if ((!usingItem && isUsingItem)
-            || (!inventory && serverOpenInventory)
-            || (!sneaking && mc.thePlayer.isSneaking)
-            || (!collide && mc.thePlayer.isCollidedHorizontally)
-            || (!blindness && mc.thePlayer.isPotionActive(Potion.blindness) && !mc.thePlayer.isSprinting)
-            || (!hunger && !(mc.thePlayer.foodStats.foodLevel > 6f || mc.thePlayer.capabilities.allowFlying))
+        if (isUsingItem && (!usingItem || usingItemOnlyNoSlow && !NoSlow.doNoSlow())
+            || !inventory && serverOpenInventory
+            || !sneaking && mc.thePlayer.isSneaking
+            || !collide && mc.thePlayer.isCollidedHorizontally
+            || !blindness && mc.thePlayer.isPotionActive(Potion.blindness) && !mc.thePlayer.isSprinting
+            || !hunger && mc.thePlayer.foodStats.foodLevel <= 6f && !mc.thePlayer.capabilities.allowFlying
         ) return true
 
         if (!isMoving)
