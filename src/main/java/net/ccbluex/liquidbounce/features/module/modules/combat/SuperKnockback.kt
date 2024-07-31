@@ -30,7 +30,8 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
     private val delay by IntValue("Delay", 0, 0..500)
     private val hurtTime by IntValue("HurtTime", 10, 0..10)
 
-    private val mode by ListValue("Mode", arrayOf("SprintTap", "SprintTap2", "WTap", "Old", "Silent", "Packet", "SneakPacket").sortedArray(), "Old")
+    private val mode by ListValue("Mode", arrayOf("SprintTap", "SprintTap2", "WTap", "Old", "Grim", "Silent", "Packet", "SneakPacket").sortedArray(), "Old")
+    private val grim by BooleanValue("Grim", true) { mode in arrayOf("Old", "Packet", "SneakPacket") }
     private val maxTicksUntilBlock: IntValue = object : IntValue("MaxTicksUntilBlock", 2, 0..5) {
         override fun isSupported() = mode == "WTap"
 
@@ -109,35 +110,49 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
             "Old" -> {
                 // Users reported that this mode is better than the other ones
 
-                if (mc.thePlayer.isSprinting) {
-                    sendPacket(C0BPacketEntityAction(player, C0BPacketEntityAction.Action.STOP_SPRINTING))
+                if (player.isSprinting && !grim || grim && player.serverSprintState) {
+                    sendPacket(C0BPacketEntityAction(player, STOP_SPRINTING))
                 }
 
                 sendPackets(
-                    C0BPacketEntityAction(player, C0BPacketEntityAction.Action.START_SPRINTING),
-                    C0BPacketEntityAction(player, C0BPacketEntityAction.Action.STOP_SPRINTING),
-                    C0BPacketEntityAction(player, C0BPacketEntityAction.Action.START_SPRINTING)
+                    C0BPacketEntityAction(player, START_SPRINTING),
+                    C0BPacketEntityAction(player, STOP_SPRINTING),
+                    C0BPacketEntityAction(player, START_SPRINTING)
                 )
-                mc.thePlayer.isSprinting = true
-                mc.thePlayer.serverSprintState = true
+                player.isSprinting = true
+                player.serverSprintState = true
             }
 
             "SprintTap", "Silent" -> if (player.isSprinting && player.serverSprintState) ticks = 2
 
             "Packet" -> {
-                sendPackets(
-                    C0BPacketEntityAction(player, STOP_SPRINTING),
-                    C0BPacketEntityAction(player, START_SPRINTING)
-                )
+                if (grim && player.serverSprintState || !grim) {
+                    sendPacket(C0BPacketEntityAction(player, STOP_SPRINTING))
+                }
+
+                sendPacket(C0BPacketEntityAction(player, START_SPRINTING))
+
+                if (grim) {
+                    player.isSprinting = true
+                    player.serverSprintState = true
+                }
             }
 
             "SneakPacket" -> {
+                if (grim && player.serverSprintState || !grim) {
+                    sendPacket(C0BPacketEntityAction(player, STOP_SPRINTING))
+                }
+
                 sendPackets(
-                    C0BPacketEntityAction(player, STOP_SPRINTING),
                     C0BPacketEntityAction(player, START_SNEAKING),
                     C0BPacketEntityAction(player, START_SPRINTING),
                     C0BPacketEntityAction(player, STOP_SNEAKING)
                 )
+
+                if (grim) {
+                    player.isSprinting = true
+                    player.serverSprintState = true
+                }
             }
 
             "WTap" -> {
