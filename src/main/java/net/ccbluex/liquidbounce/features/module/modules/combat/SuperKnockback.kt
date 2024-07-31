@@ -30,7 +30,7 @@ object SuperKnockback : Module("SuperKnockback", COMBAT) {
     private val delay by IntValue("Delay", 0, 0..500)
     private val hurtTime by IntValue("HurtTime", 10, 0..10)
 
-    private val mode by ListValue("Mode", arrayOf("SprintTap", "SprintTap2", "WTap", "Old", "Grim", "Silent", "Packet", "SneakPacket").sortedArray(), "Old")
+    private val mode by ListValue("Mode", arrayOf("SprintTap", "SprintTap2", "WTap", "Old", "Silent", "Packet", "SneakPacket").sortedArray(), "Old")
     private val grim by BooleanValue("Grim", true) { mode in arrayOf("Old", "Packet", "SneakPacket") }
     private val maxTicksUntilBlock: IntValue = object : IntValue("MaxTicksUntilBlock", 2, 0..5) {
         override fun isSupported() = mode == "WTap"
