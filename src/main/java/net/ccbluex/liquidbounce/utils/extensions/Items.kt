@@ -77,8 +77,8 @@ val ItemStack.attackDamage
 
 val ItemStack.isSplashPotion get() = item is ItemPotion && ItemPotion.isSplash(metadata)
 
-val Item?.canUse get() = when (this) {
-    is ItemSword, is ItemPotion, is ItemBucketMilk -> true
+val ItemStack?.canUse: Boolean get() = when (this?.item) {
+    is ItemSword, is ItemPotion, is ItemBucketMilk -> !isSplashPotion
     is ItemBow -> mc.playerController.isInCreativeMode || mc.thePlayer.inventory.hasItem(arrow)
     is ItemAppleGold -> mc.playerController.isNotCreative
     is ItemFood -> mc.playerController.isNotCreative && mc.thePlayer.foodStats.foodLevel < 20

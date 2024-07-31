@@ -20,7 +20,7 @@ object Grim2365 : NoSlowMode("Grim2.3.65") {
     override fun onMotion(event: MotionEvent) {
         if (event.eventState != PRE) return
         for (i in 0..8) {
-            if (mc.thePlayer.inventory?.mainInventory?.get(i)?.item.canUse) continue
+            if (mc.thePlayer.inventory?.mainInventory?.get(i).canUse) continue
 
             serverSlot = i
             sendPacket(C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem))

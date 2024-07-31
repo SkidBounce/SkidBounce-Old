@@ -6,9 +6,9 @@
 package net.ccbluex.liquidbounce.features.module.modules.movement
 
 import net.ccbluex.liquidbounce.event.EventState
-import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.EventState.POST
 import net.ccbluex.liquidbounce.event.EventState.PRE
+import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.events.MotionEvent
 import net.ccbluex.liquidbounce.event.events.PacketEvent
 import net.ccbluex.liquidbounce.event.events.SlowDownEvent
@@ -16,16 +16,23 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory.MOVEMENT
 import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.NoSlowMode
-import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.aac.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.aac.AAC
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.aac.AAC2
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.NCP
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.NewNCP
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.UNCP
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.UNCP.shouldSwap
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.ncp.UNCP2
 import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.other.*
-import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.watchdog.*
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.watchdog.WatchDog
+import net.ccbluex.liquidbounce.features.module.modules.movement.noslowmodes.watchdog.WatchDog2
 import net.ccbluex.liquidbounce.utils.MovementUtils.hasMotion
 import net.ccbluex.liquidbounce.utils.NoSlowItem
 import net.ccbluex.liquidbounce.utils.NoSlowItem.*
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPacket
 import net.ccbluex.liquidbounce.utils.PacketUtils.sendPackets
+import net.ccbluex.liquidbounce.utils.extensions.canUse
+import net.ccbluex.liquidbounce.utils.extensions.isSplashPotion
 import net.ccbluex.liquidbounce.utils.inventory.InventoryUtils.serverUsing
 import net.ccbluex.liquidbounce.value.BooleanValue
 import net.ccbluex.liquidbounce.value.FloatValue
@@ -289,11 +296,11 @@ object NoSlow : Module("NoSlow", MOVEMENT, gameDetecting = false) {
     private val isUsingItem get() = mc.thePlayer?.heldItem != null && (mc.thePlayer.isUsingItem || (mc.thePlayer.heldItem?.item is ItemSword && KillAura.blockStatus) || isUNCPBlocking())
 
     val noSlowItem: NoSlowItem
-        get() = mc.thePlayer?.heldItem?.item?.run {
+        get() = mc.thePlayer?.heldItem?.run {
             return@run when {
-                this is ItemSword && blocking -> SWORD
-                this is ItemBow && bows -> BOW
-                (this is ItemPotion || this is ItemFood || this is ItemBucketMilk) && consuming -> CONSUMABLE
+                item is ItemSword && blocking -> SWORD
+                item is ItemBow && bows -> BOW
+                (item is ItemPotion && !isSplashPotion || item is ItemFood || item is ItemBucketMilk) && consuming -> CONSUMABLE
                 else -> OTHER
             }
         } ?: OTHER

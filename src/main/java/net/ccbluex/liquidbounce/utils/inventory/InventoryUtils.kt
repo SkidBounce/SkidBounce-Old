@@ -168,7 +168,7 @@ object InventoryUtils : MinecraftInstance(), Listenable {
                 CLICK_TIMER.reset()
 
                 // check if the item was used
-                if (packet.placedBlockDirection == 255 && packet.stack.item.canUse)
+                if (packet.placedBlockDirection == 255 && packet.stack.canUse)
                     _serverUsing = true
             }
 

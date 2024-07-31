@@ -28,7 +28,7 @@ object Drop : NoSlowMode("Drop") {
         if (!mc.thePlayer.isUsingItem)
             received = false
 
-        if (event.packet.isUse && mc.thePlayer.heldItem.item.canUse) {
+        if (event.packet.isUse && mc.thePlayer.heldItem.canUse) {
             // fixme this should be after the packet is sent
             sendPacket(C07PacketPlayerDigging(DROP_ITEM, ORIGIN, DOWN))
             received = false
