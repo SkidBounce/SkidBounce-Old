@@ -32,7 +32,7 @@ jobs:
         run: chmod +x ./gradlew && ./gradlew build
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4.3.5
+        uses: actions/upload-artifact@v4.3.6
         with:
           name: skidbounce
           path: build/libs/skidbounce-v?.?.?.jar
