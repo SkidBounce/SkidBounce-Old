@@ -78,6 +78,8 @@ class SimulatedPlayer(
     val pos: Vec3
         get() = Vec3(posX, posY, posZ)
 
+    var stepConfirm: () -> Unit = {}
+
     private var moveForward = 0f
     private var moveStrafing = 0f
     private var isJumping = false
@@ -732,6 +734,8 @@ class SimulatedPlayer(
                     velocityY = d7
                     velocityZ = d8
                     this.setEntityBoundingBox(axisalignedbb3)
+                } else {
+                    stepConfirm()
                 }
             }
             resetPositionToBB()
